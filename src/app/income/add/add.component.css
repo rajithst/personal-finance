@@ -1,0 +1,14 @@
+td {
+    padding-right: 8px;
+}
+
+.income-field-table {
+    width: 100%;
+}
+.income-input {
+    width: 100%;
+}
+
+.income-form-footer {
+    padding: 20px;
+}

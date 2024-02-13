@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Add Income</h2>
+<mat-dialog-content>
+    <table class="income-field-table" cellspacing="0">
+        <tr>
+            <td>
+                <mat-form-field appearance="fill" class="income-input">
+                    <mat-label>Category</mat-label>
+                        <mat-select>
+                          @for (incomeType of incomeTypes; track incomeType) {
+                            <mat-option [value]="incomeType.value">{{incomeType.viewValue}}</mat-option>
+                          }
+                        </mat-select>
+                </mat-form-field>
+            </td>
+            <td>
+                <mat-form-field class="fill" class="income-input">
+                    <mat-label>Amount (¥)</mat-label>
+                    <input matInput placeholder="Amount">
+                </mat-form-field>
+            </td>
+      </tr>
+      <tr>
+        <td>
+            <mat-form-field class="income-input">
+                <mat-label>Date</mat-label>
+                <input matInput [matDatepicker]="picker">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </td>
+        <td>
+            <mat-form-field appearance="fill" class="income-input">
+                <mat-label>Expending Month</mat-label>
+                    <mat-select>
+                      @for (month of months; track month) {
+                        <mat-option [value]="month.value">{{month.viewValue}}</mat-option>
+                      }
+                    </mat-select>
+            </mat-form-field>
+        </td>
+      </tr>
+    </table>
+    <mat-form-field class="income-input">
+        <mat-label>Notes</mat-label>
+        <textarea matInput placeholder="Notes"></textarea>
+    </mat-form-field>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="income-form-footer">
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary">Save</button>
+</mat-dialog-actions>
