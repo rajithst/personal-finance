@@ -1,12 +1,33 @@
 <div class="content-container">
-    <div class="container">
-        <div class="header-container">
-            <h1>Monthly Income</h1>
-            <button mat-raised-button color="primary" (click)="addIncome('2ms', '2ms')">Add</button>
-          </div>
+  <mat-toolbar>
+    <span>Income</span>
+    <div class="data-filters">
+      <div class="filter-option">
+        <mat-form-field>
+          <mat-label>Search Range..</mat-label>
+          <mat-date-range-input
+            [formGroup]="savingRange"
+            [rangePicker]="savingRangePicker"
+            >
+            <input matStartDate placeholder="Start date" formControlName="start">
+            <input matEndDate placeholder="End date" formControlName="end">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="savingRangePicker"></mat-datepicker-toggle>
+          <mat-date-range-picker #savingRangePicker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+      <div class="filter-option">
+        <button mat-raised-button color="primary" (click)="addSaving()">Add</button>
+      </div>
+    </div>
+  </mat-toolbar>
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="500ms">
+    <mat-tab label="Incomes">
+      <mat-card>
+        <mat-card-content>
           <mat-accordion multi="true">
-            @for (data of incomeData; track $index) {
-              <mat-expansion-panel class="monthly-income-panel">
+            @for (data of savingData; track $index) {
+              <mat-expansion-panel class="monthly-savings-panel">
                 <mat-expansion-panel-header>
                   <mat-panel-title>{{data.year}} - {{data.month}}</mat-panel-title>
                   <mat-panel-description></mat-panel-description>
@@ -33,5 +54,16 @@
               </mat-expansion-panel>
             }
           </mat-accordion>
-      </div>
+        </mat-card-content>
+      </mat-card>
+      
+    </mat-tab>
+    <mat-tab label="Charts">
+      <mat-card>
+        <mat-card-content>
+          charts
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
 </div>

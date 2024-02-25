@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IncomeService } from '../income.service';
 
 interface IncomeType {
   value: string;
@@ -33,10 +35,33 @@ export class AddComponent {
       viewValue: 'Rental'
     },
     {
+      value: 'cashack',
+      viewValue: 'Cash Back'
+    },
+    {
+      value: 'interest',
+      viewValue: 'Interest'
+    },
+    {
+      value: 'Points',
+      viewValue: 'Points'
+    },
+    {
       value: 'other',
       viewValue: 'Other'
     }
   ];
-  incomeForm: any;
+  incomeForm = this.formBuilder.group({
+    category: ['', Validators.required],
+    amount: ['', [Validators.required]],
+    date: ['', Validators.required],
+    target_month: [''],
+    notes: ['']
+  });
+  constructor(private formBuilder: FormBuilder, private incomeService: IncomeService) {}
 
+
+  submit() {
+    this.incomeService.addIncome(this.incomeForm.value).subscribe(income => console.log(income))
+  }
 }

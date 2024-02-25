@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>Add Income</h2>
+<mat-dialog-content>
+    <form [formGroup]="incomeForm">
+        <table class="income-field-table" cellspacing="0">
+            <tr>
+                <td>
+                    <mat-form-field appearance="fill" class="income-input">
+                        <mat-label>Category</mat-label>
+                            <mat-select formControlName="category">
+                              @for (incomeType of incomeTypes; track incomeType) {
+                                <mat-option [value]="incomeType.value">{{incomeType.viewValue}}</mat-option>
+                              }
+                            </mat-select>
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field class="fill" class="income-input">
+                        <mat-label>Amount (¥)</mat-label>
+                        <input matInput placeholder="Amount" formControlName="amount">
+                    </mat-form-field>
+                </td>
+          </tr>
+          <tr>
+            <td>
+                <mat-form-field class="income-input">
+                    <mat-label>Date</mat-label>
+                    <input matInput 
+                        [matDatepicker]="picker"
+                        formControlName="date">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </td>
+            <td>
+                <mat-form-field appearance="fill" class="income-input">
+                    <mat-label>Expending Month</mat-label>
+                        <mat-select formControlName="target_month">
+                          @for (month of months; track month) {
+                            <mat-option [value]="month.value">{{month.viewValue}}</mat-option>
+                          }
+                        </mat-select>
+                </mat-form-field>
+            </td>
+          </tr>
+        </table>
+        <mat-form-field class="income-input">
+            <mat-label>Notes</mat-label>
+            <textarea matInput placeholder="Notes"  formControlName="notes"></textarea>
+        </mat-form-field>
+    </form>
+    
+
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="income-form-footer">
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()">Save</button>
+</mat-dialog-actions>

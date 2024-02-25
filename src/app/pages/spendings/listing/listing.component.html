@@ -1,0 +1,27 @@
+<div class="content-container">
+    <mat-toolbar>
+        <span>Spendings</span>
+        <div class="data-filters">
+            <div class="filter-option">
+            <mat-form-field>
+                <mat-label>Search Range..</mat-label>
+                <mat-date-range-input
+                [formGroup]="spendingRange"
+                [rangePicker]="spendingRangePicker"
+                >
+                <input matStartDate placeholder="Start date" formControlName="start">
+                <input matEndDate placeholder="End date" formControlName="end">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="spendingRangePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #spendingRangePicker></mat-date-range-picker>
+            </mat-form-field>
+            </div>
+            <div class="filter-option">
+                <button mat-raised-button color="primary" (click)="addSpending()">Add</button>
+            </div>
+            <div class="filter-option">
+                <button mat-raised-button color="primary" (click)="importSpending()">Import</button>
+            </div>
+        </div>
+    </mat-toolbar>
+</div>

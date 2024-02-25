@@ -9,23 +9,23 @@ const routes: Routes = [
   },
   {
     path: 'income',
-    loadChildren: () => import('./income/income.module').then(m => m.IncomeModule)
+    loadChildren: () => import('./pages/income/income.module').then(m => m.IncomeModule)
   },
   {
     path: 'spendings',
-    loadChildren: () => import('./spendings/spendings.module').then(m => m.SpendingsModule)
+    loadChildren: () => import('./pages/spendings/spendings.module').then(m => m.SpendingsModule)
   },
   {
     path: 'debts',
-    loadChildren: () => import('./debts/debts.module').then(m => m.DebtsModule)
+    loadChildren: () => import('./pages/debts/debts.module').then(m => m.DebtsModule)
   },
   {
     path: 'savings',
-    loadChildren: () => import('./savings/savings.module').then(m => m.SavingsModule)
+    loadChildren: () => import('./pages/savings/savings.module').then(m => m.SavingsModule)
   },
   {
     path: 'bills-and-subscriptions',
-    loadChildren: () => import('./bills-and-subscriptions/bills-and-subscriptions.module').then(m => m.BillsAndSubscriptionsModule)
+    loadChildren: () => import('./pages/bills-and-subscriptions/bills-and-subscriptions.module').then(m => m.BillsAndSubscriptionsModule)
   }
 ];
 
