@@ -3,8 +3,7 @@
   <div class="sidebar">
     <nav class="sidebar-nav">
       <div class="user-info">
-        <img src="assets/avatar.png" alt="User Avatar">
-        <span>John Doe</span>
+        
       </div>
   
       <ul class="menu-items">
@@ -34,6 +33,7 @@
     </nav>
   </div>
   <div class="content">
+    <mat-progress-bar [mode]="progressMode"></mat-progress-bar>
     <router-outlet />
   </div>
 </div>

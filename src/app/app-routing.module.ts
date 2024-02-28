@@ -1,6 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
+import { IncomeComponent } from './finance/income/income.component';
+import { SavingsComponent } from './finance/savings/savings.component';
+import { DebtsComponent } from './finance/debts/debts.component';
+import { SpendingsComponent } from './finance/spendings/spendings.component';
+import { BillsAndSubscriptionsComponent } from './finance/bills-and-subscriptions/bills-and-subscriptions.component';
 
 const routes: Routes = [
   {
@@ -9,24 +14,25 @@ const routes: Routes = [
   },
   {
     path: 'income',
-    loadChildren: () => import('./pages/income/income.module').then(m => m.IncomeModule)
-  },
-  {
-    path: 'spendings',
-    loadChildren: () => import('./pages/spendings/spendings.module').then(m => m.SpendingsModule)
-  },
-  {
-    path: 'debts',
-    loadChildren: () => import('./pages/debts/debts.module').then(m => m.DebtsModule)
+    component: IncomeComponent
   },
   {
     path: 'savings',
-    loadChildren: () => import('./pages/savings/savings.module').then(m => m.SavingsModule)
+    component: SavingsComponent
   },
   {
-    path: 'bills-and-subscriptions',
-    loadChildren: () => import('./pages/bills-and-subscriptions/bills-and-subscriptions.module').then(m => m.BillsAndSubscriptionsModule)
-  }
+    path: 'debts',
+    component: DebtsComponent
+  },
+  {
+    path: 'spendings',
+    component: SpendingsComponent
+  },
+  {
+    path: 'bills-and-subscription',
+    component: BillsAndSubscriptionsComponent
+  },
+  
 ];
 
 @NgModule({
