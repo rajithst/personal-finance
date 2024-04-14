@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { Income, IncomeList, MonthlyIncome } from '../finance/income/income.data';
+import { Income, IncomeRequest } from '../shared/interface/income.data';
+import {Transaction, TransactionRequest, TransactionsResponse} from '../shared/interface/transactions';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -9,35 +10,35 @@ const httpOptions = {
     })
 };
 
+
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
-    private SRC_URL = 'http://127.0.0.1:8000';
+    private SRC_URL = 'http://127.0.0.1:8000/finance';
 
 
     constructor(private http: HttpClient) {}
 
-    getIncome(): Observable<Income[]> {
-        return this.http.get<Income[]>(`${this.SRC_URL}/income`).pipe(
-            map((response: any) => {
-                return response.map((item: any) => ({
-                category: item.category,
-                amount: item.amount,
-                date: item.date,
-                year: item.year,
-                month: item.month,
-                month_text: item.month_text,
-                target_month: item.target_month,
-                target_month_text: item.target_month_text,
-                notes: item.notes
-                }));
-            })
-        );
+    getTransactions(): Observable<TransactionsResponse> {
+        return this.http.get<TransactionsResponse>(`${this.SRC_URL}/transactions`)
     }
 
-    addIncome(payload: any): Observable<Object> {
-        return this.http.post(`${this.SRC_URL}/income`, payload)
+    updateTransaction(payload: TransactionRequest): Observable<Transaction> {
+      if (payload.id) {
+        return this.http.put<Transaction>(`${this.SRC_URL}/transactions/${payload.id}/`, payload)
+      } else {
+        return this.http.post<Transaction>(`${this.SRC_URL}/transactions/`, payload)
+      }
     }
+
+    updateIncome(payload: IncomeRequest): Observable<Income> {
+        if (payload.id) {
+            return this.http.put<Income>(`${this.SRC_URL}/transactions/income/${payload.id}/`, payload)
+        } else {
+            return this.http.post<Income>(`${this.SRC_URL}/transactions/income/`, payload)
+        }
+    }
+
 
 }

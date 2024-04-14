@@ -1,17 +1,26 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { Income, IncomeList, MonthlyIncome } from '../finance/income/income.data';
 import { ReplaySubject, Subject } from 'rxjs';
+import { Income, MonthlyIncome, IncomeRequest } from '../shared/interface/income.data';
+import {
+  MonthlyTransaction,
+  Transaction,
+  TransactionRequest,
+  TransactionsResponse
+} from '../shared/interface/transactions';
 
 export class SessionData {
-  sessionIncomes: IncomeList[] =  [];
-  sessionSavings: [] = [];
+  incomes: MonthlyIncome[] =  [];
+  saving: MonthlyTransaction[] = [];
+  expenses: MonthlyTransaction[] = [];
+  payments:  MonthlyTransaction[] = [];
 }
 
 export enum SessionEventMessage {
   INIT_SESSION_LOAD_SUCCESS,
   INIT_SESSION_LOAD_FAILED,
-  INIT_BORADCAST
+  SESSION_TRANSACTION_UPDATE_SUCCESS,
+  SESSION_TRANSACTION_UPDATE_FAILED
 }
 
 @Injectable({
@@ -32,35 +41,104 @@ export class SessionService {
   }
 
   refresh() {
-    this.apiService.getIncome().subscribe((incomes) => {
-      this.session.sessionIncomes = this.linkIncomeData(incomes)
+
+    const getTransactionList = (x: MonthlyTransaction[]) => {
+      let results: Transaction[] = [];
+      x.forEach(y => results =  results.concat(y.transactions))
+      return results;
+    };
+
+    this.apiService.getTransactions().subscribe((transactions: TransactionsResponse) => {
+      this.session.incomes = transactions.income;
+      this.session.saving = transactions.saving;
+      this.session.expenses = transactions.expense;
+      this.session.payments = transactions.payment;
       this.message.next(SessionEventMessage.INIT_SESSION_LOAD_SUCCESS)
+    })
+
+  }
+
+  updateIncome(payload:IncomeRequest) {
+    this.apiService.updateIncome(payload).subscribe((income: Income) => {
+      if (income) {
+        this.updateSessionIncome(income);
+        this.message.next(SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS)
+      } else {
+        this.message.next(SessionEventMessage.SESSION_TRANSACTION_UPDATE_FAILED)
+      }
+    })
+  }
+
+  updateTransaction(payload:TransactionRequest) {
+    this.apiService.updateTransaction(payload).subscribe((transaction: Transaction) => {
+      if (transaction) {
+        this.syncSessionTransaction(transaction);
+        this.message.next(SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS)
+      } else {
+        this.message.next(SessionEventMessage.SESSION_TRANSACTION_UPDATE_FAILED)
+      }
     })
   }
 
 
-  private linkIncomeData(incomes: Income[]) {
-    const monthlyIncomesMap: Map<string, IncomeList> = new Map();
-    incomes.forEach(model => {
-        const key = `${model.year}-${model.month_text}`;
-        if (!monthlyIncomesMap.has(key)) {
-            monthlyIncomesMap.set(key, {
-                year: model.year,
-                month: model.month_text,
-                incomes: []
-            });
-        }
-        const incomeData: MonthlyIncome = {
-            date: model.date,
-            source: model.category.toString(),
-            amount: model.amount
-        };
-        const monthlyIncome = monthlyIncomesMap.get(key);
-        if (monthlyIncome) {
-            monthlyIncome.incomes.push(incomeData);
-        }
-    });
-    return Array.from(monthlyIncomesMap.values());
+  updateSessionIncome(data: Income) {
+    const idx = this.session.incomes.findIndex((x: MonthlyIncome) => x.year == data.year && x.month == data.month)
+    if (idx !== -1) {
+      const currItem = this.session.incomes[idx];
+      const incomeId = currItem.transactions.findIndex((x: Income) => x.id == data.id);
+      this.session.incomes[idx]['total'] += data.amount
+      if (incomeId !== -1) {
+        const currTransaction = currItem.transactions[incomeId];
+        this.session.incomes[idx].transactions[incomeId] = data
+        this.session.incomes[idx]['total'] -= currTransaction.amount;
+      } else {
+        this.session.incomes[idx].transactions.push(data)
+      }
+    } else  {
+      const incomeObject: MonthlyIncome = {year: data.year!, month: data.month!, month_text: data.month_text!, 'total': data.amount, 'transactions': []}
+      incomeObject.transactions.push(data)
+      this.session.incomes.push(incomeObject)
+    }
+  }
+
+  syncSessionTransaction(data: Transaction) {
+    let source = this.getTargetMonthlyTransaction(data);
+    const idx = source.findIndex((x: MonthlyTransaction) => x.year == data.year && x.month == data.month)
+    if (idx !== -1) {
+      const currItem = source[idx];
+      const expId = currItem.transactions.findIndex((x: Transaction) => x.id == data.id);
+      source[idx]['total'] += data.amount
+      if (expId !== -1) {
+        const currTransaction = currItem.transactions[expId];
+        source[idx].transactions[expId] = data
+        source[idx]['total'] -= currTransaction.amount;
+      } else {
+        source[idx].transactions.push(data);
+      }
+    } else  {
+      const transactionObject: MonthlyTransaction = {year: data.year!, month: data.month!, month_text: data.month_text!, total: data.amount, transactions: [], transactions_cp: []}
+      transactionObject.transactions.push(data)
+      source.push(transactionObject)
+    }
+    this.updateSession(data, source);
+  }
+
+  updateSession(payload: Transaction, update: MonthlyTransaction[]) {
+    if (payload.is_expense) {
+      this.session.expenses = update;
+    } else if (payload.is_saving) {
+      this.session.saving = update;
+    }
+  }
+
+  getTargetMonthlyTransaction(payload: Transaction): MonthlyTransaction[] {
+    if (payload.is_expense) {
+      return this.session.expenses;
+    } else if (payload.is_saving) {
+      return this.session.saving;
+    } else {
+      return this.session.expenses
+    }
   }
 
 }

@@ -13,7 +13,10 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import { MatNativeDateModule } from '@angular/material/core';
+import {MatNativeDateModule } from '@angular/material/core';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatSortModule} from '@angular/material/sort';
+import {MatDividerModule} from '@angular/material/divider';
 
 
 @NgModule({
@@ -32,7 +35,10 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatToolbarModule,
     MatCardModule,
     MatProgressBarModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatSortModule,
+    MatDividerModule
   ],
   exports: [
     MatButtonModule,
@@ -48,8 +54,11 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatToolbarModule,
     MatCardModule,
     MatProgressBarModule,
-    MatNativeDateModule
-    
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatSortModule,
+    MatDividerModule
+
   ],
   declarations: []
 })

@@ -2,13 +2,13 @@ td {
     padding-right: 8px;
 }
 
-.saving-field-table {
+.expense-field-table {
     width: 100%;
 }
-.saving-input {
+.expense-input {
     width: 100%;
 }
 
-.saving-form-footer {
+.expense-form-footer {
     padding: 20px;
 }

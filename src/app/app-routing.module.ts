@@ -4,13 +4,14 @@ import { AppComponent } from './app.component';
 import { IncomeComponent } from './finance/income/income.component';
 import { SavingsComponent } from './finance/savings/savings.component';
 import { DebtsComponent } from './finance/debts/debts.component';
-import { SpendingsComponent } from './finance/spendings/spendings.component';
-import { BillsAndSubscriptionsComponent } from './finance/bills-and-subscriptions/bills-and-subscriptions.component';
+import { ExpenseComponent } from './finance/expense/expense.component';
+import { PaymentComponent } from './finance/payment/payment.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: AppComponent
+    pathMatch: 'full',
+    redirectTo: '/income'
   },
   {
     path: 'income',
@@ -25,14 +26,14 @@ const routes: Routes = [
     component: DebtsComponent
   },
   {
-    path: 'spendings',
-    component: SpendingsComponent
+    path: 'expense',
+    component: ExpenseComponent
   },
   {
-    path: 'bills-and-subscription',
-    component: BillsAndSubscriptionsComponent
+    path: 'payments',
+    component: PaymentComponent
   },
-  
+
 ];
 
 @NgModule({

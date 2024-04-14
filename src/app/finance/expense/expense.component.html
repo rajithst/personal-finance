@@ -1,0 +1,31 @@
+<div class="content-container">
+    <mat-tab-group mat-align-tabs="start" animationDuration="500ms" class="data-tab-group">
+        <mat-tab label="Expenses">
+          <div class="data-card">
+            <div class="data-card-content" *ngIf="expenseData.length>0">
+              <app-transaction-table [transactions]="expenseData" [displayedColumns]="displayedColumns"></app-transaction-table>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Charts">
+          <mat-card>
+            <mat-card-content>
+              <div class="chart-options">
+                <div class="bar-chart">
+                  <highcharts-chart
+                    [Highcharts]="Highcharts"
+                    [options]="chartOptionsColumn"
+                    style="width: 100%; height: 400px; display: block;"
+                  ></highcharts-chart>
+                  <highcharts-chart
+                    [Highcharts]="Highcharts"
+                    [options]="chartOptionsPie"
+                    style="width: 100%; height: 400px; display: block;"
+                  ></highcharts-chart>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+    </mat-tab-group>
+</div>

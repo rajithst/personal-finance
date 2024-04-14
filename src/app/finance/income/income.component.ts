@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { IncomeAddComponent } from './income_add/income_add.component';
+import { IncomeDialog } from './income_add/income_add.component';
 import { FormGroup, FormControl} from '@angular/forms';
-import { IncomeList } from './income.data';
+import {Income, MonthlyIncome} from '../../shared/interface/income.data';
 import { SessionEventMessage, SessionService } from '../../core/session.service';
-import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts';
-import DataLabelsPlugin from 'chartjs-plugin-datalabels';
+
 
 @Component({
   selector: 'app-income',
@@ -14,10 +12,10 @@ import DataLabelsPlugin from 'chartjs-plugin-datalabels';
   styleUrl: './income.component.css'
 })
 export class IncomeComponent implements OnInit{
-  @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
-  
-  constructor(private dialog: MatDialog, 
-              private sessionService: SessionService) {}
+
+  constructor(private dialog: MatDialog,
+              private sessionService: SessionService,
+              ) {}
 
   private sessionData = this.sessionService.getData();
   private message =  this.sessionService.getEventMessage();
@@ -26,89 +24,45 @@ export class IncomeComponent implements OnInit{
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
-  displayedColumns: string[] = ['date', 'source', 'amount'];
-  incomeData: IncomeList[] = [];
+  displayedColumns: string[] = ['date', 'source', 'amount', 'actions'];
+  incomeData: MonthlyIncome[] = [];
+  chartData: any[] = [];
+
 
   ngOnInit() {
     this.message.subscribe((msg: SessionEventMessage)  => {
-      if (msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS) {
-        this.incomeData =  this.sessionData.sessionIncomes;
+      if (msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS || msg === SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS) {
+        this.incomeData =  JSON.parse(JSON.stringify(this.sessionData.incomes));
+        this.prepareChartData();
       }
     })
   }
 
   addIncome() {
-    this.dialog.open(IncomeAddComponent, {
-      width: '550px',
+    const dialog = this.dialog.open(IncomeDialog, {
+      width: '850px',
       position: {
         top: '50px',
-      }
+      },
+      data: {'formData': null}
     });
   }
-  
-  public barChartOptions: ChartConfiguration['options'] = {
-    // We use these empty structures as placeholders for dynamic theming.
-    scales: {
-      x: {},
-      y: {
-        min: 10,
-      },
-    },
-    plugins: {
-      legend: {
-        display: true,
-      },
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-      },
-    },
-  };
-  public barChartType: ChartType = 'bar';
-  public barChartPlugins = [DataLabelsPlugin];
 
-  public barChartData: ChartData<'bar'> = {
-    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
-    datasets: [
-      { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-      { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
-    ],
-  };
+  editRecord(element: Income) {
+    const dialog = this.dialog.open(IncomeDialog, {
+      width: '850px',
+      position: {
+        top: '50px',
+      },
+      data: {'formData': element}
+    });
+   }
 
-  // events
-  public chartClicked({
-    event,
-    active,
-  }: {
-    event?: ChartEvent;
-    active?: object[];
-  }): void {
-    console.log(event, active);
+  deleteRecord(element: Income) {
+    console.log(element)
   }
 
-  public chartHovered({
-    event,
-    active,
-  }: {
-    event?: ChartEvent;
-    active?: object[];
-  }): void {
-    console.log(event, active);
-  }
+  prepareChartData() {
 
-  public randomize(): void {
-    // Only Change 3 values
-    this.barChartData.datasets[0].data = [
-      Math.round(Math.random() * 100),
-      59,
-      80,
-      Math.round(Math.random() * 100),
-      56,
-      Math.round(Math.random() * 100),
-      40,
-    ];
-
-    this.chart?.update();
   }
-  
 }

@@ -7,18 +7,23 @@ import { ProgressBarMode } from '@angular/material/progress-bar';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  
+
   progressMode: ProgressBarMode = 'determinate';
   message = this.sessionService.getEventMessage()
+  filters: any = {}
+
   constructor(private sessionService:SessionService) {
     this.progressMode = 'indeterminate';
     this.sessionService.refresh()
-    console.log(this.sessionService.getData())
     this.message.subscribe((msg: SessionEventMessage)  => {
       if (msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS) {
         this.progressMode = 'determinate';
       }
     })
+  }
 
+  onFilterSearch($event: any) {
+    console.log('reciveing...')
+    this.filters = $event;
   }
 }

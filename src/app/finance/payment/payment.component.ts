@@ -1,16 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {EXPENSE_CATEGORIES, MONTHS, PAYMENT_METHODS, SAVING_CATEGORIES, YEARS} from "../../shared/static/client_data";
+import {MatDialog} from "@angular/material/dialog";
 import {SessionEventMessage, SessionService} from "../../core/session.service";
 import {DropDownType} from "../../shared/interface/common.data";
-import {MONTHS, YEARS, SAVING_CATEGORIES} from "../../shared/static/client_data";
 import {MonthlyTransaction, Transaction} from "../../shared/interface/transactions";
 
 @Component({
-  selector: 'app-savings',
-  templateUrl: './savings.component.html',
-  styleUrl: './savings.component.css'
+  selector: 'app-payment',
+  templateUrl: './payment.component.html',
+  styleUrl: './payment.component.css'
 })
-export class SavingsComponent implements OnInit{
+export class PaymentComponent implements OnInit{
 
   private message =  this.sessionService.getEventMessage();
   private sessionData = this.sessionService.getData();
@@ -21,7 +21,7 @@ export class SavingsComponent implements OnInit{
   MONTHS: DropDownType[] = MONTHS
   SAVING_CATEGORIES: DropDownType[] = SAVING_CATEGORIES
   displayedColumns: string[] = ['date', 'category', 'subcategory', 'payment_method', 'amount', 'destination', 'actions'];
-  savingData: MonthlyTransaction[] = [];
+  paymentData: MonthlyTransaction[] = [];
   searchQuery: string = '';
   savingCategory: number[] = [];
   dataYear: number[] = [2024];
@@ -30,7 +30,7 @@ export class SavingsComponent implements OnInit{
   ngOnInit() {
     this.message.subscribe((msg: SessionEventMessage)  => {
       if (msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS || msg === SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS) {
-        this.savingData =  JSON.parse(JSON.stringify(this.sessionData.saving));
+        this.paymentData =  JSON.parse(JSON.stringify(this.sessionData.payments));
       }
     })
   }
@@ -52,5 +52,4 @@ export class SavingsComponent implements OnInit{
   onSelectionChange() {
 
   }
-
 }

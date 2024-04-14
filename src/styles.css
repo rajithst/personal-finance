@@ -2,3 +2,69 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.input-form-field {
+  margin-right: 10px;
+}
+
+.year-filter-field  {
+  width: 150px;
+}
+
+.month-filter-field  {
+  width: 150px;
+}.input-form-field {
+  margin-right: 10px;
+}
+
+.year-filter-field  {
+  width: 150px;
+}
+
+.month-filter-field  {
+  width: 150px;
+}
+
+.data-filters {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.filter-option {
+  margin: 20px 10px 0 0;
+}
+.data-filters {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.filter-option {
+  margin: 20px 10px 0 0;
+}
+
+.searchbar-filter-field {
+  width: 350px;
+}
+
+.content-container {
+  margin: 10px;
+  height: 90vh;
+}
+
+.data-card {
+  height: 85vh;
+  overflow: hidden;
+}
+
+.data-card-content {
+  max-height: 100%;
+  overflow: auto;
+}

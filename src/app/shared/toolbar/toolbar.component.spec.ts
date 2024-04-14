@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SavingsAddComponent } from './savings_add.component';
+import { ToolbarComponent } from './toolbar.component';
 
-describe('AddComponent', () => {
-  let component: SavingsAddComponent;
-  let fixture: ComponentFixture<SavingsAddComponent>;
+describe('ToolbarComponent', () => {
+  let component: ToolbarComponent;
+  let fixture: ComponentFixture<ToolbarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SavingsAddComponent]
+      declarations: [ToolbarComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(SavingsAddComponent);
+    fixture = TestBed.createComponent(ToolbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

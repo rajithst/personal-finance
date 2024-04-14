@@ -1,0 +1,53 @@
+<mat-toolbar>
+  <div class="data-filters">
+    <div class="filter-option">
+      <mat-form-field appearance="fill" class="input-form-field searchbar-filter-field">
+        <mat-label>Search</mat-label>
+        <input matInput [(ngModel)]="searchQuery" (keyup)="onSearch()">
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="input-form-field">
+        <mat-label>Category</mat-label>
+          <mat-select [(ngModel)]="expenseCategory" multiple>
+            @for (exc of EXPENSE_CATEGORIES; track exc) {
+              <mat-option [value]="exc.value" (click)="onSelectionChange()">{{exc.viewValue}}</mat-option>
+            }
+          </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="input-form-field">
+        <mat-label>Sub Category</mat-label>
+          <mat-select [(ngModel)]="expenseSubCategory">
+            @for (exc of EXPENSE_SUB_CATEGORIES; track exc) {
+              <mat-option [value]="exc.value" (click)="onSelectionChange()">{{exc.viewValue}}</mat-option>
+            }
+          </mat-select>
+      </mat-form-field>
+      <mat-form-field class="input-form-field payment-method-filter-field">
+        <mat-label>Payment Method</mat-label>
+        <mat-select [(ngModel)]="paymentMethod"  multiple>
+          @for (pm of PAYMENT_METHODS; track pm) {
+            <mat-option [value]="pm.value" (click)="onSelectionChange()">{{pm.viewValue}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="input-form-field year-filter-field">
+        <mat-label>Year</mat-label>
+        <mat-select [(ngModel)]="dataYear"  multiple>
+          @for (yr of YEARS; track yr) {
+            <mat-option [value]="yr.value" (click)="onSelectionChange()">{{yr.viewValue}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="input-form-field month-filter-field">
+        <mat-label>Month</mat-label>
+        <mat-select [(ngModel)]="dataMonth"  multiple>
+          @for (month of MONTHS; track month) {
+            <mat-option [value]="month.value" (click)="onSelectionChange()">{{month.viewValue}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-raised-button color="primary" (click)="addTransaction()">Add</button>
+    </div>
+  </div>
+</mat-toolbar>
