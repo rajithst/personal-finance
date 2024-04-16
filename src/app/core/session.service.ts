@@ -107,11 +107,13 @@ export class SessionService {
     if (idx !== -1) {
       const currItem = source[idx];
       const expId = currItem.transactions.findIndex((x: Transaction) => x.id == data.id);
-      source[idx]['total'] += data.amount
       if (expId !== -1) {
         const currTransaction = currItem.transactions[expId];
-        source[idx].transactions[expId] = data
-        source[idx]['total'] -= currTransaction.amount;
+        if (data.is_deleted)  {
+          source[idx].transactions.splice(expId, 1)
+        } else {
+          source[idx].transactions[expId] = data
+        }
       } else {
         source[idx].transactions.push(data);
       }
@@ -140,5 +142,4 @@ export class SessionService {
       return this.session.expenses
     }
   }
-
 }

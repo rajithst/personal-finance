@@ -1,22 +1,23 @@
 import {Component, Inject, OnInit, signal} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { SessionEventMessage, SessionService } from '../../../core/session.service';
+import { SessionEventMessage, SessionService } from '../../core/session.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DropDownType } from '../../interface/common.data';
+import { DropDownType } from '../../shared/interface/common.data';
 import {
-  EXPENSE_CATEGORIES,
-  EXPENSE_SUB_CATEGORIES,
+  TRANSACTION_CATEGORIES,
+  TRANSACTION_SUB_CATEGORIES,
   PAYMENT_METHODS,
   SAVING_CATEGORIES,
   SAVINGS_CATEGORY_ID,
   NA_CATEGORY_ID,
   NA_SUB_CATEGORY_ID
-} from '../../static/client_data';
+} from '../../shared/static/client_data';
 import moment from 'moment';
-import {Transaction, TransactionRequest} from "../../interface/transactions";
+import {Transaction, TransactionRequest} from "../../shared/interface/transactions";
 
 export interface TransactionUpdateDialogData {
-  formData: Transaction | null
+  formData: Transaction | null;
+  task: string
 }
 
 @Component({
@@ -24,11 +25,11 @@ export interface TransactionUpdateDialogData {
   templateUrl: './transaction-update.component.html',
   styleUrl: './transaction-update.component.css'
 })
-export class TransactionUpdateDialog implements OnInit{
+export class TransactionUpdateDialog implements OnInit {
 
   private message =  this.sessionService.getEventMessage();
   PAYMENT_METHODS: DropDownType[] = PAYMENT_METHODS;
-  EXPENSE_CATEGORIES: DropDownType[] = EXPENSE_CATEGORIES;
+  TRANSACTION_CATEGORIES: DropDownType[] = TRANSACTION_CATEGORIES;
   EXPENSE_SUB_CATEGORIES:  DropDownType[] = [];
 
   expenseForm = new FormGroup({
@@ -74,20 +75,20 @@ export class TransactionUpdateDialog implements OnInit{
       })
     }
 
-    this.EXPENSE_SUB_CATEGORIES = EXPENSE_SUB_CATEGORIES[formData?.category!];
+    this.EXPENSE_SUB_CATEGORIES = TRANSACTION_SUB_CATEGORIES[formData?.category!];
 
 
     this.expenseForm.get('category')?.valueChanges.subscribe(value => {
       if (value) {
-        this.EXPENSE_SUB_CATEGORIES = EXPENSE_SUB_CATEGORIES[value];
+        this.EXPENSE_SUB_CATEGORIES = TRANSACTION_SUB_CATEGORIES[value];
       }
     });
     this.expenseForm.get('is_saving')?.valueChanges.subscribe(value => {
       if (value) {
         this.expenseForm.get('category')?.setValue(SAVINGS_CATEGORY_ID);
-        this.EXPENSE_SUB_CATEGORIES = EXPENSE_SUB_CATEGORIES[SAVINGS_CATEGORY_ID];
+        this.EXPENSE_SUB_CATEGORIES = TRANSACTION_SUB_CATEGORIES[SAVINGS_CATEGORY_ID];
       } else {
-        this.EXPENSE_SUB_CATEGORIES = EXPENSE_SUB_CATEGORIES[this.expenseForm.get('category')?.value ||  NA_SUB_CATEGORY_ID]
+        this.EXPENSE_SUB_CATEGORIES = TRANSACTION_SUB_CATEGORIES[this.expenseForm.get('category')?.value ||  NA_SUB_CATEGORY_ID]
       }
     });
   }
@@ -110,7 +111,7 @@ export class TransactionUpdateDialog implements OnInit{
       is_saving: formVals.is_saving!,
       is_expense: formVals.is_expense!,
       is_payment: formVals.is_payment!,
-      is_deleted: false
+      is_deleted: this.data.task == 'delete'
     };
     this.sessionService.updateTransaction(payload);
     this.message.subscribe((msg: SessionEventMessage)  => {

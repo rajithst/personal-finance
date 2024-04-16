@@ -8,27 +8,21 @@ import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/
 import { MaterialModule } from './material.module';
 import { IncomeComponent } from './finance/income/income.component';
 import { IncomeDialog } from './finance/income/income_add/income_add.component';
-import { SavingsComponent } from './finance/savings/savings.component';
-import { ExpenseComponent } from './finance/expense/expense.component';
 import { DebtsComponent } from './finance/debts/debts.component';
-import { PaymentComponent } from './finance/payment/payment.component';
-import { TransactionUpdateDialog } from './shared/transaction-table/transaction-update/transaction-update.component';
-import { TransactionTableComponent } from './shared/transaction-table/transaction-table.component';
-import { ToolbarComponent } from './shared/toolbar/toolbar.component';
+import { TransactionUpdateDialog } from './finance/transaction-update/transaction-update.component';
+import { TransactionTableComponent } from './finance/transaction-table/transaction-table.component';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { TransactionComponent} from './finance/transaction/transaction.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     IncomeComponent,
     IncomeDialog,
-    SavingsComponent,
-    ExpenseComponent,
     DebtsComponent,
-    PaymentComponent,
     TransactionUpdateDialog,
     TransactionTableComponent,
-    ToolbarComponent,
+    TransactionComponent,
   ],
   imports: [
     BrowserModule,

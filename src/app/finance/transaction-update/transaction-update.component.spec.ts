@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PaymentComponent } from './payment.component';
+import { TransactionUpdateDialog } from './transaction-update.component';
 
-describe('BillsAndSubscriptionsComponent', () => {
-  let component: PaymentComponent;
-  let fixture: ComponentFixture<PaymentComponent>;
+describe('ExpenseDialog', () => {
+  let component: TransactionUpdateDialog;
+  let fixture: ComponentFixture<TransactionUpdateDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PaymentComponent]
+      declarations: [TransactionUpdateDialog]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PaymentComponent);
+    fixture = TestBed.createComponent(TransactionUpdateDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

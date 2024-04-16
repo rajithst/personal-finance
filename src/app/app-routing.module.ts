@@ -1,11 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
-import { IncomeComponent } from './finance/income/income.component';
-import { SavingsComponent } from './finance/savings/savings.component';
-import { DebtsComponent } from './finance/debts/debts.component';
-import { ExpenseComponent } from './finance/expense/expense.component';
-import { PaymentComponent } from './finance/payment/payment.component';
+import {TransactionComponent} from "./finance/transaction/transaction.component";
 
 const routes: Routes = [
   {
@@ -15,23 +10,23 @@ const routes: Routes = [
   },
   {
     path: 'income',
-    component: IncomeComponent
+    component: TransactionComponent
   },
   {
     path: 'savings',
-    component: SavingsComponent
+    component: TransactionComponent
   },
   {
     path: 'debts',
-    component: DebtsComponent
+    component: TransactionComponent
   },
   {
     path: 'expense',
-    component: ExpenseComponent
+    component: TransactionComponent
   },
   {
     path: 'payments',
-    component: PaymentComponent
+    component: TransactionComponent
   },
 
 ];

@@ -10,7 +10,7 @@ export class AppComponent {
 
   progressMode: ProgressBarMode = 'determinate';
   message = this.sessionService.getEventMessage()
-  filters: any = {}
+
 
   constructor(private sessionService:SessionService) {
     this.progressMode = 'indeterminate';
@@ -20,10 +20,5 @@ export class AppComponent {
         this.progressMode = 'determinate';
       }
     })
-  }
-
-  onFilterSearch($event: any) {
-    console.log('reciveing...')
-    this.filters = $event;
   }
 }

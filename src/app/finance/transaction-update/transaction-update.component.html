@@ -1,7 +1,33 @@
-<h2 mat-dialog-title>Add Expense</h2>
+<h2 mat-dialog-title>Update Transaction</h2>
 <mat-dialog-content>
+  <ng-container *ngIf="data.task =='delete'">
+    <p>Do you want to delete this record?</p>
+    <table class="delete-info">
+      <tr>
+        <th>Description</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>Date</td>
+        <td>{{data.formData?.date}}</td>
+      </tr>
+      <tr>
+        <td>Amount</td>
+        <td>{{data.formData?.amount}}</td>
+      </tr>
+      <tr>
+        <td>Destination</td>
+        <td>{{data.formData?.destination}}</td>
+      </tr>
+      <tr>
+        <td>Alias</td>
+        <td>{{data.formData?.alias}}</td>
+      </tr>
+    </table>
+  </ng-container>
+  <ng-container *ngIf="data.task == 'update'">
     <form [formGroup]="expenseForm">
-        <table class="expense-field-table" cellspacing="0">
+        <table class="expense-field-table">
           <tr>
               <td>
                 <mat-checkbox color="primary"  formControlName="update_similar">Update similar records</mat-checkbox>
@@ -13,7 +39,6 @@
                 <mat-checkbox color="primary"  formControlName="is_saving">Add to Savings</mat-checkbox>
               </td>
           </tr>
-
           <tr>
               <td>
                   <mat-form-field class="fill expense-input">
@@ -29,7 +54,7 @@
                   <mat-form-field appearance="fill" class="fill expense-input">
                           <mat-label>Category</mat-label>
                               <mat-select formControlName="category">
-                                @for (exc of EXPENSE_CATEGORIES; track exc) {
+                                @for (exc of TRANSACTION_CATEGORIES; track exc) {
                                   <mat-option [value]="exc.value">{{exc.viewValue}}</mat-option>
                                 }
                               </mat-select>
@@ -85,9 +110,11 @@
           <textarea matInput placeholder="Notes"  formControlName="notes"></textarea>
         </mat-form-field>
     </form>
+  </ng-container>
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="expense-form-footer">
   <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="submit()">Save</button>
+  <button mat-raised-button color="primary" (click)="submit()">{{data.task == 'delete' ? 'Delete': 'Save'}}</button>
 </mat-dialog-actions>
