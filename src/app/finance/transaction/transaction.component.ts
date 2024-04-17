@@ -62,7 +62,7 @@ export class TransactionComponent implements OnInit {
       position: {
         top: '50px',
       },
-      data: {'formData': null}
+      data: {'formData': null, 'task': 'add'}
     });
   }
   protected filterData() {
@@ -95,6 +95,8 @@ export class TransactionComponent implements OnInit {
       return this.sessionData.saving
     } else if (currentURL === '/payments') {
       return this.sessionData.payments
+    } else if (currentURL == '/income') {
+      return this.sessionData.incomes;
     } else {
       return []
     }

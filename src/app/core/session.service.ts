@@ -5,12 +5,11 @@ import { Income, MonthlyIncome, IncomeRequest } from '../shared/interface/income
 import {
   MonthlyTransaction,
   Transaction,
-  TransactionRequest,
   TransactionsResponse
 } from '../shared/interface/transactions';
 
 export class SessionData {
-  incomes: MonthlyIncome[] =  [];
+  incomes: MonthlyTransaction[] =  [];
   saving: MonthlyTransaction[] = [];
   expenses: MonthlyTransaction[] = [];
   payments:  MonthlyTransaction[] = [];
@@ -61,7 +60,7 @@ export class SessionService {
   updateIncome(payload:IncomeRequest) {
     this.apiService.updateIncome(payload).subscribe((income: Income) => {
       if (income) {
-        this.updateSessionIncome(income);
+        //this.updateSessionIncome(income);
         this.message.next(SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS)
       } else {
         this.message.next(SessionEventMessage.SESSION_TRANSACTION_UPDATE_FAILED)
@@ -69,7 +68,7 @@ export class SessionService {
     })
   }
 
-  updateTransaction(payload:TransactionRequest) {
+  updateTransaction(payload:Transaction) {
     this.apiService.updateTransaction(payload).subscribe((transaction: Transaction) => {
       if (transaction) {
         this.syncSessionTransaction(transaction);
@@ -80,26 +79,6 @@ export class SessionService {
     })
   }
 
-
-  updateSessionIncome(data: Income) {
-    const idx = this.session.incomes.findIndex((x: MonthlyIncome) => x.year == data.year && x.month == data.month)
-    if (idx !== -1) {
-      const currItem = this.session.incomes[idx];
-      const incomeId = currItem.transactions.findIndex((x: Income) => x.id == data.id);
-      this.session.incomes[idx]['total'] += data.amount
-      if (incomeId !== -1) {
-        const currTransaction = currItem.transactions[incomeId];
-        this.session.incomes[idx].transactions[incomeId] = data
-        this.session.incomes[idx]['total'] -= currTransaction.amount;
-      } else {
-        this.session.incomes[idx].transactions.push(data)
-      }
-    } else  {
-      const incomeObject: MonthlyIncome = {year: data.year!, month: data.month!, month_text: data.month_text!, 'total': data.amount, 'transactions': []}
-      incomeObject.transactions.push(data)
-      this.session.incomes.push(incomeObject)
-    }
-  }
 
   syncSessionTransaction(data: Transaction) {
     let source = this.getTargetMonthlyTransaction(data);
@@ -130,6 +109,10 @@ export class SessionService {
       this.session.expenses = update;
     } else if (payload.is_saving) {
       this.session.saving = update;
+    } else if (payload.is_payment) {
+      this.session.payments = update;
+    } else {
+      this.session.incomes = update;
     }
   }
 
@@ -138,8 +121,10 @@ export class SessionService {
       return this.session.expenses;
     } else if (payload.is_saving) {
       return this.session.saving;
+    } else if (payload.is_payment) {
+      return this.session.payments
     } else {
-      return this.session.expenses
+      return this.session.incomes
     }
   }
 }

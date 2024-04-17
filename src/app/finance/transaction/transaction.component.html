@@ -47,9 +47,6 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div>
-      <button mat-raised-button color="primary" (click)="addTransaction()">Add</button>
-    </div>
   </div>
 </mat-toolbar>
 </div>
@@ -57,6 +54,12 @@
   <div class="data-card">
     <div class="data-card-content">
       <app-transaction-table [transactions]="transactionData" [displayedColumns]="displayedColumns"></app-transaction-table>
+      <div class="transaction-add">
+        <button mat-fab color="primary" (click)="addTransaction()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
     </div>
   </div>
 </div>

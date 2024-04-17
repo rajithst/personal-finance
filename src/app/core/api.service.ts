@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Income, IncomeRequest } from '../shared/interface/income.data';
-import {Transaction, TransactionRequest, TransactionsResponse} from '../shared/interface/transactions';
+import {Transaction, TransactionsResponse} from '../shared/interface/transactions';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -24,7 +24,7 @@ export class ApiService {
         return this.http.get<TransactionsResponse>(`${this.SRC_URL}/transactions`)
     }
 
-    updateTransaction(payload: TransactionRequest): Observable<Transaction> {
+    updateTransaction(payload: Transaction): Observable<Transaction> {
       if (payload.id) {
         return this.http.put<Transaction>(`${this.SRC_URL}/transactions/${payload.id}/`, payload)
       } else {

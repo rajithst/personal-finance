@@ -1,6 +1,6 @@
 import { DropDownType } from "../interface/common.data"
 
-export const SAVINGS_CATEGORY_ID = 5;
+export const SAVINGS_CATEGORY_ID = 6;
 export const NA_CATEGORY_ID = 1000;
 export const NA_SUB_CATEGORY_ID = 1000;
 export const INCOME_CATEGORIES: DropDownType[] = [
