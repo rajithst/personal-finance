@@ -1,4 +1,4 @@
 export interface DropDownType {
-    value: number;
-    viewValue: string;
-  }
+  value: number;
+  viewValue: string;
+}

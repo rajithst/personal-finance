@@ -1,11 +1,10 @@
-
 export interface MonthlyTransaction {
-    year: number;
-    month: number;
-    month_text: string;
-    total: number;
-    transactions: Transaction[];
-    transactions_cp: Transaction[];
+  year: number;
+  month: number;
+  month_text: string;
+  total: number;
+  transactions: Transaction[];
+  transactions_cp: Transaction[];
 }
 
 export interface Transaction {
@@ -14,10 +13,10 @@ export interface Transaction {
   subcategory: number;
   category_text?: string;
   subcategory_text?: string | null;
-  is_payment: boolean,
-  is_deleted: boolean,
-  is_saving: boolean,
-  is_expense: boolean,
+  is_payment: boolean;
+  is_deleted: boolean;
+  is_saving: boolean;
+  is_expense: boolean;
   is_regular_destination: boolean | null;
   payment_method: number;
   payment_method_text?: string | null;
@@ -34,10 +33,8 @@ export interface Transaction {
 }
 
 export interface TransactionsResponse {
-    income: MonthlyTransaction[];
-    expense: MonthlyTransaction[];
-    saving: MonthlyTransaction[];
-    payment: MonthlyTransaction[];
+  income: MonthlyTransaction[];
+  expense: MonthlyTransaction[];
+  saving: MonthlyTransaction[];
+  payment: MonthlyTransaction[];
 }
-
-

@@ -8,21 +8,35 @@
           <mat-date-range-input
             [formGroup]="incomeRange"
             [rangePicker]="incomeRangePicker"
-            >
-            <input matStartDate placeholder="Start date" formControlName="start">
-            <input matEndDate placeholder="End date" formControlName="end">
+          >
+            <input
+              matStartDate
+              placeholder="Start date"
+              formControlName="start"
+            />
+            <input matEndDate placeholder="End date" formControlName="end" />
           </mat-date-range-input>
-          <mat-datepicker-toggle matIconSuffix [for]="incomeRangePicker"></mat-datepicker-toggle>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="incomeRangePicker"
+          ></mat-datepicker-toggle>
           <mat-date-range-picker #incomeRangePicker></mat-date-range-picker>
         </mat-form-field>
       </div>
       <div class="filter-option">
-        <button mat-raised-button color="primary" (click)="addIncome()">Add</button>
+        <button mat-raised-button color="primary" (click)="addIncome()">
+          Add
+        </button>
       </div>
     </div>
   </mat-toolbar>
 
-  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="500ms" class="data-tab-group">
+  <mat-tab-group
+    mat-stretch-tabs="false"
+    mat-align-tabs="start"
+    animationDuration="500ms"
+    class="data-tab-group"
+  >
     <mat-tab label="Incomes">
       <mat-card>
         <mat-card-content>
@@ -30,57 +44,76 @@
             @for (data of incomeData; track $index) {
               <mat-expansion-panel class="monthly-panel">
                 <mat-expansion-panel-header>
-                  <mat-panel-title>{{data.year}} - {{data.month_text}} : ¥{{data.total | number:'1.2-2' }}</mat-panel-title>
+                  <mat-panel-title
+                    >{{ data.year }} - {{ data.month_text }} : ¥{{
+                      data.total | number: "1.2-2"
+                    }}</mat-panel-title
+                  >
                   <mat-panel-description></mat-panel-description>
                 </mat-expansion-panel-header>
-                  <table mat-table [dataSource]="data.transactions" class="mat-elevation-z8">
+                <table
+                  mat-table
+                  [dataSource]="data.transactions"
+                  class="mat-elevation-z8"
+                >
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.date }}
+                    </td>
+                  </ng-container>
 
-                    <ng-container matColumnDef="date">
-                      <th mat-header-cell *matHeaderCellDef> Date </th>
-                      <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-                    </ng-container>
+                  <ng-container matColumnDef="source">
+                    <th mat-header-cell *matHeaderCellDef>Category</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.category_text }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef>Amount</th>
+                    <td mat-cell *matCellDef="let element">
+                      ¥{{ element.amount | number: "1.2-2" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let element">
+                      <button
+                        mat-icon-button
+                        matTooltip="Click to Edit"
+                        class="iconbutton"
+                        color="primary"
+                        (click)="editRecord(element)"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button
+                        mat-icon-button
+                        matTooltip="Click to Delete"
+                        class="iconbutton"
+                        color="warn"
+                        (click)="deleteRecord(element)"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
 
-                    <ng-container matColumnDef="source">
-                      <th mat-header-cell *matHeaderCellDef> Category </th>
-                      <td mat-cell *matCellDef="let element"> {{element.category_text}} </td>
-                    </ng-container>
-                    <ng-container matColumnDef="amount">
-                      <th mat-header-cell *matHeaderCellDef> Amount </th>
-                      <td mat-cell *matCellDef="let element"> ¥{{element.amount | number:'1.2-2'}} </td>
-                    </ng-container>
-                    <ng-container matColumnDef="actions">
-                      <th mat-header-cell *matHeaderCellDef> Actions </th>
-                      <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button matTooltip="Click to Edit"
-                                class="iconbutton"
-                                color="primary"
-                                (click)="editRecord(element)">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                        <button mat-icon-button matTooltip="Click to Delete"
-                                class="iconbutton"
-                                color="warn"
-                                (click)="deleteRecord(element)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                      </td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                  </table>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                  ></tr>
+                </table>
               </mat-expansion-panel>
             }
           </mat-accordion>
         </mat-card-content>
       </mat-card>
-
     </mat-tab>
     <mat-tab label="Charts">
       <mat-card>
-        <mat-card-content>
-
-        </mat-card-content>
+        <mat-card-content> </mat-card-content>
       </mat-card>
     </mat-tab>
   </mat-tab-group>
