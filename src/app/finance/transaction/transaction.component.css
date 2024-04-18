@@ -7,6 +7,33 @@
   align-items: flex-end;
 }
 
+.data-card {
+  height: 85vh;
+  overflow: hidden;
+}
+
+.data-card-content {
+  max-height: 100%;
+  overflow: auto;
+}
+
+.chart-card {
+  height: 85vh;
+  overflow: hidden;
+}
+
+.chart-card-content {
+  max-height: 100%;
+  overflow: auto;
+}
+
 .chart-boxes {
   display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.chart-box-row {
+  display: flex;
+  justify-content: space-around;
 }

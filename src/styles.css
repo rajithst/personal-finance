@@ -59,12 +59,4 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   height: 90vh;
 }
 
-.data-card {
-  height: 85vh;
-  overflow: hidden;
-}
 
-.data-card-content {
-  max-height: 100%;
-  overflow: auto;
-}

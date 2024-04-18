@@ -1,3 +1,4 @@
+
 <ngx-charts-bar-horizontal *ngIf="options.type == 'horizontal'"
       [view]="view"
       [results]="chartData"
@@ -7,6 +8,7 @@
       [legend]="showLegend"
       [showXAxisLabel]="showXAxisLabel"
       [showYAxisLabel]="showYAxisLabel"
+      [showDataLabel]="showDataLabel"
       [xAxisLabel]="xAxisLabel"
       [yAxisLabel]="yAxisLabel"
       (select)="onSelect($event)">
@@ -21,6 +23,7 @@
       [legend]="showLegend"
       [showXAxisLabel]="showXAxisLabel"
       [showYAxisLabel]="showYAxisLabel"
+      [showDataLabel]="showDataLabel"
       [xAxisLabel]="xAxisLabel"
       [yAxisLabel]="yAxisLabel"
       (select)="onSelect($event)">

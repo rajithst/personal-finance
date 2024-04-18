@@ -18,6 +18,7 @@ export class PfBarChartComponent implements OnChanges {
   gradient = true;
   showLegend = false;
   showXAxisLabel = true;
+  showDataLabel = true;
   xAxisLabel = '';
   showYAxisLabel = true;
   yAxisLabel = '';

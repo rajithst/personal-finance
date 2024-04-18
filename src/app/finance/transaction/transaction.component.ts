@@ -10,8 +10,9 @@ import {
 } from '../../core/session.service';
 import { NavigationEnd, Router } from '@angular/router';
 import {
-  MONTHS,
-  PAYMENT_METHODS,
+  INCOME_CATEGORIES,
+  MONTHS, PAYMENT_CATEGORY_ID,
+  PAYMENT_METHODS, SAVINGS_CATEGORY_ID,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
   YEARS,
@@ -49,6 +50,9 @@ export class TransactionComponent implements OnInit {
     'actions',
   ];
   transactionData: MonthlyTransaction[] = [];
+  dataStream: MonthlyTransaction[] = [];
+  filterCategories: DropDownType[] = [];
+  targetCategory: number = 1;
   barChartData: any[] = [];
   pieChartData: any[] = [];
 
@@ -68,12 +72,7 @@ export class TransactionComponent implements OnInit {
         msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
         msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
       ) {
-        this.filterData();
-      }
-    });
-
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
+        this.initPageParams()
         this.filterData();
       }
     });
@@ -97,7 +96,7 @@ export class TransactionComponent implements OnInit {
     const subCategories: number[] = this.transactionSubCategory || [];
     const searchQuery: string = this.searchQuery;
 
-    const currData = this.getDataStream()
+    const currData = this.dataStream
       .filter((x) => years.includes(x.year))
       .filter((x) => (months.length > 0 ? months.includes(x.month) : true))
       .sort((x, y) => y.month - x.month)
@@ -133,32 +132,16 @@ export class TransactionComponent implements OnInit {
     this.pieChartData = this.getSumByCategory(currData)
   }
 
-  private getDataStream(): MonthlyTransaction[] {
-    const currentURL = this.router.url;
-    if (currentURL === '/expense') {
-      return this.sessionData.expenses;
-    } else if (currentURL === '/savings') {
-      return this.sessionData.saving;
-    } else if (currentURL === '/payments') {
-      return this.sessionData.payments;
-    } else if (currentURL == '/income') {
-      return this.sessionData.incomes;
-    } else {
-      return [];
-    }
-  }
-
   private getSumByCategory(transactions: MonthlyTransaction[]) {
     const categorySums: { [category: string]: number } = {};
 
-    // Initialize sums for each category
-    TRANSACTION_CATEGORIES.forEach(category => {
+    this.filterCategories.forEach(category => {
       categorySums[category.viewValue] = 0;
     });
 
     transactions.forEach(data => {
       data.transactions_cp.forEach(x => {
-        const category = x.category_text!;
+        const category = this.targetCategory == 1 ? x.category_text! : x.subcategory_text!;
         const amount = x.amount;
         if (categorySums.hasOwnProperty(category)) {
           categorySums[category] += amount
@@ -176,5 +159,26 @@ export class TransactionComponent implements OnInit {
     console.log($event)
   }
 
-  protected readonly performance = performance;
+  private initPageParams() {
+    const currentURL = this.router.url;
+    if (currentURL === '/expense') {
+      this.dataStream = this.sessionData.expenses;
+      this.filterCategories = TRANSACTION_CATEGORIES
+      this.targetCategory = 1;
+    } else if (currentURL === '/savings') {
+      this.dataStream = this.sessionData.saving;
+      this.filterCategories = TRANSACTION_SUB_CATEGORIES[SAVINGS_CATEGORY_ID]
+      this.targetCategory = 2;
+    } else if (currentURL === '/payments') {
+      this.dataStream = this.sessionData.payments;
+      this.filterCategories = TRANSACTION_SUB_CATEGORIES[PAYMENT_CATEGORY_ID]
+      this.targetCategory = 2;
+    } else if (currentURL == '/income') {
+      this.dataStream = this.sessionData.incomes;
+      this.filterCategories = INCOME_CATEGORIES
+      this.targetCategory = 1;
+    } else {
+      this.dataStream = [];
+    }
+  }
 }

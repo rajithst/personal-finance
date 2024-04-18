@@ -11,10 +11,10 @@ export class PfPieChartComponent {
   @Input() data!: any[];
   @Input() options!: BarChartOptions;
 
-  view: [number, number] = [600, 400];
+  view: [number, number] = [600, 300];
   showLabels: boolean = true;
   gradient = true;
-  showLegend: boolean = false;
+  showLegend: boolean = true;
   chartData: any[] = [];
 
   ngOnChanges() {
