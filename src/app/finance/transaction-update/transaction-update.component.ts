@@ -32,7 +32,7 @@ export interface TransactionUpdateDialogData {
   styleUrl: './transaction-update.component.css',
 })
 export class TransactionUpdateDialog implements OnInit {
-  private message = this.sessionService.getEventMessage();
+
   PAYMENT_METHODS: DropDownType[] = PAYMENT_METHODS;
   TRANSACTION_CATEGORIES: DropDownType[] = TRANSACTION_CATEGORIES;
   EXPENSE_SUB_CATEGORIES: DropDownType[] = [];
@@ -42,8 +42,10 @@ export class TransactionUpdateDialog implements OnInit {
     public dialogRef: MatDialogRef<TransactionUpdateDialog>,
     @Inject(MAT_DIALOG_DATA) public data: TransactionUpdateDialogData,
   ) {}
-
+  message = this.sessionService.getEventMessage();
+  sessionData = this.sessionService.getData();
   transactionForm = this.getNewTransactionForm();
+  destinations: string[] = this.sessionData.destinations;
 
   ngOnInit(): void {
     const formData = this.data.formData;

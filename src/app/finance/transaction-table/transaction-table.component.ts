@@ -15,6 +15,7 @@ export class TransactionTableComponent implements OnChanges {
   @Input() transactions!: MonthlyTransaction[];
   @Input() displayedColumns!: string[];
   transactionData: MonthlyTransaction[] = [];
+
   constructor(private dialog: MatDialog) {}
   ngOnChanges() {
     this.transactionData = this.transactions;

@@ -6,3 +6,7 @@
   display: flex;
   align-items: flex-end;
 }
+
+.chart-boxes {
+  display: flex;
+}

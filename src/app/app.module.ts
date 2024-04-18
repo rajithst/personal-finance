@@ -11,8 +11,10 @@ import { IncomeDialog } from './finance/income/income_add/income_add.component';
 import { DebtsComponent } from './finance/debts/debts.component';
 import { TransactionUpdateDialog } from './finance/transaction-update/transaction-update.component';
 import { TransactionTableComponent } from './finance/transaction-table/transaction-table.component';
-import { HighchartsChartModule } from 'highcharts-angular';
 import { TransactionComponent} from './finance/transaction/transaction.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { PfBarChartComponent } from './finance/charts/pf-bar-chart/pf-bar-chart.component';
+import { PfPieChartComponent } from './finance/charts/pf-pie-chart/pf-pie-chart.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { TransactionComponent} from './finance/transaction/transaction.component
     TransactionUpdateDialog,
     TransactionTableComponent,
     TransactionComponent,
+    PfBarChartComponent,
+    PfPieChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,7 +35,7 @@ import { TransactionComponent} from './finance/transaction/transaction.component
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    HighchartsChartModule
+    NgxChartsModule
   ],
   providers: [
     provideClientHydration(),

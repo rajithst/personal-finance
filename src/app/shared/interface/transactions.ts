@@ -37,4 +37,5 @@ export interface TransactionsResponse {
   expense: MonthlyTransaction[];
   saving: MonthlyTransaction[];
   payment: MonthlyTransaction[];
+  destinations: string[];
 }

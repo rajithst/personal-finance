@@ -18,6 +18,7 @@ import {
 } from '../../shared/static/client_data';
 import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
 import { DropDownType } from '../../shared/interface/common.data';
+import {BarChartOptions} from "../charts/options/chart_options";
 
 @Component({
   selector: 'app-transaction',
@@ -48,6 +49,8 @@ export class TransactionComponent implements OnInit {
     'actions',
   ];
   transactionData: MonthlyTransaction[] = [];
+  barChartData: any[] = [];
+  pieChartData: any[] = [];
 
   dataYear: number[] = [2024];
   dataMonth: number[] = [1, 2, 3];
@@ -55,6 +58,9 @@ export class TransactionComponent implements OnInit {
   transactionCategory: number[] = [];
   transactionSubCategory: number[] = [];
   searchQuery: string = '';
+  barChartOptionsMonthly: BarChartOptions = {type: 'vertical', xAxisLabel: 'Months', yAxisLabel: 'Amount'};
+  barChartOptionsCategory: BarChartOptions = {type: 'horizontal', xAxisLabel: 'Amount', yAxisLabel: 'Category'};
+
 
   ngOnInit() {
     this.message.subscribe((msg: SessionEventMessage) => {
@@ -71,6 +77,7 @@ export class TransactionComponent implements OnInit {
         this.filterData();
       }
     });
+
   }
 
   addTransaction() {
@@ -122,6 +129,8 @@ export class TransactionComponent implements OnInit {
       );
     });
     this.transactionData = currData;
+    this.barChartData = this.transactionData.map(x => ({'name': x.month_text, 'value': x.total}))
+    this.pieChartData = this.getSumByCategory(currData)
   }
 
   private getDataStream(): MonthlyTransaction[] {
@@ -138,4 +147,34 @@ export class TransactionComponent implements OnInit {
       return [];
     }
   }
+
+  private getSumByCategory(transactions: MonthlyTransaction[]) {
+    const categorySums: { [category: string]: number } = {};
+
+    // Initialize sums for each category
+    TRANSACTION_CATEGORIES.forEach(category => {
+      categorySums[category.viewValue] = 0;
+    });
+
+    transactions.forEach(data => {
+      data.transactions_cp.forEach(x => {
+        const category = x.category_text!;
+        const amount = x.amount;
+        if (categorySums.hasOwnProperty(category)) {
+          categorySums[category] += amount
+        }
+      })
+    })
+    const sumByCatehory: any[] = [];
+    for (const [key, value] of Object.entries(categorySums)) {
+      sumByCatehory.push({'name': key, 'value': value})
+    }
+    return sumByCatehory;
+  }
+
+  onSelectionChange($event: any) {
+    console.log($event)
+  }
+
+  protected readonly performance = performance;
 }

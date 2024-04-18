@@ -21,7 +21,7 @@
         </mat-form-field>
         <mat-form-field appearance="fill" class="input-form-field">
           <mat-label>Sub Category</mat-label>
-          <mat-select [(ngModel)]="transactionSubCategory">
+          <mat-select [(ngModel)]="transactionSubCategory" (openedChange)="onSelectionChange($event)">
             @for (exc of TRANSACTION_SUB_CATEGORIES; track exc) {
               <mat-option [value]="exc.value" (click)="filterData()">{{
                 exc.viewValue
@@ -64,17 +64,56 @@
   </mat-toolbar>
 </div>
 <div class="content-container">
-  <div class="data-card">
-    <div class="data-card-content">
-      <app-transaction-table
-        [transactions]="transactionData"
-        [displayedColumns]="displayedColumns"
-      ></app-transaction-table>
-      <div class="transaction-add-button">
-        <button mat-fab color="primary" (click)="addTransaction()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-    </div>
-  </div>
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">table_rows</mat-icon>
+        Data
+      </ng-template>
+        <div class="data-card">
+          <div class="data-card-content">
+            <app-transaction-table
+              [transactions]="transactionData"
+              [displayedColumns]="displayedColumns"
+            ></app-transaction-table>
+            <div class="transaction-add-button">
+              <button mat-fab color="primary" (click)="addTransaction()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">bar_chart</mat-icon>
+        Charts
+      </ng-template>
+      <mat-card>
+        <mat-card-content>
+          <div class="chart-boxes">
+            <div class="chart-box-row">
+              <div class="chart-box">
+              <app-pf-bar-chart [data]="barChartData" [options]="barChartOptionsMonthly"></app-pf-bar-chart>
+              </div>
+              <div class="chart-box">
+                <app-pf-bar-chart [data]="pieChartData" [options]="barChartOptionsCategory"></app-pf-bar-chart>
+              </div>
+            </div>
+            <div class="chart-box-row">
+              <div class="chart-box">
+                <app-pf-pie-chart [data]="pieChartData" [options]="barChartOptionsCategory"></app-pf-pie-chart>
+              </div>
+            </div>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+
 </div>
+<footer>
+  div.
+</footer>

@@ -17,6 +17,7 @@ export class SessionData {
   saving: MonthlyTransaction[] = [];
   expenses: MonthlyTransaction[] = [];
   payments: MonthlyTransaction[] = [];
+  destinations: string[] = [];
 }
 
 export enum SessionEventMessage {
@@ -57,6 +58,7 @@ export class SessionService {
         this.session.saving = transactions.saving;
         this.session.expenses = transactions.expense;
         this.session.payments = transactions.payment;
+        this.session.destinations = transactions.destinations
         this.message.next(SessionEventMessage.INIT_SESSION_LOAD_SUCCESS);
       });
   }

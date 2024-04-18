@@ -17,6 +17,7 @@ import {MatNativeDateModule } from '@angular/material/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSortModule} from '@angular/material/sort';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatNativeDateModule,
     MatCheckboxModule,
     MatSortModule,
-    MatDividerModule
+    MatDividerModule,
+    MatAutocompleteModule
   ],
   exports: [
     MatButtonModule,
@@ -57,7 +59,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatNativeDateModule,
     MatCheckboxModule,
     MatSortModule,
-    MatDividerModule
+    MatDividerModule,
+    MatAutocompleteModule
 
   ],
   declarations: []
