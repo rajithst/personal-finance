@@ -15,6 +15,8 @@ import { TransactionComponent} from './finance/transaction/transaction.component
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PfBarChartComponent } from './finance/charts/pf-bar-chart/pf-bar-chart.component';
 import { PfPieChartComponent } from './finance/charts/pf-pie-chart/pf-pie-chart.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import {SharedModule} from "./shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -27,15 +29,17 @@ import { PfPieChartComponent } from './finance/charts/pf-pie-chart/pf-pie-chart.
     TransactionComponent,
     PfBarChartComponent,
     PfPieChartComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     MaterialModule,
+    SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxChartsModule
+    NgxChartsModule,
   ],
   providers: [
     provideClientHydration(),
@@ -43,6 +47,5 @@ import { PfPieChartComponent } from './finance/charts/pf-pie-chart/pf-pie-chart.
     provideHttpClient(withFetch()),
   ],
   bootstrap: [AppComponent],
-
 })
-export class AppModule { }
+export class AppModule {}

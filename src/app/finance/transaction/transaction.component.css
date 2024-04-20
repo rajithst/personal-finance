@@ -1,7 +1,35 @@
+.transaction-content-container {
+  margin: 10px;
+  height: 90vh;
+}
+
+.input-form-field {
+  margin-right: 10px;
+  height: 75px;
+}
+
+
+.data-filters {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.filter-option {
+  margin: 20px 10px 0 0;
+}
+
+.searchbar-filter-field {
+  width: 350px;
+}
+
 .transaction-add-button {
   position: absolute;
-  bottom: 60px;
-  left: 94%;
+  bottom: 12%;
+  left: 96%;
   z-index: 100;
   display: flex;
   align-items: flex-end;

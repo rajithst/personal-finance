@@ -18,7 +18,10 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSortModule} from '@angular/material/sort';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-
+import {MatMenuModule} from '@angular/material/menu';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   imports: [
@@ -36,11 +39,15 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatToolbarModule,
     MatCardModule,
     MatProgressBarModule,
+    MatMenuModule,
     MatNativeDateModule,
     MatCheckboxModule,
     MatSortModule,
     MatDividerModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSidenavModule,
+    MatListModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     MatButtonModule,
@@ -56,11 +63,15 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatToolbarModule,
     MatCardModule,
     MatProgressBarModule,
+    MatMenuModule,
     MatNativeDateModule,
     MatCheckboxModule,
     MatSortModule,
     MatDividerModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSidenavModule,
+    MatListModule,
+    MatProgressSpinnerModule
 
   ],
   declarations: []

@@ -24,6 +24,7 @@ export class TransactionTableComponent implements OnChanges {
   editRecord(item: Transaction, task: string) {
     item.update_similar = true;
     item.is_regular_destination = true;
+    item.is_deleted = task === 'delete';
     const dialog = this.dialog.open(TransactionUpdateDialog, {
       width: '850px',
       position: {
