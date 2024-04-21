@@ -6,18 +6,20 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { StockComponent } from './stock/stock.component';
 import {StockService} from "./service/stock.service";
 import {SharedModule} from "../shared/shared.module";
+import { ProtofolioComponent } from './protofolio/protofolio.component';
+import {MatFabButton} from "@angular/material/button";
+import {MatIcon} from "@angular/material/icon";
 
 
 @NgModule({
-  declarations: [
-    DashboardComponent,
-    StockComponent
-  ],
+  declarations: [DashboardComponent, StockComponent, ProtofolioComponent],
   imports: [
     CommonModule,
     SharedModule,
-    InvestmentsRoutingModule
+    InvestmentsRoutingModule,
+    MatFabButton,
+    MatIcon,
   ],
-  providers: [StockService]
+  providers: [StockService],
 })
-export class InvestmentsModule { }
+export class InvestmentsModule {}

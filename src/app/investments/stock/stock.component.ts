@@ -12,7 +12,7 @@ export class StockComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.stock = this.route.snapshot.data['stock']
+    this.stock = this.route.snapshot.data['symbol']
     console.log(this.stock)
   }
 }

@@ -7,5 +7,5 @@ export const stockResolver: ResolveFn<Stock> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
 ) => {
-  return inject(StockService).loadStockBySymbol(route.paramMap.get('stock')!)
+  return inject(StockService).loadStockBySymbol(route.paramMap.get('symbol')!)
 }
