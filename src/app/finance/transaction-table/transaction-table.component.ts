@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import {
   MonthlyTransaction,
   Transaction,
-} from '../../shared/interface/transactions';
+} from '../model/transactions';
 import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -13,8 +13,8 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class TransactionTableComponent implements OnChanges {
   @Input() transactions!: MonthlyTransaction[];
-  @Input() displayedColumns!: string[];
   transactionData: MonthlyTransaction[] = [];
+  selectedTransactions: number[] = [];
 
   constructor(private dialog: MatDialog) {}
   ngOnChanges() {
@@ -32,5 +32,11 @@ export class TransactionTableComponent implements OnChanges {
       },
       data: { formData: item, task: task },
     });
+  }
+
+  toggleItem(id: number | null, event: any) {
+    if (event.target.checked) {
+
+    }
   }
 }

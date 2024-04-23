@@ -1,0 +1,37 @@
+.table-container {
+    overflow-x: auto;
+}
+
+table.portfolio-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.portfolio-table thead {
+    background-color: #f2f2f2;
+}
+
+table.portfolio-table thead th, tbody td {
+    padding: 10px;
+    text-align: left;
+}
+
+table.portfolio-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table.portfolio-table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+table.portfolio-table tbody td {
+    border-bottom: 1px solid #ddd;
+}
+
+table.portfolio-table tbody td:first-child {
+    font-weight: bold;
+}
+
+table.portfolio-table tbody td:last-child {
+    font-style: italic;
+}

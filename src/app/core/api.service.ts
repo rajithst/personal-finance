@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { Income, IncomeRequest } from '../shared/interface/income.data';
+import { Income, IncomeRequest } from '../finance/model/income.data';
 import {
   Transaction,
   TransactionsResponse,
-} from '../shared/interface/transactions';
+} from '../finance/model/transactions';
 
 const httpOptions = {
   headers: new HttpHeaders({

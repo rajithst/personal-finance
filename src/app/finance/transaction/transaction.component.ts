@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   MonthlyTransaction,
   Transaction,
-} from '../../shared/interface/transactions';
+} from '../model/transactions';
 import { MatDialog } from '@angular/material/dialog';
 import {
   SessionEventMessage,
@@ -10,15 +10,15 @@ import {
 } from '../../core/session.service';
 import { NavigationEnd, Router } from '@angular/router';
 import {
+  DropDownType,
   INCOME_CATEGORIES,
   MONTHS, PAYMENT_CATEGORY_ID,
   PAYMENT_METHODS, SAVINGS_CATEGORY_ID,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
   YEARS,
-} from '../../shared/static/client_data';
+} from '../../data/client.data';
 import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
-import { DropDownType } from '../../shared/interface/common.data';
 import {BarChartOptions} from "../charts/options/chart_options";
 
 @Component({
@@ -40,18 +40,9 @@ export class TransactionComponent implements OnInit {
     private router: Router,
     private sessionService: SessionService,
   ) {}
-  displayedColumns: string[] = [
-    'date',
-    'category',
-    'subcategory',
-    'payment_method',
-    'amount',
-    'destination',
-    'actions',
-  ];
   transactionData: MonthlyTransaction[] = [];
   dataStream: MonthlyTransaction[] = [];
-  filterCategories: DropDownType[] = [];
+  filterCategories: DropDownType[] = TRANSACTION_CATEGORIES;
   targetCategory: number = 1;
   barChartData: any[] = [];
   pieChartData: any[] = [];
@@ -64,6 +55,7 @@ export class TransactionComponent implements OnInit {
   searchQuery: string = '';
   barChartOptionsMonthly: BarChartOptions = {type: 'vertical', xAxisLabel: 'Months', yAxisLabel: 'Amount'};
   barChartOptionsCategory: BarChartOptions = {type: 'horizontal', xAxisLabel: 'Amount', yAxisLabel: 'Category'};
+  isGridView: boolean = true;
 
 
   ngOnInit() {
@@ -72,10 +64,16 @@ export class TransactionComponent implements OnInit {
         msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
         msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
       ) {
-        this.initPageParams()
+        this.initPageParams();
         this.filterData();
       }
     });
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.initPageParams();
+        this.filterData();
+      }
+    })
 
   }
 
@@ -88,9 +86,25 @@ export class TransactionComponent implements OnInit {
       data: { formData: null, task: 'add' },
     });
   }
+
+  onSelectedItemsChange(selectedItems: DropDownType[], filterType: string) {
+    const values = selectedItems.map(i => i.value);
+    if (filterType == 'category') {
+      this.transactionCategory = values;
+    } else if (filterType == 'subCategory') {
+      this.transactionSubCategory = values;
+    } else if (filterType == 'paymentMethod') {
+      this.paymentMethod = values;
+    } else if (filterType == 'year') {
+      this.dataYear = values;
+    } else if (filterType == 'month') {
+      this.dataMonth = values;
+    }
+    this.filterData();
+  }
   protected filterData() {
-    const years: number[] = this.dataYear || [];
-    const months: number[] = this.dataMonth || [];
+    let years: number[] = this.dataYear || [];
+    let months: number[] = this.dataMonth || [];
     const paymentMethods: number[] = this.paymentMethod || [];
     const categories: number[] = this.transactionCategory || [];
     const subCategories: number[] = this.transactionSubCategory || [];
@@ -161,19 +175,19 @@ export class TransactionComponent implements OnInit {
 
   private initPageParams() {
     const currentURL = this.router.url;
-    if (currentURL === '/expense') {
+    if (currentURL === '/transactions/expense') {
       this.dataStream = this.sessionData.expenses;
       this.filterCategories = TRANSACTION_CATEGORIES
       this.targetCategory = 1;
-    } else if (currentURL === '/savings') {
+    } else if (currentURL === '/transactions/savings') {
       this.dataStream = this.sessionData.saving;
       this.filterCategories = TRANSACTION_SUB_CATEGORIES[SAVINGS_CATEGORY_ID]
       this.targetCategory = 2;
-    } else if (currentURL === '/payments') {
+    } else if (currentURL === '/transactions/payments') {
       this.dataStream = this.sessionData.payments;
       this.filterCategories = TRANSACTION_SUB_CATEGORIES[PAYMENT_CATEGORY_ID]
       this.targetCategory = 2;
-    } else if (currentURL == '/income') {
+    } else if (currentURL == '/transactions/income') {
       this.dataStream = this.sessionData.incomes;
       this.filterCategories = INCOME_CATEGORIES
       this.targetCategory = 1;

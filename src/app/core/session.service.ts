@@ -5,12 +5,12 @@ import {
   Income,
   MonthlyIncome,
   IncomeRequest,
-} from '../shared/interface/income.data';
+} from '../finance/model/income.data';
 import {
   MonthlyTransaction,
   Transaction,
   TransactionsResponse,
-} from '../shared/interface/transactions';
+} from '../finance/model/transactions';
 
 export class SessionData {
   incomes: MonthlyTransaction[] = [];
@@ -31,7 +31,7 @@ export enum SessionEventMessage {
   providedIn: 'root',
 })
 export class SessionService {
-  session: SessionData = new SessionData();
+  private session: SessionData = new SessionData();
   message: Subject<SessionEventMessage> =
     new ReplaySubject<SessionEventMessage>(1);
   constructor(private apiService: ApiService) {}
@@ -95,7 +95,7 @@ export class SessionService {
       });
   }
 
-  syncSessionTransaction(data: Transaction) {
+  private syncSessionTransaction(data: Transaction) {
     let source = this.getTargetMonthlyTransaction(data);
     const idx = source.findIndex(
       (x: MonthlyTransaction) => x.year == data.year && x.month == data.month,
@@ -130,7 +130,7 @@ export class SessionService {
     this.updateSession(data, source);
   }
 
-  updateSession(payload: Transaction, update: MonthlyTransaction[]) {
+  private updateSession(payload: Transaction, update: MonthlyTransaction[]) {
     if (payload.is_expense) {
       this.session.expenses = update;
     } else if (payload.is_saving) {
@@ -142,7 +142,7 @@ export class SessionService {
     }
   }
 
-  getTargetMonthlyTransaction(payload: Transaction): MonthlyTransaction[] {
+  private getTargetMonthlyTransaction(payload: Transaction): MonthlyTransaction[] {
     if (payload.is_expense) {
       return this.session.expenses;
     } else if (payload.is_saving) {

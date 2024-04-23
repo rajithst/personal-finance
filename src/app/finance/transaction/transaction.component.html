@@ -1,123 +1,59 @@
+
 <div class="toolbar">
-    <ul>
-        <li><a routerLink="/income">Income</a></li>
-        <li><a routerLink="/payments">Payments</a></li>
-        <li><a routerLink="/savings">Savings</a></li>
-        <li><a routerLink="/expense">Expenses</a></li>
-    </ul>
-</div>
-<div class="transaction-toolbar">
-  <mat-toolbar>
-    <div class="data-filters">
-      <div class="filter-option">
-        <mat-form-field
-          appearance="fill"
-          class="input-form-field searchbar-filter-field"
-        >
-          <mat-label>Search</mat-label>
-          <input matInput [(ngModel)]="searchQuery" (keyup)="filterData()" />
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="input-form-field">
-          <mat-label>Category</mat-label>
-          <mat-select [(ngModel)]="transactionCategory" multiple>
-            @for (exc of TRANSACTION_CATEGORIES; track exc) {
-              <mat-option [value]="exc.value" (click)="filterData()">{{
-                exc.viewValue
-              }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="input-form-field">
-          <mat-label>Sub Category</mat-label>
-          <mat-select [(ngModel)]="transactionSubCategory" (openedChange)="onSelectionChange($event)">
-            @for (exc of TRANSACTION_SUB_CATEGORIES; track exc) {
-              <mat-option [value]="exc.value" (click)="filterData()">{{
-                exc.viewValue
-              }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="input-form-field payment-method-filter-field">
-          <mat-label>Payment Method</mat-label>
-          <mat-select [(ngModel)]="paymentMethod" multiple>
-            @for (pm of PAYMENT_METHODS; track pm) {
-              <mat-option [value]="pm.value" (click)="filterData()">{{
-                pm.viewValue
-              }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="input-form-field year-filter-field">
-          <mat-label>Year</mat-label>
-          <mat-select [(ngModel)]="dataYear" multiple>
-            @for (yr of YEARS; track yr) {
-              <mat-option [value]="yr.value" (click)="filterData()">{{
-                yr.viewValue
-              }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="input-form-field month-filter-field">
-          <mat-label>Month</mat-label>
-          <mat-select [(ngModel)]="dataMonth" multiple>
-            @for (month of MONTHS; track month) {
-              <mat-option [value]="month.value" (click)="filterData()">{{
-                month.viewValue
-              }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-  </mat-toolbar>
+  <ul class="menu">
+    <li class="menu-item" routerLink="" routerLinkActive="active-menu-item"> <span>Dashboard</span></li>
+    <li class="menu-item" routerLink="income" routerLinkActive="active-menu-item"> <span>Income</span></li>
+    <li class="menu-item" routerLink="payments" routerLinkActive="active-menu-item"> <span>Payments</span></li>
+    <li class="menu-item" routerLink="savings" routerLinkActive="active-menu-item"> <span>Savings</span></li>
+    <li class="menu-item" routerLink="expense" routerLinkActive="active-menu-item"> <span>Expenses</span></li>
+  </ul>
+
+  <div class="toggle-buttons">
+    <app-multi-select-drop-down [title]="'Category'" [items]="TRANSACTION_CATEGORIES" [selectedIds]="transactionCategory" (selectedItemsChange)="onSelectedItemsChange($event, 'category')"></app-multi-select-drop-down>
+    <app-multi-select-drop-down [title]="'Sub Category'" [items]="TRANSACTION_SUB_CATEGORIES" [selectedIds]="transactionSubCategory" (selectedItemsChange)="onSelectedItemsChange($event, 'subCategory')"></app-multi-select-drop-down>
+    <app-multi-select-drop-down [title]="'Payment method'" [items]="PAYMENT_METHODS" [selectedIds]="paymentMethod" (selectedItemsChange)="onSelectedItemsChange($event, 'paymentMethod')"></app-multi-select-drop-down>
+    <app-multi-select-drop-down [title]="'Year'" [items]="YEARS" [selectedIds]="dataYear" (selectedItemsChange)="onSelectedItemsChange($event, 'year')"></app-multi-select-drop-down>
+    <app-multi-select-drop-down [title]="'Month'" [items]="MONTHS" [selectedIds]="dataMonth" (selectedItemsChange)="onSelectedItemsChange($event, 'month')"></app-multi-select-drop-down>
+    <button class="toggle-button" id="chartButton" (click)="isGridView=false">Merge</button>
+
+  </div>
 </div>
 <div class="transaction-content-container">
-  <mat-tab-group>
-    <mat-tab>
-      <ng-template mat-tab-label>
-        Data
-      </ng-template>
-        <div class="data-card">
-          <div class="data-card-content">
-            <app-transaction-table
-              [transactions]="transactionData"
-              [displayedColumns]="displayedColumns"
-            ></app-transaction-table>
-            <div class="transaction-add-button">
-              <button mat-fab color="primary" (click)="addTransaction()">
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
-          </div>
+  <div class="data-card">
+    <div class="data-card-content">
+      <ng-container *ngIf="isGridView">
+        <app-transaction-table
+          [transactions]="transactionData"
+        ></app-transaction-table>
+        <div class="transaction-add-button">
+          <button mat-fab color="primary" (click)="addTransaction()">
+            <mat-icon>add</mat-icon>
+          </button>
         </div>
-    </mat-tab>
+      </ng-container>
+<!--      <ng-container *ngIf="!isGridView">-->
+<!--        <div class="chart-boxes">-->
+<!--          <div class="chart-box-row">-->
+<!--            <div class="chart-box">-->
+<!--            <app-pf-bar-chart [data]="barChartData" [options]="barChartOptionsMonthly"></app-pf-bar-chart>-->
+<!--            </div>-->
+<!--            <div class="chart-box">-->
+<!--              <app-pf-bar-chart [data]="pieChartData" [options]="barChartOptionsCategory"></app-pf-bar-chart>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="chart-box-row">-->
+<!--            <div class="chart-box">-->
+<!--              <app-pf-pie-chart [data]="pieChartData" [options]="barChartOptionsCategory"></app-pf-pie-chart>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </ng-container>-->
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-card-content">
 
-    <mat-tab>
-      <ng-template mat-tab-label>
-        Charts
-      </ng-template>
-      <div class="chart-card">
-        <div class="chart-card-content">
-          <div class="chart-boxes">
-            <div class="chart-box-row">
-              <div class="chart-box">
-              <app-pf-bar-chart [data]="barChartData" [options]="barChartOptionsMonthly"></app-pf-bar-chart>
-              </div>
-              <div class="chart-box">
-                <app-pf-bar-chart [data]="pieChartData" [options]="barChartOptionsCategory"></app-pf-bar-chart>
-              </div>
-            </div>
-            <div class="chart-box-row">
-              <div class="chart-box">
-                <app-pf-pie-chart [data]="pieChartData" [options]="barChartOptionsCategory"></app-pf-pie-chart>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
+    </div>
+  </div>
 
 </div>
-<footer>
-</footer>

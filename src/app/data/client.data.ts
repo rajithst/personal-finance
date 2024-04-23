@@ -1,9 +1,17 @@
-import { DropDownType } from '../interface/common.data';
+
 
 export const SAVINGS_CATEGORY_ID = 6;
 export const PAYMENT_CATEGORY_ID = 14;
 export const NA_CATEGORY_ID = 1000;
 export const NA_SUB_CATEGORY_ID = 1000;
+
+export interface DropDownType {
+  value: number;
+  viewValue: string;
+}export interface DropDownType {
+  value: number;
+  viewValue: string;
+}
 export const INCOME_CATEGORIES: DropDownType[] = [
   { value: 1, viewValue: 'Salary/Wages' },
   { value: 2, viewValue: 'Freelance Income' },

@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {MonthlyTransaction} from "../../../shared/interface/transactions";
+import {MonthlyTransaction} from "../../model/transactions";
 import {BarChartOptions} from "../options/chart_options";
 
 

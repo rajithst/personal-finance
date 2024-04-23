@@ -1,9 +1,16 @@
 <div class="toolbar">
-    <ul>
-        <li><a routerLink="profile">Protofolio</a></li>
-        <li class="has-submenu"><a routerLink="stock">Holdings</a></li>
-        <li class="has-submenu"><a href="#">Dividends</a></li>
-        <li><a href="#">Contact</a></li>
-    </ul>
+  <ul class="menu">
+    <li class="menu-item" routerLink="/" routerLinkActive="active-menu-item"> <span>Dashboard</span></li>
+    <li class="menu-item" routerLink="profile" routerLinkActive="active-menu-item"> <span>Holdings</span></li>
+    <li class="menu-item" routerLink="" routerLinkActive="active-menu-item"> <span>Dividends</span></li>
+    <li class="menu-item" routerLink="" routerLinkActive="active-menu-item"> <span>Transactions</span></li>
+  </ul>
 </div>
-<router-outlet></router-outlet>
+<div class="investment-content-container">
+  <div class="data-card">
+    <div class="data-card-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+

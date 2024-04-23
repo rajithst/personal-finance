@@ -10,16 +10,17 @@ import {
   SessionService,
 } from '../../core/session.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DropDownType } from '../../shared/interface/common.data';
+
 import {
+  DropDownType,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
   PAYMENT_METHODS,
   SAVINGS_CATEGORY_ID,
   NA_SUB_CATEGORY_ID,
-} from '../../shared/static/client_data';
+} from '../../data/client.data';
 import moment from 'moment';
-import { Transaction } from '../../shared/interface/transactions';
+import { Transaction } from '../model/transactions';
 
 export interface TransactionUpdateDialogData {
   formData: Transaction | null;

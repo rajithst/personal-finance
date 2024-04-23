@@ -1,3 +1,37 @@
 .transaction-panel {
   margin: 10px 0;
 }
+
+table.transaction-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.transaction-table thead {
+    background-color: #f2f2f2;
+}
+
+table.transaction-table thead th, tbody td {
+    padding: 0 10px;
+    text-align: center;
+}
+
+table.transaction-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table.transaction-table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+table.transaction-table tbody td {
+    border-bottom: 1px solid #ddd;
+}
+
+table.transaction-table tbody td:first-child {
+    font-weight: bold;
+}
+
+table.transaction-table tbody td:last-child {
+    font-style: italic;
+}
