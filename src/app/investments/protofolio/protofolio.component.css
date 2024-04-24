@@ -35,3 +35,13 @@ table.portfolio-table tbody td:first-child {
 table.portfolio-table tbody td:last-child {
     font-style: italic;
 }
+
+.transaction-add-button {
+  position: absolute;
+  bottom: 2%;
+  left: 96%;
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+

@@ -1,45 +1,19 @@
-.toolbar {
-  background-color: #333;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-}
+
 
 /* Menu styling */
-.menu {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+
+
+
+
+.data-card {
+  height: 85vh;
+  overflow: hidden;
 }
 
-.menu-item {
-  display: inline-block;
-  margin-right: 20px;
-  position: relative;
-  cursor: pointer;
+.data-card-content {
+  max-height: 100%;
+  margin: 0 10%;
+  overflow: auto;
 }
 
-.submenu {
-  display: none;
-  position: absolute;
-  background-color: #333;
-  padding: 10px;
-  left: 0;
-  top: 100%;
-  min-width: 120px;
-}
 
-.menu-item:hover .submenu {
-  display: block;
-}
-
-.active-menu-item > span {
-  color: #87edc1;
-}
-
-.investment-content-container {
-  margin: 10px;
-  height: 90vh;
-}

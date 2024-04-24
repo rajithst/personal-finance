@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SessionEventMessage, SessionService } from './core/session.service';
+import { SessionEventMessage, SessionService } from './finance/service/session.service';
 import { ProgressBarMode } from '@angular/material/progress-bar';
 @Component({
   selector: 'app-root',

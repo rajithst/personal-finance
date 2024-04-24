@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { MaterialModule } from './material.module';
-import { DebtsComponent } from './finance/debts/debts.component';
+import { TransactionDashboardComponent } from './finance/dashboard/dashboard.component';
 import { TransactionUpdateDialog } from './finance/transaction-update/transaction-update.component';
 import { TransactionTableComponent } from './finance/transaction-table/transaction-table.component';
 import { TransactionComponent} from './finance/transaction/transaction.component';
@@ -15,17 +15,19 @@ import { PfBarChartComponent } from './finance/charts/pf-bar-chart/pf-bar-chart.
 import { PfPieChartComponent } from './finance/charts/pf-pie-chart/pf-pie-chart.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import {SharedModule} from "./shared/shared.module";
+import { SubmenuComponent } from './finance/submenu/submenu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DebtsComponent,
+    TransactionDashboardComponent,
     TransactionUpdateDialog,
     TransactionTableComponent,
     TransactionComponent,
     PfBarChartComponent,
     PfPieChartComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    SubmenuComponent
   ],
   imports: [
     BrowserModule,

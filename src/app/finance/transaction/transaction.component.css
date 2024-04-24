@@ -3,31 +3,10 @@
   height: 90vh;
 }
 
-.input-form-field {
-  margin-right: 10px;
-  height: 75px;
-}
-
-.data-filters {
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
-.filter-option {
-  margin: 20px 10px 0 0;
-}
-
-.searchbar-filter-field {
-  width: 350px;
-}
 
 .transaction-add-button {
   position: absolute;
-  bottom: 12%;
+  bottom: 2%;
   left: 96%;
   z-index: 100;
   display: flex;
@@ -41,6 +20,7 @@
 
 .data-card-content {
   max-height: 100%;
+  margin: 0 10%;
   overflow: auto;
 }
 
@@ -66,40 +46,13 @@
   padding: 10px 20px;
 }
 
-/* Menu styling */
-.menu {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
 
-.menu-item {
-  display: inline-block;
-  margin-right: 20px;
-  position: relative;
-  cursor: pointer;
-}
-
-.submenu {
-  display: none;
-  position: absolute;
-  background-color: #333;
-  padding: 10px;
-  left: 0;
-  top: 100%;
-  min-width: 120px;
-}
-
-.menu-item:hover .submenu {
-  display: block;
-}
-
-.toggle-buttons {
+.filter-buttons {
   display: flex;
   align-items: center;
 }
 
-.toggle-button {
+.filter-button {
   background-color: #555;
   color: #fff;
   border: none;
@@ -109,7 +62,7 @@
   border-radius: 5px;
 }
 
-.toggle-button:hover {
+.filter-button:hover {
   background-color: #777;
 }
 

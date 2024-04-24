@@ -6,6 +6,7 @@ import {
   Transaction,
   TransactionsResponse,
 } from '../finance/model/transactions';
+import {InvestmentResponse} from "../investments/model/investment";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -17,23 +18,27 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class ApiService {
-  private SRC_URL = 'http://127.0.0.1:8000/finance';
+  private SRC_URL = 'http://127.0.0.1:8000';
 
   constructor(private http: HttpClient) {}
 
   getTransactions(): Observable<TransactionsResponse> {
-    return this.http.get<TransactionsResponse>(`${this.SRC_URL}/transactions`);
+    return this.http.get<TransactionsResponse>(`${this.SRC_URL}/finance/transactions`);
+  }
+
+  getInvestments(): Observable<InvestmentResponse> {
+    return this.http.get<InvestmentResponse>(`${this.SRC_URL}/investments/list`)
   }
 
   updateTransaction(payload: Transaction): Observable<Transaction> {
     if (payload.id) {
       return this.http.put<Transaction>(
-        `${this.SRC_URL}/transactions/${payload.id}/`,
+        `${this.SRC_URL}/finance/transactions/${payload.id}/`,
         payload,
       );
     } else {
       return this.http.post<Transaction>(
-        `${this.SRC_URL}/transactions/`,
+        `${this.SRC_URL}/finance/transactions/`,
         payload,
       );
     }

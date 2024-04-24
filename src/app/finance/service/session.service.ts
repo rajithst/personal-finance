@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
+import { ApiService } from '../../core/api.service';
 import { ReplaySubject, Subject } from 'rxjs';
 import {
   Income,
   MonthlyIncome,
   IncomeRequest,
-} from '../finance/model/income.data';
+} from '../model/income.data';
 import {
   MonthlyTransaction,
   Transaction,
   TransactionsResponse,
-} from '../finance/model/transactions';
+} from '../model/transactions';
 
 export class SessionData {
   incomes: MonthlyTransaction[] = [];

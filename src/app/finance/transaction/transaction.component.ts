@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {
   SessionEventMessage,
   SessionService,
-} from '../../core/session.service';
+} from '../service/session.service';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   DropDownType,
@@ -40,6 +40,7 @@ export class TransactionComponent implements OnInit {
     private router: Router,
     private sessionService: SessionService,
   ) {}
+
   transactionData: MonthlyTransaction[] = [];
   dataStream: MonthlyTransaction[] = [];
   filterCategories: DropDownType[] = TRANSACTION_CATEGORIES;
@@ -68,6 +69,7 @@ export class TransactionComponent implements OnInit {
         this.filterData();
       }
     });
+
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.initPageParams();
@@ -175,19 +177,19 @@ export class TransactionComponent implements OnInit {
 
   private initPageParams() {
     const currentURL = this.router.url;
-    if (currentURL === '/transactions/expense') {
+    if (currentURL === '/expense') {
       this.dataStream = this.sessionData.expenses;
       this.filterCategories = TRANSACTION_CATEGORIES
       this.targetCategory = 1;
-    } else if (currentURL === '/transactions/savings') {
+    } else if (currentURL === '/savings') {
       this.dataStream = this.sessionData.saving;
       this.filterCategories = TRANSACTION_SUB_CATEGORIES[SAVINGS_CATEGORY_ID]
       this.targetCategory = 2;
-    } else if (currentURL === '/transactions/payments') {
+    } else if (currentURL === '/payments') {
       this.dataStream = this.sessionData.payments;
       this.filterCategories = TRANSACTION_SUB_CATEGORIES[PAYMENT_CATEGORY_ID]
       this.targetCategory = 2;
-    } else if (currentURL == '/transactions/income') {
+    } else if (currentURL == '/income') {
       this.dataStream = this.sessionData.incomes;
       this.filterCategories = INCOME_CATEGORIES
       this.targetCategory = 1;

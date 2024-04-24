@@ -8,7 +8,7 @@ import {
 import {
   SessionEventMessage,
   SessionService,
-} from '../../core/session.service';
+} from '../service/session.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import {

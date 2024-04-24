@@ -2,6 +2,11 @@
   margin: 10px 0;
 }
 
+.transaction-item-panel .mat-expansion-panel-header-description {
+  justify-content: end;
+  align-items: center;
+}
+
 table.transaction-table {
     width: 100%;
     border-collapse: collapse;

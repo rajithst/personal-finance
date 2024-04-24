@@ -1,13 +1,13 @@
-<mat-accordion multi="true">
+<mat-accordion multi="true" class="transaction-item-panel">
   @for (data of transactionData; track $index) {
     <mat-expansion-panel class="transaction-panel">
       <mat-expansion-panel-header>
-        <mat-panel-title
-          >{{ data.year }} - {{ data.month_text }} : ¥{{
+        <mat-panel-title>{{ data.year }} - {{ data.month_text }} : ¥{{
             data.total | number: "1.2-2"
-          }}</mat-panel-title
-        >
-        <mat-panel-description></mat-panel-description>
+          }}</mat-panel-title>
+        <mat-panel-description>
+          <mat-icon>pie_chart</mat-icon>
+        </mat-panel-description>
       </mat-expansion-panel-header>
       <table class="transaction-table">
         <thead>

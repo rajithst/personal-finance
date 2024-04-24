@@ -4,6 +4,8 @@ import {LoadingComponent} from "./loading/loading.component";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { MultiSelectDropDownComponent } from './ui-components/multi-select-drop-down/multi-select-drop-down.component';
 
+
+
 @NgModule({
   declarations: [
     LoadingComponent,
@@ -12,6 +14,7 @@ import { MultiSelectDropDownComponent } from './ui-components/multi-select-drop-
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
+
   ],
   exports: [
     LoadingComponent,
