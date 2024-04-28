@@ -26,17 +26,25 @@ export class TransactionComponent {
 
   transactionData: MonthlyTransaction[] = [];
 
-  dataYear: number[] = [2024];
-  dataMonth: number[] = [1, 2, 3];
+  dataYear: number[] = [];
+  dataMonth: number[] = [];
   paymentMethod: number[] = [];
   transactionCategory: number[] = [];
   transactionSubCategory: number[] = [];
   searchQuery: string = '';
 
   protected fetchQueryParams(params: Params) {
-    this.transactionCategory = params['cat']?.split(',').map(Number) || [];
-    this.dataYear = params['years']?.split(',').map(Number) || [2024];
-    this.dataMonth = params['months']?.split(',').map(Number) || [1, 2, 3];
+    const getOrDefault = (value: string) =>  { return value === '' ? [] : value.split(',').map(Number) }
+
+    this.transactionCategory = getOrDefault(params['cat']! || '');
+    this.dataYear = getOrDefault(params['years']! || '');
+    this.dataMonth = getOrDefault(params['months']! || '');
+    if (this.dataYear.length == 0) {
+      this.dataYear = [2024];
+    }
+    if (this.dataMonth.length == 0) {
+      this.dataMonth = [1, 2, 3];
+    }
   }
 
   addTransaction() {

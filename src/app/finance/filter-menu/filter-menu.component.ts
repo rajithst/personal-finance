@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
-  DropDownType,
-  MONTHS,
-  PAYMENT_METHODS,
+  DropDownType, INCOME_CATEGORIES,
+  MONTHS, PAYMENT_CATEGORIES,
+  PAYMENT_METHODS, SAVING_CATEGORIES,
   TRANSACTION_CATEGORIES,
   YEARS,
 } from '../../data/client.data';
@@ -15,34 +15,52 @@ import {months} from "moment";
   styleUrl: './filter-menu.component.css',
 })
 export class FilterMenuComponent implements OnInit {
-
-  protected readonly YEARS = YEARS;
-  protected readonly MONTHS = MONTHS;
-  protected readonly PAYMENT_METHODS = PAYMENT_METHODS;
-  protected readonly TRANSACTION_CATEGORIES = TRANSACTION_CATEGORIES;
-  protected readonly TRANSACTION_SUB_CATEGORIES: DropDownType[] = [];
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  protected URL: string = '';
+  constructor(private route: ActivatedRoute, private router: Router) {
+    const urlSegmants: string[] = [];
+    this.route.url.forEach(x => {
+      urlSegmants.push(x.map(x => x.path)[0])
+    })
+    this.URL = urlSegmants[urlSegmants.length - 1]
+  }
 
   categoryParams: number[] = []
   subCategoryParams: number[] = []
-  yearParams: number[] = []
-  monthParams: number[] = []
+  yearParams: number[] = [2024]
+  monthParams: number[] = [1, 2, 3]
 
-  transactionCategories = TRANSACTION_CATEGORIES;
+  transactionCategories: DropDownType[] = TRANSACTION_CATEGORIES;
   years = YEARS;
   months = MONTHS;
 
+  paramsMap: any  = {
+    'category': this.categoryParams,
+    'year': this.yearParams,
+    'month': this.monthParams
+  }
+
   ngOnInit() {
+    if (this.URL === 'savings') {
+      this.transactionCategories = SAVING_CATEGORIES;
+    } else if (this.URL === 'income') {
+      this.transactionCategories = INCOME_CATEGORIES
+    } else if (this.URL === 'payments') {
+      this.transactionCategories = PAYMENT_CATEGORIES
+    }
     this.route.queryParams.subscribe(params => {
       this.categoryParams = params['cat']?.split(',').map(Number) || [];
       this.subCategoryParams = params['subcat']?.split(',').map(Number) || [];
       this.yearParams = params['years']?.split(',').map(Number) || [2024];
       this.monthParams = params['months']?.split(',').map(Number) || [1, 2, 3];
+      console.log(this.categoryParams)
       this.buildQueryParams()
     })
   }
 
   buildQueryParams() {
+    this.transactionCategories.forEach(y => y.checked = false);
+    this.years.forEach(y => y.checked = false);
+    this.months.forEach(y => y.checked = false);
     this.transactionCategories.forEach(y => {
       if (this.categoryParams.includes(y.value)) {
         y.checked = true;
@@ -61,28 +79,21 @@ export class FilterMenuComponent implements OnInit {
   }
   toggleItem($event: any, item: any, target: string) {
     if ($event.target.checked) {
-      if (target=='category') {
-        this.categoryParams.push(item.value)
-      }
+      this.paramsMap[target].push(item.value)
     } else {
-
+      const idx = this.paramsMap[target].indexOf(item.value);
+      if (idx !== -1)  {
+        this.paramsMap[target].splice(idx, 1);
+      }
     }
-    this.router.navigate(['/expense'], { queryParams: this.prepareQueryParams()})
-    // if (this.isSelected(item)) {
-    //   this.selectedItems = this.selectedItems.filter(
-    //     (selectedItem) => selectedItem !== item,
-    //   );
-    // } else {
-    //   this.selectedItems.push(item);
-    // }
-    // this.selectedItemsChange.emit(this.selectedItems);
+    this.router.navigate([`/${this.URL}`], { queryParams: this.prepareQueryParams()})
   }
 
   private prepareQueryParams() {
     const qpm: any = {};
-    qpm['cat'] = this.categoryParams.join(',')
-    qpm['years'] = this.yearParams.join(',')
-    qpm['months'] = this.monthParams.join(',')
+    qpm['cat'] = this.paramsMap['category'].join(',')
+    qpm['years'] = this.paramsMap['year'].join(',')
+    qpm['months'] = this.paramsMap['month'].join(',')
     return qpm;
   }
 }
