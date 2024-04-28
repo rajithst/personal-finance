@@ -6,7 +6,8 @@ import {
   Transaction,
   TransactionsResponse,
 } from '../finance/model/transactions';
-import {InvestmentResponse} from "../investments/model/investment";
+import { InvestmentResponse } from '../investments/model/investment';
+import { StockPurchase } from '../investments/model/transaction';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -23,38 +24,32 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   getTransactions(): Observable<TransactionsResponse> {
-    return this.http.get<TransactionsResponse>(`${this.SRC_URL}/finance/transactions`);
+    return this.http.get<TransactionsResponse>(
+      `${this.SRC_URL}/finance/transactions`,
+    );
   }
 
   getInvestments(): Observable<InvestmentResponse> {
-    return this.http.get<InvestmentResponse>(`${this.SRC_URL}/investments/list`)
+    return this.http.get<InvestmentResponse>(
+      `${this.SRC_URL}/investments/list`,
+    );
   }
 
   updateTransaction(payload: Transaction): Observable<Transaction> {
-    if (payload.id) {
-      return this.http.put<Transaction>(
-        `${this.SRC_URL}/finance/transactions/${payload.id}/`,
-        payload,
-      );
-    } else {
-      return this.http.post<Transaction>(
-        `${this.SRC_URL}/finance/transactions/`,
-        payload,
-      );
-    }
+    return this.http.post<Transaction>(
+      `${this.SRC_URL}/finance/transactions/`,
+      payload,
+    );
   }
 
   updateIncome(payload: IncomeRequest): Observable<Income> {
-    if (payload.id) {
-      return this.http.put<Income>(
-        `${this.SRC_URL}/transactions/income/${payload.id}/`,
-        payload,
-      );
-    } else {
-      return this.http.post<Income>(
-        `${this.SRC_URL}/transactions/income/`,
-        payload,
-      );
-    }
+    return this.http.post<Income>(
+      `${this.SRC_URL}/transactions/income/`,
+      payload,
+    );
+  }
+
+  updateStockPurchaseHistory(payload: StockPurchase): Observable<any> {
+    return this.http.post(`${this.SRC_URL}/investments/stock-purchase/`, payload)
   }
 }

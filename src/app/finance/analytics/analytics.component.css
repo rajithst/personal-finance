@@ -1,0 +1,10 @@
+.chart-boxes {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.chart-box-row {
+  display: flex;
+  justify-content: space-around;
+}

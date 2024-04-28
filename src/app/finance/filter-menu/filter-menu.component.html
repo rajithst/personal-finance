@@ -1,0 +1,42 @@
+
+<!--<div class="filter-section">-->
+<!--  <div class="filter-title"><p>{{title}}</p></div>-->
+<!--  <div class="filter-items">-->
+<!--    <ul>-->
+<!--      @for (exc of items; track exc) {-->
+<!--        <li><input type="checkbox" [value]="exc.value" (change)="toggleItem(exc)" [checked]="isSelected(exc)">{{exc.viewValue}}</li>-->
+<!--      }-->
+<!--    </ul>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div class="filter-section">
+  <div class="filter-title"><p>Categories</p></div>
+  <div class="filter-items">
+    <ul>
+      @for (exc of transactionCategories; track exc) {
+        <li><input type="checkbox" [value]="exc.value" (change)="toggleItem($event, exc, 'category')" [checked]="exc.checked">{{exc.viewValue}}</li>
+      }
+    </ul>
+  </div>
+</div>
+<div class="filter-section">
+  <div class="filter-title"><p>Years</p></div>
+  <div class="filter-items">
+    <ul>
+      @for (exc of years; track exc) {
+        <li><input type="checkbox" [value]="exc.value" (change)="toggleItem($event, exc, 'year')" [checked]="exc.checked">{{exc.viewValue}}</li>
+      }
+    </ul>
+  </div>
+</div>
+
+<div class="filter-section">
+  <div class="filter-title"><p>Months</p></div>
+  <div class="filter-items">
+    <ul>
+      @for (exc of months; track exc) {
+        <li><input type="checkbox" [value]="exc.value" (change)="toggleItem($event, exc, 'month')" [checked]="exc.checked">{{exc.viewValue}}</li>
+      }
+    </ul>
+</div>

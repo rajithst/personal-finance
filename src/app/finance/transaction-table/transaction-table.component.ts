@@ -1,10 +1,8 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import {
-  MonthlyTransaction,
-  Transaction,
-} from '../model/transactions';
+import { MonthlyTransaction, Transaction } from '../model/transactions';
 import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-transaction-table',
@@ -16,7 +14,10 @@ export class TransactionTableComponent implements OnChanges {
   transactionData: MonthlyTransaction[] = [];
   selectedTransactions: number[] = [];
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+  ) {}
   ngOnChanges() {
     this.transactionData = this.transactions;
   }
@@ -32,11 +33,17 @@ export class TransactionTableComponent implements OnChanges {
       },
       data: { formData: item, task: task },
     });
+    dialog.afterClosed().subscribe((result) => {
+      if (result.refresh) {
+        this.snackBar.open('Updated!', 'Success', {
+          duration: 3000,
+        });
+      }
+    });
   }
 
   toggleItem(id: number | null, event: any) {
     if (event.target.checked) {
-
     }
   }
 }

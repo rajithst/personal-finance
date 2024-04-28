@@ -39,9 +39,14 @@ table.portfolio-table tbody td:last-child {
 .transaction-add-button {
   position: absolute;
   bottom: 2%;
-  left: 96%;
+  left: 94%;
   z-index: 100;
   display: flex;
   align-items: flex-end;
 }
 
+
+.ticker-image {
+  height: 20px;
+  width: 20px;
+}

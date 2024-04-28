@@ -1,20 +1,11 @@
-
-<div class="toolbar">
-  <app-submenu></app-submenu>
-  <div class="filter-buttons">
-    <app-multi-select-drop-down [title]="'Category'" [items]="TRANSACTION_CATEGORIES" [selectedIds]="transactionCategory" (selectedItemsChange)="onSelectedItemsChange($event, 'category')"></app-multi-select-drop-down>
-    <app-multi-select-drop-down [title]="'Sub Category'" [items]="TRANSACTION_SUB_CATEGORIES" [selectedIds]="transactionSubCategory" (selectedItemsChange)="onSelectedItemsChange($event, 'subCategory')"></app-multi-select-drop-down>
-    <app-multi-select-drop-down [title]="'Payment method'" [items]="PAYMENT_METHODS" [selectedIds]="paymentMethod" (selectedItemsChange)="onSelectedItemsChange($event, 'paymentMethod')"></app-multi-select-drop-down>
-    <app-multi-select-drop-down [title]="'Year'" [items]="YEARS" [selectedIds]="dataYear" (selectedItemsChange)="onSelectedItemsChange($event, 'year')"></app-multi-select-drop-down>
-    <app-multi-select-drop-down [title]="'Month'" [items]="MONTHS" [selectedIds]="dataMonth" (selectedItemsChange)="onSelectedItemsChange($event, 'month')"></app-multi-select-drop-down>
-    <button class="filter-button" id="chartButton" (click)="isGridView=false">Merge</button>
-  </div>
-</div>
-
+<app-submenu></app-submenu>
 <div class="transaction-content-container">
   <div class="data-card">
+    <div class="data-filter-content">
+      <app-filter-menu></app-filter-menu>
+    </div>
     <div class="data-card-content">
-      <ng-container *ngIf="isGridView">
+      <ng-container>
         <app-transaction-table
           [transactions]="transactionData"
         ></app-transaction-table>
@@ -25,29 +16,6 @@
         </div>
 
       </ng-container>
-<!--      <ng-container *ngIf="!isGridView">-->
-<!--        <div class="chart-boxes">-->
-<!--          <div class="chart-box-row">-->
-<!--            <div class="chart-box">-->
-<!--            <app-pf-bar-chart [data]="barChartData" [options]="barChartOptionsMonthly"></app-pf-bar-chart>-->
-<!--            </div>-->
-<!--            <div class="chart-box">-->
-<!--              <app-pf-bar-chart [data]="pieChartData" [options]="barChartOptionsCategory"></app-pf-bar-chart>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="chart-box-row">-->
-<!--            <div class="chart-box">-->
-<!--              <app-pf-pie-chart [data]="pieChartData" [options]="barChartOptionsCategory"></app-pf-pie-chart>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </ng-container>-->
     </div>
   </div>
-  <div class="chart-card">
-    <div class="chart-card-content">
-
-    </div>
-  </div>
-
 </div>

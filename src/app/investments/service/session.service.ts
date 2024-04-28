@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import {ApiService} from "../../core/api.service";
+import {StockPurchase} from "../model/transaction";
 
 
 export class SessionData {
   holdings: any[] = [];
   dividends: any[] = [];
   transactions: any[] = [];
+  companies: any[] = [];
 }
 
 export enum SessionEventMessage {
@@ -31,6 +33,7 @@ export class SessionService {
   refresh() {
     console.log('getting investment data...')
     this.apiService.getInvestments().subscribe(data => {
+      this.session.companies = data.companies;
       this.session.holdings = data.holdings;
       this.session.dividends = data.dividends;
       this.session.transactions = data.transactions;
@@ -38,4 +41,9 @@ export class SessionService {
     })
   }
 
+  updateStockPurchaseHistory(payload: StockPurchase) {
+    this.apiService.updateStockPurchaseHistory(payload).subscribe(data => {
+      console.log(data)
+    })
+  }
 }

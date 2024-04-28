@@ -2,8 +2,6 @@
   margin: 10px;
   height: 90vh;
 }
-
-
 .transaction-add-button {
   position: absolute;
   bottom: 2%;
@@ -14,6 +12,7 @@
 }
 
 .data-card {
+  display: flex;
   height: 85vh;
   overflow: hidden;
 }
@@ -24,48 +23,7 @@
   overflow: auto;
 }
 
-.chart-boxes {
-  display: flex;
-  justify-content: space-around;
-  flex-direction: column;
-}
-
-.chart-box-row {
-  display: flex;
-  justify-content: space-around;
-}
-
-
-/* Toolbar styling */
-.toolbar {
-  background-color: #333;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-}
-
-
-.filter-buttons {
-  display: flex;
-  align-items: center;
-}
-
-.filter-button {
-  background-color: #555;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  margin-left: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.filter-button:hover {
-  background-color: #777;
-}
-
-.active-menu-item > span {
-  color: #87edc1;
+.data-filter-content {
+  max-height: 85vh;
+  overflow: auto;
 }

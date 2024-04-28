@@ -1,0 +1,82 @@
+<h2 mat-dialog-title>
+  {{ data.task == "add" ? "Add" : "Update" }} Transaction
+  <span *ngIf="data.task != 'add'">({{ data.formData?.id }})</span>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="transactionForm">
+    <ng-container *ngIf="data.task == 'delete'">
+      <p>Do you want to delete this record?</p>
+      <table class="delete-info">
+
+        <tr>
+          <td>Delete Reason</td>
+          <td>
+            <mat-form-field class="fill expense-input">
+              <textarea matInput formControlName="delete_reason"></textarea>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </ng-container>
+    <ng-container *ngIf="data.task == 'update' || data.task == 'add'">
+      <table class="expense-field-table">
+        <tr>
+          <td colspan="3">
+            <mat-form-field class="fill expense-input">
+              <mat-label>Company</mat-label>
+              <mat-select formControlName="company">
+                @for (cmp of COMPANIES; track cmp) {
+                  <mat-option [value]="cmp.value">{{ cmp.viewValue }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="fill expense-input">
+              <mat-label>Price</mat-label>
+              <input matInput placeholder="Purchase price" formControlName="purchase_price" />
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="fill expense-input">
+              <mat-label>Shares</mat-label>
+              <input matInput placeholder="Shares" formControlName="quantity" />
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="fill expense-input">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="purchase_date" />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <mat-form-field class="fill expense-input">
+              <mat-label>Notes</mat-label>
+              <input
+                matInput
+                placeholder="Notes"
+                formControlName="notes"
+              />
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </ng-container>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="expense-form-footer">
+  <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()">
+    {{ data.task == "delete" ? "Delete" : "Save" }}
+  </button>
+</mat-dialog-actions>

@@ -1,10 +1,5 @@
 import { Component, Inject, OnInit, signal } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import {
   SessionEventMessage,
   SessionService,
@@ -33,7 +28,6 @@ export interface TransactionUpdateDialogData {
   styleUrl: './transaction-update.component.css',
 })
 export class TransactionUpdateDialog implements OnInit {
-
   PAYMENT_METHODS: DropDownType[] = PAYMENT_METHODS;
   TRANSACTION_CATEGORIES: DropDownType[] = TRANSACTION_CATEGORIES;
   EXPENSE_SUB_CATEGORIES: DropDownType[] = [];

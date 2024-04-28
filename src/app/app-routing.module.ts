@@ -1,9 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {TransactionComponent} from "./finance/transaction/transaction.component";
+import {
+  ExpenseComponent,
+  IncomeComponent,
+  PaymentComponent, SavingComponent,
+} from "./finance/transaction/transaction.component";
 import {PageNotFoundComponent} from "./shared/page-not-found/page-not-found.component";
 import {refreshResolver} from "./finance/service/resolvers";
 import {TransactionDashboardComponent} from "./finance/dashboard/dashboard.component";
+import {AnalyticsComponent} from "./finance/analytics/analytics.component";
 
 const routes: Routes = [
   {
@@ -20,23 +25,23 @@ const routes: Routes = [
   },
   {
     path: 'income',
-    component: TransactionComponent
+    component: IncomeComponent
   },
   {
     path: 'savings',
-    component: TransactionComponent
-  },
-  {
-    path: 'dashboard',
-    component: TransactionComponent
+    component: SavingComponent
   },
   {
     path: 'expense',
-    component: TransactionComponent
+    component: ExpenseComponent
   },
   {
     path: 'payments',
-    component: TransactionComponent
+    component: PaymentComponent
+  },
+  {
+    path: 'analytics',
+    component: AnalyticsComponent
   },
   {
     path: 'investments',

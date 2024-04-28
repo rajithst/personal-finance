@@ -1,27 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {LoadingComponent} from "./loading/loading.component";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import { MultiSelectDropDownComponent } from './ui-components/multi-select-drop-down/multi-select-drop-down.component';
-
-
+import { LoadingComponent } from './loading/loading.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MaterialModule } from './material.module';
 
 @NgModule({
-  declarations: [
-    LoadingComponent,
-    MultiSelectDropDownComponent,
-  ],
+  declarations: [LoadingComponent],
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
-
+    MaterialModule,
   ],
-  exports: [
-    LoadingComponent,
-    MultiSelectDropDownComponent
-  ]
+  exports: [LoadingComponent],
 })
-export class SharedModule {
-
-
-}
+export class SharedModule {}

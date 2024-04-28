@@ -22,6 +22,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatAutocompleteModule,
     MatSidenavModule,
     MatListModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   exports: [
     MatButtonModule,
@@ -71,8 +73,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatAutocompleteModule,
     MatSidenavModule,
     MatListModule,
-    MatProgressSpinnerModule
-
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   declarations: []
 })

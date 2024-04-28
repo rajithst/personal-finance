@@ -1,52 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  MonthlyTransaction,
-  Transaction,
-} from '../model/transactions';
+import { MonthlyTransaction, Transaction } from '../model/transactions';
 import { MatDialog } from '@angular/material/dialog';
 import {
   SessionEventMessage,
   SessionService,
 } from '../service/session.service';
-import { NavigationEnd, Router } from '@angular/router';
-import {
-  DropDownType,
-  INCOME_CATEGORIES,
-  MONTHS, PAYMENT_CATEGORY_ID,
-  PAYMENT_METHODS, SAVINGS_CATEGORY_ID,
-  TRANSACTION_CATEGORIES,
-  TRANSACTION_SUB_CATEGORIES,
-  YEARS,
-} from '../../data/client.data';
+import {ActivatedRoute, NavigationEnd, Params, Router} from '@angular/router';
 import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
-import {BarChartOptions} from "../charts/options/chart_options";
+
 
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
   styleUrl: './transaction.component.css',
 })
-export class TransactionComponent implements OnInit {
-  private message = this.sessionService.getEventMessage();
-  private sessionData = this.sessionService.getData();
-
-  protected readonly YEARS = YEARS;
-  protected readonly MONTHS = MONTHS;
-  protected readonly PAYMENT_METHODS = PAYMENT_METHODS;
-  protected readonly TRANSACTION_CATEGORIES = TRANSACTION_CATEGORIES;
-  protected readonly TRANSACTION_SUB_CATEGORIES: DropDownType[] = [];
+export class TransactionComponent {
+  message = this.sessionService.getEventMessage();
+  sessionData = this.sessionService.getData();
   constructor(
     private dialog: MatDialog,
-    private router: Router,
+    protected router: Router,
+    protected route: ActivatedRoute,
     private sessionService: SessionService,
   ) {}
 
   transactionData: MonthlyTransaction[] = [];
-  dataStream: MonthlyTransaction[] = [];
-  filterCategories: DropDownType[] = TRANSACTION_CATEGORIES;
-  targetCategory: number = 1;
-  barChartData: any[] = [];
-  pieChartData: any[] = [];
 
   dataYear: number[] = [2024];
   dataMonth: number[] = [1, 2, 3];
@@ -54,29 +32,11 @@ export class TransactionComponent implements OnInit {
   transactionCategory: number[] = [];
   transactionSubCategory: number[] = [];
   searchQuery: string = '';
-  barChartOptionsMonthly: BarChartOptions = {type: 'vertical', xAxisLabel: 'Months', yAxisLabel: 'Amount'};
-  barChartOptionsCategory: BarChartOptions = {type: 'horizontal', xAxisLabel: 'Amount', yAxisLabel: 'Category'};
-  isGridView: boolean = true;
 
-
-  ngOnInit() {
-    this.message.subscribe((msg: SessionEventMessage) => {
-      if (
-        msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
-        msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
-      ) {
-        this.initPageParams();
-        this.filterData();
-      }
-    });
-
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.initPageParams();
-        this.filterData();
-      }
-    })
-
+  protected fetchQueryParams(params: Params) {
+    this.transactionCategory = params['cat']?.split(',').map(Number) || [];
+    this.dataYear = params['years']?.split(',').map(Number) || [2024];
+    this.dataMonth = params['months']?.split(',').map(Number) || [1, 2, 3];
   }
 
   addTransaction() {
@@ -89,21 +49,6 @@ export class TransactionComponent implements OnInit {
     });
   }
 
-  onSelectedItemsChange(selectedItems: DropDownType[], filterType: string) {
-    const values = selectedItems.map(i => i.value);
-    if (filterType == 'category') {
-      this.transactionCategory = values;
-    } else if (filterType == 'subCategory') {
-      this.transactionSubCategory = values;
-    } else if (filterType == 'paymentMethod') {
-      this.paymentMethod = values;
-    } else if (filterType == 'year') {
-      this.dataYear = values;
-    } else if (filterType == 'month') {
-      this.dataMonth = values;
-    }
-    this.filterData();
-  }
   protected filterData() {
     let years: number[] = this.dataYear || [];
     let months: number[] = this.dataMonth || [];
@@ -112,7 +57,7 @@ export class TransactionComponent implements OnInit {
     const subCategories: number[] = this.transactionSubCategory || [];
     const searchQuery: string = this.searchQuery;
 
-    const currData = this.dataStream
+    const currData = this.getDataStream()
       .filter((x) => years.includes(x.year))
       .filter((x) => (months.length > 0 ? months.includes(x.month) : true))
       .sort((x, y) => y.month - x.month)
@@ -144,57 +89,125 @@ export class TransactionComponent implements OnInit {
       );
     });
     this.transactionData = currData;
-    this.barChartData = this.transactionData.map(x => ({'name': x.month_text, 'value': x.total}))
-    this.pieChartData = this.getSumByCategory(currData)
   }
 
-  private getSumByCategory(transactions: MonthlyTransaction[]) {
-    const categorySums: { [category: string]: number } = {};
+  getDataStream(): MonthlyTransaction[] {
+    return []
+  }
+}
 
-    this.filterCategories.forEach(category => {
-      categorySums[category.viewValue] = 0;
+@Component({
+  selector: 'app-income',
+  templateUrl: './transaction.component.html',
+  styleUrl: './transaction.component.css',
+})
+export class IncomeComponent extends TransactionComponent implements OnInit {
+
+  ngOnInit() {
+    this.message.subscribe((msg: SessionEventMessage) => {
+      if (
+        msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
+        msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
+      ) {
+        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.filterData();
+      }
     });
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.filterData();
+      }
+    });
+  }
+  override getDataStream(): MonthlyTransaction[] {
+    return this.sessionData.incomes;
+  }
+}
 
-    transactions.forEach(data => {
-      data.transactions_cp.forEach(x => {
-        const category = this.targetCategory == 1 ? x.category_text! : x.subcategory_text!;
-        const amount = x.amount;
-        if (categorySums.hasOwnProperty(category)) {
-          categorySums[category] += amount
-        }
-      })
-    })
-    const sumByCatehory: any[] = [];
-    for (const [key, value] of Object.entries(categorySums)) {
-      sumByCatehory.push({'name': key, 'value': value})
-    }
-    return sumByCatehory;
+@Component({
+  selector: 'app-expense',
+  templateUrl: './transaction.component.html',
+  styleUrl: './transaction.component.css',
+})
+export class ExpenseComponent extends TransactionComponent implements OnInit {
+  ngOnInit() {
+    this.message.subscribe((msg: SessionEventMessage) => {
+      if (
+        msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
+        msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
+      ) {
+        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.filterData();
+      }
+    });
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.filterData();
+      }
+    });
   }
 
-  onSelectionChange($event: any) {
-    console.log($event)
+  override getDataStream(): MonthlyTransaction[] {
+    return this.sessionData.expenses;
   }
+}
 
-  private initPageParams() {
-    const currentURL = this.router.url;
-    if (currentURL === '/expense') {
-      this.dataStream = this.sessionData.expenses;
-      this.filterCategories = TRANSACTION_CATEGORIES
-      this.targetCategory = 1;
-    } else if (currentURL === '/savings') {
-      this.dataStream = this.sessionData.saving;
-      this.filterCategories = TRANSACTION_SUB_CATEGORIES[SAVINGS_CATEGORY_ID]
-      this.targetCategory = 2;
-    } else if (currentURL === '/payments') {
-      this.dataStream = this.sessionData.payments;
-      this.filterCategories = TRANSACTION_SUB_CATEGORIES[PAYMENT_CATEGORY_ID]
-      this.targetCategory = 2;
-    } else if (currentURL == '/income') {
-      this.dataStream = this.sessionData.incomes;
-      this.filterCategories = INCOME_CATEGORIES
-      this.targetCategory = 1;
-    } else {
-      this.dataStream = [];
-    }
+@Component({
+  selector: 'app-payment',
+  templateUrl: './transaction.component.html',
+  styleUrl: './transaction.component.css',
+})
+export class PaymentComponent extends TransactionComponent implements OnInit {
+
+  ngOnInit() {
+    this.message.subscribe((msg: SessionEventMessage) => {
+      if (
+        msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
+        msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
+      ) {
+        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.filterData();
+      }
+    });
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.filterData();
+      }
+    });
+  }
+  override getDataStream(): MonthlyTransaction[] {
+    return this.sessionData.payments;
+  }
+}
+
+@Component({
+  selector: 'app-saving',
+  templateUrl: './transaction.component.html',
+  styleUrl: './transaction.component.css',
+})
+export class SavingComponent extends TransactionComponent implements OnInit {
+
+  ngOnInit(){
+    this.message.subscribe((msg: SessionEventMessage) => {
+      if (
+        msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
+        msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
+      ) {
+        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.filterData();
+      }
+    });
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.filterData();
+      }
+    });
+  }
+  override getDataStream(): MonthlyTransaction[] {
+    return this.sessionData.saving;
   }
 }

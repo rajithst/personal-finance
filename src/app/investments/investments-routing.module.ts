@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {StockComponent} from "./stock/stock.component";
 import {investmentDataResolver} from "./service/resolvers";
-import {ProtofolioComponent} from "./protofolio/protofolio.component";
+import {HoldingsComponent} from "./holdings/holdings.component";
 import {DividendComponent} from "./dividend/dividend.component";
 import {HomeComponent} from "./home/home.component";
 
@@ -18,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    component: ProtofolioComponent,
+    component: HoldingsComponent,
   },
   {
     path: 'stock',
