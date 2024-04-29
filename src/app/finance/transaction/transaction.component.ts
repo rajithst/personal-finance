@@ -37,13 +37,15 @@ export class TransactionComponent {
     const getOrDefault = (value: string) =>  { return value === '' ? [] : value.split(',').map(Number) }
 
     this.transactionCategory = getOrDefault(params['cat']! || '');
+    this.transactionSubCategory = getOrDefault(params['subcat']! || '');
     this.dataYear = getOrDefault(params['years']! || '');
     this.dataMonth = getOrDefault(params['months']! || '');
+    this.paymentMethod = getOrDefault(params['pm']! || '');
     if (this.dataYear.length == 0) {
       this.dataYear = [2024];
     }
     if (this.dataMonth.length == 0) {
-      this.dataMonth = [1, 2, 3];
+      this.dataMonth = [1, 2, 3, 4];
     }
   }
 
@@ -151,6 +153,7 @@ export class ExpenseComponent extends TransactionComponent implements OnInit {
     });
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
+        console.log('subscribing to params on expense')
         this.fetchQueryParams(this.route.snapshot.queryParams)
         this.filterData();
       }

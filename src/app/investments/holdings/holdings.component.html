@@ -23,21 +23,45 @@
               </div>
             </td>
             <td>{{data.quantity}}</td>
-            <td>{{data.average_price | number: "1.2-2"}}</td>
-            <td>{{data.current_price | number: "1.2-2"}}</td>
-            <td>{{data.total_investment | number: "1.2-2"}}</td>
-            <td>{{data.current_value | number: "1.2-2"}}</td>
+            <td>${{data.average_price | number: "1.2-2"}}</td>
+            <td>${{data.current_price | number: "1.2-2"}}</td>
+            <td>${{data.total_investment | number: "1.2-2"}}</td>
+            <td>${{data.current_value | number: "1.2-2"}}</td>
             <td>
               <div class="holding-item-contents-2">
-                <div class="profit-loss">{{data.profit_loss | number: "1.2-2"}}</div>
+                <div class="profit-loss" [ngStyle]="{'color': data.profit_loss < 0 ? 'red': 'green'}">
+                  <span>{{data.profit_loss > 0 ? '+' : '-'}}</span>${{Math.abs(data.profit_loss) | number: "1.2-2"}}
+                </div>
                 <div class="profit-loss-percentage">
-                   {{data.profit_change_percentage | number: "1.2-2"}} %
-                    <fa-icon [icon]="faCircleUp" [style]="{color: 'red'}"></fa-icon>
+                    <fa-icon [icon]="faCircleDown" [style]="{color: 'red'}" *ngIf="data.profit_change_percentage < 0 "></fa-icon>
+                    <fa-icon [icon]="faCircleUp" [style]="{color: 'green'}" *ngIf="data.profit_change_percentage > 0 "></fa-icon>
+                    {{data.profit_change_percentage | number: "1.2-2"}} %
                 </div>
               </div></td>
             <td>$250,000</td>
         </tr>
         }
+      <tr>
+        <td>Total</td>
+        <td>{{totalShares}}</td>
+        <td></td>
+        <td></td>
+        <td>${{totalInvestment | number: "1.2-2"}}</td>
+        <td>${{totalCurrentPrice | number: "1.2-2"}}</td>
+        <td [ngStyle]="{'color': totalProfit < 0 ? 'red': 'green'}">
+          <div class="holding-item-contents-2">
+            <div class="profit-loss">
+              <span>{{totalProfit > 0 ? '+' : '-'}}</span> ${{totalProfit | number: "1.2-2"}}
+            </div>
+            <div class="profit-loss-percentage">
+              <fa-icon [icon]="faCircleDown" [style]="{color: 'red'}" *ngIf="totalProfitPercentage < 0 "></fa-icon>
+              <fa-icon [icon]="faCircleUp" [style]="{color: 'green'}" *ngIf="totalProfitPercentage > 0 "></fa-icon>
+              {{totalProfitPercentage | number: "1.2-2"}} %
+            </div>
+          </div>
+        </td>
+        <td></td>
+      </tr>
       </tbody>
     </table>
 </div>

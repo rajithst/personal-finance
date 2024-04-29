@@ -10,6 +10,26 @@
   </div>
 </div>
 <div class="filter-section">
+  <div class="filter-title"><p>Payment Methods</p></div>
+  <div class="filter-items">
+    <ul>
+      @for (exc of paymentMethods; track exc) {
+        <li><input type="checkbox" [value]="exc.value" (change)="toggleItem($event, exc, 'paymentMethod')" [checked]="exc.checked">{{exc.viewValue}}</li>
+      }
+    </ul>
+  </div>
+</div>
+<!--<div class="filter-section">-->
+<!--  <div class="filter-title"><p>Sub categories</p></div>-->
+<!--  <div class="filter-items">-->
+<!--    <ul>-->
+<!--      @for (exc of transactionSubCategories; track exc) {-->
+<!--        <li><input type="checkbox" [value]="exc.value" (change)="toggleItem($event, exc, 'subcategory')" [checked]="exc.checked">{{exc.viewValue}}</li>-->
+<!--      }-->
+<!--    </ul>-->
+<!--  </div>-->
+<!--</div>-->
+<div class="filter-section">
   <div class="filter-title"><p>Years</p></div>
   <div class="filter-items">
     <ul>
