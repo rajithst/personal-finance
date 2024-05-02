@@ -8,6 +8,7 @@ import {
 } from '../finance/model/transactions';
 import { InvestmentResponse } from '../investments/model/investment';
 import { StockPurchase } from '../investments/model/transaction';
+import { environment } from '../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,7 +20,7 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class ApiService {
-  private SRC_URL = 'http://127.0.0.1:8000';
+  private SRC_URL = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

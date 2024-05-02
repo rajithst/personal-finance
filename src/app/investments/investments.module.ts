@@ -13,6 +13,7 @@ import { SubmenuComponent } from './submenu/submenu.component';
 import { TradeDialogComponent } from './trade-dialog/trade-dialog.component';
 import { MaterialModule } from '../shared/material.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TradeHistoryComponent } from './trade-history/trade-history.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     HomeComponent,
     SubmenuComponent,
     TradeDialogComponent,
+    TradeHistoryComponent,
   ],
   imports: [
     CommonModule,

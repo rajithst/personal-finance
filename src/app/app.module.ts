@@ -21,9 +21,6 @@ import {
   IncomeComponent, PaymentComponent,
   SavingComponent, TransactionComponent
 } from './finance/transaction/transaction.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { PfBarChartComponent } from './finance/charts/pf-bar-chart/pf-bar-chart.component';
-import { PfPieChartComponent } from './finance/charts/pf-pie-chart/pf-pie-chart.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { SharedModule } from './shared/shared.module';
 import { SubmenuComponent } from './finance/submenu/submenu.component';
@@ -42,8 +39,6 @@ import { AnalyticsComponent } from './finance/analytics/analytics.component';
     ExpenseComponent,
     SavingComponent,
     PaymentComponent,
-    PfBarChartComponent,
-    PfPieChartComponent,
     PageNotFoundComponent,
     SubmenuComponent,
     FilterMenuComponent,
@@ -58,7 +53,6 @@ import { AnalyticsComponent } from './finance/analytics/analytics.component';
     HttpClientModule,
     MaterialModule,
     SharedModule,
-    NgxChartsModule,
   ],
   providers: [
     provideClientHydration(),

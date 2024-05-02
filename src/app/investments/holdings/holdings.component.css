@@ -15,7 +15,7 @@ table.portfolio-table thead {
 table.portfolio-table thead th,
 tbody td {
   padding: 10px;
-  text-align: left;
+  text-align: center;
 }
 
 table.portfolio-table tbody tr:nth-child(even) {

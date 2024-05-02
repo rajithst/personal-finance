@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PfBarChartComponent } from './pf-bar-chart.component';
+import { TradeHistoryComponent } from './trade-history.component';
 
-describe('PfBarChartComponent', () => {
-  let component: PfBarChartComponent;
-  let fixture: ComponentFixture<PfBarChartComponent>;
+describe('TradeHistoryComponent', () => {
+  let component: TradeHistoryComponent;
+  let fixture: ComponentFixture<TradeHistoryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PfBarChartComponent]
+      declarations: [TradeHistoryComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(PfBarChartComponent);
+    fixture = TestBed.createComponent(TradeHistoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

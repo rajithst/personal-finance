@@ -6,6 +6,7 @@ import {investmentDataResolver} from "./service/resolvers";
 import {HoldingsComponent} from "./holdings/holdings.component";
 import {DividendComponent} from "./dividend/dividend.component";
 import {HomeComponent} from "./home/home.component";
+import {TradeHistoryComponent} from "./trade-history/trade-history.component";
 
 
 const routes: Routes = [
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: 'dividend',
     component: DividendComponent,
+  },
+  {
+    path: 'trade-history',
+    component: TradeHistoryComponent,
   },
 
 
