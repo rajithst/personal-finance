@@ -3,7 +3,6 @@ import { ApiService } from '../../core/api.service';
 import { ReplaySubject, Subject } from 'rxjs';
 import {
   Income,
-  MonthlyIncome,
   IncomeRequest,
 } from '../model/income.data';
 import {
@@ -45,12 +44,6 @@ export class SessionService {
   }
 
   refresh() {
-    const getTransactionList = (x: MonthlyTransaction[]) => {
-      let results: Transaction[] = [];
-      x.forEach((y) => (results = results.concat(y.transactions)));
-      return results;
-    };
-
     this.apiService
       .getTransactions()
       .subscribe((transactions: TransactionsResponse) => {
@@ -83,7 +76,17 @@ export class SessionService {
       .updateTransaction(payload)
       .subscribe((transaction: Transaction) => {
         if (transaction) {
-          this.syncSessionTransaction(transaction);
+          transaction.checked = false;
+          const isMergeRequest = payload.is_merge && payload.merged_ids;
+          if (isMergeRequest) {
+            transaction.is_merge = true;
+            transaction.merged_ids = []
+            this.deleteMergedTransactions(payload)
+          }
+          this.syncSessionTransaction(transaction, this.session.expenses);
+          let source = this.getTargetTransactionCategory(transaction);
+          this.syncSessionTransaction(transaction, source);
+
           this.message.next(
             SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS,
           );
@@ -95,62 +98,60 @@ export class SessionService {
       });
   }
 
-  private syncSessionTransaction(data: Transaction) {
-    let source = this.getTargetMonthlyTransaction(data);
+  private syncSessionTransaction(newData: Transaction, source: MonthlyTransaction[]) {
     const idx = source.findIndex(
-      (x: MonthlyTransaction) => x.year == data.year && x.month == data.month,
+      (x: MonthlyTransaction) => x.year == newData.year && x.month == newData.month,
     );
     if (idx !== -1) {
       const currItem = source[idx];
       const expId = currItem.transactions.findIndex(
-        (x: Transaction) => x.id == data.id,
+        (x: Transaction) => x.id == newData.id,
       );
       if (expId !== -1) {
-        const currTransaction = currItem.transactions[expId];
-        if (data.is_deleted) {
+        if (newData.is_deleted) {
           source[idx].transactions.splice(expId, 1);
         } else {
-          source[idx].transactions[expId] = data;
+          source[idx].transactions[expId] = newData;
         }
       } else {
-        source[idx].transactions.push(data);
+        source[idx].transactions.push(newData);
       }
     } else {
       const transactionObject: MonthlyTransaction = {
-        year: data.year!,
-        month: data.month!,
-        month_text: data.month_text!,
-        total: data.amount,
+        year: newData.year!,
+        month: newData.month!,
+        month_text: newData.month_text!,
+        total: newData.amount,
         transactions: [],
         transactions_cp: [],
       };
-      transactionObject.transactions.push(data);
+      transactionObject.transactions.push(newData);
       source.push(transactionObject);
     }
-    this.updateSession(data, source);
   }
-
-  private updateSession(payload: Transaction, update: MonthlyTransaction[]) {
-    if (payload.is_expense) {
-      this.session.expenses = update;
-    } else if (payload.is_saving) {
-      this.session.saving = update;
-    } else if (payload.is_payment) {
-      this.session.payments = update;
-    } else {
-      this.session.incomes = update;
-    }
-  }
-
-  private getTargetMonthlyTransaction(payload: Transaction): MonthlyTransaction[] {
-    if (payload.is_expense) {
-      return this.session.expenses;
-    } else if (payload.is_saving) {
+  private getTargetTransactionCategory(payload: Transaction): MonthlyTransaction[] {
+     if (payload.is_saving) {
       return this.session.saving;
     } else if (payload.is_payment) {
       return this.session.payments;
     } else {
       return this.session.incomes;
     }
+  }
+
+  private deleteMergedTransactions(data: Transaction) {
+    this.session.expenses.forEach(x => {
+      x.transactions = x.transactions.filter(y => !data.merged_ids!.includes(y.id!))
+      if ('transaction_cp' in x) {
+        x.transactions_cp = x.transactions_cp.filter(y => !data.merged_ids!.includes(y.id!))
+      }
+    });
+    let source = this.getTargetTransactionCategory(data);
+    source.forEach(x => {
+      x.transactions = x.transactions.filter(y => !data.merged_ids!.includes(y.id!))
+      if ('transaction_cp' in x) {
+        x.transactions_cp = x.transactions_cp.filter(y => !data.merged_ids!.includes(y.id!))
+      }
+    });
   }
 }

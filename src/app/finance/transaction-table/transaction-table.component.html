@@ -1,18 +1,17 @@
 <mat-accordion multi="true" class="transaction-item-panel">
-  @for (data of transactionData; track $index) {
+  @for (data of transactions; track data; let rowId = $index) {
     <mat-expansion-panel class="transaction-panel">
       <mat-expansion-panel-header>
         <mat-panel-title>{{ data.year }} - {{ data.month_text }} : ¥{{
             data.total | number: "1.2-2"
           }}</mat-panel-title>
         <mat-panel-description>
-          <mat-icon>pie_chart</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <table class="transaction-table">
         <thead>
           <tr>
-              <th></th>
+              <th><input type="checkbox" [value]="checkAllItems" (change)="toggleAll($event, data.year, data.month)"></th>
               <th>Date</th>
               <th>Category</th>
               <th>Sub Category</th>
@@ -23,9 +22,9 @@
           </tr>
       </thead>
       <tbody>
-      @for (row of data.transactions_cp; track $index) {
+      @for (row of data.transactions_cp; track row; let tableRowId = $index) {
         <tr>
-            <td><input type="checkbox" [value]="row.id" (change)="toggleItem(row.id, $event)"></td>
+            <td><input type="checkbox" [value]="row.checked" [checked]="row.checked" (change)="toggleItem(row, $event)"></td>
             <td>{{row.date}}</td>
             <td>{{row.category_text}}</td>
             <td>{{row.subcategory_text}}</td>
@@ -33,24 +32,31 @@
             <td>¥{{row.amount | number: "1.2-2"}}</td>
             <td>{{row.alias ? row.alias : row.destination}}</td>
             <td>
-              <button
-                mat-icon-button
-                matTooltip="Click to Edit"
-                class="iconbutton"
-                color="primary"
-                (click)="editRecord(row, 'update')"
-              >
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button
-                mat-icon-button
-                matTooltip="Click to Delete"
-                class="iconbutton"
-                color="warn"
-                (click)="editRecord(row, 'delete')"
-              >
-              <mat-icon>delete</mat-icon>
-            </button>
+              <div class="transaction-actions">
+                <div class="edit-action">
+                  <ng-container>
+                    <span (click)="editRecord(row, 'update')">
+                      <fa-icon [icon]="faGeorIcon" size="lg" [style]="{color: '#435ef3'}"></fa-icon>
+                    </span>
+                  </ng-container>
+                </div>
+                <div class="edit-action">
+                  <ng-container *ngIf="canMerge(row)">
+                    <span (click)="mergeTransactions()">
+                      <fa-icon [icon]="faMergeIcon" size="lg" [style]="{color: 'green'}"></fa-icon>
+                    </span>
+                  </ng-container>
+                </div>
+                <div class="edit-action">
+                  <ng-container *ngIf="row.is_merge">
+                    <span (click)="showMergeTransactions(row)">
+                      <fa-icon [icon]="faListIcon" size="lg" [style]="{color: 'green'}"></fa-icon>
+                    </span>
+                  </ng-container>
+
+                </div>
+              </div>
+
             </td>
         </tr>
       }

@@ -7,5 +7,10 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-
+[mat-dialog-title] {
+  padding: 10px 24px;
+  background: #369;
+  color: #fff !important;
+  cursor: move;
+}
 

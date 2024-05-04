@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MonthlyTransaction, Transaction } from '../model/transactions';
+import { MonthlyTransaction } from '../model/transactions';
 import { MatDialog } from '@angular/material/dialog';
 import {
   SessionEventMessage,
@@ -50,7 +50,7 @@ export class TransactionComponent {
   }
 
   addTransaction() {
-    const dialog = this.dialog.open(TransactionUpdateDialog, {
+    this.dialog.open(TransactionUpdateDialog, {
       width: '850px',
       position: {
         top: '50px',
@@ -103,6 +103,10 @@ export class TransactionComponent {
 
   getDataStream(): MonthlyTransaction[] {
     return []
+  }
+
+  onTransactionChecked(selectedIds: number[]) {
+    console.log(selectedIds);
   }
 }
 

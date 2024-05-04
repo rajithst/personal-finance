@@ -17,6 +17,7 @@ export interface Transaction {
   is_deleted: boolean;
   is_saving: boolean;
   is_expense: boolean;
+  is_merge: boolean;
   is_regular_destination: boolean | null;
   payment_method: number;
   payment_method_text?: string | null;
@@ -30,6 +31,8 @@ export interface Transaction {
   notes: string | null;
   update_similar: boolean | null;
   delete_reason: string | null;
+  checked: boolean | false;
+  merged_ids: number[] | null
 }
 
 export interface TransactionsResponse {

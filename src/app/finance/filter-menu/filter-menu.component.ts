@@ -1,13 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   DropDownType, INCOME_CATEGORIES,
-  MONTHS, NA_SUB_CATEGORY_ID, PAYMENT_CATEGORIES, PAYMENT_CATEGORY_ID,
-  PAYMENT_METHODS, SAVING_CATEGORIES, SAVINGS_CATEGORY_ID,
+  MONTHS, NA_SUB_CATEGORY_ID, PAYMENT_CATEGORY_ID,
+  PAYMENT_METHODS, SAVINGS_CATEGORY_ID,
   TRANSACTION_CATEGORIES, TRANSACTION_SUB_CATEGORIES,
   YEARS,
 } from '../../data/client.data';
 import {ActivatedRoute, Router} from "@angular/router";
-import {months} from "moment";
 
 @Component({
   selector: 'app-filter-menu',
@@ -23,11 +22,14 @@ export class FilterMenuComponent implements OnInit {
     })
     this.URL = urlSegments[urlSegments.length - 1]
   }
+  today = new Date();
+  currentMonthNumber = this.today.getMonth() + 1;
+  currentYear = this.today.getFullYear();
 
   categoryParams: number[] = []
   subCategoryParams: number[] = []
-  yearParams: number[] = [2024]
-  monthParams: number[] = [1, 2, 3, 4]
+  yearParams: number[] = [this.currentYear]
+  monthParams: number[] = Array.from({length: this.currentMonthNumber}, (_,i) => i + 1)
   paymentMethodParams: number[] = []
 
   transactionCategories: DropDownType[] = TRANSACTION_CATEGORIES;
@@ -45,13 +47,11 @@ export class FilterMenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('init filter menu')
     this.route.queryParams.subscribe(params => {
-      console.log('subscribing to params on filtermennu')
       this.categoryParams = params['cat']?.split(',').map(Number) || [];
       this.subCategoryParams = params['subcat']?.split(',').map(Number) || [];
-      this.yearParams = params['years']?.split(',').map(Number) || [2024];
-      this.monthParams = params['months']?.split(',').map(Number) || [1, 2, 3];
+      this.yearParams = params['years']?.split(',').map(Number) || this.yearParams;
+      this.monthParams = params['months']?.split(',').map(Number) || this.monthParams;
       this.paymentMethodParams = params['pm']?.split(',').map(Number) || [];
       this.setDefaultParamValues()
       this.buildQueryParams()

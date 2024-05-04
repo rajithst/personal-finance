@@ -1,0 +1,9 @@
+.filter-items > ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.filter-title {
+  text-align: center;
+  font-weight: 700;
+}

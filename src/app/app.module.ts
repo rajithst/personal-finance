@@ -14,7 +14,7 @@ import {
 } from '@angular/common/http';
 import { MaterialModule } from './shared/material.module';
 import { TransactionDashboardComponent } from './finance/dashboard/dashboard.component';
-import { TransactionUpdateDialog } from './finance/transaction-update/transaction-update.component';
+import { TransactionUpdateDialog, TransactionDeleteDialog } from './finance/transaction-update/transaction-update.component';
 import { TransactionTableComponent } from './finance/transaction-table/transaction-table.component';
 import {
   ExpenseComponent,
@@ -27,6 +27,7 @@ import { SubmenuComponent } from './finance/submenu/submenu.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FilterMenuComponent } from './finance/filter-menu/filter-menu.component';
 import { AnalyticsComponent } from './finance/analytics/analytics.component';
+import { TransactionDetailDialog } from './finance/transaction-detail/transaction-detail.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { AnalyticsComponent } from './finance/analytics/analytics.component';
     TransactionDashboardComponent,
     TransactionComponent,
     TransactionUpdateDialog,
+    TransactionDeleteDialog,
     TransactionTableComponent,
     IncomeComponent,
     ExpenseComponent,
@@ -43,6 +45,7 @@ import { AnalyticsComponent } from './finance/analytics/analytics.component';
     SubmenuComponent,
     FilterMenuComponent,
     AnalyticsComponent,
+    TransactionDetailDialog,
   ],
   imports: [
     BrowserModule,

@@ -8,35 +8,47 @@
 }
 
 table.transaction-table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 table.transaction-table thead {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
-table.transaction-table thead th, tbody td {
-    padding: 0 10px;
-    text-align: center;
+table.transaction-table thead th,
+tbody td {
+  padding: 0 10px;
+  text-align: center;
 }
 
 table.transaction-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
 }
 
 table.transaction-table tbody tr:hover {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 table.transaction-table tbody td {
-    border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  line-height: 40px;
 }
 
 table.transaction-table tbody td:first-child {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 table.transaction-table tbody td:last-child {
-    font-style: italic;
+  font-style: italic;
+}
+
+.transaction-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.edit-action, .merge-action {
+  cursor: pointer;
+  width: 15px;
 }

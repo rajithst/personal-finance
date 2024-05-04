@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Income, IncomeRequest } from '../finance/model/income.data';
 import {
   Transaction,
@@ -9,12 +9,9 @@ import {
 import { InvestmentResponse } from '../investments/model/investment';
 import { StockPurchase } from '../investments/model/transaction';
 import { environment } from '../../environments/environment';
-
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-  }),
-};
+new HttpHeaders({
+  'Content-Type': 'application/json',
+});
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +36,13 @@ export class ApiService {
   updateTransaction(payload: Transaction): Observable<Transaction> {
     return this.http.post<Transaction>(
       `${this.SRC_URL}/finance/transactions/`,
+      payload,
+    );
+  }
+
+  mergeTransaction(payload: Transaction): Observable<Transaction> {
+    return this.http.post<Transaction>(
+      `${this.SRC_URL}/finance/transactions/merge`,
       payload,
     );
   }
