@@ -14,6 +14,7 @@ import { TradeDialogComponent } from './trade-dialog/trade-dialog.component';
 import { MaterialModule } from '../shared/material.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TradeHistoryComponent } from './trade-history/trade-history.component';
+import { HoldingTableComponent } from './holdings/holding-table/holding-table.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { TradeHistoryComponent } from './trade-history/trade-history.component';
     SubmenuComponent,
     TradeDialogComponent,
     TradeHistoryComponent,
+    HoldingTableComponent,
   ],
   imports: [
     CommonModule,

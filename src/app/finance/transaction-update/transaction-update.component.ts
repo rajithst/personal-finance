@@ -191,8 +191,3 @@ export class TransactionDeleteDialog extends TransactionUpdateDialog {
     this.dialogRef.close({ refresh: true, data: this.deleteReason });
   }
 }
-
-export interface TransactionMergeDialogData {
-  transactions: Transaction[];
-}
-

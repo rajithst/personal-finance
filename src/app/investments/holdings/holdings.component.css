@@ -1,44 +1,6 @@
-.table-container {
-  overflow-x: auto;
-  margin: 0 10%;
+.stock-container {
+  margin: 1%;
 }
-
-table.portfolio-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-table.portfolio-table thead {
-  background-color: #f2f2f2;
-}
-
-table.portfolio-table thead th,
-tbody td {
-  padding: 10px;
-  text-align: center;
-}
-
-table.portfolio-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-table.portfolio-table tbody tr:hover {
-    background-color: #f0f0f0;
-}
-
-table.portfolio-table tbody td {
-    border-bottom: 1px solid #737171;
-}
-
-
-table.portfolio-table tbody td:first-child {
-  font-weight: bold;
-}
-
-table.portfolio-table tbody td:last-child {
-  font-style: italic;
-}
-
 .transaction-add-button {
   position: absolute;
   bottom: 2%;
@@ -46,14 +8,4 @@ table.portfolio-table tbody td:last-child {
   z-index: 100;
   display: flex;
   align-items: flex-end;
-}
-
-.ticker-image {
-  height: 20px;
-  width: 20px;
-}
-
-.holding-item-contents-1 {
-  display: flex;
-  justify-content: space-evenly;
 }

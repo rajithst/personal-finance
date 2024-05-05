@@ -1,0 +1,99 @@
+<div class="stock-summary">
+  <div class="summary-item total-value">
+    <div class="summary-item-title">
+      <div class="summary-item-title-icon">
+        <fa-icon [icon]="faMoneyBill" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+        <span>Total Value</span>
+      </div>
+      <div class="summary-item-title-value">
+        <span>{{currency}}{{totalCurrentPrice | number: "1.2-2"}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="summary-item total-investment">
+    <div class="summary-item-title">
+      <div class="summary-item-title-icon">
+        <fa-icon [icon]="faMoneyBill" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+        <span>Invested Value</span>
+      </div>
+      <div class="summary-item-title-value">
+        <span>{{currency}}{{totalInvestment | number: "1.2-2"}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="summary-item total-profit">
+    <div class="summary-item-title">
+      <div class="summary-item-title-icon">
+        <fa-icon [icon]="faLineChart" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+        <span>Total Profit</span>
+      </div>
+      <div class="summary-item-title-value" [ngClass]="{'profit': totalProfit >=  0, 'loss': totalProfit < 0}">
+        <span>{{totalProfit >= 0 ? '' : '-'}} {{currency}}{{Math.abs(totalProfit) | number: "1.2-2"}}</span>
+        <span class="percentage-change">
+          {{totalProfitPercentage | number: "1.2-2"}} %
+          <fa-icon [icon]="totalProfit > 0 ? faCaretUp : faCaretDown" class="{{totalProfit > 0 ? 'profit' : 'loss'}}"></fa-icon>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="summary-item forex">
+    <div class="summary-item-title">
+      <div class="summary-item-title-icon">
+        <fa-icon [icon]="faJpy" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+        <span>Total Profit (Y)</span>
+      </div>
+      <div class="summary-item-title-value">
+        <span>156</span>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<table class="portfolio-table">
+  <thead>
+  <tr>
+    <th>Stock</th>
+    <th>Shares</th>
+    <th>Cost per share</th>
+    <th>Current share value</th>
+    <th>Total Investment</th>
+    <th>Current Value</th>
+    <th>Total Profit</th>
+    <th>Share in protofolio</th>
+  </tr>
+  </thead>
+  <tbody>
+    @for (data of holdings; track $index) {
+      <tr>
+        <td>
+          <div class="holding-item-contents-1">
+            <div class="company-image"><img src="{{data.image}}" alt="" class="ticker-image"></div>
+            <div class="company-ticker">
+              <div class="company-name">{{data.company_name}}</div>
+              <div class="company-symbol">{{data.company}}</div>
+            </div>
+          </div>
+        </td>
+        <td>{{data.quantity}}</td>
+        <td>{{data.stock_currency}}{{data.average_price | number: "1.2-2"}}</td>
+        <td>{{data.stock_currency}}{{data.current_price | number: "1.2-2"}}</td>
+        <td>{{data.stock_currency}}{{data.total_investment | number: "1.2-2"}}</td>
+        <td>{{data.stock_currency}}{{data.current_value | number: "1.2-2"}}</td>
+        <td>
+          <div class="holding-item-contents-2">
+            <div class="profit-loss"
+                 [ngClass]="{'profit': data.profit_loss >= 0, 'loss': data.profit_loss < 0}">
+              <span>{{ formatValue(data.profit_loss) }} </span>
+            </div>
+            <div class="profit-loss-percentage" [ngClass]="{'profit': data.profit_loss >= 0, 'loss': data.profit_loss < 0}">
+              <fa-icon [icon]="data.profit_change_percentage > 0 ? faCaretUp : faCaretDown"></fa-icon>
+              {{ data.profit_change_percentage | number: "1.2-2" }} %
+            </div>
+          </div>
+        </td>
+        <td>{{(data.total_investment/totalInvestment)*100 | number: "1.2-2" }} %</td>
+      </tr>
+    }
+  </tbody>
+</table>

@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { TransactionUpdateDialog } from '../../finance/transaction-update/transaction-update.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TradeDialogComponent } from '../trade-dialog/trade-dialog.component';
 import {SessionService} from "../service/session.service";
-import {faCircleDown, faCircleUp} from '@fortawesome/free-solid-svg-icons';
+import {
+  faCaretUp,
+  faLineChart,
+  faCaretDown,
+  faMoneyBill,
+  faMoneyBillTrendUp, faJpy
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-holdings',
@@ -11,27 +16,25 @@ import {faCircleDown, faCircleUp} from '@fortawesome/free-solid-svg-icons';
   styleUrl: './holdings.component.css',
 })
 export class HoldingsComponent implements OnInit {
+  protected readonly Math = Math;
+  protected readonly faMoneyBill = faMoneyBill;
+  protected readonly faMoneyBillTrendUp = faMoneyBillTrendUp;
+  protected readonly faLineChart = faLineChart;
+  protected readonly faCaretUp = faCaretUp;
+  protected readonly faCaretDown = faCaretDown;
+
   private sessionData = this.sessionService.getData();
   constructor(private dialog: MatDialog, private sessionService: SessionService) {}
-  holdings: any[] = []
-  faCircleUp = faCircleUp;
-  faCircleDown = faCircleDown;
-  totalShares: number = 0;
-  totalInvestment: number = 0;
-  totalCurrentPrice: number = 0;
-  totalProfit: number = 0;
-  totalProfitPercentage: number = 0;
+  usHoldings: any[] = []
+  domesticHoldings: any[] = []
+
   ngOnInit(): void {
-    this.holdings = this.sessionData.holdings
-    this.totalShares = this.holdings.reduce((ac, cv) => ac + cv['quantity'], 0);
-    this.totalInvestment = this.holdings.reduce((ac, cv) => ac + cv['total_investment'], 0);
-    this.totalCurrentPrice = this.holdings.reduce((ac, cv) => ac + cv['current_value'], 0);
-    this.totalProfit = this.holdings.reduce((ac, cv) => ac + cv['profit_loss'], 0);
-    this.totalProfitPercentage = (this.totalProfit/this.totalInvestment)*100;
+    this.usHoldings = this.sessionData.holdings.filter(x => x.stock_currency === '$')
+    this.domesticHoldings = this.sessionData.holdings.filter(x => x.stock_currency === '¥')
   }
 
   addTransaction() {
-    const dialog = this.dialog.open(TradeDialogComponent, {
+    this.dialog.open(TradeDialogComponent, {
       width: '750px',
       position: {
         top: '50px',
@@ -40,6 +43,7 @@ export class HoldingsComponent implements OnInit {
     });
   }
 
-  protected readonly Math = Math;
 
+
+  protected readonly faJpy = faJpy;
 }

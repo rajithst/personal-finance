@@ -21,7 +21,7 @@ import {TransactionDetailDialog} from "../transaction-detail/transaction-detail.
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransactionTableComponent implements OnChanges {
-  @Input() transactions!: MonthlyTransaction[];
+  @Input() transactions: MonthlyTransaction[] = [];
   transactionData: MonthlyTransaction[] = [];
   selectedTransactions: Record<string, number[]> = {};
   selectedMonths: number[] = [];
@@ -136,7 +136,7 @@ export class TransactionTableComponent implements OnChanges {
   }
 
   showMergeTransactions(row: Transaction) {
-    const dialog = this.dialog.open(TransactionDetailDialog, {
+    this.dialog.open(TransactionDetailDialog, {
       width: '850px',
       position: {
         top: '50px',
