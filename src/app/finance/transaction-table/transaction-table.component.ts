@@ -40,8 +40,8 @@ export class TransactionTableComponent implements OnChanges {
   }
 
   editRecord(item: Transaction, task: string) {
-    item.update_similar = true;
-    item.is_regular_destination = true;
+    item.update_similar = false;
+    item.is_regular_destination = false;
     const dialog = this.dialog.open(TransactionUpdateDialog, {
       width: '850px',
       position: {
@@ -110,9 +110,15 @@ export class TransactionTableComponent implements OnChanges {
   }
 
   getCheckedTransactions() {
-    return this.transactionData
+    const results = this.transactionData
       .map((month) => month.transactions)
       .flatMap((transaction) => transaction.filter((x) => x.checked));
+
+    results.forEach(x => {
+      x.update_similar = false;
+      x.is_regular_destination = false;
+    })
+    return results;
   }
 
   prepareSelectedTransactions() {
