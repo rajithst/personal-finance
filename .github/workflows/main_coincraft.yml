@@ -26,11 +26,10 @@ jobs:
           npm install
           npm run build --if-present
 
-      - name: Change directory to dist/pfclient/browser
-        run: cd ./dist/pfclient/browser
-
       - name: Zip artifact for deployment
-        run: zip -r ../../../release.zip .
+        run: |
+          cd ./dist/pfclient/browser
+          zip -r ../../../release.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
