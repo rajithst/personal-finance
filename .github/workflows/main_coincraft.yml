@@ -25,9 +25,10 @@ jobs:
         run: |
           npm install
           npm run build --if-present
+          npm run test --if-present
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./dist/pfclient/browser/* -r
+        run: zip release.zip ./* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -52,13 +53,13 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-
+      
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_18B5899F271149A9A821366A294F3027 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BD0081A366B043C5A1742C95EED03602 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_EBBE08E907164ECE8484DFA98E71EA02 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D59FC05A349942E7A10B89113A666651 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FB6E72107A9F4725B4ACDF50DB16E62C }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_613ADFB2EC2D461C9A74778B2F3FE86C }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -67,3 +68,4 @@ jobs:
           app-name: 'coincraft'
           slot-name: 'Production'
           package: .
+          
