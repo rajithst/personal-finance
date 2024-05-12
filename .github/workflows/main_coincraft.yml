@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'coincraft'
           slot-name: 'Production'
-          package: './browser'
+          package: './release.zip'
