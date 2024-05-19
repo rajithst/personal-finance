@@ -11,7 +11,7 @@ import {
 } from '../transaction-update/transaction-update.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { faGear, faCodeMerge, faList } from '@fortawesome/free-solid-svg-icons';
+import {faGear, faCodeMerge, faList, faCircleCheck} from '@fortawesome/free-solid-svg-icons';
 import {TransactionDetailDialog} from "../transaction-detail/transaction-detail.component";
 
 @Component({
@@ -26,9 +26,12 @@ export class TransactionTableComponent implements OnChanges {
   selectedTransactions: Record<string, number[]> = {};
   selectedMonths: number[] = [];
   checkAllItems: boolean = false;
-  faGeorIcon = faGear;
-  faMergeIcon = faCodeMerge;
-  faListIcon = faList;
+  protected readonly faGeorIcon = faGear;
+  protected readonly faMergeIcon = faCodeMerge;
+  protected readonly faListIcon = faList;
+  protected readonly faCircleCheck = faCircleCheck;
+
+  displayedColumns: string[] = ['select', 'Date', 'Category', 'SubCategory', 'PaymentMethod', 'Amount', 'PaymentMethod', 'Destination', 'Actions'];
 
   constructor(
     private dialog: MatDialog,
@@ -149,5 +152,9 @@ export class TransactionTableComponent implements OnChanges {
       },
       data: {},
     });
+  }
+
+  toggleSelection(element: Transaction) {
+    element.checked = !element.checked;
   }
 }

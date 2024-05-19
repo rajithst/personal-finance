@@ -1,2 +1,16 @@
 <app-investment-submenu></app-investment-submenu>
-<p>dividend works</p>
+<div class="dividend-container">
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab label="US Stocks">
+      <div class="table-container">
+        <app-dividend-table [dividends]="usDividends"></app-dividend-table>
+      </div>
+    </mat-tab>
+    <mat-tab label="Domestic Stocks">
+      <div class="table-container">
+        <app-dividend-table [dividends]="domesticDividends"></app-dividend-table>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>

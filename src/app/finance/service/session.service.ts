@@ -52,6 +52,7 @@ export class SessionService {
         this.session.expenses = transactions.expense;
         this.session.payments = transactions.payment;
         this.session.destinations = transactions.destinations
+        console.log(this.session)
         this.message.next(SessionEventMessage.INIT_SESSION_LOAD_SUCCESS);
       });
   }

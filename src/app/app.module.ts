@@ -11,15 +11,21 @@ import {
   HttpClientModule,
   provideHttpClient,
   withFetch,
+  withInterceptors,
 } from '@angular/common/http';
 import { MaterialModule } from './shared/material.module';
 import { TransactionDashboardComponent } from './finance/dashboard/dashboard.component';
-import { TransactionUpdateDialog, TransactionDeleteDialog } from './finance/transaction-update/transaction-update.component';
+import {
+  TransactionUpdateDialog,
+  TransactionDeleteDialog,
+} from './finance/transaction-update/transaction-update.component';
 import { TransactionTableComponent } from './finance/transaction-table/transaction-table.component';
 import {
   ExpenseComponent,
-  IncomeComponent, PaymentComponent,
-  SavingComponent, TransactionComponent
+  IncomeComponent,
+  PaymentComponent,
+  SavingComponent,
+  TransactionComponent,
 } from './finance/transaction/transaction.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { SharedModule } from './shared/shared.module';
@@ -28,6 +34,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FilterMenuComponent } from './finance/filter-menu/filter-menu.component';
 import { AnalyticsComponent } from './finance/analytics/analytics.component';
 import { TransactionDetailDialog } from './finance/transaction-detail/transaction-detail.component';
+import { loadingInterceptor } from './core/loading.intercepter';
 
 @NgModule({
   declarations: [
@@ -60,7 +67,7 @@ import { TransactionDetailDialog } from './finance/transaction-detail/transactio
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([loadingInterceptor])),
   ],
   bootstrap: [AppComponent],
 })

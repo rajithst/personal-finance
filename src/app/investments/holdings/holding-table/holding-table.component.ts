@@ -1,4 +1,12 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import {MatSort} from '@angular/material/sort';
+
 import {
   faCaretDown,
   faCaretUp,
@@ -6,14 +14,20 @@ import {
   faLineChart,
   faMoneyBill,
 } from '@fortawesome/free-solid-svg-icons';
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: 'app-holding-table',
   templateUrl: './holding-table.component.html',
   styleUrl: './holding-table.component.css',
 })
-export class HoldingTableComponent implements OnChanges {
+export class HoldingTableComponent implements OnChanges  {
+
+
+
   @Input() holdings: any[] = [];
+  @ViewChild(MatSort) sort: MatSort;
+
   protected readonly faCaretDown = faCaretDown;
   protected readonly faCaretUp = faCaretUp;
   protected readonly faLineChart = faLineChart;
@@ -27,6 +41,8 @@ export class HoldingTableComponent implements OnChanges {
   totalProfit: number = 0;
   totalProfitPercentage: number = 0;
   currency: string = 'USD';
+  displayedColumns: string[] = ['Stock', 'Shares', 'CostPerShare', 'CurrentShareValue', 'TotalInvestment', 'CurrentValue', 'TotalProfit', 'ShareInProtofolio'];
+  dataSource = new MatTableDataSource();
 
   ngOnChanges(changes: SimpleChanges): void {
     this.currency = this.holdings.length > 0 ? this.holdings[0].stock_currency : '$';
@@ -35,7 +51,11 @@ export class HoldingTableComponent implements OnChanges {
     this.totalCurrentPrice = this.holdings.reduce((ac, cv) => ac + cv['current_value'], 0);
     this.totalProfit = this.holdings.reduce((ac, cv) => ac + cv['profit_loss'], 0);
     this.totalProfitPercentage = (this.totalProfit/this.totalInvestment)*100;
+    this.dataSource = new MatTableDataSource(this.holdings);
+    this.dataSource.sort = this.sort;
   }
+
+
 
   formatValue(value: number): string {
     const prefix = value > 0 ? '+' : '-';

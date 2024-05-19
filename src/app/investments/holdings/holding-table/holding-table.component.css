@@ -1,33 +1,12 @@
-.table-container {
-  overflow-x: auto;
-  margin: 1% 10%;
-}
+
 
 table.portfolio-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-table.portfolio-table thead {
-  background-color: #8d8a8a;
-}
-
-table.portfolio-table thead th,
-tbody td {
-  padding: 10px;
-  text-align: center;
-}
-
-table.portfolio-table tbody td {
-  border-bottom: 1px solid #737171;
-}
-
 table.portfolio-table tbody td:first-child {
   width: 400px;
-}
-
-table.portfolio-table tbody tr {
-  line-height: 15px;
 }
 
 .company-image {
@@ -45,13 +24,11 @@ table.portfolio-table tbody tr {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 400px;
   font-size: 12px;
 }
 
 .holding-item-contents-1 {
   display: flex;
-  justify-content: space-evenly;
 }
 
 .profit {
@@ -69,12 +46,7 @@ table.portfolio-table tbody tr {
 
 .summary-item {
   width: 25%;
-  height: 50px;
-  border: 1px solid;
-  border-radius: 5px;
-  background: #f4ecec;
-  padding: 3px;
-  margin: 0 5px;
+  margin-right: 5px;
 }
 
 .summary-item-title-icon > span {

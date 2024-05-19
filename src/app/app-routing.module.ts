@@ -6,7 +6,6 @@ import {
   PaymentComponent, SavingComponent,
 } from "./finance/transaction/transaction.component";
 import {PageNotFoundComponent} from "./shared/page-not-found/page-not-found.component";
-import {refreshResolver} from "./finance/service/resolvers";
 import {TransactionDashboardComponent} from "./finance/dashboard/dashboard.component";
 import {AnalyticsComponent} from "./finance/analytics/analytics.component";
 
@@ -14,14 +13,11 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'dashboard'
+    redirectTo: 'dashboard',
   },
   {
     path: 'dashboard',
     component: TransactionDashboardComponent,
-    resolve: {
-      all: refreshResolver
-    }
   },
   {
     path: 'income',

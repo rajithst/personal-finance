@@ -2,7 +2,7 @@
 
 export interface InvestmentResponse {
   holdings: any[];
-  dividends: any[];
+  dividends: any;
   transactions: any[];
   companies: any[];
 }

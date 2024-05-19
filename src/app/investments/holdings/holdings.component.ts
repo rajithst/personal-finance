@@ -22,6 +22,7 @@ export class HoldingsComponent implements OnInit {
   protected readonly faLineChart = faLineChart;
   protected readonly faCaretUp = faCaretUp;
   protected readonly faCaretDown = faCaretDown;
+  protected readonly faJpy = faJpy;
 
   private sessionData = this.sessionService.getData();
   constructor(private dialog: MatDialog, private sessionService: SessionService) {}
@@ -45,5 +46,5 @@ export class HoldingsComponent implements OnInit {
 
 
 
-  protected readonly faJpy = faJpy;
+
 }

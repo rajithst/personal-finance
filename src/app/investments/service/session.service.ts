@@ -3,10 +3,14 @@ import { ReplaySubject, Subject } from 'rxjs';
 import {ApiService} from "../../core/api.service";
 import {StockPurchase} from "../model/transaction";
 
+export interface SessionDividend {
+  us: any[],
+  domestic: any[]
+}
 
 export class SessionData {
   holdings: any[] = [];
-  dividends: any[] = [];
+  dividends: SessionDividend = {us: [], domestic: []};
   transactions: any[] = [];
   companies: any[] = [];
 }

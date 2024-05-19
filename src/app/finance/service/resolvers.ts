@@ -7,6 +7,6 @@ export const refreshResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
 ) => {
-  console.log('resolving dddata..')
+  console.log('transaction data fetching')
   return inject(SessionService).refresh()
 }
