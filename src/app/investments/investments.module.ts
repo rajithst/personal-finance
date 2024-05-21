@@ -16,6 +16,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TradeHistoryComponent } from './trade-history/trade-history.component';
 import { HoldingTableComponent } from './holdings/holding-table/holding-table.component';
 import { DividendTableComponent } from './dividend/dividend-table/dividend-table.component';
+import { TradeHistoryTableComponent } from './trade-history/trade-history-table/trade-history-table.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { DividendTableComponent } from './dividend/dividend-table/dividend-table
     TradeHistoryComponent,
     HoldingTableComponent,
     DividendTableComponent,
+    TradeHistoryTableComponent,
   ],
   imports: [
     CommonModule,

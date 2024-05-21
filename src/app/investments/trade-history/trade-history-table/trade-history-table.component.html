@@ -1,0 +1,73 @@
+<mat-card>
+  <mat-card-content>
+    <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 portfolio-table">
+      <ng-container matColumnDef="Stock">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Stock </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="holding-item-contents-1">
+            <div class="company-image"><img src="{{element.image}}" alt="" class="ticker-image"></div>
+            <div class="company-ticker">
+              <div class="company-name">{{element.company_name}}</div>
+              <div class="company-symbol">{{element.company}}</div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Date">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.purchase_date}} </td>
+      </ng-container>
+      <ng-container matColumnDef="Shares">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Shares </th>
+        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+      </ng-container>
+      <ng-container matColumnDef="Price">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Price </th>
+        <td mat-cell *matCellDef="let element"> {{element.stock_currency}}{{element.purchase_price * element.quantity | number: "1.2-2"}} </td>
+      </ng-container>
+      <ng-container matColumnDef="CurrentShareValue">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Current share value </th>
+        <!--          <td mat-cell *matCellDef="let element"> {{element.stock_currency}}{{element.current_price | number: "1.2-2"}} </td>-->
+        <td mat-cell *matCellDef="let element"> </td>
+      </ng-container>
+      <ng-container matColumnDef="TotalProfit">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Total Profit </th>
+        <td mat-cell *matCellDef="let element">
+          <!--            <div class="profit-loss"-->
+          <!--                 [ngClass]="{'profit': element.profit_loss >= 0, 'loss': element.profit_loss < 0}">-->
+          <!--              <span>{{ formatValue(element.profit_loss) }} </span>-->
+          <!--            </div>-->
+          <!--            <div class="profit-loss-percentage" [ngClass]="{'profit': element.profit_loss >= 0, 'loss': element.profit_loss < 0}">-->
+          <!--              <fa-icon [icon]="element.profit_change_percentage > 0 ? faCaretUp : faCaretDown"></fa-icon>-->
+          <!--              {{ element.profit_change_percentage | number: "1.2-2" }} %-->
+          <!--            </div>-->
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Actions">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> </th>
+        <td mat-cell *matCellDef="let element">
+          <span [matMenuTriggerFor]="menu">
+              <fa-icon
+                [icon]="faEllipsis"
+                size="lg"
+                [style]="{ color: '#3699ff' }"
+              ></fa-icon>
+          </span>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <fa-icon [icon]="faPlus" size="sm"></fa-icon>
+              <span>Add Transaction</span>
+            </button>
+            <button mat-menu-item disabled>
+              <fa-icon [icon]="faTrash" size="sm"></fa-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>

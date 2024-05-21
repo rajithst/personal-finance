@@ -1,0 +1,9 @@
+.trade-history-container {
+  margin: 1% 5%;
+  height: 90vh;
+}
+
+.table-container {
+  max-height: 100%;
+  overflow-x: auto;
+}

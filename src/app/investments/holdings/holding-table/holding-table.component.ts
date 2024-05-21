@@ -5,26 +5,23 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {MatSort} from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 
 import {
   faCaretDown,
-  faCaretUp,
+  faCaretUp, faEllipsis,
   faJpy,
   faLineChart,
-  faMoneyBill,
+  faMoneyBill, faPlus, faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import {MatTableDataSource} from "@angular/material/table";
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-holding-table',
   templateUrl: './holding-table.component.html',
   styleUrl: './holding-table.component.css',
 })
-export class HoldingTableComponent implements OnChanges  {
-
-
-
+export class HoldingTableComponent implements OnChanges {
   @Input() holdings: any[] = [];
   @ViewChild(MatSort) sort: MatSort;
 
@@ -32,7 +29,10 @@ export class HoldingTableComponent implements OnChanges  {
   protected readonly faCaretUp = faCaretUp;
   protected readonly faLineChart = faLineChart;
   protected readonly faMoneyBill = faMoneyBill;
+  protected readonly faEllipsis = faEllipsis;
   protected readonly faJpy = faJpy;
+  protected readonly faPlus = faPlus;
+  protected readonly faTrash = faTrash;
   protected readonly Math = Math;
 
   totalShares: number = 0;
@@ -41,26 +41,46 @@ export class HoldingTableComponent implements OnChanges  {
   totalProfit: number = 0;
   totalProfitPercentage: number = 0;
   currency: string = 'USD';
-  displayedColumns: string[] = ['Stock', 'Shares', 'CostPerShare', 'CurrentShareValue', 'TotalInvestment', 'CurrentValue', 'TotalProfit', 'ShareInProtofolio'];
+  displayedColumns: string[] = [
+    'Stock',
+    'Shares',
+    'CostPerShare',
+    'CurrentShareValue',
+    'TotalInvestment',
+    'CurrentValue',
+    'TotalProfit',
+    'ShareInProtofolio',
+    'Actions'
+  ];
   dataSource = new MatTableDataSource();
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.currency = this.holdings.length > 0 ? this.holdings[0].stock_currency : '$';
+    this.currency =
+      this.holdings.length > 0 ? this.holdings[0].stock_currency : '$';
     this.totalShares = this.holdings.reduce((ac, cv) => ac + cv['quantity'], 0);
-    this.totalInvestment = this.holdings.reduce((ac, cv) => ac + cv['total_investment'], 0);
-    this.totalCurrentPrice = this.holdings.reduce((ac, cv) => ac + cv['current_value'], 0);
-    this.totalProfit = this.holdings.reduce((ac, cv) => ac + cv['profit_loss'], 0);
-    this.totalProfitPercentage = (this.totalProfit/this.totalInvestment)*100;
+    this.totalInvestment = this.holdings.reduce(
+      (ac, cv) => ac + cv['total_investment'],
+      0,
+    );
+    this.totalCurrentPrice = this.holdings.reduce(
+      (ac, cv) => ac + cv['current_value'],
+      0,
+    );
+    this.totalProfit = this.holdings.reduce(
+      (ac, cv) => ac + cv['profit_loss'],
+      0,
+    );
+    this.totalProfitPercentage =
+      (this.totalProfit / this.totalInvestment) * 100;
     this.dataSource = new MatTableDataSource(this.holdings);
     this.dataSource.sort = this.sort;
   }
-
-
 
   formatValue(value: number): string {
     const prefix = value > 0 ? '+' : '-';
     const formattedValue = Math.abs(value);
     return `${prefix} ${this.currency}${formattedValue.toFixed(2)}`;
   }
+
 
 }
