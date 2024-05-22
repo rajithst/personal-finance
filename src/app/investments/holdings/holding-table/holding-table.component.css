@@ -31,6 +31,15 @@ table.portfolio-table tbody td:first-child {
   display: flex;
 }
 
+.holding-actions {
+  cursor: pointer;
+}
+
+.holding-action-item {
+  margin-left: 10px;
+  font-size: 14px;
+}
+
 .profit {
   color: green;
 }
@@ -58,7 +67,6 @@ table.portfolio-table tbody td:first-child {
   align-content: center;
   text-align: center;
 }
-
 .summary-item-title-value {
   font-size: 20px;
   text-align: center;

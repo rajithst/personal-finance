@@ -3,36 +3,37 @@ export interface MonthlyTransaction {
   month: number;
   month_text: string;
   total: number;
-  transactions: Transaction[];
-  transactions_cp: Transaction[];
+  transactions: TransactionExpand[];
+  transactions_cp: TransactionExpand[];
 }
 
 export interface Transaction {
   id: number | null;
-  category: number;
-  subcategory: number;
-  category_text?: string;
-  subcategory_text?: string | null;
-  is_payment: boolean;
-  is_deleted: boolean;
-  is_saving: boolean;
-  is_expense: boolean;
-  is_merge: boolean;
-  is_regular_destination: boolean | null;
-  payment_method: number;
-  payment_method_text?: string | null;
-  amount: number;
+  amount: number | null;
   date: string;
   destination: string;
-  alias: string | null;
-  year?: number;
-  month?: number;
-  month_text?: string;
-  notes: string | null;
-  update_similar: boolean | null;
-  delete_reason: string | null;
+  alias: string;
+  category: number;
+  subcategory: number;
+  notes: string;
+  is_saving: boolean;
+  is_payment: boolean;
+  is_expense: boolean;
+  is_deleted: boolean;
+  is_merge: boolean;
+  merge_id: number | null;
+  delete_reason: string;
+  payment_method: number;
+}
+
+export interface TransactionExpand extends Transaction {
+  category_text: string;
+  subcategory_text: string;
+  payment_method_text: string;
+  year: number;
+  month: number;
+  month_text: string;
   checked: boolean | false;
-  merged_ids: number[] | null
 }
 
 export interface TransactionsResponse {
@@ -41,4 +42,10 @@ export interface TransactionsResponse {
   saving: MonthlyTransaction[];
   payment: MonthlyTransaction[];
   destinations: string[];
+}
+
+export interface TransactionRequest extends Transaction {
+  is_regular_destination: boolean;
+  update_similar: boolean;
+  //merged_ids: number[] | null
 }

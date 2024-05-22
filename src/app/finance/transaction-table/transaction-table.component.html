@@ -60,41 +60,66 @@
         <ng-container matColumnDef="Actions">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let element">
-            <div class="transaction-actions">
-              <div class="edit-action">
-                <ng-container>
-                  <span (click)="editRecord(element, 'update')">
-                    <fa-icon
-                      [icon]="faGeorIcon"
-                      size="lg"
-                      [style]="{ color: '#3699ff' }"
-                    ></fa-icon>
-                  </span>
-                </ng-container>
-              </div>
-              <div class="edit-action">
-                <ng-container *ngIf="canMerge(element)">
-                  <span (click)="mergeTransactions()">
-                    <fa-icon
-                      [icon]="faMergeIcon"
-                      size="lg"
-                      [style]="{ color: 'green' }"
-                    ></fa-icon>
-                  </span>
-                </ng-container>
-              </div>
-              <div class="edit-action">
-                <ng-container *ngIf="element.is_merge">
-                  <span (click)="showMergeTransactions(element)">
-                    <fa-icon
-                      [icon]="faListIcon"
-                      size="lg"
-                      [style]="{ color: 'green' }"
-                    ></fa-icon>
-                  </span>
-                </ng-container>
-              </div>
-            </div>
+            <span class="transaction-actions" [matMenuTriggerFor]="menu">
+                <fa-icon
+                  [icon]="faEllipsis"
+                  size="lg"
+                  [style]="{ color: '#3699ff' }"
+                ></fa-icon>
+            </span>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editRecord(element, 'update')">
+                <fa-icon [icon]="faEdit" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
+                <span class="transaction-action-item">Edit</span>
+              </button>
+              <button mat-menu-item>
+                <fa-icon [icon]="faScissors" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
+                <span class="transaction-action-item">Split</span>
+              </button>
+              <button mat-menu-item [disabled]="!element.is_merge" (click)="showMergeTransactions(element)">
+                <fa-icon [icon]="faList" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
+                <span class="transaction-action-item">Show Merge history</span>
+              </button>
+              <button mat-menu-item (click)="deleteRecord(element, 'delete')">
+                <fa-icon [icon]="faTrash" size="sm" [style]="{ color: 'red' }"></fa-icon>
+                <span class="transaction-action-item">Delete</span>
+              </button>
+            </mat-menu>
+<!--            <div class="transaction-actions">-->
+<!--              <div class="edit-action">-->
+<!--                <ng-container>-->
+<!--                  <span (click)="editRecord(element, 'update')">-->
+<!--                    <fa-icon-->
+<!--                      [icon]="faGeorIcon"-->
+<!--                      size="lg"-->
+<!--                      [style]="{ color: '#3699ff' }"-->
+<!--                    ></fa-icon>-->
+<!--                  </span>-->
+<!--                </ng-container>-->
+<!--              </div>-->
+<!--              <div class="edit-action">-->
+<!--                <ng-container *ngIf="canMerge(element)">-->
+<!--                  <span (click)="mergeTransactions()">-->
+<!--                    <fa-icon-->
+<!--                      [icon]="faMergeIcon"-->
+<!--                      size="lg"-->
+<!--                      [style]="{ color: 'green' }"-->
+<!--                    ></fa-icon>-->
+<!--                  </span>-->
+<!--                </ng-container>-->
+<!--              </div>-->
+<!--              <div class="edit-action">-->
+<!--                <ng-container *ngIf="element.is_merge">-->
+<!--                  <span (click)="showMergeTransactions(element)">-->
+<!--                    <fa-icon-->
+<!--                      [icon]="faListIcon"-->
+<!--                      size="lg"-->
+<!--                      [style]="{ color: 'green' }"-->
+<!--                    ></fa-icon>-->
+<!--                  </span>-->
+<!--                </ng-container>-->
+<!--              </div>-->
+<!--            </div>-->
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

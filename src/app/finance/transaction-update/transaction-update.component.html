@@ -7,173 +7,161 @@
   {{ headerTitle }}
 </h2>
 <mat-dialog-content>
-  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-    <mat-tab label="Transaction Details">
-      <ng-container *ngIf="data.task == 'merge'">
-        <h3>Following transactions will merge in to one transaction.</h3>
-        <table class="merge-table">
-          <thead>
-            <tr>
-              <th>Transaction ID</th>
-              <th>Date</th>
-              <th>Amount</th>
-              <th>Destination</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (
-              row of data.formDataList;
-              track row;
-              let tableRowId = $index
-            ) {
-              <tr>
-                <td>{{ row.id }}</td>
-                <td>{{ row.date }}</td>
-                <td>{{ row.amount | number: "1.2-2" }}</td>
-                <td>{{ row.destination }}</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-        <mat-divider></mat-divider>
-      </ng-container>
-      <form [formGroup]="transactionForm">
-        <table class="expense-field-table">
+
+  <ng-container *ngIf="data.task == 'merge'">
+    <h3>Following transactions will merge in to one transaction.</h3>
+    <table class="merge-table">
+      <thead>
+      <tr>
+        <th>Transaction ID</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Destination</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (
+            row of data.formDataList;
+          track row;
+          let tableRowId = $index
+          ) {
           <tr>
-            <td>
-              <mat-checkbox color="primary" formControlName="update_similar"
-                >Update similar</mat-checkbox
-              >
-              <mat-checkbox
-                color="primary"
-                formControlName="is_regular_destination"
-                >Is regular destination</mat-checkbox
-              >
-            </td>
-            <td>
-              <mat-checkbox color="primary" formControlName="is_payment"
-                >Add to Payments</mat-checkbox
-              >
-            </td>
-            <td>
-              <mat-checkbox color="primary" formControlName="is_saving"
-                >Add to Savings</mat-checkbox
-              >
-            </td>
+            <td>{{ row.id }}</td>
+            <td>{{ row.date }}</td>
+            <td>{{ row.amount | number: "1.2-2" }}</td>
+            <td>{{ row.destination }}</td>
           </tr>
-          <tr>
-            <td>
-              <mat-form-field class="fill expense-input">
-                <mat-label>Payment Method</mat-label>
-                <mat-select formControlName="payment_method">
-                  @for (pm of PAYMENT_METHODS; track pm) {
-                    <mat-option [value]="pm.value">{{
-                      pm.viewValue
-                    }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field appearance="fill" class="fill expense-input">
-                <mat-label>Category</mat-label>
-                <mat-select formControlName="category">
-                  @for (exc of TRANSACTION_CATEGORIES; track exc) {
-                    <mat-option [value]="exc.value">{{
-                      exc.viewValue
-                    }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field appearance="fill" class="fill expense-input">
-                <mat-label>Sub Category</mat-label>
-                <mat-select formControlName="subcategory">
-                  @for (exc of EXPENSE_SUB_CATEGORIES; track exc) {
-                    <mat-option [value]="exc.value">{{
-                      exc.viewValue
-                    }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field class="fill expense-input">
-                <mat-label>Date</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="picker"
-                  formControlName="date"
-                />
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="picker"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field class="fill expense-input">
-                <mat-label>Amount (¥)</mat-label>
-                <input matInput placeholder="Amount" formControlName="amount" />
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field class="fill expense-input">
-                <mat-label>Destination</mat-label>
-                <input
-                  matInput
-                  placeholder="Destination"
-                  formControlName="destination"
-                />
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="3">
-              <mat-form-field class="fill expense-input">
-                <mat-label>Destination Alias (English)</mat-label>
-                <input
-                  matInput
-                  placeholder="Destination"
-                  formControlName="alias"
-                  [matAutocomplete]="destinationAc"
-                />
-                <mat-autocomplete #destinationAc="matAutocomplete">
-                  @for (dst of destinations; track dst) {
-                    <mat-option [value]="dst">{{ dst }}</mat-option>
-                  }
-                </mat-autocomplete>
-              </mat-form-field>
-            </td>
-          </tr>
-        </table>
-        <mat-form-field class="fill expense-input">
-          <mat-label>Notes</mat-label>
-          <textarea
-            matInput
-            placeholder="Notes"
-            formControlName="notes"
-          ></textarea>
-        </mat-form-field>
-      </form>
-    </mat-tab>
-    <mat-tab label="Split Bill"> </mat-tab>
-  </mat-tab-group>
+        }
+      </tbody>
+    </table>
+    <mat-divider></mat-divider>
+  </ng-container>
+  <form [formGroup]="transactionForm">
+    <table class="expense-field-table">
+      <tr>
+        <td>
+          <mat-checkbox color="primary" formControlName="update_similar"
+          >Update similar</mat-checkbox
+          >
+          <mat-checkbox
+            color="primary"
+            formControlName="is_regular_destination"
+          >Is regular destination</mat-checkbox
+          >
+        </td>
+        <td>
+          <mat-checkbox color="primary" formControlName="is_payment"
+          >Add to Payments</mat-checkbox
+          >
+        </td>
+        <td>
+          <mat-checkbox color="primary" formControlName="is_saving"
+          >Add to Savings</mat-checkbox
+          >
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field class="fill expense-input">
+            <mat-label>Payment Method</mat-label>
+            <mat-select formControlName="payment_method">
+              @for (pm of PAYMENT_METHODS; track pm) {
+                <mat-option [value]="pm.value">{{
+                    pm.viewValue
+                  }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill" class="fill expense-input">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              @for (exc of TRANSACTION_CATEGORIES; track exc) {
+                <mat-option [value]="exc.value">{{
+                    exc.viewValue
+                  }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill" class="fill expense-input">
+            <mat-label>Sub Category</mat-label>
+            <mat-select formControlName="subcategory">
+              @for (exc of EXPENSE_SUB_CATEGORIES; track exc) {
+                <mat-option [value]="exc.value">{{
+                    exc.viewValue
+                  }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field class="fill expense-input">
+            <mat-label>Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="date"
+            />
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="fill expense-input">
+            <mat-label>Amount (¥)</mat-label>
+            <input matInput placeholder="Amount" formControlName="amount" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="fill expense-input">
+            <mat-label>Destination</mat-label>
+            <input
+              matInput
+              placeholder="Destination"
+              formControlName="destination"
+            />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <mat-form-field class="fill expense-input">
+            <mat-label>Destination Alias (English)</mat-label>
+            <input
+              matInput
+              placeholder="Destination"
+              formControlName="alias"
+              [matAutocomplete]="destinationAc"
+            />
+            <mat-autocomplete #destinationAc="matAutocomplete">
+              @for (dst of destinations; track dst) {
+                <mat-option [value]="dst">{{ dst }}</mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+    <mat-form-field class="fill expense-input">
+      <mat-label>Notes</mat-label>
+      <textarea
+        matInput
+        placeholder="Notes"
+        formControlName="notes"
+      ></textarea>
+    </mat-form-field>
+  </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="expense-form-footer">
   <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
   <button mat-raised-button color="primary" (click)="submit()">Save</button>
-  <button
-    mat-raised-button
-    color="warn"
-    (click)="delete()"
-    *ngIf="data.task != 'merge'"
-  >
-    Delete
-  </button>
 </mat-dialog-actions>

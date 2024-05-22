@@ -124,15 +124,18 @@
               </span>
               <mat-menu #menu="matMenu">
                 <button mat-menu-item>
-                  <fa-icon [icon]="faPlus"></fa-icon>
-                  <span>Add Transaction</span>
+                  <fa-icon [icon]="faPlus" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
+                  <span class="holding-action-item">Add Transaction</span>
                 </button>
-                <button mat-menu-item disabled>
-                  <fa-icon [icon]="faTrash"></fa-icon>
-                  <span>Delete</span>
+                <button mat-menu-item>
+                  <fa-icon [icon]="faList" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
+                  <span class="holding-action-item">Show History</span>
+                </button>
+                <button mat-menu-item>
+                  <fa-icon [icon]="faTrash" size="sm" [style]="{ color: 'red' }"></fa-icon>
+                  <span class="holding-action-item">Delete</span>
                 </button>
               </mat-menu>
-
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

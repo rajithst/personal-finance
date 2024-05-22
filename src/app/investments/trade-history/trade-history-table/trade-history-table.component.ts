@@ -1,5 +1,13 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {faCircleCheck, faCaretUp, faCaretDown, faEllipsis, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleCheck,
+  faCaretUp,
+  faCaretDown,
+  faEllipsis,
+  faPlus,
+  faTrash,
+  faEdit
+} from '@fortawesome/free-solid-svg-icons';
 import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
@@ -25,4 +33,5 @@ export class TradeHistoryTableComponent implements OnChanges {
 
   protected readonly faPlus = faPlus;
   protected readonly faTrash = faTrash;
+  protected readonly faEdit = faEdit;
 }

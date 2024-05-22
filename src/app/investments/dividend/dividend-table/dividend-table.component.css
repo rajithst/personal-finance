@@ -72,3 +72,32 @@ table.dividend-table td:first-child {
 .dividend-flow {
   cursor: pointer;
 }
+
+.dividend-summary {
+  display: flex;
+  margin: 5px 0;
+}
+
+.summary-item {
+  width: 25%;
+  margin-right: 5px;
+}
+
+.summary-item-title-icon > span {
+  margin-left: 10px;
+}
+.summary-item-title {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  text-align: center;
+}
+
+.summary-item-title-value {
+  font-size: 20px;
+  text-align: center;
+}
+
+.summary-item-title-value > .percentage-change {
+  font-size: 14px;
+}

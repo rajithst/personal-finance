@@ -6,7 +6,6 @@ import {
 } from '../service/session.service';
 import {
   MAT_DIALOG_DATA,
-  MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
 
@@ -18,12 +17,12 @@ import {
   SAVINGS_CATEGORY_ID,
   NA_SUB_CATEGORY_ID,
 } from '../../data/client.data';
-import { Transaction } from '../model/transactions';
-import moment from "moment/moment";
+import { TransactionExpand, TransactionRequest } from '../model/transactions';
+import moment from 'moment/moment';
 
 export interface TransactionUpdateDialogData {
-  formData: Transaction | null;
-  formDataList: Transaction[] | null;
+  formData: TransactionExpand | null;
+  formDataList: TransactionExpand[] | null;
   task: string;
 }
 
@@ -39,25 +38,25 @@ export class TransactionUpdateDialog implements OnInit {
 
   constructor(
     private sessionService: SessionService,
-    private dialog: MatDialog,
     public dialogRef: MatDialogRef<TransactionUpdateDialog>,
     @Inject(MAT_DIALOG_DATA) public data: TransactionUpdateDialogData,
   ) {}
   message = this.sessionService.getEventMessage();
   sessionData = this.sessionService.getData();
-  transactionForm = this.getNewTransactionForm();
+  transactionForm: FormGroup;
   destinations: string[] = this.sessionData.destinations;
   headerTitle: string = '';
 
   ngOnInit(): void {
     let formData = this.data.formData;
-    this.headerTitle = this.data.task == "add" ? 'Add Transaction': `Update Transaction (${this.data.formData?.id})`;
-    if (this.data.task == 'merge') {
-      formData = this.prepareMergeForm()
-      this.headerTitle = 'Merge Transactions'
-    }
+    this.headerTitle =
+      this.data.task == 'add'
+        ? 'Add Transaction'
+        : `Update Transaction (${this.data.formData?.id})`;
     if (formData) {
-      this.transactionForm.setValue(this.fillTransactionForm(formData));
+      this.transactionForm = this.getNewTransactionForm(formData);
+    } else {
+      this.transactionForm = this.getEmptyTransactionForm();
     }
 
     this.EXPENSE_SUB_CATEGORIES =
@@ -86,9 +85,7 @@ export class TransactionUpdateDialog implements OnInit {
     this.transactionForm.value.date = moment(
       this.transactionForm.value.date,
     ).format('YYYY-MM-DD');
-    const payload: Transaction = this.fillTransactionForm(
-      this.transactionForm.value as Transaction,
-    );
+    const payload: TransactionRequest = this.transactionForm.value;
     this.sessionService.updateTransaction(payload);
     this.message.subscribe((msg: SessionEventMessage) => {
       if (msg === SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS) {
@@ -97,81 +94,54 @@ export class TransactionUpdateDialog implements OnInit {
     });
   }
 
-  delete() {
-    const deleteDialog = this.dialog.open(TransactionDeleteDialog, {
-      width: '550px',
-      data: this.data,
-    });
-    deleteDialog.afterClosed().subscribe((result) => {
-      if (result.refresh && result.data) {
-        this.transactionForm.value.is_deleted = true;
-        this.transactionForm.value.delete_reason = result.data;
-        this.submit();
-      }
-    });
-  }
-
   cancel() {
     this.dialogRef.close({ refresh: false, data: null });
   }
 
-  getNewTransactionForm() {
+  getNewTransactionForm(data: TransactionExpand) {
     return new FormGroup({
-      id: new FormControl<number | null>(null),
-      category: new FormControl<number>(0),
-      subcategory: new FormControl<number>(0),
-      payment_method: new FormControl<number>(0),
-      amount: new FormControl<number | null>(null),
-      date: new FormControl<string>(''),
-      destination: new FormControl<string>(''),
-      alias: new FormControl<string>(''),
-      notes: new FormControl<string>(''),
-      update_similar: new FormControl<boolean>(true),
-      is_payment: new FormControl<boolean>(false),
-      is_saving: new FormControl<boolean>(false),
-      is_expense: new FormControl<boolean>(false),
-      is_deleted: new FormControl<boolean>(false),
-      is_merge: new FormControl<boolean>(false),
-      is_regular_destination: new FormControl<boolean>(true),
-      delete_reason: new FormControl<string>(''),
-      checked: new FormControl<boolean>(false),
-      merged_ids: new FormControl<number[]>([]),
+      id: new FormControl(data.id),
+      category: new FormControl(data.category),
+      subcategory: new FormControl(data.subcategory),
+      payment_method: new FormControl(data.payment_method),
+      amount: new FormControl(data.amount),
+      date: new FormControl(data.date),
+      destination: new FormControl(data.destination),
+      alias: new FormControl(data.alias),
+      notes: new FormControl(data.notes),
+      update_similar: new FormControl(false),
+      is_payment: new FormControl(data.is_payment),
+      is_saving: new FormControl(data.is_saving),
+      is_expense: new FormControl(data.is_expense),
+      is_deleted: new FormControl(data.is_deleted),
+      is_merge: new FormControl(data.is_merge),
+      merge_id: new FormControl(data.merge_id),
+      is_regular_destination: new FormControl(false),
+      delete_reason: new FormControl(data.delete_reason),
     });
   }
 
-  fillTransactionForm(formData: Transaction): Transaction {
-    return {
-      id: formData.id,
-      category: formData.category,
-      subcategory: formData.subcategory,
-      payment_method: formData.payment_method,
-      destination: formData.destination,
-      alias: formData.alias,
-      amount: Number(formData.amount),
-      date: formData.date,
-      notes: formData.notes,
-      update_similar: formData.update_similar,
-      is_saving: formData.is_saving,
-      is_expense: formData.is_expense,
-      is_payment: formData.is_payment,
-      is_deleted: formData.is_deleted,
-      is_merge: formData.is_merge,
-      is_regular_destination: formData.is_regular_destination,
-      delete_reason: formData.delete_reason,
-      checked: formData.checked,
-      merged_ids: formData.merged_ids || []
-    };
-  }
-
-  prepareMergeForm() {
-    const totalAmount = this.data.formDataList!.reduce((tot, transaction) => tot + transaction.amount, 0);
-    const transactionId = Math.min(...this.data.formDataList!.map(x => x.id!))
-    const data = this.fillTransactionForm(this.data.formDataList![0])
-    data.id = transactionId;
-    data.amount = totalAmount
-    data.merged_ids = this.data.formDataList?.map(x => x.id) as number[];
-    data.is_merge = true
-    return data;
+  getEmptyTransactionForm() {
+    return new FormGroup({
+      id: new FormControl(null),
+      category: new FormControl(null),
+      subcategory: new FormControl(null),
+      payment_method: new FormControl(null),
+      amount: new FormControl(null),
+      date: new FormControl(''),
+      destination: new FormControl(''),
+      alias: new FormControl(''),
+      notes: new FormControl(''),
+      update_similar: new FormControl(false),
+      is_payment: new FormControl(false),
+      is_saving: new FormControl(false),
+      is_expense: new FormControl(false),
+      is_deleted: new FormControl(false),
+      is_merge: new FormControl(false),
+      merge_id: new FormControl(null),
+      is_regular_destination: new FormControl(false),
+      delete_reason: new FormControl(''),
+    });
   }
 }
 
@@ -188,6 +158,8 @@ export class TransactionDeleteDialog extends TransactionUpdateDialog {
   }
 
   confirm() {
-    this.dialogRef.close({ refresh: true, data: this.deleteReason });
+    this.transactionForm.get('is_deleted')?.setValue(true);
+    this.transactionForm.get('delete_reason')?.setValue(this.deleteReason);
+    this.submit();
   }
 }

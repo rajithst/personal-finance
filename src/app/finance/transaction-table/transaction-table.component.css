@@ -43,12 +43,21 @@ table.transaction-table tbody td:last-child {
   font-style: italic;
 }
 
+/*.transaction-actions {*/
+/*  display: flex;*/
+/*  justify-content: space-around;*/
+/*}*/
+
+/*.edit-action, .merge-action {*/
+/*  cursor: pointer;*/
+/*  width: 15px;*/
+/*}*/
+
 .transaction-actions {
-  display: flex;
-  justify-content: space-around;
+  cursor: pointer;
 }
 
-.edit-action, .merge-action {
-  cursor: pointer;
-  width: 15px;
+.transaction-action-item {
+  margin-left: 10px;
+  font-size: 14px;
 }

@@ -9,9 +9,9 @@ import { MatSort } from '@angular/material/sort';
 
 import {
   faCaretDown,
-  faCaretUp, faEllipsis,
+  faCaretUp, faEdit, faEllipsis,
   faJpy,
-  faLineChart,
+  faLineChart, faList,
   faMoneyBill, faPlus, faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { MatTableDataSource } from '@angular/material/table';
@@ -83,4 +83,6 @@ export class HoldingTableComponent implements OnChanges {
   }
 
 
+  protected readonly faEdit = faEdit;
+  protected readonly faList = faList;
 }
