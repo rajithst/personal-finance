@@ -23,7 +23,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatChip, MatChipSet } from '@angular/material/chips';
 
 @NgModule({
   imports: [
@@ -51,7 +52,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatListModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    DragDropModule
+    DragDropModule,
+    MatChip, MatChipSet
   ],
   exports: [
     MatButtonModule,
@@ -77,7 +79,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatListModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    DragDropModule
+    DragDropModule,
+    MatChip, MatChipSet
   ],
   declarations: [],
 })

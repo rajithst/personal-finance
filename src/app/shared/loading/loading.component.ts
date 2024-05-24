@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
+import {HttpContextToken} from "@angular/common/http";
 import {LoadingService} from "./loading.service";
 import {
   NavigationCancel,
@@ -21,10 +22,10 @@ export class LoadingComponent implements OnInit {
 
   @Input()
   detectRoutingOngoing = false
-  constructor(public loadingService: LoadingService,
-              private router: Router) {
 
-  }
+  loadingService = inject(LoadingService);
+  router = inject(Router)
+  loading = this.loadingService.loading;
 
   ngOnInit() {
     if (this.detectRoutingOngoing) {
@@ -45,6 +46,8 @@ export class LoadingComponent implements OnInit {
         )
     }
   }
-
-
 }
+
+export const SkipLoading = new HttpContextToken(
+  () => false
+)

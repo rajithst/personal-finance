@@ -1,99 +1,147 @@
+<script src="../../../finance/transaction-table/transaction-table.component.ts"></script>
 <div class="stock-summary">
-  <div class="summary-item total-value">
-    <div class="summary-item-title">
-      <div class="summary-item-title-icon">
-        <fa-icon [icon]="faMoneyBill" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
-        <span>Total Value</span>
+  <mat-card class="summary-item total-value">
+    <mat-card-content>
+      <div class="summary-item-title">
+        <div class="summary-item-title-icon">
+          <fa-icon [icon]="faMoneyBill" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+          <span>Total Value</span>
+        </div>
+        <div class="summary-item-title-value">
+          <span>{{currency}}{{totalCurrentPrice | number: "1.2-2"}}</span>
+        </div>
       </div>
-      <div class="summary-item-title-value">
-        <span>{{currency}}{{totalCurrentPrice | number: "1.2-2"}}</span>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="summary-item total-investment">
+    <mat-card-content>
+      <div class="summary-item-title">
+        <div class="summary-item-title-icon">
+          <fa-icon [icon]="faMoneyBill" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+          <span>Invested Value</span>
+        </div>
+        <div class="summary-item-title-value">
+          <span>{{currency}}{{totalInvestment | number: "1.2-2"}}</span>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="summary-item total-investment">
-    <div class="summary-item-title">
-      <div class="summary-item-title-icon">
-        <fa-icon [icon]="faMoneyBill" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
-        <span>Invested Value</span>
-      </div>
-      <div class="summary-item-title-value">
-        <span>{{currency}}{{totalInvestment | number: "1.2-2"}}</span>
-      </div>
-    </div>
-  </div>
-  <div class="summary-item total-profit">
-    <div class="summary-item-title">
-      <div class="summary-item-title-icon">
-        <fa-icon [icon]="faLineChart" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
-        <span>Total Profit</span>
-      </div>
-      <div class="summary-item-title-value" [ngClass]="{'profit': totalProfit >=  0, 'loss': totalProfit < 0}">
-        <span>{{totalProfit >= 0 ? '' : '-'}} {{currency}}{{Math.abs(totalProfit) | number: "1.2-2"}}</span>
-        <span class="percentage-change">
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="summary-item total-profit">
+    <mat-card-content>
+      <div class="summary-item-title">
+        <div class="summary-item-title-icon">
+          <fa-icon [icon]="faLineChart" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+          <span>Total Profit</span>
+        </div>
+        <div class="summary-item-title-value" [ngClass]="{'profit': totalProfit >=  0, 'loss': totalProfit < 0}">
+          <span>{{totalProfit >= 0 ? '' : '-'}} {{currency}}{{Math.abs(totalProfit) | number: "1.2-2"}}</span>
+          <span class="percentage-change">
           {{totalProfitPercentage | number: "1.2-2"}} %
           <fa-icon [icon]="totalProfit > 0 ? faCaretUp : faCaretDown" class="{{totalProfit > 0 ? 'profit' : 'loss'}}"></fa-icon>
         </span>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="summary-item forex">
-    <div class="summary-item-title">
-      <div class="summary-item-title-icon">
-        <fa-icon [icon]="faJpy" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
-        <span>Total Profit (Y)</span>
-      </div>
-      <div class="summary-item-title-value">
-        <span>156</span>
+    </mat-card-content>
 
+  </mat-card>
+  <mat-card class="summary-item forex">
+    <mat-card-content>
+      <div class="summary-item-title">
+        <div class="summary-item-title-icon">
+          <fa-icon [icon]="faJpy" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+          <span>Total Profit (Y)</span>
+        </div>
+        <div class="summary-item-title-value">
+          <span>156</span>
+
+        </div>
       </div>
-    </div>
-  </div>
+    </mat-card-content>
+  </mat-card>
 </div>
 
-<table class="portfolio-table">
-  <thead>
-  <tr>
-    <th>Stock</th>
-    <th>Shares</th>
-    <th>Cost per share</th>
-    <th>Current share value</th>
-    <th>Total Investment</th>
-    <th>Current Value</th>
-    <th>Total Profit</th>
-    <th>Share in protofolio</th>
-  </tr>
-  </thead>
-  <tbody>
-    @for (data of holdings; track $index) {
-      <tr>
-        <td>
+<mat-card>
+  <mat-card-content>
+    <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 portfolio-table">
+      <ng-container matColumnDef="Stock">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Stock </th>
+        <td mat-cell *matCellDef="let element">
           <div class="holding-item-contents-1">
-            <div class="company-image"><img src="{{data.image}}" alt="" class="ticker-image"></div>
+            <div class="company-image"><img src="{{element.image}}" alt="" class="ticker-image"></div>
             <div class="company-ticker">
-              <div class="company-name">{{data.company_name}}</div>
-              <div class="company-symbol">{{data.company}}</div>
+              <div class="company-name">{{element.company_name}}</div>
+              <div class="company-symbol">{{element.company}}</div>
             </div>
           </div>
         </td>
-        <td>{{data.quantity}}</td>
-        <td>{{data.stock_currency}}{{data.average_price | number: "1.2-2"}}</td>
-        <td>{{data.stock_currency}}{{data.current_price | number: "1.2-2"}}</td>
-        <td>{{data.stock_currency}}{{data.total_investment | number: "1.2-2"}}</td>
-        <td>{{data.stock_currency}}{{data.current_value | number: "1.2-2"}}</td>
-        <td>
-          <div class="holding-item-contents-2">
-            <div class="profit-loss"
-                 [ngClass]="{'profit': data.profit_loss >= 0, 'loss': data.profit_loss < 0}">
-              <span>{{ formatValue(data.profit_loss) }} </span>
-            </div>
-            <div class="profit-loss-percentage" [ngClass]="{'profit': data.profit_loss >= 0, 'loss': data.profit_loss < 0}">
-              <fa-icon [icon]="data.profit_change_percentage > 0 ? faCaretUp : faCaretDown"></fa-icon>
-              {{ data.profit_change_percentage | number: "1.2-2" }} %
-            </div>
+      </ng-container>
+      <ng-container matColumnDef="Shares">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Shares </th>
+        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+      </ng-container>
+      <ng-container matColumnDef="CostPerShare">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Cost per share </th>
+        <td mat-cell *matCellDef="let element"> {{element.stock_currency}}{{element.average_price | number: "1.2-2"}} </td>
+      </ng-container>
+      <ng-container matColumnDef="CurrentShareValue">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Current share value </th>
+        <td mat-cell *matCellDef="let element"> {{element.stock_currency}}{{element.current_price | number: "1.2-2"}} </td>
+      </ng-container>
+      <ng-container matColumnDef="TotalInvestment">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Total Investment </th>
+        <td mat-cell *matCellDef="let element"> {{element.stock_currency}}{{element.total_investment | number: "1.2-2"}} </td>
+      </ng-container>
+      <ng-container matColumnDef="CurrentValue">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Current Value </th>
+        <td mat-cell *matCellDef="let element"> {{element.stock_currency}}{{element.current_value | number: "1.2-2"}} </td>
+      </ng-container>
+      <ng-container matColumnDef="TotalProfit">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Total Profit </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="profit-loss"
+               [ngClass]="{'profit': element.profit_loss >= 0, 'loss': element.profit_loss < 0}">
+            <span>{{ formatValue(element.profit_loss) }} </span>
+          </div>
+          <div class="profit-loss-percentage" [ngClass]="{'profit': element.profit_loss >= 0, 'loss': element.profit_loss < 0}">
+            <fa-icon [icon]="element.profit_change_percentage > 0 ? faCaretUp : faCaretDown"></fa-icon>
+            {{ element.profit_change_percentage | number: "1.2-2" }} %
           </div>
         </td>
-        <td>{{(data.total_investment/totalInvestment)*100 | number: "1.2-2" }} %</td>
-      </tr>
-    }
-  </tbody>
-</table>
+      </ng-container>
+      <ng-container matColumnDef="ShareInProtofolio">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Share in protofolio </th>
+        <td mat-cell *matCellDef="let element"> {{(element.total_investment/totalInvestment)*100 | number: "1.2-2" }} % </td>
+      </ng-container>
+      <ng-container matColumnDef="Actions">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> </th>
+        <td mat-cell *matCellDef="let element">
+              <span class="holding-actions" [matMenuTriggerFor]="menu">
+                <fa-icon
+                  [icon]="faEllipsis"
+                  size="lg"
+                  [style]="{ color: '#3699ff' }"
+                ></fa-icon>
+              </span>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                  <fa-icon [icon]="faPlus" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
+                  <span class="holding-action-item">Add Transaction</span>
+                </button>
+                <button mat-menu-item>
+                  <fa-icon [icon]="faList" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
+                  <span class="holding-action-item">Show History</span>
+                </button>
+                <button mat-menu-item>
+                  <fa-icon [icon]="faTrash" size="sm" [style]="{ color: 'red' }"></fa-icon>
+                  <span class="holding-action-item">Delete</span>
+                </button>
+              </mat-menu>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>
+
+

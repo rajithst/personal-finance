@@ -1,0 +1,103 @@
+.dividend-summary {
+  display: flex;
+  margin: 5px 0;
+}
+
+.summary-item {
+  width: 25%;
+  margin-right: 5px;
+}
+
+.dividend-cards {
+  height: 70vh;
+  overflow-x: auto;
+}
+.dividend-card {
+  margin-bottom: 1%;
+}
+
+.dividend-title-header {
+  display: flex;
+  align-items: center;
+  width: 200px;
+  justify-content: space-between;
+}
+.dividend-title-header > .dividend-amount {
+  font-size: 15px;
+  color: green;
+  background-color: #c4d7c4;
+  border-radius: 5px;
+  width: 50px;
+  text-align: center;
+}
+.dividend-card-content {
+  margin-top: 1%;
+}
+
+table.dividend-table td:first-child {
+  width: 400px;
+}
+
+.company-image {
+  width: 50px;
+  height: 30px;
+  align-content: center;
+}
+
+.ticker-image {
+  width: 30px;
+  height: 25px;
+}
+.company-ticker {
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 400px;
+  font-size: 12px;
+}
+
+.holding-item-contents-1 {
+  display: flex;
+}
+.dividend-status {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.dividend-info {
+  font-weight: 800;
+}
+
+.dividend-flow {
+  cursor: pointer;
+}
+
+.dividend-summary {
+  display: flex;
+  margin: 5px 0;
+}
+
+.summary-item {
+  width: 25%;
+  margin-right: 5px;
+}
+
+.summary-item-title-icon > span {
+  margin-left: 10px;
+}
+.summary-item-title {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  text-align: center;
+}
+
+.summary-item-title-value {
+  font-size: 20px;
+  text-align: center;
+}
+
+.summary-item-title-value > .percentage-change {
+  font-size: 14px;
+}

@@ -1,0 +1,148 @@
+<div class="dividend-summary">
+  <mat-card class="summary-item total-value">
+    <mat-card-content>
+      <div class="summary-item-title">
+        <div class="summary-item-title-icon">
+          <fa-icon
+            [icon]="faMoneyBill"
+            size="lg"
+            [style]="{ color: '#3699ff' }"
+          ></fa-icon>
+          <span>Total Dividend Value</span>
+        </div>
+        <div class="summary-item-title-value">
+          <span></span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="summary-item total-investment">
+    <mat-card-content>
+      <div class="summary-item-title">
+        <div class="summary-item-title-icon">
+          <fa-icon
+            [icon]="faMoneyBill"
+            size="lg"
+            [style]="{ color: '#3699ff' }"
+          ></fa-icon>
+          <span>Invested Value</span>
+        </div>
+        <div class="summary-item-title-value">
+          <span></span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="summary-item total-profit">
+    <mat-card-content>
+      <div class="summary-item-title">
+        <div class="summary-item-title-icon">
+          <fa-icon
+            [icon]="faLineChart"
+            size="lg"
+            [style]="{ color: '#3699ff' }"
+          ></fa-icon>
+          <span>Total Profit</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="summary-item forex">
+    <mat-card-content>
+      <div class="summary-item-title">
+        <div class="summary-item-title-icon">
+          <fa-icon
+            [icon]="faJpy"
+            size="lg"
+            [style]="{ color: '#3699ff' }"
+          ></fa-icon>
+          <span>Total Profit (Y)</span>
+        </div>
+        <div class="summary-item-title-value">
+          <span>156</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div class="dividend-cards">
+  @for (div of dividends; track $index) {
+    <mat-card class="dividend-card">
+      <mat-card-header>
+        <mat-card-title class="dividend-title">
+          <div class="dividend-title-header">
+            <div class="dividend-title">
+              {{ div.year }} - {{ div.month_text }}
+            </div>
+            <div class="dividend-amount">${{ div.total }}</div>
+          </div>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="dividend-card-content">
+        <table
+          mat-table
+          [dataSource]="div.transactions"
+          class="mat-elevation-z8 dividend-table"
+        >
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>No.</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="holding-item-contents-1">
+                <div class="company-image">
+                  <img src="{{ element.image }}" alt="" class="ticker-image" />
+                </div>
+                <div class="company-ticker">
+                  <div class="company-name">{{ element.company_name }}</div>
+                  <div class="company-symbol">{{ element.company }}</div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <td mat-cell *matCellDef="let element">
+              <div class="dividend-info-expand">
+                <div class="dividend-info">{{ element.stock_currency }}{{ element.amount | number: "1.2-2" }}</div>
+                <div class="dividend-status">3 * 0.44</div>
+              </div>
+
+            </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="weight">
+            <td mat-cell *matCellDef="let element">
+              <div class="dividend-info-expand">
+                <div class="dividend-info">{{ element.ex_dividend_date }}</div>
+                <div class="dividend-status">Ex Dividend Date</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="symbol">
+            <td mat-cell *matCellDef="let element">
+              <div class="dividend-info-expand">
+                <div class="dividend-info">{{ element.payment_date }}</div>
+                <div class="dividend-status">Payment Date</div>
+              </div>
+
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <td mat-cell *matCellDef="let element">
+              <span class="dividend-flow" (click)="dividendPaymentFlow(element)">
+                <fa-icon
+                  [icon]="faCircleCheck"
+                  size="lg"
+                  [style]="{ color: '#3699ff' }"
+                ></fa-icon>
+              </span>
+
+            </td>
+          </ng-container>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

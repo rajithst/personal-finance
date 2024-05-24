@@ -94,7 +94,7 @@ export class TransactionComponent {
             : true,
         );
       x.total = x.transactions_cp.reduce(
-        (total, { amount }) => total + amount,
+        (total, { amount }) => total + amount!,
         0,
       );
     });

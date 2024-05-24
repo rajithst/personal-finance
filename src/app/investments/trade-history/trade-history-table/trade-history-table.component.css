@@ -1,3 +1,79 @@
+table.portfolio-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.portfolio-table tbody td:first-child {
+  width: 400px;
+}
+
+.company-image {
+  width: 50px;
+  height: 30px;
+  align-content: center;
+}
+
+.ticker-image {
+  width: 30px;
+  height: 25px;
+}
+.company-ticker {
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 12px;
+}
+
+.holding-item-contents-1 {
+  display: flex;
+}
+
+.trade-history-action {
+  cursor: pointer;
+}
+
+.trade-history-action-item {
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+.profit {
+  color: green;
+}
+
+.loss {
+  color: #f64e60;
+}
+
+.stock-summary {
+  display: flex;
+  margin: 5px 0;
+}
+
+.summary-item {
+  width: 25%;
+  margin-right: 5px;
+}
+
+.summary-item-title-icon > span {
+  margin-left: 10px;
+}
+.summary-item-title {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  text-align: center;
+}
+
+.summary-item-title-value {
+  font-size: 20px;
+  text-align: center;
+}
+
+.summary-item-title-value > .percentage-change {
+  font-size: 14px;
+}
 
 
 table.portfolio-table {
@@ -31,15 +107,6 @@ table.portfolio-table tbody td:first-child {
   display: flex;
 }
 
-.holding-actions {
-  cursor: pointer;
-}
-
-.holding-action-item {
-  margin-left: 10px;
-  font-size: 14px;
-}
-
 .profit {
   color: green;
 }
@@ -67,6 +134,7 @@ table.portfolio-table tbody td:first-child {
   align-content: center;
   text-align: center;
 }
+
 .summary-item-title-value {
   font-size: 20px;
   text-align: center;

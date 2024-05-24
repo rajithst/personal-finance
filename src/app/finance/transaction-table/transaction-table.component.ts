@@ -5,13 +5,18 @@ import {
   OnChanges,
 
 } from '@angular/core';
-import { MonthlyTransaction, Transaction } from '../model/transactions';
+import {MonthlyTransaction, Transaction, TransactionExpand} from '../model/transactions';
 import {
+  TransactionDeleteDialog,
   TransactionUpdateDialog,
 } from '../transaction-update/transaction-update.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { faGear, faCodeMerge, faList } from '@fortawesome/free-solid-svg-icons';
+import {
+  faList,
+  faEllipsis,
+  faTrash, faEdit, faScissors
+} from '@fortawesome/free-solid-svg-icons';
 import {TransactionDetailDialog} from "../transaction-detail/transaction-detail.component";
 
 @Component({
@@ -26,9 +31,14 @@ export class TransactionTableComponent implements OnChanges {
   selectedTransactions: Record<string, number[]> = {};
   selectedMonths: number[] = [];
   checkAllItems: boolean = false;
-  faGeorIcon = faGear;
-  faMergeIcon = faCodeMerge;
-  faListIcon = faList;
+
+  protected readonly faEllipsis = faEllipsis;
+  protected readonly faTrash = faTrash;
+  protected readonly faEdit = faEdit;
+  protected readonly faList = faList;
+  protected readonly faScissors = faScissors;
+
+  displayedColumns: string[] = ['select', 'Date', 'Category', 'SubCategory', 'PaymentMethod', 'Amount', 'PaymentMethod', 'Destination', 'Actions'];
 
   constructor(
     private dialog: MatDialog,
@@ -39,9 +49,7 @@ export class TransactionTableComponent implements OnChanges {
     this.prepareSelectedTransactions()
   }
 
-  editRecord(item: Transaction, task: string) {
-    item.update_similar = false;
-    item.is_regular_destination = false;
+  editRecord(item: TransactionExpand, task: string) {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
       width: '850px',
       position: {
@@ -58,7 +66,24 @@ export class TransactionTableComponent implements OnChanges {
     });
   }
 
-  toggleItem(row: Transaction, $event: any) {
+  deleteRecord(item: TransactionExpand, task: string) {
+    const dialog = this.dialog.open(TransactionDeleteDialog, {
+      width: '850px',
+      position: {
+        top: '50px',
+      },
+      data: { formData: item, task: task },
+    });
+    dialog.afterClosed().subscribe((result) => {
+      if (result.refresh) {
+        this.snackBar.open('Deleted!', 'Success', {
+          duration: 3000,
+        });
+      }
+    });
+  }
+
+  toggleItem(row: TransactionExpand, $event: any) {
     const isChecked = $event.target.checked;
     const target = this.transactionData
       .find((x) => x.year == row.year && x.month == row.month)
@@ -114,10 +139,10 @@ export class TransactionTableComponent implements OnChanges {
       .map((month) => month.transactions)
       .flatMap((transaction) => transaction.filter((x) => x.checked));
 
-    results.forEach(x => {
-      x.update_similar = false;
-      x.is_regular_destination = false;
-    })
+    // results.forEach(x => {
+    //   x.update_similar = false;
+    //   x.is_regular_destination = false;
+    // })
     return results;
   }
 
@@ -133,7 +158,7 @@ export class TransactionTableComponent implements OnChanges {
     })
   }
 
-  canMerge(row: Transaction): boolean {
+  canMerge(row: TransactionExpand): boolean {
     const transactionKey = `${row.year}${row.month}`;
     if (transactionKey in this.selectedTransactions) {
       return this.selectedTransactions[transactionKey].length > 1 && this.selectedTransactions[transactionKey].includes(row.id!)
@@ -150,4 +175,10 @@ export class TransactionTableComponent implements OnChanges {
       data: {},
     });
   }
+
+  toggleSelection(element: TransactionExpand) {
+    element.checked = !element.checked;
+  }
+
+
 }

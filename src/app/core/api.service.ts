@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Income, IncomeRequest } from '../finance/model/income.data';
 import {
-  Transaction,
+  Transaction, TransactionExpand,
   TransactionsResponse,
 } from '../finance/model/transactions';
 import { InvestmentResponse } from '../investments/model/investment';
@@ -23,7 +23,7 @@ export class ApiService {
 
   getTransactions(): Observable<TransactionsResponse> {
     return this.http.get<TransactionsResponse>(
-      `${this.SRC_URL}/finance/transactions`,
+      `${this.SRC_URL}/finance/list`,
     );
   }
 
@@ -33,11 +33,16 @@ export class ApiService {
     );
   }
 
-  updateTransaction(payload: Transaction): Observable<Transaction> {
-    return this.http.post<Transaction>(
-      `${this.SRC_URL}/finance/transactions/`,
-      payload,
-    );
+  updateTransaction(payload: Transaction): Observable<TransactionExpand> {
+    if (payload.id) {
+      return this.http.put<TransactionExpand>(
+        `${this.SRC_URL}/finance/transaction/${payload.id}/`,
+        payload,
+      );
+    } else {
+      return this.http.post<TransactionExpand>(`${this.SRC_URL}/finance/transaction/`, payload)
+    }
+
   }
 
   mergeTransaction(payload: Transaction): Observable<Transaction> {
