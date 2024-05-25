@@ -27,7 +27,7 @@ export class TradeDialogComponent {
   ) {}
 
   transactionForm = this.getNewTransactionForm();
-  COMPANIES: DropDownTypeString[] = this.sessionData.companies.map(x => ({value: x.symbol, viewValue: x.company_name}))
+  COMPANIES: any[] = this.sessionData.companies
 
   private getNewTransactionForm() {
     return new FormGroup({

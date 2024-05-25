@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://pfbackend.azurewebsites.net'
+  apiUrl: 'https://personal-finance-backend-lofxa.ondigitalocean.app'
 };

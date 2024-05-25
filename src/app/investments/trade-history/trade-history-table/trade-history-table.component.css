@@ -1,3 +1,7 @@
+.trade-history-table-card {
+  height: 80vh;
+  overflow-x: auto;
+}
 table.portfolio-table {
   width: 100%;
   border-collapse: collapse;
@@ -74,7 +78,6 @@ table.portfolio-table tbody td:first-child {
 .summary-item-title-value > .percentage-change {
   font-size: 14px;
 }
-
 
 table.portfolio-table {
   width: 100%;

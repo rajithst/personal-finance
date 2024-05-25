@@ -1,4 +1,7 @@
-
+.stock-table-card {
+  height: 70vh;
+  overflow-x: auto;
+}
 
 table.portfolio-table {
   width: 100%;

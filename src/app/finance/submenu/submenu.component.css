@@ -27,12 +27,13 @@
 }
 
 .active-menu-item > span {
-  color: #87edc1;
+  color: #3699ff;
 }
 
 .toolbar {
-  background-color: #333;
-  color: #fff;
+  background-color: #f2f1f1;
+  color: #333131;
+  font-weight: 500;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -58,4 +59,7 @@
   background-color: #777;
 }
 
-
+.finance-action-item {
+  margin-left: 10px;
+  font-size: 14px;
+}
