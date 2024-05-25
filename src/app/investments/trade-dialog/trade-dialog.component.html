@@ -11,7 +11,7 @@
         <tr>
           <td>Delete Reason</td>
           <td>
-            <mat-form-field class="fill expense-input">
+            <mat-form-field class="fill trade-input">
               <textarea matInput formControlName="delete_reason"></textarea>
             </mat-form-field>
           </td>
@@ -22,11 +22,19 @@
       <table class="expense-field-table">
         <tr>
           <td colspan="3">
-            <mat-form-field class="fill expense-input">
+            <mat-form-field class="fill trade-input">
               <mat-label>Company</mat-label>
               <mat-select formControlName="company">
                 @for (cmp of COMPANIES; track cmp) {
-                  <mat-option [value]="cmp.value">{{ cmp.viewValue }}</mat-option>
+                  <mat-option [value]="cmp.company">
+                    <div class="holding-item-contents-1">
+                      <div class="company-image"><img src="{{cmp.image}}" alt="" class="ticker-image"></div>
+                      <div class="company-ticker">
+                        <div class="company-name">{{cmp.company_name}}</div>
+                        <div class="company-symbol">{{cmp.company}}</div>
+                      </div>
+                    </div>
+                  </mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -34,19 +42,19 @@
         </tr>
         <tr>
           <td>
-            <mat-form-field class="fill expense-input">
+            <mat-form-field class="fill trade-input">
               <mat-label>Price</mat-label>
               <input matInput placeholder="Purchase price" formControlName="purchase_price" />
             </mat-form-field>
           </td>
           <td>
-            <mat-form-field class="fill expense-input">
+            <mat-form-field class="fill trade-input">
               <mat-label>Shares</mat-label>
               <input matInput placeholder="Shares" formControlName="quantity" />
             </mat-form-field>
           </td>
           <td>
-            <mat-form-field class="fill expense-input">
+            <mat-form-field class="fill trade-input">
               <mat-label>Date</mat-label>
               <input matInput [matDatepicker]="picker" formControlName="purchase_date" />
               <mat-datepicker-toggle
@@ -59,7 +67,7 @@
         </tr>
         <tr>
           <td colspan="3">
-            <mat-form-field class="fill expense-input">
+            <mat-form-field class="fill trade-input">
               <mat-label>Notes</mat-label>
               <input
                 matInput

@@ -3,16 +3,8 @@
   height: 90vh;
 }
 
-.table-container {
+.holding.table-container {
   max-height: 100%;
   overflow-x: auto;
 }
 
-.transaction-add-button {
-  position: absolute;
-  bottom: 2%;
-  left: 94%;
-  z-index: 100;
-  display: flex;
-  align-items: flex-end;
-}
