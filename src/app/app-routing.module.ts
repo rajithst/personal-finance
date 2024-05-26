@@ -8,6 +8,7 @@ import {
 import {PageNotFoundComponent} from "./shared/page-not-found/page-not-found.component";
 import {TransactionDashboardComponent} from "./finance/dashboard/dashboard.component";
 import {AnalyticsComponent} from "./finance/analytics/analytics.component";
+import {financeResolver} from "./finance/service/resolvers";
 
 const routes: Routes = [
   {
@@ -18,6 +19,9 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: TransactionDashboardComponent,
+    resolve: {
+      all: financeResolver
+    }
   },
   {
     path: 'income',
