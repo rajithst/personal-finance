@@ -3,10 +3,9 @@ import {inject} from "@angular/core";
 import {SessionService} from "./session.service";
 
 
-export const refreshResolver: ResolveFn<any> = (
+export const financeResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
 ) => {
-  console.log('transaction data fetching')
   return inject(SessionService).refresh()
 }
