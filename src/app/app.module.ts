@@ -35,6 +35,7 @@ import { FilterMenuComponent } from './finance/filter-menu/filter-menu.component
 import { AnalyticsComponent } from './finance/analytics/analytics.component';
 import { TransactionDetailDialog } from './finance/transaction-detail/transaction-detail.component';
 import { loadingInterceptor } from './core/loading.intercepter';
+import { TransactionFilterComponent } from './finance/transaction-filter/transaction-filter.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { loadingInterceptor } from './core/loading.intercepter';
     FilterMenuComponent,
     AnalyticsComponent,
     TransactionDetailDialog,
+    TransactionFilterComponent,
   ],
   imports: [
     BrowserModule,

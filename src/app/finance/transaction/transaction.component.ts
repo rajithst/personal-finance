@@ -7,7 +7,16 @@ import {
 } from '../service/session.service';
 import {ActivatedRoute, NavigationEnd, Params, Router} from '@angular/router';
 import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
-import {faCirclePlus, faFilter, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {
+  faBank,
+  faCirclePlus,
+  faFilter,
+  faLayerGroup,
+  faList,
+  faPlus,
+  faSearch, faShop, faTag,
+  faUpload
+} from "@fortawesome/free-solid-svg-icons";
 
 
 @Component({
@@ -113,6 +122,13 @@ export class TransactionComponent {
     protected readonly faCirclePlus = faCirclePlus;
   protected readonly faFilter = faFilter;
   protected readonly faSearch = faSearch;
+  protected readonly faList = faList;
+  protected readonly faUpload = faUpload;
+  protected readonly faPlus = faPlus;
+  protected readonly faLayerGroup = faLayerGroup;
+  protected readonly faShop = faShop;
+  protected readonly faBank = faBank;
+  protected readonly faTag = faTag;
 }
 
 @Component({

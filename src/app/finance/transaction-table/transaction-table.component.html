@@ -85,44 +85,9 @@
                 <span class="transaction-action-item">Delete</span>
               </button>
             </mat-menu>
-<!--            <div class="transaction-actions">-->
-<!--              <div class="edit-action">-->
-<!--                <ng-container>-->
-<!--                  <span (click)="editRecord(element, 'update')">-->
-<!--                    <fa-icon-->
-<!--                      [icon]="faGeorIcon"-->
-<!--                      size="lg"-->
-<!--                      [style]="{ color: '#3699ff' }"-->
-<!--                    ></fa-icon>-->
-<!--                  </span>-->
-<!--                </ng-container>-->
-<!--              </div>-->
-<!--              <div class="edit-action">-->
-<!--                <ng-container *ngIf="canMerge(element)">-->
-<!--                  <span (click)="mergeTransactions()">-->
-<!--                    <fa-icon-->
-<!--                      [icon]="faMergeIcon"-->
-<!--                      size="lg"-->
-<!--                      [style]="{ color: 'green' }"-->
-<!--                    ></fa-icon>-->
-<!--                  </span>-->
-<!--                </ng-container>-->
-<!--              </div>-->
-<!--              <div class="edit-action">-->
-<!--                <ng-container *ngIf="element.is_merge">-->
-<!--                  <span (click)="showMergeTransactions(element)">-->
-<!--                    <fa-icon-->
-<!--                      [icon]="faListIcon"-->
-<!--                      size="lg"-->
-<!--                      [style]="{ color: 'green' }"-->
-<!--                    ></fa-icon>-->
-<!--                  </span>-->
-<!--                </ng-container>-->
-<!--              </div>-->
-<!--            </div>-->
           </td>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </mat-expansion-panel>

@@ -7,36 +7,36 @@
     <div class="data-card-content">
       <div class="filter-toolbar">
         <div class="filter-toolbar-left">
-          <span>Transactions Activity</span>
+          <h2>Transactions Activity</h2>
         </div>
         <div class="filter-toolbar-right">
-          <div class="search-bar">
+          <div class="search-bar"></div>
+          <div class="filter-item">
+            <fa-icon
+              [icon]="faFilter"
+              size="1x"
+              [style]="{ color: '#4a4949' }"
+            ></fa-icon>
           </div>
-          <div class="mega-filter">
-            <div class="trade-history-action">
-              <fa-icon
-                [icon]="faFilter"
-                size="2x"
-                [style]="{ color: '#4a4949' }"
-              ></fa-icon>
-            </div>
+          <div class="filter-item">
+            <fa-icon
+              [icon]="faUpload"
+              size="1x"
+              [style]="{ color: '#4a4949' }"
+            ></fa-icon>
           </div>
-          <div class="add-transactions">
-          <span class="trade-history-action">
+          <div class="filter-item" (click)="addTransaction()">
             <fa-icon
               [icon]="faCirclePlus"
-              size="2x"
+              size="1x"
               [style]="{ color: '#3699ff' }"
             ></fa-icon>
-          </span>
           </div>
         </div>
-
       </div>
+
       <ng-container>
-        <app-transaction-table
-          [transactions]="transactionData"
-        >
+        <app-transaction-table [transactions]="transactionData">
         </app-transaction-table>
       </ng-container>
     </div>

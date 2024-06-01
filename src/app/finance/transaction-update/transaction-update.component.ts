@@ -135,7 +135,7 @@ export class TransactionUpdateDialog implements OnInit {
       update_similar: new FormControl(false),
       is_payment: new FormControl(false),
       is_saving: new FormControl(false),
-      is_expense: new FormControl(false),
+      is_expense: new FormControl(true),
       is_deleted: new FormControl(false),
       is_merge: new FormControl(false),
       merge_id: new FormControl(null),
