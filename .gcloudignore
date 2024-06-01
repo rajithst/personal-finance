@@ -1,0 +1,10 @@
+e2e/
+node_modules/
+src/
+.angular/
+^(.*/)?\..*$
+^(.*/)?.*\.json$
+^(.*/)?.*\.ts$
+^(.*/)?.*\.md$
+^(.*/)?.*\.yaml$
+^LICENSE

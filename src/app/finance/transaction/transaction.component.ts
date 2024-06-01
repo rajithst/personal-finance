@@ -7,6 +7,7 @@ import {
 } from '../service/session.service';
 import {ActivatedRoute, NavigationEnd, Params, Router} from '@angular/router';
 import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
+import {faCirclePlus, faFilter, faSearch} from "@fortawesome/free-solid-svg-icons";
 
 
 @Component({
@@ -108,6 +109,10 @@ export class TransactionComponent {
   onTransactionChecked(selectedIds: number[]) {
     console.log(selectedIds);
   }
+
+    protected readonly faCirclePlus = faCirclePlus;
+  protected readonly faFilter = faFilter;
+  protected readonly faSearch = faSearch;
 }
 
 @Component({
