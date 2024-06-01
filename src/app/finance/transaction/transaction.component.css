@@ -32,3 +32,22 @@
   padding-right: 10px;
   width: 15%;
 }
+
+
+.filter-toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.search-wrapper{
+  display: flex;
+  border: 1px solid rgba(0, 0, 0, 0.276);
+  align-items: stretch;
+  border-radius: 50px;
+  background-color: #fff;
+  overflow: hidden;
+  max-width: 400px;
+  box-shadow: 2px 1px 5px 1px rgba(0, 0, 0, 0.273);
+
+}
+
