@@ -12,9 +12,9 @@ import {
   faCirclePlus,
   faFilter,
   faLayerGroup,
-  faList,
+  faList, faPencil,
   faPlus,
-  faSearch, faShop, faTag,
+  faSearch, faShop, faTag, faTrash,
   faUpload
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -43,6 +43,10 @@ export class TransactionComponent {
   transactionSubCategory: number[] = [];
   searchQuery: string = '';
 
+  today = new Date();
+  currentMonthNumber = this.today.getMonth() + 1;
+  currentYear = this.today.getFullYear();
+
   protected fetchQueryParams(params: Params) {
     const getOrDefault = (value: string) =>  { return value === '' ? [] : value.split(',').map(Number) }
 
@@ -52,10 +56,10 @@ export class TransactionComponent {
     this.dataMonth = getOrDefault(params['months']! || '');
     this.paymentMethod = getOrDefault(params['pm']! || '');
     if (this.dataYear.length == 0) {
-      this.dataYear = [2024];
+      this.dataYear = [this.currentYear];
     }
     if (this.dataMonth.length == 0) {
-      this.dataMonth = [1, 2, 3, 4];
+      this.dataMonth = Array.from({length: this.currentMonthNumber}, (_,i) => i + 1);
     }
   }
 
@@ -119,7 +123,7 @@ export class TransactionComponent {
     console.log(selectedIds);
   }
 
-    protected readonly faCirclePlus = faCirclePlus;
+  protected readonly faCirclePlus = faCirclePlus;
   protected readonly faFilter = faFilter;
   protected readonly faSearch = faSearch;
   protected readonly faList = faList;
@@ -129,6 +133,8 @@ export class TransactionComponent {
   protected readonly faShop = faShop;
   protected readonly faBank = faBank;
   protected readonly faTag = faTag;
+  protected readonly faPencil = faPencil;
+  protected readonly faTrash = faTrash;
 }
 
 @Component({

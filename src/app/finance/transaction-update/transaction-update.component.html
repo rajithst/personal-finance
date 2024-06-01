@@ -40,29 +40,7 @@
     <table class="expense-field-table">
       <tr>
         <td>
-          <mat-checkbox color="primary" formControlName="update_similar"
-          >Update similar</mat-checkbox
-          >
-          <mat-checkbox
-            color="primary"
-            formControlName="is_regular_destination"
-          >Is regular destination</mat-checkbox
-          >
-        </td>
-        <td>
-          <mat-checkbox color="primary" formControlName="is_payment"
-          >Add to Payments</mat-checkbox
-          >
-        </td>
-        <td>
-          <mat-checkbox color="primary" formControlName="is_saving"
-          >Add to Savings</mat-checkbox
-          >
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <mat-form-field class="fill expense-input">
+          <mat-form-field class="fill expense-input" appearance="outline">
             <mat-label>Payment Method</mat-label>
             <mat-select formControlName="payment_method">
               @for (pm of PAYMENT_METHODS; track pm) {
@@ -74,33 +52,19 @@
           </mat-form-field>
         </td>
         <td>
-          <mat-form-field appearance="fill" class="fill expense-input">
-            <mat-label>Category</mat-label>
-            <mat-select formControlName="category">
-              @for (exc of TRANSACTION_CATEGORIES; track exc) {
-                <mat-option [value]="exc.value">{{
-                    exc.viewValue
-                  }}</mat-option>
+          <mat-form-field appearance="outline" class="expense-input">
+            <mat-label>Transaction Type</mat-label>
+            <mat-select formControlName="transaction_type">
+              @for (exc of TRANSACTION_TYPES; track exc) {
+                <mat-option [value]="exc.value">
+                  {{exc.viewValue }}
+                </mat-option>
               }
             </mat-select>
           </mat-form-field>
         </td>
         <td>
-          <mat-form-field appearance="fill" class="fill expense-input">
-            <mat-label>Sub Category</mat-label>
-            <mat-select formControlName="subcategory">
-              @for (exc of EXPENSE_SUB_CATEGORIES; track exc) {
-                <mat-option [value]="exc.value">{{
-                    exc.viewValue
-                  }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <mat-form-field class="fill expense-input">
+          <mat-form-field appearance="outline" class="expense-input">
             <mat-label>Date</mat-label>
             <input
               matInput
@@ -114,27 +78,56 @@
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
         </td>
-        <td>
-          <mat-form-field class="fill expense-input">
-            <mat-label>Amount (¥)</mat-label>
-            <input matInput placeholder="Amount" formControlName="amount" />
-          </mat-form-field>
-        </td>
-        <td>
-          <mat-form-field class="fill expense-input">
-            <mat-label>Destination</mat-label>
+      </tr>
+      <tr>
+
+        <td colspan="2">
+          <mat-form-field appearance="outline" class="expense-input">
+            <mat-label>Payee</mat-label>
             <input
               matInput
-              placeholder="Destination"
+              placeholder="Payee"
               formControlName="destination"
             />
           </mat-form-field>
         </td>
+        <td>
+          <mat-form-field appearance="outline" class="expense-input">
+            <mat-label>Amount</mat-label>
+            <input matInput placeholder="Amount" formControlName="amount" />
+            <span matTextPrefix>¥&nbsp;</span>
+          </mat-form-field>
+        </td>
+
       </tr>
       <tr>
-        <td colspan="3">
-          <mat-form-field class="fill expense-input">
-            <mat-label>Destination Alias (English)</mat-label>
+        <td>
+          <mat-form-field appearance="outline" class="expense-input">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              @for (exc of TRANSACTION_CATEGORIES; track exc) {
+                <mat-option [value]="exc.value">{{
+                    exc.viewValue
+                  }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline" class="fill expense-input">
+            <mat-label>Sub Category</mat-label>
+            <mat-select formControlName="subcategory">
+              @for (exc of EXPENSE_SUB_CATEGORIES; track exc) {
+                <mat-option [value]="exc.value">{{
+                    exc.viewValue
+                  }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline" class="expense-input">
+            <mat-label>Payee Alias (English)</mat-label>
             <input
               matInput
               placeholder="Destination"
@@ -150,14 +143,36 @@
         </td>
       </tr>
     </table>
-    <mat-form-field class="fill expense-input">
-      <mat-label>Notes</mat-label>
-      <textarea
-        matInput
-        placeholder="Notes"
-        formControlName="notes"
-      ></textarea>
-    </mat-form-field>
+    <mat-divider></mat-divider>
+    <div class="additional-info-area">
+      <div class="info-area">
+        <div class="area-title">
+          <span>Rules</span>
+        </div>
+        <ul class="rules-list">
+          <li>
+            <mat-checkbox color="primary" formControlName="update_similar">Update similar</mat-checkbox>
+          </li>
+          <li>
+            <mat-checkbox color="primary" formControlName="is_regular_destination">Is regular destination</mat-checkbox>
+          </li>
+        </ul>
+      </div>
+      <div class="info-area">
+        <div class="area-title">
+          <span>Additional Info</span>
+        </div>
+        <mat-form-field appearance="outline" class="expense-input">
+          <mat-label>Notes</mat-label>
+          <textarea
+            matInput
+            placeholder="Notes"
+            formControlName="notes"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
   </form>
 </mat-dialog-content>
 

@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   faList,
   faEllipsis,
-  faTrash, faEdit, faScissors
+  faTrash, faEdit, faScissors, faEye, faEyeSlash
 } from '@fortawesome/free-solid-svg-icons';
 import {TransactionDetailDialog} from "../transaction-detail/transaction-detail.component";
 
@@ -181,4 +181,6 @@ export class TransactionTableComponent implements OnChanges {
   }
 
 
+  protected readonly faEye = faEye;
+  protected readonly faEyeSlash = faEyeSlash;
 }

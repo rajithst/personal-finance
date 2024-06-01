@@ -7,6 +7,7 @@ td {
 }
 .expense-input {
   width: 100%;
+  font-size: 12px;
 }
 
 .expense-form-footer {
@@ -31,3 +32,23 @@ table.merge-table td {
   text-align: left;
 }
 
+.additional-info-area {
+  display: flex;
+  flex-direction: row;
+
+}
+.additional-info-area > .info-area {
+  width: 100%;
+}
+
+.area-title > span {
+  margin-left: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.rules-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0;
+}

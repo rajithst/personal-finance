@@ -11,11 +11,13 @@ import {
 
 import {
   DropDownType,
+  TRANSACTION_TYPES,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
   PAYMENT_METHODS,
   SAVINGS_CATEGORY_ID,
   NA_SUB_CATEGORY_ID,
+
 } from '../../data/client.data';
 import { TransactionExpand, TransactionRequest } from '../model/transactions';
 import moment from 'moment/moment';
@@ -36,6 +38,7 @@ export class TransactionUpdateDialog implements OnInit {
   PAYMENT_METHODS: DropDownType[] = PAYMENT_METHODS;
   TRANSACTION_CATEGORIES: DropDownType[] = TRANSACTION_CATEGORIES;
   EXPENSE_SUB_CATEGORIES: DropDownType[] = [];
+  TRANSACTION_TYPES: DropDownType[] = TRANSACTION_TYPES;
 
   constructor(
     private sessionService: SessionService,
@@ -122,6 +125,7 @@ export class TransactionUpdateDialog implements OnInit {
       destination: new FormControl(data.destination),
       alias: new FormControl(data.alias),
       notes: new FormControl(data.notes),
+      transaction_type: new FormControl(data.is_expense ? 2 : 1),
       update_similar: new FormControl(false),
       is_payment: new FormControl(data.is_payment),
       is_saving: new FormControl(data.is_saving),
@@ -146,6 +150,7 @@ export class TransactionUpdateDialog implements OnInit {
       alias: new FormControl(''),
       notes: new FormControl(''),
       update_similar: new FormControl(false),
+      transaction_type: new FormControl(2),
       is_payment: new FormControl(false),
       is_saving: new FormControl(false),
       is_expense: new FormControl(true),
