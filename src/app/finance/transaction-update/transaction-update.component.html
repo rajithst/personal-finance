@@ -142,7 +142,7 @@
               [matAutocomplete]="destinationAc"
             />
             <mat-autocomplete #destinationAc="matAutocomplete">
-              @for (dst of destinations; track dst) {
+              @for (dst of filteredDestinations | async; track dst) {
                 <mat-option [value]="dst">{{ dst }}</mat-option>
               }
             </mat-autocomplete>

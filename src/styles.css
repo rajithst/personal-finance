@@ -8,8 +8,8 @@ body {
 
 [mat-dialog-title] {
   padding: 10px 24px;
-  background: #369;
-  color: #fff !important;
+  /*background: #369;*/
+  /*color: #fff !important;*/
   cursor: move;
 }
 

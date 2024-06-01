@@ -19,6 +19,7 @@ import {
 } from '../../data/client.data';
 import { TransactionExpand, TransactionRequest } from '../model/transactions';
 import moment from 'moment/moment';
+import {map, Observable, startWith} from "rxjs";
 
 export interface TransactionUpdateDialogData {
   formData: TransactionExpand | null;
@@ -44,7 +45,8 @@ export class TransactionUpdateDialog implements OnInit {
   message = this.sessionService.getEventMessage();
   sessionData = this.sessionService.getData();
   transactionForm: FormGroup;
-  destinations: string[] = this.sessionData.destinations;
+  filteredDestinations: Observable<string[]>;
+  destinations: string[] = this.sessionData.destinations
   headerTitle: string = '';
 
   ngOnInit(): void {
@@ -79,6 +81,12 @@ export class TransactionUpdateDialog implements OnInit {
           ];
       }
     });
+
+    // @ts-ignore
+    this.filteredDestinations = this.transactionForm.get('alias')?.valueChanges.pipe(
+      startWith(''),
+      map((alias: string | null) => this._filter(alias || ''))
+    )
   }
 
   submit() {
@@ -96,6 +104,11 @@ export class TransactionUpdateDialog implements OnInit {
 
   cancel() {
     this.dialogRef.close({ refresh: false, data: null });
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.destinations.filter((option: string) => option.toLowerCase().includes(filterValue));
   }
 
   getNewTransactionForm(data: TransactionExpand) {
