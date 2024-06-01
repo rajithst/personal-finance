@@ -1,4 +1,4 @@
-import {HttpHandlerFn, HttpInterceptorFn, HttpRequest} from "@angular/common/http";
+import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from "@angular/common/http";
 import {inject} from "@angular/core";
 import {LoadingService} from "../shared/loading/loading.service";
 import {SkipLoading} from "../shared/loading/loading.component";

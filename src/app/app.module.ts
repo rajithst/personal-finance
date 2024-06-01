@@ -7,12 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import {
-  HttpClientModule,
-  provideHttpClient,
-  withFetch,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { MaterialModule } from './shared/material.module';
 import { TransactionDashboardComponent } from './finance/dashboard/dashboard.component';
 import {
@@ -37,40 +32,34 @@ import { TransactionDetailDialog } from './finance/transaction-detail/transactio
 import { loadingInterceptor } from './core/loading.intercepter';
 import { TransactionFilterComponent } from './finance/transaction-filter/transaction-filter.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    TransactionDashboardComponent,
-    TransactionComponent,
-    TransactionUpdateDialog,
-    TransactionDeleteDialog,
-    TransactionTableComponent,
-    IncomeComponent,
-    ExpenseComponent,
-    SavingComponent,
-    PaymentComponent,
-    PageNotFoundComponent,
-    SubmenuComponent,
-    FilterMenuComponent,
-    AnalyticsComponent,
-    TransactionDetailDialog,
-    TransactionFilterComponent,
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AppRoutingModule,
-    FontAwesomeModule,
-    HttpClientModule,
-    MaterialModule,
-    SharedModule,
-  ],
-  providers: [
-    provideClientHydration(),
-    provideAnimationsAsync(),
-    provideHttpClient(withFetch(), withInterceptors([loadingInterceptor])),
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        TransactionDashboardComponent,
+        TransactionComponent,
+        TransactionUpdateDialog,
+        TransactionDeleteDialog,
+        TransactionTableComponent,
+        IncomeComponent,
+        ExpenseComponent,
+        SavingComponent,
+        PaymentComponent,
+        PageNotFoundComponent,
+        SubmenuComponent,
+        FilterMenuComponent,
+        AnalyticsComponent,
+        TransactionDetailDialog,
+        TransactionFilterComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        FormsModule,
+        ReactiveFormsModule,
+        AppRoutingModule,
+        FontAwesomeModule,
+        MaterialModule,
+        SharedModule], providers: [
+        provideClientHydration(),
+        provideAnimationsAsync(),
+        provideHttpClient(withFetch(), withInterceptors([loadingInterceptor])),
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}

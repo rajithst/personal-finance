@@ -1,5 +1,5 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
-import {HttpContextToken} from "@angular/common/http";
+import { HttpContextToken } from "@angular/common/http";
 import {LoadingService} from "./loading.service";
 import {
   NavigationCancel,
