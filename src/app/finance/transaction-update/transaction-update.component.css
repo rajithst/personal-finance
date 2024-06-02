@@ -4,10 +4,12 @@ td {
 
 .expense-field-table {
   width: 100%;
+  margin-top: 10px;
 }
+
 .expense-input {
   width: 100%;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .expense-form-footer {
@@ -19,6 +21,7 @@ table.merge-table {
   border-collapse: collapse;
   margin-bottom: 10px;
 }
+
 table.merge-table th {
   padding: 8px;
   border: 1px solid #dddddd;
@@ -35,7 +38,6 @@ table.merge-table td {
 .additional-info-area {
   display: flex;
   flex-direction: row;
-
 }
 .additional-info-area > .info-area {
   width: 100%;

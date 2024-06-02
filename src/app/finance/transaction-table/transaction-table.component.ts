@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   faList,
   faEllipsis,
-  faTrash, faEdit, faScissors, faEye, faEyeSlash
+  faTrash, faEdit, faScissors
 } from '@fortawesome/free-solid-svg-icons';
 import {TransactionDetailDialog} from "../transaction-detail/transaction-detail.component";
 
@@ -38,7 +38,7 @@ export class TransactionTableComponent implements OnChanges {
   protected readonly faList = faList;
   protected readonly faScissors = faScissors;
 
-  displayedColumns: string[] = ['select', 'Date', 'Category', 'SubCategory', 'PaymentMethod', 'Amount', 'PaymentMethod', 'Destination', 'Actions'];
+  displayedColumns: string[] = ['select', 'Date', 'PaymentMethod', 'Destination', 'Category', 'SubCategory', 'Amount', 'Notes', 'Actions'];
 
   constructor(
     private dialog: MatDialog,
@@ -180,7 +180,4 @@ export class TransactionTableComponent implements OnChanges {
     element.checked = !element.checked;
   }
 
-
-  protected readonly faEye = faEye;
-  protected readonly faEyeSlash = faEyeSlash;
 }

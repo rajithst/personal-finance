@@ -5,19 +5,15 @@ import {
   SessionEventMessage,
   SessionService,
 } from '../service/session.service';
-import {ActivatedRoute, NavigationEnd, Params, Router} from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
 import {
-  faBank,
   faCirclePlus,
   faFilter,
-  faLayerGroup,
-  faList, faPencil,
-  faPlus,
-  faSearch, faShop, faTag, faTrash,
-  faUpload
-} from "@fortawesome/free-solid-svg-icons";
-
+  faPencil,
+  faTrash,
+  faUpload,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-transaction',
@@ -27,6 +23,12 @@ import {
 export class TransactionComponent {
   message = this.sessionService.getEventMessage();
   sessionData = this.sessionService.getData();
+  protected readonly faCirclePlus = faCirclePlus;
+  protected readonly faFilter = faFilter;
+  protected readonly faUpload = faUpload;
+  protected readonly faPencil = faPencil;
+  protected readonly faTrash = faTrash;
+
   constructor(
     private dialog: MatDialog,
     protected router: Router,
@@ -48,7 +50,9 @@ export class TransactionComponent {
   currentYear = this.today.getFullYear();
 
   protected fetchQueryParams(params: Params) {
-    const getOrDefault = (value: string) =>  { return value === '' ? [] : value.split(',').map(Number) }
+    const getOrDefault = (value: string) => {
+      return value === '' ? [] : value.split(',').map(Number);
+    };
 
     this.transactionCategory = getOrDefault(params['cat']! || '');
     this.transactionSubCategory = getOrDefault(params['subcat']! || '');
@@ -59,7 +63,10 @@ export class TransactionComponent {
       this.dataYear = [this.currentYear];
     }
     if (this.dataMonth.length == 0) {
-      this.dataMonth = Array.from({length: this.currentMonthNumber}, (_,i) => i + 1);
+      this.dataMonth = Array.from(
+        { length: this.currentMonthNumber },
+        (_, i) => i + 1,
+      );
     }
   }
 
@@ -116,25 +123,12 @@ export class TransactionComponent {
   }
 
   getDataStream(): MonthlyTransaction[] {
-    return []
+    return [];
   }
 
   onTransactionChecked(selectedIds: number[]) {
     console.log(selectedIds);
   }
-
-  protected readonly faCirclePlus = faCirclePlus;
-  protected readonly faFilter = faFilter;
-  protected readonly faSearch = faSearch;
-  protected readonly faList = faList;
-  protected readonly faUpload = faUpload;
-  protected readonly faPlus = faPlus;
-  protected readonly faLayerGroup = faLayerGroup;
-  protected readonly faShop = faShop;
-  protected readonly faBank = faBank;
-  protected readonly faTag = faTag;
-  protected readonly faPencil = faPencil;
-  protected readonly faTrash = faTrash;
 }
 
 @Component({
@@ -143,20 +137,19 @@ export class TransactionComponent {
   styleUrl: './transaction.component.css',
 })
 export class IncomeComponent extends TransactionComponent implements OnInit {
-
   ngOnInit() {
     this.message.subscribe((msg: SessionEventMessage) => {
       if (
         msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
         msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
       ) {
-        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.fetchQueryParams(this.route.snapshot.queryParams);
         this.filterData();
       }
     });
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.fetchQueryParams(this.route.snapshot.queryParams);
         this.filterData();
       }
     });
@@ -178,14 +171,14 @@ export class ExpenseComponent extends TransactionComponent implements OnInit {
         msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
         msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
       ) {
-        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.fetchQueryParams(this.route.snapshot.queryParams);
         this.filterData();
       }
     });
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        console.log('subscribing to params on expense')
-        this.fetchQueryParams(this.route.snapshot.queryParams)
+        console.log('subscribing to params on expense');
+        this.fetchQueryParams(this.route.snapshot.queryParams);
         this.filterData();
       }
     });
@@ -202,20 +195,19 @@ export class ExpenseComponent extends TransactionComponent implements OnInit {
   styleUrl: './transaction.component.css',
 })
 export class PaymentComponent extends TransactionComponent implements OnInit {
-
   ngOnInit() {
     this.message.subscribe((msg: SessionEventMessage) => {
       if (
         msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
         msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
       ) {
-        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.fetchQueryParams(this.route.snapshot.queryParams);
         this.filterData();
       }
     });
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.fetchQueryParams(this.route.snapshot.queryParams);
         this.filterData();
       }
     });
@@ -231,20 +223,19 @@ export class PaymentComponent extends TransactionComponent implements OnInit {
   styleUrl: './transaction.component.css',
 })
 export class SavingComponent extends TransactionComponent implements OnInit {
-
-  ngOnInit(){
+  ngOnInit() {
     this.message.subscribe((msg: SessionEventMessage) => {
       if (
         msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
         msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
       ) {
-        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.fetchQueryParams(this.route.snapshot.queryParams);
         this.filterData();
       }
     });
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.fetchQueryParams(this.route.snapshot.queryParams)
+        this.fetchQueryParams(this.route.snapshot.queryParams);
         this.filterData();
       }
     });

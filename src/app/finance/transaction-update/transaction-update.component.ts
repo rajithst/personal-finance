@@ -56,7 +56,7 @@ export class TransactionUpdateDialog implements OnInit {
     let formData = this.data.formData;
     this.headerTitle =
       this.data.task == 'add'
-        ? 'Add Transaction'
+        ? 'Create Transaction'
         : `Update Transaction (${this.data.formData?.id})`;
     if (formData) {
       this.transactionForm = this.getNewTransactionForm(formData);
@@ -82,6 +82,18 @@ export class TransactionUpdateDialog implements OnInit {
           TRANSACTION_SUB_CATEGORIES[
             this.transactionForm.get('category')?.value || NA_SUB_CATEGORY_ID
           ];
+      }
+    });
+
+    this.transactionForm.get('transaction_type')?.valueChanges.subscribe((value) => {
+      if (value == 2) {
+        this.transactionForm.get('is_expense')?.setValue(true);
+        this.transactionForm.get('is_saving')?.setValue(false);
+        this.transactionForm.get('is_payment')?.setValue(false);
+      } else if (value == 3) {
+        this.transactionForm.get('is_payment')?.setValue(true);
+        this.transactionForm.get('is_expense')?.setValue(true);
+        this.transactionForm.get('is_saving')?.setValue(false);
       }
     });
 
@@ -125,7 +137,7 @@ export class TransactionUpdateDialog implements OnInit {
       destination: new FormControl(data.destination),
       alias: new FormControl(data.alias),
       notes: new FormControl(data.notes),
-      transaction_type: new FormControl(data.is_expense ? 2 : 1),
+      transaction_type: new FormControl(data.is_payment ? 3 : data.is_expense ? 2 : 1),
       update_similar: new FormControl(false),
       is_payment: new FormControl(data.is_payment),
       is_saving: new FormControl(data.is_saving),

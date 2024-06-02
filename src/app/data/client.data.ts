@@ -17,6 +17,7 @@ export interface DropDownTypeString {
 export const TRANSACTION_TYPES: DropDownType[] = [
   { value: 1, viewValue: 'Income', checked: false },
   { value: 2, viewValue: 'Expense', checked: false },
+  { value: 3, viewValue: 'Payment', checked: false },
 ]
 export const INCOME_CATEGORIES: DropDownType[] = [
   { value: 1, viewValue: 'Salary/Wages', checked: false },
