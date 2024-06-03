@@ -1,0 +1,16 @@
+.chart-card-header {
+  display: flex;
+  padding: 5px 16px 0;
+  justify-content: center;
+  background: #bdbdbd;
+  height: 30px;
+  align-items: center
+}
+
+.chart-card-title {
+  font-size: 14px;
+}
+
+.chard-card-content {
+  margin-top: 10px;
+}

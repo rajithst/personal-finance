@@ -4,7 +4,7 @@ env: standard
 handlers:
   - url: /
     secure: always
-    static_files: dist/pfclient/browser/index.html
+    static_files: dist/pfclient/browser/index.csr.html
     upload: dist/pfclient/browser/.*
 
   - url: /(.*\.js)
@@ -22,5 +22,5 @@ handlers:
 
   - url: /.*
     secure: always
-    static_files: dist/pfclient/browser/index.html
+    static_files: dist/pfclient/browser/index.csr.html
     upload: dist/pfclient/browser/.*

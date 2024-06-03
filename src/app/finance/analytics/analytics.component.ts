@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+
 
 @Component({
   selector: 'app-analytics',
@@ -6,7 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './analytics.component.css',
 })
 export class AnalyticsComponent {
-
-
 
 }

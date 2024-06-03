@@ -16,7 +16,6 @@ import {
   TRANSACTION_SUB_CATEGORIES,
   PAYMENT_METHODS,
   SAVINGS_CATEGORY_ID,
-  NA_SUB_CATEGORY_ID,
 
 } from '../../data/client.data';
 import { TransactionExpand, TransactionRequest } from '../model/transactions';
@@ -70,18 +69,7 @@ export class TransactionUpdateDialog implements OnInit {
     this.transactionForm.get('category')?.valueChanges.subscribe((value) => {
       if (value) {
         this.EXPENSE_SUB_CATEGORIES = TRANSACTION_SUB_CATEGORIES[value];
-      }
-    });
-    this.transactionForm.get('is_saving')?.valueChanges.subscribe((value) => {
-      if (value) {
-        this.transactionForm.get('category')?.setValue(SAVINGS_CATEGORY_ID);
-        this.EXPENSE_SUB_CATEGORIES =
-          TRANSACTION_SUB_CATEGORIES[SAVINGS_CATEGORY_ID];
-      } else {
-        this.EXPENSE_SUB_CATEGORIES =
-          TRANSACTION_SUB_CATEGORIES[
-            this.transactionForm.get('category')?.value || NA_SUB_CATEGORY_ID
-          ];
+        this.transactionForm.get('is_saving')?.setValue(value === SAVINGS_CATEGORY_ID)
       }
     });
 
