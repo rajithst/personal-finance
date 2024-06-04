@@ -1,69 +1,69 @@
 <div class="dividend-summary">
-  <mat-card class="summary-item total-value">
-    <mat-card-content>
-      <div class="summary-item-title">
-        <div class="summary-item-title-icon">
-          <fa-icon
-            [icon]="faMoneyBill"
-            size="lg"
-            [style]="{ color: '#3699ff' }"
-          ></fa-icon>
-          <span>Total Dividend Value</span>
-        </div>
-        <div class="summary-item-title-value">
-          <span></span>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="summary-item total-investment">
-    <mat-card-content>
-      <div class="summary-item-title">
-        <div class="summary-item-title-icon">
-          <fa-icon
-            [icon]="faMoneyBill"
-            size="lg"
-            [style]="{ color: '#3699ff' }"
-          ></fa-icon>
-          <span>Invested Value</span>
-        </div>
-        <div class="summary-item-title-value">
-          <span></span>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="summary-item total-profit">
-    <mat-card-content>
-      <div class="summary-item-title">
-        <div class="summary-item-title-icon">
-          <fa-icon
-            [icon]="faLineChart"
-            size="lg"
-            [style]="{ color: '#3699ff' }"
-          ></fa-icon>
-          <span>Total Profit</span>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="summary-item forex">
-    <mat-card-content>
-      <div class="summary-item-title">
-        <div class="summary-item-title-icon">
-          <fa-icon
-            [icon]="faJpy"
-            size="lg"
-            [style]="{ color: '#3699ff' }"
-          ></fa-icon>
-          <span>Total Profit (Y)</span>
-        </div>
-        <div class="summary-item-title-value">
-          <span>156</span>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+<!--  <mat-card class="summary-item total-value">-->
+<!--    <mat-card-content>-->
+<!--      <div class="summary-item-title">-->
+<!--        <div class="summary-item-title-icon">-->
+<!--          <fa-icon-->
+<!--            [icon]="faMoneyBill"-->
+<!--            size="lg"-->
+<!--            [style]="{ color: '#3699ff' }"-->
+<!--          ></fa-icon>-->
+<!--          <span>Total Dividend Value</span>-->
+<!--        </div>-->
+<!--        <div class="summary-item-title-value">-->
+<!--          <span></span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </mat-card-content>-->
+<!--  </mat-card>-->
+<!--  <mat-card class="summary-item total-investment">-->
+<!--    <mat-card-content>-->
+<!--      <div class="summary-item-title">-->
+<!--        <div class="summary-item-title-icon">-->
+<!--          <fa-icon-->
+<!--            [icon]="faMoneyBill"-->
+<!--            size="lg"-->
+<!--            [style]="{ color: '#3699ff' }"-->
+<!--          ></fa-icon>-->
+<!--          <span>Invested Value</span>-->
+<!--        </div>-->
+<!--        <div class="summary-item-title-value">-->
+<!--          <span></span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </mat-card-content>-->
+<!--  </mat-card>-->
+<!--  <mat-card class="summary-item total-profit">-->
+<!--    <mat-card-content>-->
+<!--      <div class="summary-item-title">-->
+<!--        <div class="summary-item-title-icon">-->
+<!--          <fa-icon-->
+<!--            [icon]="faLineChart"-->
+<!--            size="lg"-->
+<!--            [style]="{ color: '#3699ff' }"-->
+<!--          ></fa-icon>-->
+<!--          <span>Total Profit</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </mat-card-content>-->
+<!--  </mat-card>-->
+<!--  <mat-card class="summary-item forex">-->
+<!--    <mat-card-content>-->
+<!--      <div class="summary-item-title">-->
+<!--        <div class="summary-item-title-icon">-->
+<!--          <fa-icon-->
+<!--            [icon]="faJpy"-->
+<!--            size="lg"-->
+<!--            [style]="{ color: '#3699ff' }"-->
+<!--          ></fa-icon>-->
+<!--          <span>Total Profit (Y)</span>-->
+<!--        </div>-->
+<!--        <div class="summary-item-title-value">-->
+<!--          <span>156</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </mat-card-content>-->
+<!--  </mat-card>-->
 </div>
 <div class="dividend-cards">
   @for (div of dividends; track $index) {
@@ -74,7 +74,7 @@
             <div class="dividend-title">
               {{ div.year }} - {{ div.month_text }}
             </div>
-            <div class="dividend-amount">${{ div.total }}</div>
+            <div class="dividend-amount">{{div.currency}}{{ div.total }}</div>
           </div>
         </mat-card-title>
       </mat-card-header>
@@ -101,8 +101,8 @@
           <ng-container matColumnDef="name">
             <td mat-cell *matCellDef="let element">
               <div class="dividend-info-expand">
-                <div class="dividend-info">{{ element.stock_currency }}{{ element.amount | number: "1.2-2" }}</div>
-                <div class="dividend-status">3 * 0.44</div>
+                <div class="dividend-info stock-dividend-total">{{ element.stock_currency }}{{ element.total_amount | number: "1.2-2" }}</div>
+                <div class="dividend-status">{{ element.quantity }} x {{ element.amount }}</div>
               </div>
 
             </td>

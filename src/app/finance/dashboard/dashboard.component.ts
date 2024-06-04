@@ -12,7 +12,7 @@ export class TransactionDashboardComponent implements OnInit {
   message = this.sessionService.getEventMessage();
   sessionData = this.sessionService.getData();
   today = new Date();
-  currentMonthNumber = this.today.getMonth() - 1;
+  currentMonthNumber = this.today.getMonth();
   currentMonthName: string = MONTHS.find(x => x.value == this.currentMonthNumber)!.viewValue
   currentYear = this.today.getFullYear();
   constructor(private sessionService:SessionService) {}
@@ -67,7 +67,7 @@ export class TransactionDashboardComponent implements OnInit {
     this.monthlyExpenses.unshift(['Month', 'Expense', 'Payment'])
     this.monthlyExpensesOptions = {
       title: `${this.currentYear} Monthly Expenses vs Payments`,
-      width:700,
+      width:500,
       height:300,
       is3D: true,
       legend: {position: 'bottom'}
@@ -101,14 +101,16 @@ export class TransactionDashboardComponent implements OnInit {
   }
 
   private prepareLastMonthExpenseCategories() {
-    const transactions = this.sessionData.expenses.filter(x => x.year === this.currentYear && x.month===this.currentMonthNumber).map(x => x.transactions)[0]
-    TRANSACTION_CATEGORIES.forEach(x => {
-      const cSum = transactions.filter(y => y.category == x.value).reduce((acc, transaction) => acc + transaction.amount!, 0);
-      this.categoryWiseSum.push([x.viewValue, cSum])
-    })
+    const transactions = this.sessionData.expenses.filter(x => x.year === this.currentYear && x.month===this.currentMonthNumber).map(x => x.transactions_cp)[0]
+    if (transactions && transactions.length > 0) {
+      TRANSACTION_CATEGORIES.forEach(x => {
+        const cSum = transactions.filter(y => y.category == x.value).reduce((acc, transaction) => acc + transaction.amount!, 0);
+        this.categoryWiseSum.push([x.viewValue, cSum])
+      })
+    }
     this.categoryWiseSumOptions = {
       title: `${this.currentYear} ${this.currentMonthName} Expenses (%)`,
-      width:400,
+      width:350,
       height:300,
       is3D: true,
       chartArea:{left:10,top:30,width:'100%',height:'90%'},
@@ -120,7 +122,7 @@ export class TransactionDashboardComponent implements OnInit {
   private prepareLastMonthExpenses() {
     this.categoryWiseSumValueOptions = {
       title: `${this.currentYear} ${this.currentMonthName} Expenses (Value)`,
-      width:400,
+      width:350,
       height:300,
       is3D: true,
       bars: 'horizontal',
@@ -129,14 +131,16 @@ export class TransactionDashboardComponent implements OnInit {
   }
 
   private preparePaymentMethodCard() {
-    const transactions = this.sessionData.expenses.filter(x => x.year === this.currentYear && x.month===this.currentMonthNumber).map(x => x.transactions)[0];
-    PAYMENT_METHODS.forEach(x => {
-      const pmSum = transactions.filter(y => y.payment_method === x.value).reduce((acc, transaction) => acc + transaction.amount!, 0);
-      this.paymentMethodWiseSum.push([x.viewValue, pmSum])
-    })
+    const transactions = this.sessionData.expenses.filter(x => x.year === this.currentYear && x.month===this.currentMonthNumber).map(x => x.transactions_cp)[0];
+    if (transactions && transactions.length > 0) {
+      PAYMENT_METHODS.forEach(x => {
+        const pmSum = transactions.filter(y => y.payment_method === x.value).reduce((acc, transaction) => acc + transaction.amount!, 0);
+        this.paymentMethodWiseSum.push([x.viewValue, pmSum])
+      })
+    }
     this.paymentMethodWiseSumOptions = {
       title: `${this.currentYear} ${this.currentMonthName} Payment Method`,
-      width:400,
+      width:350,
       height:300,
       is3D: true,
       fontSize: 12,
@@ -146,13 +150,14 @@ export class TransactionDashboardComponent implements OnInit {
   }
 
   private prepareMonthlyPaymentsCard() {
-    const monthlyPayments = this.sessionData.payments.filter(x => x.year === this.currentYear && x.month===this.currentMonthNumber).map(x => x.transactions)[0];
-    const monthlyPaymentByDestination = monthlyPayments.map(x => [x.alias ? x.alias : x.destination, x.amount])
-    monthlyPaymentByDestination.unshift(['Month', 'Amount'])
-    this.monthlyPayments = monthlyPaymentByDestination;
+    const monthlyPayments = this.sessionData.payments.filter(x => x.year === this.currentYear && x.month===this.currentMonthNumber).map(x => x.transactions_cp)[0];
+    if (monthlyPayments) {
+      this.monthlyPayments = monthlyPayments.map(x => [x.alias ? x.alias : x.destination, x.amount])
+    }
+    this.monthlyPayments.unshift(['Month', 'Amount'])
     this.monthlyPaymentsOptions = {
       title: `${this.currentYear} ${this.currentMonthName} Payments`,
-      width:400,
+      width:350,
       height:300,
       is3D: true,
       fontSize: 12,

@@ -4,6 +4,7 @@
     <mat-card-title class="chart-card-title">{{chartTitle}}</mat-card-title>
   </mat-card-header>
   <mat-card-content class="chart-card-content">
-    <div #chartArea></div>
+    <div #chartArea *ngIf="chartData.length > 2"></div>
+    <div *ngIf="chartData.length <=2" style="height: 300px; width: 300px">Data not available</div>
   </mat-card-content>
 </mat-card>

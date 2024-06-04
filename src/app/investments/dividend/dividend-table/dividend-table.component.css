@@ -101,3 +101,7 @@ table.dividend-table td:first-child {
 .summary-item-title-value > .percentage-change {
   font-size: 14px;
 }
+
+.stock-dividend-total {
+  color: green;
+}
