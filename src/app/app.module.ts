@@ -27,10 +27,12 @@ import { SharedModule } from './shared/shared.module';
 import { SubmenuComponent } from './finance/submenu/submenu.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FilterMenuComponent } from './finance/filter-menu/filter-menu.component';
-import { AnalyticsComponent } from './finance/analytics/analytics.component';
 import { TransactionDetailDialog } from './finance/transaction-detail/transaction-detail.component';
 import { loadingInterceptor } from './core/loading.intercepter';
 import { TransactionFilterComponent } from './finance/transaction-filter/transaction-filter.component';
+import {SideNavClosedComponent, SideNavComponent} from "./side-nav/side-nav.component";
+import {TopNavComponent} from "./top-nav/top-nav.component";
+import {PayeeRulesComponent} from "./finance/payee-rules/payee-rules.component";
 
 @NgModule({ declarations: [
         AppComponent,
@@ -46,9 +48,12 @@ import { TransactionFilterComponent } from './finance/transaction-filter/transac
         PageNotFoundComponent,
         SubmenuComponent,
         FilterMenuComponent,
-        AnalyticsComponent,
         TransactionDetailDialog,
         TransactionFilterComponent,
+        SideNavComponent,
+        SideNavClosedComponent,
+        TopNavComponent,
+        PayeeRulesComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         FormsModule,

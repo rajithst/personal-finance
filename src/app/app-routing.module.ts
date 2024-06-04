@@ -3,12 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import {
   ExpenseComponent,
   IncomeComponent,
-  PaymentComponent, SavingComponent,
-} from "./finance/transaction/transaction.component";
-import {PageNotFoundComponent} from "./shared/page-not-found/page-not-found.component";
-import {TransactionDashboardComponent} from "./finance/dashboard/dashboard.component";
-import {AnalyticsComponent} from "./finance/analytics/analytics.component";
-import {financeResolver} from "./finance/service/resolvers";
+  PaymentComponent,
+  SavingComponent,
+} from './finance/transaction/transaction.component';
+import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
+import { TransactionDashboardComponent } from './finance/dashboard/dashboard.component';
+import { financeResolver } from './finance/service/resolvers';
 
 const routes: Routes = [
   {
@@ -20,42 +20,40 @@ const routes: Routes = [
     path: 'dashboard',
     component: TransactionDashboardComponent,
     resolve: {
-      all: financeResolver
-    }
+      all: financeResolver,
+    },
   },
   {
     path: 'income',
-    component: IncomeComponent
+    component: IncomeComponent,
   },
   {
     path: 'savings',
-    component: SavingComponent
+    component: SavingComponent,
   },
   {
-    path: 'expense',
-    component: ExpenseComponent
+    path: 'transactions',
+    component: ExpenseComponent,
   },
   {
     path: 'payments',
-    component: PaymentComponent
-  },
-  {
-    path: 'analytics',
-    component: AnalyticsComponent
+    component: PaymentComponent,
   },
   {
     path: 'investments',
-    loadChildren: () => import('./investments/investments.module').then(m => m.InvestmentsModule),
+    loadChildren: () =>
+      import('./investments/investments.module').then(
+        (m) => m.InvestmentsModule,
+      ),
   },
   {
     path: '**',
-    component: PageNotFoundComponent
-  }
-
+    component: PageNotFoundComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

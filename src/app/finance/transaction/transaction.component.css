@@ -13,7 +13,7 @@
 
 .data-card {
   display: flex;
-  height: 85vh;
+  height: 80vh;
   overflow: hidden;
   width: 100%;
 }
@@ -22,7 +22,7 @@
   max-height: 100%;
   margin: 0 1%;
   overflow: auto;
-  width: 85%;
+  width: 90%;
 }
 
 .data-filter-content {
