@@ -10,12 +10,10 @@ export const loadingInterceptor: HttpInterceptorFn =
       return next(req);
     }
     const loadingService = inject(LoadingService);
-    console.log('loading on from intercepter')
     loadingService.loadingOn();
     return next(req)
       .pipe(
         finalize(() => {
-          console.log('loading off from intercepter')
           loadingService.loadingOff()
         })
       )

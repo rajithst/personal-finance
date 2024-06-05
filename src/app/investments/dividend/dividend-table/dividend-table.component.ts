@@ -27,7 +27,6 @@ export class DividendTableComponent {
   protected readonly faCircleCheck = faCircleCheck;
 
   dividendPaymentFlow(element: any) {
-    console.log(element)
 
   }
 }

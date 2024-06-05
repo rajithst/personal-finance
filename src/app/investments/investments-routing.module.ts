@@ -12,28 +12,38 @@ import {TradeHistoryComponent} from "./trade-history/trade-history.component";
 const routes: Routes = [
   {
     path: '',
-    component: DashboardComponent,
+    component: HomeComponent,
     resolve: {
       all: investmentDataResolver
-    }
+    },
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+      },
+      {
+        path: 'profile',
+        component: HoldingsComponent,
+      },
+      {
+        path: 'stock',
+        component: StockComponent,
+      },
+      {
+        path: 'dividend',
+        component: DividendComponent,
+      },
+      {
+        path: 'trade-history',
+        component: TradeHistoryComponent,
+      },
+    ]
   },
-  {
-    path: 'profile',
-    component: HoldingsComponent,
-  },
-  {
-    path: 'stock',
-    component: StockComponent,
-  },
-  {
-    path: 'dividend',
-    component: DividendComponent,
-  },
-  {
-    path: 'trade-history',
-    component: TradeHistoryComponent,
-  },
-
 
 ];
 

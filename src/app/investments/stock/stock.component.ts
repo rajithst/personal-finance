@@ -13,6 +13,5 @@ export class StockComponent implements OnInit {
 
   ngOnInit() {
     this.stock = this.route.snapshot.data['symbol']
-    console.log(this.stock)
   }
 }

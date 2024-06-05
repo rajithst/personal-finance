@@ -1,15 +1,40 @@
 <div class="toolbar">
   <ul class="menu">
-    <li class="menu-item" routerLink="/investments" routerLinkActive="active-menu-item"> <span>Dashboard</span></li>
+    <li class="menu-item" routerLink="dashboard" routerLinkActive="active-menu-item"> <span>Dashboard</span></li>
     <li class="menu-item" routerLink="profile" routerLinkActive="active-menu-item"> <span>Holdings</span></li>
     <li class="menu-item" routerLink="dividend" routerLinkActive="active-menu-item"> <span>Dividends</span></li>
-    <li class="menu-item" routerLink="" routerLinkActive="active-menu-item"> <span>Transactions</span></li>
+    <li class="menu-item" routerLink="trade-history" routerLinkActive="active-menu-item"> <span>Trade History</span></li>
   </ul>
+  <!--  <ul class="menu">-->
+  <!--    <li class="menu-item">-->
+  <!--      <span class="trade-history-action" [matMenuTriggerFor]="menu">-->
+  <!--        <fa-icon-->
+  <!--          [icon]="faCirclePlus"-->
+  <!--          size="2x"-->
+  <!--          [style]="{ color: '#3699ff' }"-->
+  <!--        ></fa-icon>-->
+  <!--      </span>-->
+  <!--      <mat-menu #menu="matMenu">-->
+  <!--        <button mat-menu-item (click)="addTransaction()">-->
+  <!--          <fa-icon [icon]="faPlus" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>-->
+  <!--          <span class="investment-action-item">New trade/ holding</span>-->
+  <!--        </button>-->
+  <!--        <button mat-menu-item>-->
+  <!--          <fa-icon [icon]="faPlus" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>-->
+  <!--          <span class="investment-action-item">New dividend income</span>-->
+  <!--        </button>-->
+  <!--      </mat-menu>-->
+  <!--    </li>-->
+  <!--  </ul>-->
 </div>
-<div class="investment-content-container">
-  <div class="data-card">
-    <div class="data-card-content">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
+
+<!--<div class="investment-content-container">-->
+<!--  <div class="data-card">-->
+<!--    <div class="data-card-content">-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<div class="stock-container">
+  <router-outlet></router-outlet>
 </div>
+

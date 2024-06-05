@@ -1,13 +1,17 @@
-<app-submenu></app-submenu>
+<div class="toolbar">
+  <ul class="menu">
+    <li class="menu-item" routerLink="transaction" routerLinkActive="active-menu-item"> <span>Transactions</span></li>
+    <li class="menu-item" routerLink="income" routerLinkActive="active-menu-item"> <span>Income</span></li>
+    <li class="menu-item" routerLink="payments" routerLinkActive="active-menu-item"> <span>Payments</span></li>
+    <li class="menu-item" routerLink="savings" routerLinkActive="active-menu-item"> <span>Savings</span></li>
+  </ul>
+</div>
 <div class="transaction-content-container">
   <div class="data-card">
-<!--    <div class="data-filter-content">-->
-<!--      <app-filter-menu></app-filter-menu>-->
-<!--    </div>-->
     <div class="data-card-content">
       <div class="filter-toolbar">
         <div class="filter-toolbar-left">
-          <h2>Transactions Activity</h2>
+          <h2>{{pageTitle}}</h2>
         </div>
         <div class="filter-toolbar-right">
           <div class="search-bar">
@@ -58,8 +62,7 @@
       </div>
 
       <ng-container>
-        <app-transaction-table [transactions]="transactionData">
-        </app-transaction-table>
+        <router-outlet></router-outlet>
       </ng-container>
     </div>
   </div>

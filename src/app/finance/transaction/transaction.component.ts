@@ -20,7 +20,7 @@ import {
   templateUrl: './transaction.component.html',
   styleUrl: './transaction.component.css',
 })
-export class TransactionComponent {
+export class FinanceComponent {
   message = this.sessionService.getEventMessage();
   sessionData = this.sessionService.getData();
   protected readonly faCirclePlus = faCirclePlus;
@@ -36,6 +36,7 @@ export class TransactionComponent {
     private sessionService: SessionService,
   ) {}
 
+  pageTitle = 'Transactions Activity'
   transactionData: MonthlyTransaction[] = [];
 
   dataYear: number[] = [];
@@ -127,16 +128,17 @@ export class TransactionComponent {
   }
 
   onTransactionChecked(selectedIds: number[]) {
-    console.log(selectedIds);
   }
 }
 
 @Component({
   selector: 'app-income',
-  templateUrl: './transaction.component.html',
+  //templateUrl: './transaction.component.html',
+  template: `<app-transaction-table [transactions]="transactionData"></app-transaction-table>`,
   styleUrl: './transaction.component.css',
 })
-export class IncomeComponent extends TransactionComponent implements OnInit {
+export class IncomeComponent extends FinanceComponent implements OnInit {
+  override pageTitle = 'Income Activity'
   ngOnInit() {
     this.message.subscribe((msg: SessionEventMessage) => {
       if (
@@ -161,10 +163,12 @@ export class IncomeComponent extends TransactionComponent implements OnInit {
 
 @Component({
   selector: 'app-expense',
-  templateUrl: './transaction.component.html',
+  //templateUrl: './transaction.component.html',
+  template: `<app-transaction-table [transactions]="transactionData"></app-transaction-table>`,
   styleUrl: './transaction.component.css',
 })
-export class ExpenseComponent extends TransactionComponent implements OnInit {
+export class ExpenseComponent extends FinanceComponent implements OnInit {
+  override pageTitle = 'Transaction Activity'
   ngOnInit() {
     this.message.subscribe((msg: SessionEventMessage) => {
       if (
@@ -177,7 +181,6 @@ export class ExpenseComponent extends TransactionComponent implements OnInit {
     });
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        console.log('subscribing to params on expense');
         this.fetchQueryParams(this.route.snapshot.queryParams);
         this.filterData();
       }
@@ -191,10 +194,12 @@ export class ExpenseComponent extends TransactionComponent implements OnInit {
 
 @Component({
   selector: 'app-payment',
-  templateUrl: './transaction.component.html',
+  //templateUrl: './transaction.component.html',
+  template: `<app-transaction-table [transactions]="transactionData"></app-transaction-table>`,
   styleUrl: './transaction.component.css',
 })
-export class PaymentComponent extends TransactionComponent implements OnInit {
+export class PaymentComponent extends FinanceComponent implements OnInit {
+  override pageTitle = 'Payment Activity'
   ngOnInit() {
     this.message.subscribe((msg: SessionEventMessage) => {
       if (
@@ -219,10 +224,12 @@ export class PaymentComponent extends TransactionComponent implements OnInit {
 
 @Component({
   selector: 'app-saving',
-  templateUrl: './transaction.component.html',
+  //templateUrl: './transaction.component.html',
+  template: `<app-transaction-table [transactions]="transactionData"></app-transaction-table>`,
   styleUrl: './transaction.component.css',
 })
-export class SavingComponent extends TransactionComponent implements OnInit {
+export class SavingComponent extends FinanceComponent implements OnInit {
+  override pageTitle = 'Savings Activity'
   ngOnInit() {
     this.message.subscribe((msg: SessionEventMessage) => {
       if (

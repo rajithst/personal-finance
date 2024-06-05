@@ -35,19 +35,16 @@ export class SessionService {
   }
 
   refresh() {
-    console.log('getting investment data...')
     this.apiService.getInvestments().subscribe(data => {
       this.session.companies = data.companies;
       this.session.holdings = data.holdings;
       this.session.dividends = data.dividends;
       this.session.transactions = data.transactions;
-      console.log(this.session)
     })
   }
 
   updateStockPurchaseHistory(payload: StockPurchase) {
     this.apiService.updateStockPurchaseHistory(payload).subscribe(data => {
-      console.log(data)
     })
   }
 }

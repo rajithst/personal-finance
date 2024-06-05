@@ -9,7 +9,6 @@ import { HoldingsComponent } from './holdings/holdings.component';
 import { DividendComponent } from './dividend/dividend.component';
 import { SessionService } from './service/session.service';
 import { HomeComponent } from './home/home.component';
-import { SubmenuComponent } from './submenu/submenu.component';
 import { TradeDialogComponent } from './trade-dialog/trade-dialog.component';
 import { MaterialModule } from '../shared/material.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -26,7 +25,6 @@ import { DividendFlowComponent } from './dividend/dividend-flow/dividend-flow.co
     HoldingsComponent,
     DividendComponent,
     HomeComponent,
-    SubmenuComponent,
     TradeDialogComponent,
     TradeHistoryComponent,
     HoldingTableComponent,

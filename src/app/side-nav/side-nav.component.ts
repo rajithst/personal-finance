@@ -5,8 +5,12 @@ import { Component } from '@angular/core';
   template: `
     <mat-nav-list>
       <a *ngFor="let item of routes"  mat-list-item [routerLinkActive]="'active-link'" [routerLink]="['/', item.path]">
-        <mat-icon color="primary" class="sidenav-icon">{{ item.data.icon }}</mat-icon>
-        <span>{{ item.data.text }}</span>
+        <div class="link-items">
+          <div class="link-icon"><mat-icon color="primary" class="sidenav-icon">{{ item.data.icon }}</mat-icon></div>
+          <div class="link-text"><span>{{ item.data.text }}</span></div>
+        </div>
+
+
       </a>
     </mat-nav-list>`,
   styleUrl: './side-nav.component.css'
@@ -19,7 +23,7 @@ export class SideNavComponent {
       data: { icon: 'dashboard', text: 'Dashboard' }
     },
     {
-      path: 'transactions',
+      path: 'finance',
       data: { icon: 'sync_alt', text: 'Transactions' }
     },
     {
@@ -36,7 +40,10 @@ export class SideNavComponent {
   template: `
     <mat-nav-list>
       <a *ngFor="let item of routes"  mat-list-item [routerLinkActive]="'active-link'" [routerLink]="['/', item.path]">
-        <mat-icon color="primary" class="sidenav-icon">{{ item.data.icon }}</mat-icon>
+        <div class="link-items">
+          <div class="link-icon"><mat-icon color="primary" class="sidenav-icon">{{ item.data.icon }}</mat-icon></div>
+        </div>
+
       </a>
     </mat-nav-list>`,
   styleUrls: ['./side-nav.component.scss']
@@ -48,7 +55,7 @@ export class SideNavClosedComponent {
       data: { icon: 'dashboard', text: 'Dashboard' }
     },
     {
-      path: 'transactions',
+      path: 'finance',
       data: { icon: 'sync_alt', text: 'Transactions' }
     },
     {

@@ -67,7 +67,7 @@ export class TransactionDashboardComponent implements OnInit {
     this.monthlyExpenses.unshift(['Month', 'Expense', 'Payment'])
     this.monthlyExpensesOptions = {
       title: `${this.currentYear} Monthly Expenses vs Payments`,
-      width:500,
+      width:420,
       height:300,
       is3D: true,
       legend: {position: 'bottom'}
@@ -80,7 +80,7 @@ export class TransactionDashboardComponent implements OnInit {
     this.monthlyIncome.unshift(['Month', 'Amount'])
     this.monthlyIncomeOptions = {
       title: `${this.currentYear} Monthly Income`,
-      width:500,
+      width:420,
       height:300,
       is3D: true,
       legend: {position: 'none'}
@@ -93,7 +93,7 @@ export class TransactionDashboardComponent implements OnInit {
     this.monthlySavings.unshift(['Month', 'Amount'])
     this.monthlySavingsOptions = {
       title: `${this.currentYear} Monthly Savings`,
-      width:500,
+      width:420,
       height:300,
       is3D: true,
       legend: {position: 'none'}

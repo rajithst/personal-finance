@@ -19,7 +19,7 @@ export class AppComponent {
   sideNavDefaultOpened = true;
   showFullMenu = true;
   isExpanded = true;
-  closedWidth = 90;
+  closedWidth = 70;
   openedWidth = 250;
   isMobile!: boolean;
   sideNavMode: 'side' | 'over' = 'side';

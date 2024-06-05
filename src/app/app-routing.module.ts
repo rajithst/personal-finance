@@ -1,14 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {
-  ExpenseComponent,
-  IncomeComponent,
-  PaymentComponent,
-  SavingComponent,
-} from './finance/transaction/transaction.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { TransactionDashboardComponent } from './finance/dashboard/dashboard.component';
 import { financeResolver } from './finance/service/resolvers';
+
 
 const routes: Routes = [
   {
@@ -24,21 +19,13 @@ const routes: Routes = [
     },
   },
   {
-    path: 'income',
-    component: IncomeComponent,
+    path: 'finance',
+    loadChildren: () =>
+      import('./finance/finance.module').then(
+        (m) => m.FinanceModule,
+      ),
   },
-  {
-    path: 'savings',
-    component: SavingComponent,
-  },
-  {
-    path: 'transactions',
-    component: ExpenseComponent,
-  },
-  {
-    path: 'payments',
-    component: PaymentComponent,
-  },
+
   {
     path: 'investments',
     loadChildren: () =>

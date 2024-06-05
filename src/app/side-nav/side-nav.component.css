@@ -1,5 +1,14 @@
 .active-link {
   font-weight: bold !important;
+  background: #d8d7d7;
+}
+
+.link-items {
+  display: flex;
+}
+
+.link-text {
+  margin-left: 15px;
 }
 
 .mat-nav-list {
