@@ -1,0 +1,175 @@
+<h2
+  mat-dialog-title
+  cdkDrag
+  cdkDragRootElement=".cdk-overlay-pane"
+  cdkDragHandle
+>
+  Filters
+</h2>
+<mat-dialog-content>
+    <div class="filter-section">
+      <div class="main-category-section">
+        <mat-selection-list
+          [multiple]="false"
+          hideSingleSelectionIndicator
+          class="option-list"
+        >
+          <mat-list-option (click)="clickOnMainFilter('categories')">
+            <fa-icon
+              [icon]="faLayerGroup"
+              size="1x"
+              [style]="{ color: '#4a4949' }"
+            ></fa-icon>
+            Categories</mat-list-option
+          >
+          <mat-list-option (click)="clickOnMainFilter('payment_method')">
+            <fa-icon
+              [icon]="faCreditCard"
+              size="1x"
+              [style]="{ color: '#4a4949' }"
+            ></fa-icon>
+            Payment Method</mat-list-option
+          >
+          <mat-list-option (click)="clickOnMainFilter('payee')">
+            <fa-icon
+              [icon]="faShop"
+              size="1x"
+              [style]="{ color: '#4a4949' }"
+            ></fa-icon>
+            Payee</mat-list-option
+          >
+          <mat-list-option (click)="clickOnMainFilter('year')">
+            <fa-icon
+              [icon]="faCalendar"
+              size="1x"
+              [style]="{ color: '#4a4949' }"
+            ></fa-icon>
+            Year/Month</mat-list-option
+          >
+        </mat-selection-list>
+      </div>
+
+      <div class="category-result-section">
+        <div class="category-title">{{categoryTitle}}</div>
+        <form [formGroup]="mainCategoryForm">
+          <mat-list
+            role="list"
+            *ngIf="clickedType === 'categories'"
+            class="option-list"
+          >
+            @for (exec of transactionCategories; track exec) {
+              <mat-list-item
+                matRipple
+                (click)="clickOnOption('categories', exec)"
+              >
+                <div class="list-item-actions">
+                  <div class="checkbox">
+                    <mat-checkbox
+                      [formControlName]="'category_' + exec.value"
+                      class="example-margin"
+                    ></mat-checkbox>
+                  </div>
+                  <div class="item-text">{{ exec.viewValue }}</div>
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        </form>
+        <form [formGroup]="paymentMethodForm">
+          <mat-list
+            role="list"
+            *ngIf="clickedType === 'payment_method'"
+            class="option-list"
+          >
+            @for (exec of paymentMethods; track exec) {
+              <mat-list-item matRipple>
+                <div class="list-item-actions">
+                  <div class="checkbox">
+                    <mat-checkbox
+                      [formControlName]="'paymentmethod_' + exec.value"
+                      class="example-margin"
+                    ></mat-checkbox>
+                  </div>
+                  <div class="item-text">{{ exec.viewValue }}</div>
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        </form>
+        <form [formGroup]="yearForm">
+          <mat-list
+            role="list"
+            *ngIf="clickedType === 'year'"
+            class="option-list"
+          >
+            @for (exec of years; track exec) {
+              <mat-list-item
+                matRipple
+                (click)="clickOnOption('year', exec)"
+              >
+                <div class="list-item-actions">
+                  <div class="checkbox">
+                    <mat-checkbox
+                      [formControlName]="'year_' + exec.value"
+                    ></mat-checkbox>
+                  </div>
+                  <div class="item-text">{{ exec.viewValue }}</div>
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        </form>
+      </div>
+      <div class="subcategory-section">
+        <div class="subcategory-title">{{subCategoryTitle}}</div>
+        <form [formGroup]="subCategoryForm">
+          <mat-list
+            role="list"
+            *ngIf="clickedType === 'categories'"
+            class="option-list"
+          >
+            @for (exec of transactionSubCategories; track exec) {
+              <mat-list-item matRipple>
+                <div class="list-item-actions">
+                  <div class="checkbox">
+                    <mat-checkbox
+                      [formControlName]="'subcategory_' + exec.value"
+                      [disabled]="true"
+                      class="example-margin"
+                    ></mat-checkbox>
+                  </div>
+                  <div class="item-text">{{ exec.viewValue }}</div>
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        </form>
+        <form [formGroup]="monthsForm">
+          <mat-list
+            role="list"
+            *ngIf="clickedType === 'year'"
+            class="option-list"
+          >
+            @for (exec of months; track exec) {
+              <mat-list-item matRipple>
+                <div class="list-item-actions">
+                  <div class="checkbox">
+                    <mat-checkbox
+                      [formControlName]="'month_' + exec.value"
+                    ></mat-checkbox>
+                  </div>
+                  <div class="item-text">{{ exec.viewValue }}</div>
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        </form>
+      </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button (click)="clear()">Reset Filters</button>
+  <button mat-raised-button color="primary" (click)="submit()">Filter</button>
+</mat-dialog-actions>

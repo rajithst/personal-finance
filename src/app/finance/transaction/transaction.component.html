@@ -9,61 +9,7 @@
 <div class="transaction-content-container">
   <div class="data-card">
     <div class="data-card-content">
-      <div class="filter-toolbar">
-        <div class="filter-toolbar-left">
-          <h2>{{pageTitle}}</h2>
-        </div>
-        <div class="filter-toolbar-right">
-          <div class="search-bar">
-          </div>
-          <div class="merge-panel">
-            <div class="merge-item">
-              <button mat-raised-button color="primary" matBadgePosition="before" matBadge="7" matBadgeColor="accent">
-                Merge
-              </button>
-            </div>
-            <div class="merge-item filter-item" matRipple>
-              <fa-icon
-                [icon]="faPencil"
-                size="1x"
-                [style]="{ color: '#4a4949' }"
-              ></fa-icon>
-            </div>
-            <div class="merge-item filter-item" matRipple>
-              <fa-icon
-                [icon]="faTrash"
-                size="1x"
-                [style]="{ color: '#af5252' }"
-              ></fa-icon>
-            </div>
-          </div>
-          <div class="filter-item" matRipple>
-            <fa-icon
-              [icon]="faFilter"
-              size="1x"
-              [style]="{ color: '#4a4949' }"
-            ></fa-icon>
-          </div>
-          <div class="filter-item" matRipple>
-            <fa-icon
-              [icon]="faUpload"
-              size="1x"
-              [style]="{ color: '#4a4949' }"
-            ></fa-icon>
-          </div>
-          <div class="filter-item" (click)="addTransaction()" matRipple>
-            <fa-icon
-              [icon]="faCirclePlus"
-              size="1x"
-              [style]="{ color: '#3699ff' }"
-            ></fa-icon>
-          </div>
-        </div>
-      </div>
-
-      <ng-container>
-        <router-outlet></router-outlet>
-      </ng-container>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>

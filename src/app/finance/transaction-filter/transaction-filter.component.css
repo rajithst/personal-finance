@@ -1,0 +1,36 @@
+.filter-section {
+  display: flex;
+  flex-direction: row;
+}
+
+.main-category-section {
+  width: 200px;
+  border-right: 1px solid #d5cbcb;
+}
+
+.category-result-section {
+  width: 200px;
+  border-right: 1px solid #d5cbcb;
+}
+
+.subcategory-section {
+  width: 250px;
+}
+
+.option-list {
+  margin: 0 5px;
+}
+
+.list-item-actions {
+  display: flex;
+  align-items: center;
+}
+
+.item-text {
+  cursor: pointer;
+}
+
+.category-title, .subcategory-title {
+  text-align: center;
+  font-weight: 600;
+}

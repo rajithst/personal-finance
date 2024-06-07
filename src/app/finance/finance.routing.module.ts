@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {
-  ExpenseComponent, FinanceComponent,
-  IncomeComponent,
-  PaymentComponent,
-  SavingComponent,
-} from "./transaction/transaction.component";
-
+import { FinanceComponent } from './transaction/transaction.component';
+import {ExpensesComponent} from "./transaction/expenses/expenses.component";
+import {IncomesComponent} from "./transaction/incomes/incomes.component";
+import {SavingsComponent} from "./transaction/savings/savings.component";
+import {PaymentsComponent} from "./transaction/payments/payments.component";
 
 const routes: Routes = [
   {
@@ -16,31 +14,30 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'transaction',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'transaction',
-        component: ExpenseComponent,
+        component: ExpensesComponent,
       },
       {
         path: 'income',
-        component: IncomeComponent,
+        component: IncomesComponent,
       },
       {
         path: 'savings',
-        component: SavingComponent,
+        component: SavingsComponent,
       },
       {
         path: 'payments',
-        component: PaymentComponent,
+        component: PaymentsComponent,
       },
-    ]
+    ],
   },
-
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class FinanceRoutingModule { }
+export class FinanceRoutingModule {}

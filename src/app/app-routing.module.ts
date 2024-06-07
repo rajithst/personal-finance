@@ -14,9 +14,9 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: TransactionDashboardComponent,
-    resolve: {
-      all: financeResolver,
-    },
+    // resolve: {
+    //   finance: financeResolver,
+    // },
   },
   {
     path: 'finance',

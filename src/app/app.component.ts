@@ -1,9 +1,4 @@
 import {Component, ViewChild} from '@angular/core';
-import { SessionService } from './finance/service/session.service';
-import {
-  faMoneyBillTrendUp,
-  faMoneyBillTransfer,
-} from '@fortawesome/free-solid-svg-icons';
 import {MatSidenav, MatSidenavContainer} from "@angular/material/sidenav";
 
 @Component({
@@ -12,8 +7,6 @@ import {MatSidenav, MatSidenavContainer} from "@angular/material/sidenav";
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  investmentIcon = faMoneyBillTrendUp;
-  financeIcon = faMoneyBillTransfer;
   @ViewChild(MatSidenavContainer) sidenavContainer!: MatSidenavContainer;
   @ViewChild('snav') sideNav!: MatSidenav;
   sideNavDefaultOpened = true;
@@ -25,9 +18,6 @@ export class AppComponent {
   sideNavMode: 'side' | 'over' = 'side';
   hasBackdrop: boolean = false;
   toolBarHeight = 64;
-  constructor(private sessionService: SessionService) {
-    this.sessionService.refresh();
-  }
 
   onToolbarMenuToggle() {
     if (this.isMobile) {

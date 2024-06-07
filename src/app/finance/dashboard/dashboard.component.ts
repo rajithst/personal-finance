@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {SessionService} from "../service/session.service";
+import {SessionEventMessage, SessionService} from "../service/session.service";
 import {MONTHS, PAYMENT_METHODS, TRANSACTION_CATEGORIES} from "../../data/client.data";
+import {NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-transaction-dashboard',
@@ -15,16 +16,23 @@ export class TransactionDashboardComponent implements OnInit {
   currentMonthNumber = this.today.getMonth();
   currentMonthName: string = MONTHS.find(x => x.value == this.currentMonthNumber)!.viewValue
   currentYear = this.today.getFullYear();
-  constructor(private sessionService:SessionService) {}
+  constructor(private sessionService:SessionService, protected router: Router,) {}
 
   ngOnInit(): void {
-    this.prepareMonthlyExpensesCard()
-    this.prepareMonthlyIncomeCard()
-    this.prepareMonthlySavingCard()
-    this.prepareLastMonthExpenseCategories()
-    this.prepareLastMonthExpenses()
-    this.preparePaymentMethodCard()
-    this.prepareMonthlyPaymentsCard()
+    this.sessionService.refresh()
+    this.message.subscribe((msg: SessionEventMessage) => {
+      if (
+        msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
+        msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
+      ) {
+        this.prepareData()
+      }
+    });
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.prepareData()
+      }
+    });
   }
   monthlyExpenses: any = [];
   monthlyExpensesOptions: any;
@@ -53,6 +61,16 @@ export class TransactionDashboardComponent implements OnInit {
   categoryWiseSumValueOptions: any;
   categoryWiseSumValueChartType: string = 'bar';
 
+  private prepareData() {
+    console.log('calling prepare data')
+    this.prepareMonthlyExpensesCard()
+    this.prepareMonthlyIncomeCard()
+    this.prepareMonthlySavingCard()
+    this.prepareLastMonthExpenseCategories()
+    this.prepareLastMonthExpenses()
+    this.preparePaymentMethodCard()
+    this.prepareMonthlyPaymentsCard()
+  }
 
   private prepareMonthlyExpensesCard() {
     const expenses = this.sessionData.expenses.filter(x => x.year === this.currentYear).map(x => [x.month_text, x.total]).reverse()
