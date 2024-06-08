@@ -21,7 +21,7 @@ export class LoadingComponent implements OnInit {
   routing: boolean = false;
 
   @Input()
-  detectRoutingOngoing = false
+  detectRoutingOngoing = true
 
   loadingService = inject(LoadingService);
   router = inject(Router)
@@ -34,13 +34,18 @@ export class LoadingComponent implements OnInit {
           event => {
             if (event instanceof NavigationStart ||
                 event instanceof RouteConfigLoadStart) {
+              console.log('navigating start')
                 this.loadingService.loadingOn();
             } else if (
                   event instanceof NavigationEnd ||
                   event instanceof NavigationError ||
                   event instanceof NavigationCancel ||
                   event instanceof RouteConfigLoadEnd) {
-                this.loadingService.loadingOff();
+              console.log('navigating end')
+              setTimeout(() => {
+                //this.loadingService.loadingOff();
+              }, 2000);
+
             }
           }
         )

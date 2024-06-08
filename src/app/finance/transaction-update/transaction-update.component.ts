@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
-  SessionEventMessage,
   SessionService,
 } from '../service/session.service';
 import {
@@ -44,7 +43,6 @@ export class TransactionUpdateDialog implements OnInit {
     public dialogRef: MatDialogRef<TransactionUpdateDialog>,
     @Inject(MAT_DIALOG_DATA) public data: TransactionUpdateDialogData,
   ) {}
-  message = this.sessionService.getEventMessage();
   sessionData = this.sessionService.getData();
   transactionForm: FormGroup;
   filteredDestinations: Observable<string[]>;
@@ -98,11 +96,6 @@ export class TransactionUpdateDialog implements OnInit {
     ).format('YYYY-MM-DD');
     const payload: TransactionRequest = this.transactionForm.value;
     this.sessionService.updateTransaction(payload);
-    this.message.subscribe((msg: SessionEventMessage) => {
-      if (msg === SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS) {
-        this.dialogRef.close({ refresh: true });
-      }
-    });
   }
 
   cancel() {

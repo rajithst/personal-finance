@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../core/api.service';
-import { ReplaySubject, Subject } from 'rxjs';
 import {
   Income,
   IncomeRequest,
@@ -20,6 +19,7 @@ export class SessionData {
 }
 
 export enum SessionEventMessage {
+  INIT_SESSION_LOAD_STARTED,
   INIT_SESSION_LOAD_SUCCESS,
   INIT_SESSION_LOAD_FAILED,
   SESSION_TRANSACTION_UPDATE_SUCCESS,
@@ -31,42 +31,25 @@ export enum SessionEventMessage {
 })
 export class SessionService {
   private session: SessionData = new SessionData();
-  message: Subject<SessionEventMessage> =
-    new ReplaySubject<SessionEventMessage>(1);
   constructor(private apiService: ApiService) {}
-
-  getEventMessage() {
-    return this.message;
-  }
 
   getData() {
     return this.session;
   }
 
-  refresh() {
-    this.apiService
-      .getTransactions()
-      .subscribe((transactions: TransactionsResponse) => {
-        this.session.incomes = transactions.income;
-        this.session.saving = transactions.saving;
-        this.session.expenses = transactions.expense;
-        this.session.payments = transactions.payment;
-        this.session.destinations = transactions.destinations
-        this.message.next(SessionEventMessage.INIT_SESSION_LOAD_SUCCESS);
-      });
+  setSessionData(resolvedData: TransactionsResponse) {
+    this.session.incomes = resolvedData.income;
+    this.session.saving = resolvedData.saving;
+    this.session.expenses = resolvedData.expense;
+    this.session.payments = resolvedData.payment;
+    this.session.destinations = resolvedData.destinations;
   }
 
   updateIncome(payload: IncomeRequest) {
     this.apiService.updateIncome(payload).subscribe((income: Income) => {
       if (income) {
         //this.updateSessionIncome(income);
-        this.message.next(
-          SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS,
-        );
       } else {
-        this.message.next(
-          SessionEventMessage.SESSION_TRANSACTION_UPDATE_FAILED,
-        );
       }
     });
   }
@@ -80,13 +63,7 @@ export class SessionService {
           let source = this.getTargetTransactionCategory(transaction);
           this.syncSessionTransaction(transaction, source);
 
-          this.message.next(
-            SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS,
-          );
         } else {
-          this.message.next(
-            SessionEventMessage.SESSION_TRANSACTION_UPDATE_FAILED,
-          );
         }
       });
   }
@@ -132,19 +109,6 @@ export class SessionService {
     }
   }
 
-  private deleteMergedTransactions(data: Transaction) {
-    // this.session.expenses.forEach(x => {
-    //   x.transactions = x.transactions.filter(y => !data.merged_ids!.includes(y.id!))
-    //   if ('transaction_cp' in x) {
-    //     x.transactions_cp = x.transactions_cp.filter(y => !data.merged_ids!.includes(y.id!))
-    //   }
-    // });
-    // let source = this.getTargetTransactionCategory(data);
-    // source.forEach(x => {
-    //   x.transactions = x.transactions.filter(y => !data.merged_ids!.includes(y.id!))
-    //   if ('transaction_cp' in x) {
-    //     x.transactions_cp = x.transactions_cp.filter(y => !data.merged_ids!.includes(y.id!))
-    //   }
-    // });
-  }
+
+
 }

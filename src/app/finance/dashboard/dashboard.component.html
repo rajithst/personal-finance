@@ -1,28 +1,62 @@
-
 <div class="dashboard-container">
   <div class="chart-row">
     <div class="monthly-total-expenses">
-      <app-chartbox [chartData]="monthlyExpenses" [chartOptions]="monthlyExpensesOptions" [chartType]="monthlyExpensesChartType"></app-chartbox>
+      <app-chartbox
+        [chartData]="monthlyExpenses"
+        [chartOptions]="monthlyExpensesOptions"
+        [chartType]="monthlyExpensesChartType"
+        (rendered)="childRendered()"
+      ></app-chartbox>
     </div>
     <div class="monthly-total-expenses">
-      <app-chartbox [chartData]="monthlyIncome" [chartOptions]="monthlyIncomeOptions" [chartType]="monthlyIncomeChartType"></app-chartbox>
+      <app-chartbox
+        [chartData]="monthlyIncome"
+        [chartOptions]="monthlyIncomeOptions"
+        [chartType]="monthlyIncomeChartType"
+        (rendered)="childRendered()"
+      ></app-chartbox>
     </div>
     <div class="monthly-total-expenses">
-      <app-chartbox [chartData]="monthlySavings" [chartOptions]="monthlySavingsOptions" [chartType]="monthlySavingsChartType"></app-chartbox>
+      <app-chartbox
+        [chartData]="monthlySavings"
+        [chartOptions]="monthlySavingsOptions"
+        [chartType]="monthlySavingsChartType"
+        (rendered)="childRendered()"
+      ></app-chartbox>
     </div>
   </div>
   <div class="chart-row">
     <div class="monthly-total-expenses">
-      <app-chartbox [chartData]="categoryWiseSum" [chartOptions]="categoryWiseSumOptions" [chartType]="categoryWiseSumChartType"></app-chartbox>
+      <app-chartbox
+        [chartData]="categoryWiseSum"
+        [chartOptions]="categoryWiseSumOptions"
+        [chartType]="categoryWiseSumChartType"
+        (rendered)="childRendered()"
+      ></app-chartbox>
     </div>
     <div class="monthly-total-expenses">
-      <app-chartbox [chartData]="categoryWiseSum" [chartOptions]="categoryWiseSumValueOptions" [chartType]="categoryWiseSumValueChartType"></app-chartbox>
+      <app-chartbox
+        [chartData]="categoryWiseSum"
+        [chartOptions]="categoryWiseSumValueOptions"
+        [chartType]="categoryWiseSumValueChartType"
+        (rendered)="childRendered()"
+      ></app-chartbox>
     </div>
     <div class="monthly-total-expenses">
-      <app-chartbox [chartData]="paymentMethodWiseSum" [chartOptions]="paymentMethodWiseSumOptions" [chartType]="paymentMethodWiseSumChartType"></app-chartbox>
+      <app-chartbox
+        [chartData]="paymentMethodWiseSum"
+        [chartOptions]="paymentMethodWiseSumOptions"
+        [chartType]="paymentMethodWiseSumChartType"
+        (rendered)="childRendered()"
+      ></app-chartbox>
     </div>
     <div class="monthly-total-expenses">
-      <app-chartbox [chartData]="monthlyPayments" [chartOptions]="monthlyPaymentsOptions" [chartType]="monthlyPaymentsChartType"></app-chartbox>
+      <app-chartbox
+        [chartData]="monthlyPayments"
+        [chartOptions]="monthlyPaymentsOptions"
+        [chartType]="monthlyPaymentsChartType"
+        (rendered)="childRendered()"
+      ></app-chartbox>
     </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
 import {
   faCirclePlus,
   faFilter,
@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '../../service/session.service';
 import {MonthlyTransaction} from "../../model/transactions";
-import {ProgressBarMode} from "@angular/material/progress-bar";
+import {LoadingService} from "../../../shared/loading/loading.service";
 
 @Component({
   selector: 'app-expenses',
@@ -40,7 +40,9 @@ export class ExpensesComponent implements OnInit {
   currentYear = this.today.getFullYear();
   transactionData: MonthlyTransaction[] = [];
   hiddenFilterBadge = true;
-  progressMode: ProgressBarMode = 'determinate'
+  targetTables = 0;
+  renderedTables = 0;
+  loadingService = inject(LoadingService);
 
   constructor(
     private dialog: MatDialog,
@@ -52,6 +54,7 @@ export class ExpensesComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log('inside the  expense  component')
     this.initSearchParams(null);
     this.filterData()
   }
@@ -93,7 +96,6 @@ export class ExpensesComponent implements OnInit {
     });
 
     dialog.afterClosed().subscribe((result) => {
-      this.progressMode = 'indeterminate'
       this.initSearchParams(result.data)
       this.filterData();
     });
@@ -139,8 +141,9 @@ export class ExpensesComponent implements OnInit {
         0,
       );
     });
+    this.targetTables = currData.length;
     this.transactionData = currData;
-    this.progressMode = 'determinate'
+
   }
 
   addTransaction() {
@@ -153,4 +156,7 @@ export class ExpensesComponent implements OnInit {
     });
   }
 
+  tableRendered() {
+    //this.loadingService.loadingOff();
+  }
 }

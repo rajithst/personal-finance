@@ -1,11 +1,17 @@
 import {
+  AfterViewChecked,
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnChanges,
-
+  Output, ViewChild,
 } from '@angular/core';
-import {MonthlyTransaction, Transaction, TransactionExpand} from '../model/transactions';
+import {
+  MonthlyTransaction,
+  Transaction,
+  TransactionExpand,
+} from '../model/transactions';
 import {
   TransactionDeleteDialog,
   TransactionUpdateDialog,
@@ -15,9 +21,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   faList,
   faEllipsis,
-  faTrash, faEdit, faScissors, faEllipsisV
+  faTrash,
+  faEdit,
+  faScissors,
+  faEllipsisV,
 } from '@fortawesome/free-solid-svg-icons';
-import {TransactionDetailDialog} from "../transaction-detail/transaction-detail.component";
+import { TransactionDetailDialog } from '../transaction-detail/transaction-detail.component';
+import {MatTableDataSource} from "@angular/material/table";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-transaction-table',
@@ -25,9 +37,14 @@ import {TransactionDetailDialog} from "../transaction-detail/transaction-detail.
   styleUrl: './transaction-table.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionTableComponent implements OnChanges {
-  @Input() transactions: MonthlyTransaction[] = [];
-  transactionData: MonthlyTransaction[] = [];
+export class TransactionTableComponent implements OnChanges, AfterViewChecked {
+  @Input() transactions: MonthlyTransaction;
+  @Output() tableRendered: EventEmitter<void> = new EventEmitter<void>();
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  transactionData: MonthlyTransaction;
+  dataSource: MatTableDataSource<TransactionExpand>;
   selectedTransactions: Record<string, number[]> = {};
   selectedMonths: number[] = [];
   checkAllItems: boolean = false;
@@ -37,16 +54,35 @@ export class TransactionTableComponent implements OnChanges {
   protected readonly faEdit = faEdit;
   protected readonly faList = faList;
   protected readonly faScissors = faScissors;
+  protected readonly faEllipsisV = faEllipsisV;
 
-  displayedColumns: string[] = ['select', 'Date', 'PaymentMethod', 'Destination', 'Category', 'SubCategory', 'Amount', 'Notes', 'Actions'];
+  displayedColumns: string[] = [
+    'select',
+    'Date',
+    'PaymentMethod',
+    'Destination',
+    'Category',
+    'SubCategory',
+    'Amount',
+    'Notes',
+    'Actions',
+  ];
 
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-  ) {}
+  ) {
+
+  }
   ngOnChanges() {
     this.transactionData = this.transactions;
-    this.prepareSelectedTransactions()
+    this.dataSource = new MatTableDataSource<TransactionExpand>([]);
+    this.dataSource.sort = this.sort;
+
+  }
+
+  ngAfterViewChecked(): void {
+    this.tableRendered.emit();
   }
 
   editRecord(item: TransactionExpand, task: string) {
@@ -57,6 +93,7 @@ export class TransactionTableComponent implements OnChanges {
       },
       data: { formData: item, task: task },
     });
+
     dialog.afterClosed().subscribe((result) => {
       if (result.refresh) {
         this.snackBar.open('Updated!', 'Success', {
@@ -83,89 +120,6 @@ export class TransactionTableComponent implements OnChanges {
     });
   }
 
-  toggleItem(row: TransactionExpand, $event: any) {
-    const isChecked = $event.target.checked;
-    const target = this.transactionData
-      .find((x) => x.year == row.year && x.month == row.month)
-      ?.transactions_cp.find((x) => x.id === row.id);
-    if (target) {
-      target.checked = isChecked;
-    }
-    const transactionKey = `${row.year}${row.month}`;
-    if (!(transactionKey in this.selectedTransactions)) {
-      this.selectedTransactions[transactionKey] = []
-    }
-
-    if (isChecked) {
-      this.selectedTransactions[transactionKey].push(row.id!);
-    } else {
-      this.selectedTransactions[transactionKey] = this.selectedTransactions[transactionKey].filter(
-        (x) => x !== row.id,
-      );
-    }
-  }
-
-  toggleAll($event: any, rowYear: number, rowMonth: number) {
-    const isChecked = $event.target.checked;
-    const rowIds: number[] = [];
-    this.transactionData
-      .find((x) => x.year == rowYear && x.month == rowMonth)
-      ?.transactions_cp.forEach((x) => {
-        x.checked = isChecked;
-        rowIds.push(x.id!);
-      });
-    this.selectedTransactions[`${rowYear}${rowMonth}`] = rowIds;
-  }
-
-  mergeTransactions() {
-    const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: '850px',
-      position: {
-        top: '50px',
-      },
-      data: { formData: null, formDataList: this.getCheckedTransactions(), task: 'merge' },
-    });
-    dialog.afterClosed().subscribe((result) => {
-      if (result.refresh) {
-        this.snackBar.open('Updated!', 'Success', {
-          duration: 3000,
-        });
-      }
-    });
-  }
-
-  getCheckedTransactions() {
-    const results = this.transactionData
-      .map((month) => month.transactions)
-      .flatMap((transaction) => transaction.filter((x) => x.checked));
-
-    // results.forEach(x => {
-    //   x.update_similar = false;
-    //   x.is_regular_destination = false;
-    // })
-    return results;
-  }
-
-  prepareSelectedTransactions() {
-    const checkedTransactions = this.getCheckedTransactions();
-    checkedTransactions.forEach((transaction) => {
-      const transactionKey = `${transaction.year}${transaction.month}`;
-      if (transactionKey in this.selectedTransactions) {
-        this.selectedTransactions[transactionKey].push(transaction.id!)
-      } else {
-        this.selectedTransactions[transactionKey] = [transaction.id!];
-      }
-    })
-  }
-
-  canMerge(row: TransactionExpand): boolean {
-    const transactionKey = `${row.year}${row.month}`;
-    if (transactionKey in this.selectedTransactions) {
-      return this.selectedTransactions[transactionKey].length > 1 && this.selectedTransactions[transactionKey].includes(row.id!)
-    }
-    return false;
-  }
-
   showMergeTransactions(row: Transaction) {
     this.dialog.open(TransactionDetailDialog, {
       width: '850px',
@@ -176,9 +130,8 @@ export class TransactionTableComponent implements OnChanges {
     });
   }
 
-  toggleSelection(element: TransactionExpand) {
-    element.checked = !element.checked;
-  }
 
-  protected readonly faEllipsisV = faEllipsisV;
+  panelOpened() {
+    this.dataSource = new MatTableDataSource<TransactionExpand>(this.transactionData.transactions_cp);
+  }
 }

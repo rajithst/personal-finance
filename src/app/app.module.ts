@@ -10,7 +10,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import {
   provideHttpClient,
   withFetch,
-  withInterceptors,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { MaterialModule } from './shared/material.module';
@@ -18,7 +17,6 @@ import { TransactionDashboardComponent } from './finance/dashboard/dashboard.com
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { SharedModule } from './shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { loadingInterceptor } from './core/loading.intercepter';
 import {
   SideNavClosedComponent,
   SideNavComponent,
@@ -47,7 +45,7 @@ import { TopNavComponent } from './top-nav/top-nav.component';
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch(), withInterceptors([loadingInterceptor])),
+    provideHttpClient(withFetch()),
     provideHttpClient(withInterceptorsFromDi()),
   ],
 })

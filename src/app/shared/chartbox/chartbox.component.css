@@ -1,3 +1,6 @@
+.hidden {
+  display: none;
+}
 .chart-card-header {
   display: flex;
   padding: 5px 16px 0;

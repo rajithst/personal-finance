@@ -1,4 +1,12 @@
-import {AfterViewInit, Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {faEllipsisV} from "@fortawesome/free-solid-svg-icons";
 declare var google: any;
 
@@ -12,12 +20,15 @@ export class ChartboxComponent implements AfterViewInit {
   @Input() chartType: string = '';
   @Input() chartData: any = [];
   @Input() chartOptions: any = {};
+  @Output() rendered: EventEmitter<void> = new EventEmitter<void>()
   @ViewChild('chartArea') chartArea: ElementRef;
+  protected readonly faEllipsisV = faEllipsisV;
 
-  chart: any;
+  chart: any = null;
   chartTitle: string;
 
   ngAfterViewInit() {
+    console.log('view checked --> ', this.chartData)
     google.charts.load('current', { 'packages': ['corechart', 'bar'] });
     google.charts.setOnLoadCallback(this.drawChart);
   }
@@ -38,7 +49,11 @@ export class ChartboxComponent implements AfterViewInit {
         this.chart = new google.visualization.PieChart(this.chartArea.nativeElement);
         this.chart.draw(data, options);
       }
+    } else {
+      this.chart = '';
     }
+
+    this.rendered.emit()
   }
-  protected readonly faEllipsisV = faEllipsisV;
+
 }

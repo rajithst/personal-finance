@@ -1,11 +1,16 @@
-import {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from "@angular/router";
-import {inject} from "@angular/core";
-import {SessionService} from "./session.service";
-
+import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  RouterStateSnapshot,
+} from '@angular/router';
+import { inject } from '@angular/core';
+import { ApiService } from '../../core/api.service';
+import {Observable} from 'rxjs';
+import {TransactionsResponse} from "../model/transactions";
 
 export const financeResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
-) => {
-  return inject(SessionService).refresh()
-}
+): Observable<TransactionsResponse> => {
+  return inject(ApiService).getTransactions()
+};

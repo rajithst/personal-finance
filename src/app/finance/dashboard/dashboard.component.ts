@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {SessionEventMessage, SessionService} from "../service/session.service";
+import {Component, inject, OnInit} from '@angular/core';
+import {SessionService} from "../service/session.service";
 import {MONTHS, PAYMENT_METHODS, TRANSACTION_CATEGORIES} from "../../data/client.data";
-import {NavigationEnd, Router} from "@angular/router";
+import {ActivatedRoute,} from "@angular/router";
+import {LoadingService} from "../../shared/loading/loading.service";
 
 @Component({
   selector: 'app-transaction-dashboard',
@@ -10,30 +11,32 @@ import {NavigationEnd, Router} from "@angular/router";
 })
 export class TransactionDashboardComponent implements OnInit {
 
-  message = this.sessionService.getEventMessage();
-  sessionData = this.sessionService.getData();
+
   today = new Date();
   currentMonthNumber = this.today.getMonth();
   currentMonthName: string = MONTHS.find(x => x.value == this.currentMonthNumber)!.viewValue
   currentYear = this.today.getFullYear();
-  constructor(private sessionService:SessionService, protected router: Router,) {}
+  childComponentsRendered = 0;
+  totalChildComponents = 7;
+  private loadingService = inject(LoadingService);
+  private sessionService = inject(SessionService);
+  private activatedRoute = inject(ActivatedRoute);
+  sessionData = this.sessionService.getData();
 
   ngOnInit(): void {
-    this.sessionService.refresh()
-    this.message.subscribe((msg: SessionEventMessage) => {
-      if (
-        msg === SessionEventMessage.INIT_SESSION_LOAD_SUCCESS ||
-        msg == SessionEventMessage.SESSION_TRANSACTION_UPDATE_SUCCESS
-      ) {
-        this.prepareData()
-      }
+    this.activatedRoute.data.subscribe(({finance}) => {
+      this.sessionService.setSessionData(finance)
     });
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.prepareData()
-      }
-    });
+    this.prepareData();
   }
+
+  childRendered() {
+    this.childComponentsRendered++;
+    if (this.childComponentsRendered === this.totalChildComponents) {
+      this.loadingService.loadingOff()
+    }
+  }
+
   monthlyExpenses: any = [];
   monthlyExpensesOptions: any;
   monthlyExpensesChartType: string = 'bar';

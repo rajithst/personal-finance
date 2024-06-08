@@ -1,4 +1,3 @@
-<mat-progress-bar [mode]="progressMode"></mat-progress-bar>
 <div class="filter-toolbar">
   <div class="filter-toolbar-left">
     <h2>Transaction Activity</h2>
@@ -52,5 +51,10 @@
 </div>
 
 <ng-container>
-  <app-transaction-table [transactions]="transactionData"></app-transaction-table>
+  <mat-accordion multi="true" class="transaction-item-panel">
+    @for (data of transactionData; track data; let rowId = $index) {
+      <app-transaction-table [transactions]="data" (tableRendered)="tableRendered()"></app-transaction-table>
+    }
+  </mat-accordion>
+
 </ng-container>
