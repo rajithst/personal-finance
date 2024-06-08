@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SessionService} from "../../service/session.service";
 import {MonthlyTransaction} from "../../model/transactions";
 
@@ -7,12 +7,20 @@ import {MonthlyTransaction} from "../../model/transactions";
   templateUrl: './incomes.component.html',
   styleUrl: './incomes.component.css'
 })
-export class IncomesComponent {
+export class IncomesComponent implements OnInit{
 
   sessionData = this.sessionService.getData();
-  transactionData: MonthlyTransaction[] = this.sessionData.incomes;
+  transactionData: MonthlyTransaction[];
 
   constructor(private sessionService: SessionService) {}
+
+  ngOnInit(): void {
+    const data= this.sessionData.incomes
+    data.forEach(x => {
+      x.transactions_cp = JSON.parse(JSON.stringify(x.transactions));
+    })
+    this.transactionData = data;
+  }
 
 
 

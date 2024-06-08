@@ -10,3 +10,7 @@
 .nav-brand {
   text-align: center;
 }
+
+.fix-nav {
+  height: 55px;
+}

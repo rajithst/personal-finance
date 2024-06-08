@@ -52,8 +52,8 @@
 
 <ng-container>
   <mat-accordion multi="true" class="transaction-item-panel">
-    @for (data of transactionData; track data; let rowId = $index) {
-      <app-transaction-table [transactions]="data" (tableRendered)="tableRendered()"></app-transaction-table>
+    @for (data of transactionData; track data;) {
+      <app-transaction-table [transactions]="data"></app-transaction-table>
     }
   </mat-accordion>
 

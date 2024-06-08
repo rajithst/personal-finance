@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {Component, inject, Inject, OnInit} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
   SessionService,
@@ -20,6 +20,7 @@ import {
 import { TransactionExpand, TransactionRequest } from '../model/transactions';
 import moment from 'moment/moment';
 import {map, Observable, startWith} from "rxjs";
+import {ApiService} from "../../core/api.service";
 
 export interface TransactionUpdateDialogData {
   formData: TransactionExpand | null;
@@ -37,9 +38,10 @@ export class TransactionUpdateDialog implements OnInit {
   TRANSACTION_CATEGORIES: DropDownType[] = TRANSACTION_CATEGORIES;
   EXPENSE_SUB_CATEGORIES: DropDownType[] = [];
   TRANSACTION_TYPES: DropDownType[] = TRANSACTION_TYPES;
+  sessionService = inject(SessionService);
+  apiService = inject(ApiService)
 
   constructor(
-    private sessionService: SessionService,
     public dialogRef: MatDialogRef<TransactionUpdateDialog>,
     @Inject(MAT_DIALOG_DATA) public data: TransactionUpdateDialogData,
   ) {}
@@ -95,11 +97,18 @@ export class TransactionUpdateDialog implements OnInit {
       this.transactionForm.value.date,
     ).format('YYYY-MM-DD');
     const payload: TransactionRequest = this.transactionForm.value;
-    this.sessionService.updateTransaction(payload);
+    this.apiService.updateTransaction(payload).subscribe((transaction: TransactionExpand) => {
+      if (transaction) {
+        const updatedData = this.sessionService.syncSessionTransaction(transaction, 'expenses');
+        this.dialogRef.close(updatedData)
+      } else {
+        this.dialogRef.close(null)
+      }
+    });
   }
 
   cancel() {
-    this.dialogRef.close({ refresh: false, data: null });
+    this.dialogRef.close(null);
   }
 
   private _filter(value: string): string[] {

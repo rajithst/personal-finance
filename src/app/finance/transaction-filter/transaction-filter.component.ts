@@ -17,7 +17,13 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-export interface TransactionFilterDialogData {}
+export interface TransactionFilterDialogData {
+  categories: number[],
+  subcategories: number[],
+  paymentMethods: number[],
+  years: number[],
+  months: number[],
+}
 
 @Component({
   selector: 'app-transaction-filter',
@@ -67,29 +73,23 @@ export class TransactionFilterComponent implements OnInit {
     const yearGroup: any = {};
     const monthsGroup: any = {};
     TRANSACTION_CATEGORIES.forEach((category: DropDownType) => {
-      categoryGroup[`category_${category.value}`] = new FormControl(
-        category.checked,
-      );
+      categoryGroup[`category_${category.value}`] = new FormControl(this.data.categories.includes(category.value));
       const subCategories = TRANSACTION_SUB_CATEGORIES[category.value];
       subCategories.forEach((subcategory: DropDownType) => {
         subCategoryGroup[
           `subcategory_${subcategory.value}`
-        ] = new FormControl(subcategory.checked);
+        ] = new FormControl(this.data.subcategories.includes(category.value));
       });
     });
 
     PAYMENT_METHODS.forEach((category: DropDownType) => {
-      paymentMethodGroup[`paymentmethod_${category.value}`] = new FormControl(
-        category.checked,
-      );
+      paymentMethodGroup[`paymentmethod_${category.value}`] = new FormControl(this.data.paymentMethods.includes(category.value));
     });
     YEARS.forEach((category: DropDownType) => {
-      yearGroup[`year_${category.value}`] = new FormControl(category.checked);
+      yearGroup[`year_${category.value}`] = new FormControl(this.data.years.includes(category.value));
     });
     MONTHS.forEach((category: DropDownType) => {
-      monthsGroup[`month_${category.value}`] = new FormControl(
-        category.checked,
-      );
+      monthsGroup[`month_${category.value}`] = new FormControl(this.data.months.includes(category.value));
     });
     this.mainCategoryForm = this.formBuilder.group(categoryGroup);
     this.subCategoryForm = this.formBuilder.group(subCategoryGroup);

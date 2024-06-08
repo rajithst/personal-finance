@@ -1,4 +1,10 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   faCirclePlus,
   faFilter,
@@ -11,8 +17,9 @@ import { TransactionUpdateDialog } from '../../transaction-update/transaction-up
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '../../service/session.service';
-import {MonthlyTransaction} from "../../model/transactions";
-import {LoadingService} from "../../../shared/loading/loading.service";
+import { MonthlyTransaction } from '../../model/transactions';
+import { LoadingService } from '../../../shared/loading/loading.service';
+
 
 @Component({
   selector: 'app-expenses',
@@ -49,14 +56,11 @@ export class ExpensesComponent implements OnInit {
     protected router: Router,
     protected route: ActivatedRoute,
     private sessionService: SessionService,
-  ) {
-  }
-
+  ) {}
 
   ngOnInit(): void {
-    console.log('inside the  expense  component')
     this.initSearchParams(null);
-    this.filterData()
+    this.filterData();
   }
 
   initSearchParams(data: any) {
@@ -91,18 +95,23 @@ export class ExpensesComponent implements OnInit {
       width: '700px',
       height: '500px',
       position: { top: `${rect.bottom + 10}px`, right: `20px` },
-      data: { formData: null, task: 'add' },
+      data: {
+        categories: this.transactionCategory,
+        subcategories: this.transactionSubCategory,
+        years: this.dataYear,
+        months: this.dataMonth,
+        paymentMethods: this.paymentMethod,
+      },
       hasBackdrop: false,
     });
 
     dialog.afterClosed().subscribe((result) => {
-      this.initSearchParams(result.data)
+      this.initSearchParams(result.data);
       this.filterData();
     });
   }
 
   protected filterData() {
-
     let years: number[] = this.dataYear || [];
     let months: number[] = this.dataMonth || [];
     const paymentMethods: number[] = this.paymentMethod || [];
@@ -133,7 +142,7 @@ export class ExpensesComponent implements OnInit {
         .filter((y) =>
           searchQuery.length > 0
             ? y.destination.includes(searchQuery) ||
-            y.alias?.includes(searchQuery)
+              y.alias?.includes(searchQuery)
             : true,
         );
       x.total = x.transactions_cp.reduce(
@@ -142,8 +151,8 @@ export class ExpensesComponent implements OnInit {
       );
     });
     this.targetTables = currData.length;
-    this.transactionData = currData;
-
+    this.transactionData = JSON.parse(JSON.stringify(currData));
+    this.loadingService.loadingOff();
   }
 
   addTransaction() {
@@ -159,4 +168,6 @@ export class ExpensesComponent implements OnInit {
   tableRendered() {
     //this.loadingService.loadingOff();
   }
+
+
 }

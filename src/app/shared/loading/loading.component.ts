@@ -34,18 +34,13 @@ export class LoadingComponent implements OnInit {
           event => {
             if (event instanceof NavigationStart ||
                 event instanceof RouteConfigLoadStart) {
-              console.log('navigating start')
                 this.loadingService.loadingOn();
             } else if (
                   event instanceof NavigationEnd ||
                   event instanceof NavigationError ||
                   event instanceof NavigationCancel ||
                   event instanceof RouteConfigLoadEnd) {
-              console.log('navigating end')
-              setTimeout(() => {
-                //this.loadingService.loadingOff();
-              }, 2000);
-
+              this.loadingService.loadingOff();
             }
           }
         )

@@ -6,7 +6,7 @@ import {
 } from '../model/income.data';
 import {
   MonthlyTransaction,
-  Transaction, TransactionExpand, TransactionRequest,
+  Transaction, TransactionExpand,
   TransactionsResponse,
 } from '../model/transactions';
 
@@ -17,15 +17,6 @@ export class SessionData {
   payments: MonthlyTransaction[] = [];
   destinations: string[] = [];
 }
-
-export enum SessionEventMessage {
-  INIT_SESSION_LOAD_STARTED,
-  INIT_SESSION_LOAD_SUCCESS,
-  INIT_SESSION_LOAD_FAILED,
-  SESSION_TRANSACTION_UPDATE_SUCCESS,
-  SESSION_TRANSACTION_UPDATE_FAILED,
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -54,22 +45,15 @@ export class SessionService {
     });
   }
 
-  updateTransaction(payload: TransactionRequest) {
-    this.apiService
-      .updateTransaction(payload)
-      .subscribe((transaction: TransactionExpand) => {
-        if (transaction) {
-          this.syncSessionTransaction(transaction, this.session.expenses);
-          let source = this.getTargetTransactionCategory(transaction);
-          this.syncSessionTransaction(transaction, source);
 
-        } else {
-        }
-      });
-  }
-
-  private syncSessionTransaction(newData: TransactionExpand, source: MonthlyTransaction[]) {
-    const idx = source.findIndex(
+  syncSessionTransaction(newData: TransactionExpand, target: string) {
+    let source: MonthlyTransaction[] = this.session.expenses;
+    if (target === 'payments') {
+      source = this.session.payments;
+    } else if (target === 'savings') {
+      source = this.session.saving
+    }
+    let idx = source.findIndex(
       (x: MonthlyTransaction) => x.year == newData.year && x.month == newData.month,
     );
     if (idx !== -1) {
@@ -86,7 +70,10 @@ export class SessionService {
       } else {
         source[idx].transactions.push(newData);
       }
+      source[idx].transactions_cp = JSON.parse(JSON.stringify(source[idx].transactions));
+      source[idx].total = source[idx].transactions_cp.reduce((acc, tr) => acc + tr.amount!, 0);
     } else {
+      idx = 0;
       const transactionObject: MonthlyTransaction = {
         year: newData.year!,
         month: newData.month!,
@@ -96,17 +83,10 @@ export class SessionService {
         transactions_cp: [],
       };
       transactionObject.transactions.push(newData);
+      transactionObject.transactions_cp.push(newData);
       source.push(transactionObject);
     }
-  }
-  private getTargetTransactionCategory(payload: Transaction): MonthlyTransaction[] {
-     if (payload.is_saving) {
-      return this.session.saving;
-    } else if (payload.is_payment) {
-      return this.session.payments;
-    } else {
-      return this.session.incomes;
-    }
+    return source[idx];
   }
 
 

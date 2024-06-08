@@ -1,12 +1,4 @@
-import {
-  AfterViewChecked,
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output, ViewChild,
-} from '@angular/core';
+import { Component, inject, Input, OnChanges, ViewChild } from '@angular/core';
 import {
   MonthlyTransaction,
   Transaction,
@@ -27,27 +19,29 @@ import {
   faEllipsisV,
 } from '@fortawesome/free-solid-svg-icons';
 import { TransactionDetailDialog } from '../transaction-detail/transaction-detail.component';
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { SessionService } from '../service/session.service';
 
 @Component({
   selector: 'app-transaction-table',
   templateUrl: './transaction-table.component.html',
   styleUrl: './transaction-table.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionTableComponent implements OnChanges, AfterViewChecked {
+export class TransactionTableComponent implements OnChanges {
   @Input() transactions: MonthlyTransaction;
-  @Output() tableRendered: EventEmitter<void> = new EventEmitter<void>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatTable) table: MatTable<TransactionExpand>;
 
+  sessionService = inject(SessionService);
   transactionData: MonthlyTransaction;
   dataSource: MatTableDataSource<TransactionExpand>;
   selectedTransactions: Record<string, number[]> = {};
   selectedMonths: number[] = [];
   checkAllItems: boolean = false;
+  totalCost: number = 0;
 
   protected readonly faEllipsis = faEllipsis;
   protected readonly faTrash = faTrash;
@@ -71,31 +65,29 @@ export class TransactionTableComponent implements OnChanges, AfterViewChecked {
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-  ) {
+  ) {}
 
-  }
   ngOnChanges() {
     this.transactionData = this.transactions;
+    console.log(this.transactionData);
+    this.totalCost = this.transactionData.total;
     this.dataSource = new MatTableDataSource<TransactionExpand>([]);
     this.dataSource.sort = this.sort;
-
-  }
-
-  ngAfterViewChecked(): void {
-    this.tableRendered.emit();
   }
 
   editRecord(item: TransactionExpand, task: string) {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
       width: '850px',
       position: {
-        top: '50px',
+        top: '70px',
       },
       data: { formData: item, task: task },
     });
 
-    dialog.afterClosed().subscribe((result) => {
-      if (result.refresh) {
+    dialog.afterClosed().subscribe((result: MonthlyTransaction | null) => {
+      if (result) {
+        this.totalCost = result.total;
+        this.dataSource.data = result.transactions_cp;
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
@@ -130,8 +122,10 @@ export class TransactionTableComponent implements OnChanges, AfterViewChecked {
     });
   }
 
-
   panelOpened() {
-    this.dataSource = new MatTableDataSource<TransactionExpand>(this.transactionData.transactions_cp);
+    this.dataSource = new MatTableDataSource<TransactionExpand>(
+      this.transactionData.transactions_cp,
+    );
+    this.table.renderRows();
   }
 }
