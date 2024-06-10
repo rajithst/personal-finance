@@ -9,7 +9,6 @@ import {
 } from '@angular/material/dialog';
 
 import {
-  DropDownType,
   TRANSACTION_TYPES,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
@@ -21,6 +20,7 @@ import { TransactionExpand, TransactionRequest } from '../model/transactions';
 import moment from 'moment/moment';
 import {map, Observable, startWith} from "rxjs";
 import {ApiService} from "../../core/api.service";
+import {DropDownType} from "../../data/shared.data";
 
 export interface TransactionUpdateDialogData {
   formData: TransactionExpand | null;

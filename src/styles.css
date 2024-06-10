@@ -10,7 +10,7 @@ body {
   padding: 10px 24px;
   /*background: #369;*/
   /*color: #fff !important;*/
-  cursor: move;
+  /*cursor: move;*/
 }
 
 mat-select {

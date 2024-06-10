@@ -29,7 +29,7 @@ export class ChartboxComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     console.log('view checked --> ', this.chartData)
-    google.charts.load('current', { 'packages': ['corechart', 'bar'] });
+    google.charts.load('current', { 'packages': ['corechart', 'bar', 'line'] });
     google.charts.setOnLoadCallback(this.drawChart);
   }
 
@@ -44,10 +44,17 @@ export class ChartboxComponent implements AfterViewInit {
     if (this.chartArea) {
       if (this.chartType == 'bar') {
         this.chart = new google.charts.Bar(this.chartArea.nativeElement)
+        options.bar = { groupWidth: '50%' }
+        options.vAxis = { format: 'decimal' }
         this.chart.draw(data, google.charts.Bar.convertOptions(options));
       } else if (this.chartType == 'pie') {
+        options.chartArea = { left: 10, top: 50, width: '100%', height: '70%' }
+        options.tooltip = { ignoreBounds: true }
         this.chart = new google.visualization.PieChart(this.chartArea.nativeElement);
         this.chart.draw(data, options);
+      } else if (this.chartType == 'line') {
+        this.chart = new google.charts.Line(this.chartArea.nativeElement);
+        this.chart.draw(data, google.charts.Line.convertOptions(options));
       }
     } else {
       this.chart = '';

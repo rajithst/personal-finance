@@ -6,7 +6,6 @@ import {
   faShop,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  DropDownType,
   MONTHS, NA_CATEGORY_ID,
   NA_SUB_CATEGORY_ID,
   PAYMENT_METHODS,
@@ -16,6 +15,7 @@ import {
 } from '../../data/client.data';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {DropDownType} from "../../data/shared.data";
 
 export interface TransactionFilterDialogData {
   categories: number[],

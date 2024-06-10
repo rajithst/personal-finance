@@ -3,9 +3,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { StockPurchase } from '../model/transaction';
 import { FormControl, FormGroup } from '@angular/forms';
-import {DropDownType, DropDownTypeString} from '../../data/client.data';
 import moment from 'moment/moment';
-import { Transaction } from '../../finance/model/transactions';
 import {SessionService} from "../service/session.service";
 
 export interface TradeDialogData {
@@ -61,6 +59,6 @@ export class TradeDialogComponent {
     const payload: StockPurchase = this.fillTransactionForm(
       this.transactionForm.value as StockPurchase,
     );
-    this.sessionService.updateStockPurchaseHistory(payload);
+
   }
 }

@@ -23,7 +23,7 @@ export class TradeHistoryTableComponent implements OnChanges {
   protected readonly faCaretDown = faCaretDown;
   protected readonly faEllipsis = faEllipsis;
 
-  displayedColumns: string[] = ['Stock', 'Date', 'Shares', 'Price', 'CurrentShareValue', 'TotalProfit', 'Actions'];
+  displayedColumns: string[] = ['Stock', 'Date', 'Shares', 'Industry', 'Sector', 'Price', 'CurrentShareValue', 'TotalProfit', 'Actions'];
 
   dataSource = new MatTableDataSource();
 

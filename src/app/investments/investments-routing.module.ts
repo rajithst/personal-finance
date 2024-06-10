@@ -14,7 +14,7 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     resolve: {
-      all: investmentDataResolver
+      investments: investmentDataResolver
     },
     children: [
       {

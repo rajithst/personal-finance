@@ -1,0 +1,11 @@
+.filter-toolbar {
+  display: flex;
+  justify-content: space-between;
+  height: 45px;
+  margin: 10px 0 3px;
+  align-items: center;
+}
+
+.filter-bar-title {
+  margin-bottom: 0;
+}

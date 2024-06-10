@@ -68,7 +68,8 @@
 .filter-toolbar {
   display: flex;
   justify-content: space-between;
-  margin: 5px 0;
+  height: 45px;
+  margin: 10px 0 3px;
   align-items: center;
 }
 
@@ -103,3 +104,10 @@
 }
 
 
+.filter-bar-title {
+  margin-bottom: 0;
+}
+
+.filter-enabled {
+  border: 2px solid #2541f4;
+}

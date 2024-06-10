@@ -1,10 +1,8 @@
 <div class="filter-toolbar">
   <div class="filter-toolbar-left">
-    <h2>Transaction Activity</h2>
+    <h2 class="filter-bar-title">Transaction Activity</h2>
   </div>
   <div class="filter-toolbar-right">
-    <div class="search-bar">
-    </div>
     <div class="merge-panel">
       <div class="merge-item">
         <button mat-raised-button color="primary" matBadgePosition="before" matBadge="7" matBadgeColor="accent">
@@ -26,7 +24,7 @@
         ></fa-icon>
       </div>
     </div>
-    <div #filterButton class="filter-item" matRipple (click)="openFilters()" matBadgePosition="before" matBadge="1+" [matBadgeHidden]="hiddenFilterBadge" matBadgeColor="accent">
+    <div #filterButton class="filter-item" matRipple (click)="openFilters()" [ngClass]="hiddenFilterBadge ? '': 'filter-enabled'">
       <fa-icon
         [icon]="faFilter"
         size="1x"
@@ -44,7 +42,7 @@
       <fa-icon
         [icon]="faCirclePlus"
         size="1x"
-        [style]="{ color: '#3699ff' }"
+        [style]="{ color: '#4a4949' }"
       ></fa-icon>
     </div>
   </div>

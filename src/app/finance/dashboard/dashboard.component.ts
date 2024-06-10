@@ -3,6 +3,7 @@ import {SessionService} from "../service/session.service";
 import {MONTHS, PAYMENT_METHODS, TRANSACTION_CATEGORIES} from "../../data/client.data";
 import {ActivatedRoute,} from "@angular/router";
 import {LoadingService} from "../../shared/loading/loading.service";
+import {faCaretDown, faCaretUp, faJpy, faLineChart, faMoneyBill} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-transaction-dashboard',
@@ -18,6 +19,7 @@ export class TransactionDashboardComponent implements OnInit {
   currentYear = this.today.getFullYear();
   childComponentsRendered = 0;
   totalChildComponents = 7;
+
   private loadingService = inject(LoadingService);
   private sessionService = inject(SessionService);
   private activatedRoute = inject(ActivatedRoute);
@@ -26,6 +28,7 @@ export class TransactionDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({finance}) => {
       this.sessionService.setSessionData(finance)
+      this.sessionData = this.sessionService.getData()
     });
     this.prepareData();
   }
@@ -65,7 +68,6 @@ export class TransactionDashboardComponent implements OnInit {
   categoryWiseSumValueChartType: string = 'bar';
 
   private prepareData() {
-    console.log('calling prepare data')
     this.prepareMonthlyExpensesCard()
     this.prepareMonthlyIncomeCard()
     this.prepareMonthlySavingCard()
@@ -186,4 +188,11 @@ export class TransactionDashboardComponent implements OnInit {
       legend: {position: 'right', textStyle: { fontSize: 10, alignment: 'left'}}
     }
   }
+
+  protected readonly faCaretUp = faCaretUp;
+  protected readonly faLineChart = faLineChart;
+  protected readonly faJpy = faJpy;
+  protected readonly faMoneyBill = faMoneyBill;
+  protected readonly faCaretDown = faCaretDown;
+  protected readonly Math = Math;
 }
