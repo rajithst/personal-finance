@@ -104,7 +104,9 @@ export class TransactionTableComponent implements OnChanges {
       data: { formData: item, task: task },
     });
     dialog.afterClosed().subscribe((result) => {
-      if (result.refresh) {
+      if (result) {
+        this.totalCost = result.total;
+        this.dataSource.data = result.transactions_cp;
         this.snackBar.open('Deleted!', 'Success', {
           duration: 3000,
         });

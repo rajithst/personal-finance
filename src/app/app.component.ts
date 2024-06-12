@@ -14,8 +14,8 @@ export class AppComponent implements OnInit {
   sideNavDefaultOpened = true;
   showFullMenu = true;
   isExpanded = true;
-  closedWidth = 70;
-  openedWidth = 250;
+  closedWidth = 60;
+  openedWidth = 200;
   isMobile!: boolean;
   sideNavMode: 'side' | 'over' = 'side';
   hasBackdrop: boolean = false;

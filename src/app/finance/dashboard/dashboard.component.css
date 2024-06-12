@@ -1,9 +1,46 @@
 .dashboard-container {
   margin: 10px 20px;
+  overflow: auto;
 }
 
 .chart-row {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
   margin-bottom: 10px;
+  justify-items: stretch;
+}
+.finance-summary {
+  display: flex;
+  margin: 5px 0;
+}
+
+.summary-item {
+  width: 25%;
+  margin-right: 5px;
+}
+
+.summary-item-title-icon > span {
+  margin-left: 10px;
+}
+.summary-item-title {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  text-align: center;
+}
+.summary-item-title-value {
+  font-size: 20px;
+  text-align: center;
+}
+
+.summary-item-title-value > .percentage-change {
+  font-size: 14px;
+}
+.profit {
+  color: green;
+}
+
+.loss {
+  color: #f64e60;
 }

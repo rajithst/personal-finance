@@ -22,6 +22,12 @@ import {
   SideNavComponent,
 } from './side-nav/side-nav.component';
 import { TopNavComponent } from './top-nav/top-nav.component';
+import { DashboardExtComponent } from './dashboard-ext/dashboard-ext.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -31,6 +37,7 @@ import { TopNavComponent } from './top-nav/top-nav.component';
     SideNavComponent,
     SideNavClosedComponent,
     TopNavComponent,
+    DashboardExtComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -41,6 +48,11 @@ import { TopNavComponent } from './top-nav/top-nav.component';
     FontAwesomeModule,
     MaterialModule,
     SharedModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
   ],
   providers: [
     provideClientHydration(),

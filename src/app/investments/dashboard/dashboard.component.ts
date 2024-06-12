@@ -43,6 +43,10 @@ export class DashboardComponent implements OnInit {
   sectorWiseDomesticSumOptions: any;
   sectorWiseDomesticSumChartType: string = 'pie';
 
+  securityWiseSum: [[string, any]] = [['Security', 'Total']];
+  securityWiseSumOptions: any;
+  securityWiseSumChartType: string = 'pie';
+
   monthlyAccInvestedSum: [[string, any]] = [['Month', 'Total']];
   monthlyAccInvestedSumOptions: any;
   monthlyAccInvestedSumChartType: string = 'line';
@@ -83,6 +87,7 @@ export class DashboardComponent implements OnInit {
     this.monthlyAccumulatedInvestedSum();
     this.monthlyDividendPayment();
     this.categoryBySector();
+    this.categoryBySecurity()
     this.categoryBySectorDomestic();
   }
 
@@ -104,17 +109,16 @@ export class DashboardComponent implements OnInit {
     this.monthlyDividendOptions = {
       title: `Monthly Dividend History`,
       width: 400,
-      height: 400,
+      height: 300,
       vAxis: { format: 'decimal' },
       hAxis: {
         slantedText: true,
         slantedTextAngle: 90,
       },
-      chartArea: { left: 10, top: 50, width: '100%', height: '70%' },
-      bar: { groupWidth: '50%' },
+      chartArea: { left: 0, right:0, top: 100, width: '100%', height: '70%' },
 
       fontSize: 12,
-      legend: 'none',
+      legend: {position: 'none'},
     };
   }
 
@@ -153,17 +157,17 @@ export class DashboardComponent implements OnInit {
     });
     this.monthlyAccInvestedSumOptions = {
       title: `Investment History`,
-      width: 600,
-      height: 400,
+      width: 400,
+      height: 300,
       fontSize: 12,
-      legend: 'none',
+      legend: {position: 'none'},
     };
     this.monthlyInvestedSumOptions = {
       title: `Monthly Investment History`,
       width: 400,
-      height: 400,
+      height: 300,
       fontSize: 12,
-      legend: 'none',
+      legend: {position: 'none'},
     };
   }
 
@@ -180,18 +184,19 @@ export class DashboardComponent implements OnInit {
       });
     }
     this.sectorWiseSumOptions = {
-      title: `Sector (US Stocks)`,
-      width: 400,
-      height: 400,
+      title: `US Protofolio (Sector)`,
+      width: 500,
+      height: 350,
       pieHole: 0.2,
       pieSliceText: 'label',
+      chartArea: { left: 1, top: 40, width: '80%', height: '70%' },
       pieSliceTextStyle: {
         color: 'black',
         textAlign: 'left',
         fontsize: '10px',
       },
       fontSize: 12,
-      legend: 'none',
+      legend: {position: 'none'},
     };
   }
 
@@ -206,10 +211,11 @@ export class DashboardComponent implements OnInit {
       });
     }
     this.sectorWiseDomesticSumOptions = {
-      title: `Sector (Domestic Stocks)`,
-      width: 400,
-      height: 400,
+      title: `Domesitc Protofolio (Sector)`,
+      width: 500,
+      height: 350,
       pieHole: 0.2,
+      chartArea: { left: 1, top: 40, width: '100%', height: '70%' },
       pieSliceText: 'label',
       pieSliceTextStyle: {
         color: 'black',
@@ -217,7 +223,29 @@ export class DashboardComponent implements OnInit {
         fontsize: '10px',
       },
       fontSize: 12,
-      legend: 'none',
+      legend: {position: 'none'},
+    };
+  }
+
+  categoryBySecurity() {
+    const holdings = this.sessionData.holdings.filter(y => y.stock_currency === "$");
+    holdings.forEach(hld => {
+      this.securityWiseSum.push([hld.company, hld.total_investment])
+    });
+    this.securityWiseSumOptions = {
+      title: `US Protofolio (Security)`,
+      width: 500,
+      height: 350,
+      pieHole: 0.2,
+      pieSliceText: 'label',
+      chartArea: { left: 10, top: 40, width: '100%', height: '70%' },
+      pieSliceTextStyle: {
+        color: 'black',
+        textAlign: 'left',
+        fontsize: '10px',
+      },
+      fontSize: 10,
+      legend: { position: 'right', alignment: 'middle', maxLines: 10}
     };
   }
   childRendered() {}

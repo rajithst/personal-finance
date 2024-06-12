@@ -6,8 +6,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  faCirclePlus,
-  faFilter,
+  faCirclePlus, faExpand,
+  faFilter, faMinimize,
   faPencil,
   faTrash,
   faUpload,
@@ -19,7 +19,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '../../service/session.service';
 import { MonthlyTransaction } from '../../model/transactions';
 import { LoadingService } from '../../../shared/loading/loading.service';
-
+import { MatAccordion } from '@angular/material/expansion';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-expenses',
@@ -28,6 +29,7 @@ import { LoadingService } from '../../../shared/loading/loading.service';
 })
 export class ExpensesComponent implements OnInit {
   @ViewChild('filterButton') element: ElementRef;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
 
   sessionData = this.sessionService.getData();
   protected readonly faCirclePlus = faCirclePlus;
@@ -48,13 +50,14 @@ export class ExpensesComponent implements OnInit {
   transactionData: MonthlyTransaction[] = [];
   hiddenFilterBadge = true;
   targetTables = 0;
-  renderedTables = 0;
+  allExpanded = false;
   loadingService = inject(LoadingService);
 
   constructor(
     private dialog: MatDialog,
     protected router: Router,
     protected route: ActivatedRoute,
+    private snackBar: MatSnackBar,
     private sessionService: SessionService,
   ) {}
 
@@ -63,7 +66,7 @@ export class ExpensesComponent implements OnInit {
     this.filterData();
   }
 
-  initSearchParams(data: any) {
+  initSearchParams(data?: any) {
     if (data) {
       this.dataYear = data.years;
       this.dataMonth = data.months;
@@ -156,12 +159,21 @@ export class ExpensesComponent implements OnInit {
   }
 
   addTransaction() {
-    this.dialog.open(TransactionUpdateDialog, {
+    const dialog = this.dialog.open(TransactionUpdateDialog, {
       width: '850px',
       position: {
         top: '50px',
       },
       data: { formData: null, task: 'add' },
+    });
+    dialog.afterClosed().subscribe((result) => {
+      if (result) {
+        this.initSearchParams()
+        this.filterData()
+        this.snackBar.open('Deleted!', 'Success', {
+          duration: 3000,
+        });
+      }
     });
   }
 
@@ -169,5 +181,15 @@ export class ExpensesComponent implements OnInit {
     //this.loadingService.loadingOff();
   }
 
+  expandPanels() {
+    if (this.allExpanded) {
+      this.accordion.closeAll()
+    } else {
+      this.accordion.openAll()
+    }
+    this.allExpanded = !this.allExpanded;
+  }
 
+  protected readonly faExpand = faExpand;
+  protected readonly faMinimize = faMinimize;
 }

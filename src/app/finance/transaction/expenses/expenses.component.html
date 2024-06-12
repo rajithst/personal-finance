@@ -3,42 +3,52 @@
     <h2 class="filter-bar-title">Transaction Activity</h2>
   </div>
   <div class="filter-toolbar-right">
-    <div class="merge-panel">
-      <div class="merge-item">
-        <button mat-raised-button color="primary" matBadgePosition="before" matBadge="7" matBadgeColor="accent">
-          Merge
-        </button>
-      </div>
-      <div class="merge-item filter-item" matRipple>
-        <fa-icon
-          [icon]="faPencil"
-          size="1x"
-          [style]="{ color: '#4a4949' }"
-        ></fa-icon>
-      </div>
-      <div class="merge-item filter-item" matRipple>
-        <fa-icon
-          [icon]="faTrash"
-          size="1x"
-          [style]="{ color: '#af5252' }"
-        ></fa-icon>
-      </div>
+<!--    <div class="merge-panel">-->
+<!--      <div class="merge-item">-->
+<!--        <button mat-raised-button color="primary" matBadgePosition="before" matBadge="7" matBadgeColor="accent">-->
+<!--          Merge-->
+<!--        </button>-->
+<!--      </div>-->
+<!--      <div class="merge-item filter-item" matRipple>-->
+<!--        <fa-icon-->
+<!--          [icon]="faPencil"-->
+<!--          size="1x"-->
+<!--          [style]="{ color: '#4a4949' }"-->
+<!--        ></fa-icon>-->
+<!--      </div>-->
+<!--      <div class="merge-item filter-item" matRipple>-->
+<!--        <fa-icon-->
+<!--          [icon]="faTrash"-->
+<!--          size="1x"-->
+<!--          [style]="{ color: '#af5252' }"-->
+<!--        ></fa-icon>-->
+<!--      </div>-->
+<!--    </div>-->
+    <mat-form-field appearance="outline">
+      <input type="text" matInput placeholder="Search">
+    </mat-form-field>
+    <div  class="filter-item" matRipple (click)="expandPanels()" [matTooltip]="allExpanded ? 'Minimize All' : 'Expand All'" matTooltipPosition="below">
+      <fa-icon
+        [icon]="allExpanded ? faMinimize : faExpand"
+        size="1x"
+        [style]="{ color: '#4a4949' }"
+      ></fa-icon>
     </div>
-    <div #filterButton class="filter-item" matRipple (click)="openFilters()" [ngClass]="hiddenFilterBadge ? '': 'filter-enabled'">
+    <div #filterButton class="filter-item" matRipple (click)="openFilters()" [ngClass]="hiddenFilterBadge ? '': 'filter-enabled'" matTooltip="Filters" matTooltipPosition="below">
       <fa-icon
         [icon]="faFilter"
         size="1x"
         [style]="{ color: '#4a4949' }"
       ></fa-icon>
     </div>
-    <div class="filter-item" matRipple>
+    <div class="filter-item" matRipple matTooltip="Upload Transactions" matTooltipPosition="below">
       <fa-icon
         [icon]="faUpload"
         size="1x"
         [style]="{ color: '#4a4949' }"
       ></fa-icon>
     </div>
-    <div class="filter-item" (click)="addTransaction()" matRipple>
+    <div class="filter-item" (click)="addTransaction()" matRipple matTooltip="Add Transactions" matTooltipPosition="below">
       <fa-icon
         [icon]="faCirclePlus"
         size="1x"

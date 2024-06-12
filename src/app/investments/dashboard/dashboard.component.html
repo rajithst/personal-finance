@@ -53,7 +53,6 @@
           </div>
           <div class="summary-item-title-value">
             <span>156</span>
-
           </div>
         </div>
       </mat-card-content>
@@ -88,7 +87,7 @@
     </div>
   </div>
   <div class="chart-row">
-    <div class="monthly-total-expenses">
+    <div class="chart-item">
       <app-chartbox
         [chartData]="sectorWiseSum"
         [chartOptions]="sectorWiseSumOptions"
@@ -96,7 +95,15 @@
         (rendered)="childRendered()"
       ></app-chartbox>
     </div>
-    <div class="sector-wise-breakdown">
+    <div class="chart-item">
+      <app-chartbox
+        [chartData]="securityWiseSum"
+        [chartOptions]="securityWiseSumOptions"
+        [chartType]="securityWiseSumChartType"
+        (rendered)="childRendered()"
+      ></app-chartbox>
+    </div>
+    <div class="chart-item">
       <mat-card class="chart-card">
         <mat-card-header class="chart-card-header">
           <mat-card-title class="chart-card-title">title</mat-card-title>
@@ -119,14 +126,19 @@
       </mat-card>
     </div>
   </div>
-</div>
-<div class="chart-row">
-  <div class="monthly-total-expenses">
-    <app-chartbox
-      [chartData]="sectorWiseDomesticSum"
-      [chartOptions]="sectorWiseDomesticSumOptions"
-      [chartType]="sectorWiseDomesticSumChartType"
-      (rendered)="childRendered()"
-    ></app-chartbox>
+  <div class="chart-row">
+    <div class="chart-item">
+      <div class="monthly-total-expenses">
+        <app-chartbox
+          [chartData]="sectorWiseDomesticSum"
+          [chartOptions]="sectorWiseDomesticSumOptions"
+          [chartType]="sectorWiseDomesticSumChartType"
+          (rendered)="childRendered()"
+        ></app-chartbox>
+      </div>
+    </div>
+    <div class="chart-item"></div>
+    <div class="chart-item"></div>
   </div>
 </div>
+

@@ -35,7 +35,11 @@
 }
 
 .chart-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+  margin-bottom: 10px;
+  justify-items: stretch;
 }
 
 .chart-card-header {

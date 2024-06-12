@@ -27,6 +27,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatChip, MatChipSet } from '@angular/material/chips';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatRippleModule} from '@angular/material/core';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   imports: [
@@ -57,7 +58,8 @@ import {MatRippleModule} from '@angular/material/core';
     DragDropModule,
     MatChip, MatChipSet,
     MatBadgeModule,
-    MatRippleModule
+    MatRippleModule,
+    MatTooltipModule
   ],
   exports: [
     MatButtonModule,
@@ -86,7 +88,8 @@ import {MatRippleModule} from '@angular/material/core';
     DragDropModule,
     MatChip, MatChipSet,
     MatBadgeModule,
-    MatRippleModule
+    MatRippleModule,
+    MatTooltipModule
   ],
   declarations: [],
 })
