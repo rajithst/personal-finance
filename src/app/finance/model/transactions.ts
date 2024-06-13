@@ -49,3 +49,11 @@ export interface TransactionRequest extends Transaction {
   update_similar: boolean;
   //merged_ids: number[] | null
 }
+
+export interface TransactionFilterDialogData {
+  categories: number[];
+  subcategories: number[];
+  paymentMethods: number[];
+  years: number[];
+  months: number[];
+}

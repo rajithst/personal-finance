@@ -7,7 +7,6 @@ import {
   TransactionUpdateDialog,
 } from './transaction-update/transaction-update.component';
 import { TransactionTableComponent } from './transaction-table/transaction-table.component';
-import { TransactionDetailDialog } from './transaction-detail/transaction-detail.component';
 import { TransactionFilterComponent } from './transaction-filter/transaction-filter.component';
 import { PayeeRulesComponent } from './payee-rules/payee-rules.component';
 import { FinanceRoutingModule } from './finance.routing.module';
@@ -25,7 +24,6 @@ import { PaymentsComponent } from './transaction/payments/payments.component';
     TransactionUpdateDialog,
     TransactionDeleteDialog,
     TransactionTableComponent,
-    TransactionDetailDialog,
     TransactionFilterComponent,
     PayeeRulesComponent,
     ExpensesComponent,

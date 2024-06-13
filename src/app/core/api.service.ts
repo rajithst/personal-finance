@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Income, IncomeRequest } from '../finance/model/income.data';
 import {
-  Transaction, TransactionExpand,
+  Transaction,
+  TransactionExpand,
   TransactionsResponse,
 } from '../finance/model/transactions';
 import { InvestmentResponse } from '../investments/model/investment';
 import { StockPurchase } from '../investments/model/transaction';
 import { environment } from '../../environments/environment';
+
 new HttpHeaders({
   'Content-Type': 'application/json',
 });
@@ -25,6 +27,11 @@ export class ApiService {
     return this.http.get<TransactionsResponse>(
       `${this.SRC_URL}/finance/list`,
     );
+  }
+
+  async fetchTransactions(): Promise<TransactionsResponse> {
+    const response = await fetch(`${this.SRC_URL}/finance/list`);
+    return await response.json();
   }
 
   getInvestments(): Observable<InvestmentResponse> {

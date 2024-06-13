@@ -1,15 +1,110 @@
 <div class="toolbar">
   <ul class="menu">
-    <li class="menu-item" routerLink="transaction" routerLinkActive="active-menu-item"> <span>Transactions</span></li>
-    <li class="menu-item" routerLink="income" routerLinkActive="active-menu-item"> <span>Income</span></li>
-    <li class="menu-item" routerLink="payments" routerLinkActive="active-menu-item"> <span>Payments</span></li>
-    <li class="menu-item" routerLink="savings" routerLinkActive="active-menu-item"> <span>Savings</span></li>
+    <li
+      class="menu-item"
+      routerLink="transaction"
+      routerLinkActive="active-menu-item"
+    >
+      <span>Transactions</span>
+    </li>
+    <li
+      class="menu-item"
+      routerLink="income"
+      routerLinkActive="active-menu-item"
+    >
+      <span>Income</span>
+    </li>
+    <li
+      class="menu-item"
+      routerLink="payments"
+      routerLinkActive="active-menu-item"
+    >
+      <span>Payments</span>
+    </li>
+    <li
+      class="menu-item"
+      routerLink="savings"
+      routerLinkActive="active-menu-item"
+    >
+      <span>Savings</span>
+    </li>
   </ul>
 </div>
-<div class="transaction-content-container">
-  <div class="data-card">
-    <div class="data-card-content">
-      <router-outlet></router-outlet>
+<div class="data-card-content">
+  <div class="filter-toolbar">
+    <div class="filter-toolbar-left">
+      <h2 class="filter-bar-title">Transaction Activity</h2>
     </div>
+    <div class="filter-toolbar-right">
+      <!--    <div class="merge-panel">-->
+      <!--      <div class="merge-item">-->
+      <!--        <button mat-raised-button color="primary" matBadgePosition="before" matBadge="7" matBadgeColor="accent">-->
+      <!--          Merge-->
+      <!--        </button>-->
+      <!--      </div>-->
+      <!--      <div class="merge-item filter-item" matRipple>-->
+      <!--        <fa-icon-->
+      <!--          [icon]="faPencil"-->
+      <!--          size="1x"-->
+      <!--          [style]="{ color: '#4a4949' }"-->
+      <!--        ></fa-icon>-->
+      <!--      </div>-->
+      <!--      <div class="merge-item filter-item" matRipple>-->
+      <!--        <fa-icon-->
+      <!--          [icon]="faTrash"-->
+      <!--          size="1x"-->
+      <!--          [style]="{ color: '#af5252' }"-->
+      <!--        ></fa-icon>-->
+      <!--      </div>-->
+      <!--    </div>-->
+      <div
+        class="filter-item"
+        (click)="panelAction()"
+        matRipple
+        [matTooltip]="allExpanded ? 'Minimize All' : 'Expand All'"
+        matTooltipPosition="below"
+      >
+        <fa-icon
+          [icon]="allExpanded ? faMinimize : faExpand"
+          size="1x"
+          [style]="{ color: '#4a4949' }"
+        ></fa-icon>
+      </div>
+      <div #filterButton (click)="openFilters()" class="filter-item" matRipple>
+        <fa-icon
+          [icon]="faFilter"
+          size="1x"
+          [style]="{ color: '#4a4949' }"
+        ></fa-icon>
+      </div>
+      <div
+        class="filter-item"
+        matRipple
+        matTooltip="Upload Transactions"
+        matTooltipPosition="below"
+      >
+        <fa-icon
+          [icon]="faUpload"
+          size="1x"
+          [style]="{ color: '#4a4949' }"
+        ></fa-icon>
+      </div>
+      <div
+        class="filter-item"
+        (click)="addTransaction()"
+        matRipple
+        matTooltip="Add Transactions"
+        matTooltipPosition="below"
+      >
+        <fa-icon
+          [icon]="faCirclePlus"
+          size="1x"
+          [style]="{ color: '#4a4949' }"
+        ></fa-icon>
+      </div>
+    </div>
+  </div>
+  <div class="transaction-panel-container">
+    <router-outlet></router-outlet>
   </div>
 </div>

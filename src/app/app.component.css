@@ -29,6 +29,7 @@
 
 .main-container {
   height: 90vh;
+  overflow: hidden;
 }
 
 .sidenav-container {

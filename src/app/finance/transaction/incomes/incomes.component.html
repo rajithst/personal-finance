@@ -1,17 +1,7 @@
-<div class="filter-toolbar">
-  <div class="filter-toolbar-left">
-    <h2>Income Activity</h2>
-  </div>
-  <div class="filter-toolbar-right">
-
-  </div>
-</div>
-
 <ng-container>
   <mat-accordion multi="true" class="transaction-item-panel">
     @for (data of transactionData; track data;) {
       <app-transaction-table [transactions]="data"></app-transaction-table>
     }
   </mat-accordion>
-
 </ng-container>

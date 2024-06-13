@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   faCalendar,
   faCreditCard,
@@ -6,24 +6,18 @@ import {
   faShop,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  MONTHS, NA_CATEGORY_ID,
+  MONTHS,
+  NA_CATEGORY_ID,
   NA_SUB_CATEGORY_ID,
   PAYMENT_METHODS,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
   YEARS,
 } from '../../data/client.data';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import {DropDownType} from "../../data/shared.data";
-
-export interface TransactionFilterDialogData {
-  categories: number[],
-  subcategories: number[],
-  paymentMethods: number[],
-  years: number[],
-  months: number[],
-}
+import { DropDownType } from '../../data/shared.data';
+import { SessionService } from '../service/session.service';
 
 @Component({
   selector: 'app-transaction-filter',
@@ -36,31 +30,29 @@ export class TransactionFilterComponent implements OnInit {
   protected readonly faCreditCard = faCreditCard;
   protected readonly faCalendar = faCalendar;
 
-  protected URL: string = '';
   clickedType: string = 'categories';
   categoryTitle = 'Categories';
   subCategoryTitle =
     TRANSACTION_SUB_CATEGORIES[NA_SUB_CATEGORY_ID][0].viewValue;
   selectedCategory: number = NA_SUB_CATEGORY_ID;
-  mainCategoryForm: FormGroup;
-  subCategoryForm: FormGroup;
-  paymentMethodForm: FormGroup;
-  yearForm: FormGroup;
-  monthsForm: FormGroup;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<TransactionFilterComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: TransactionFilterDialogData,
-  ) {}
-
-
   transactionCategories: DropDownType[] = TRANSACTION_CATEGORIES;
   transactionSubCategories: DropDownType[] =
     TRANSACTION_SUB_CATEGORIES[NA_SUB_CATEGORY_ID];
   years = YEARS;
   months = MONTHS;
   paymentMethods = PAYMENT_METHODS;
+  mainCategoryForm: FormGroup;
+  subCategoryForm: FormGroup;
+  paymentMethodForm: FormGroup;
+  yearForm: FormGroup;
+  monthsForm: FormGroup;
+  sessionData = this.sessionService.getData();
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private sessionService: SessionService,
+    public dialogRef: MatDialogRef<TransactionFilterComponent>,
+  ) {}
 
   ngOnInit() {
     this.createForm();
@@ -72,24 +64,25 @@ export class TransactionFilterComponent implements OnInit {
     const paymentMethodGroup: any = {};
     const yearGroup: any = {};
     const monthsGroup: any = {};
+    const filters = this.sessionData.filters;
     TRANSACTION_CATEGORIES.forEach((category: DropDownType) => {
-      categoryGroup[`category_${category.value}`] = new FormControl(this.data.categories.includes(category.value));
+      categoryGroup[`category_${category.value}`] = new FormControl(filters.categories.includes(category.value));
       const subCategories = TRANSACTION_SUB_CATEGORIES[category.value];
       subCategories.forEach((subcategory: DropDownType) => {
         subCategoryGroup[
           `subcategory_${subcategory.value}`
-        ] = new FormControl(this.data.subcategories.includes(category.value));
+        ] = new FormControl(filters.subcategories.includes(category.value));
       });
     });
 
     PAYMENT_METHODS.forEach((category: DropDownType) => {
-      paymentMethodGroup[`paymentmethod_${category.value}`] = new FormControl(this.data.paymentMethods.includes(category.value));
+      paymentMethodGroup[`paymentmethod_${category.value}`] = new FormControl(filters.paymentMethods.includes(category.value));
     });
     YEARS.forEach((category: DropDownType) => {
-      yearGroup[`year_${category.value}`] = new FormControl(this.data.years.includes(category.value));
+      yearGroup[`year_${category.value}`] = new FormControl(filters.years.includes(category.value));
     });
     MONTHS.forEach((category: DropDownType) => {
-      monthsGroup[`month_${category.value}`] = new FormControl(this.data.months.includes(category.value));
+      monthsGroup[`month_${category.value}`] = new FormControl(filters.months.includes(category.value));
     });
     this.mainCategoryForm = this.formBuilder.group(categoryGroup);
     this.subCategoryForm = this.formBuilder.group(subCategoryGroup);
@@ -116,7 +109,7 @@ export class TransactionFilterComponent implements OnInit {
       this.selectedCategory = NA_CATEGORY_ID
       this.transactionSubCategories = TRANSACTION_SUB_CATEGORIES[NA_SUB_CATEGORY_ID]
     } else if (filterType == 'payment_method') {
-      this.categoryTitle = 'Payement Method';
+      this.categoryTitle = 'Payment Method';
       this.subCategoryTitle = '';
     } else if (filterType == 'payee') {
       this.categoryTitle = 'Payee';
@@ -140,15 +133,23 @@ export class TransactionFilterComponent implements OnInit {
   }
 
   clear() {
-    this.dialogRef.close({data: null})
+    this.sessionData.filters = {
+      categories: [],
+      subcategories: [],
+      paymentMethods: [],
+      years: [2024],
+      months: [],
+    };
+    this.dialogRef.close({refresh: true})
   }
   submit() {
-    const filterParams: any = {'categories': [], 'subcategories': [], 'payment_methods': [], 'years': [], 'months': []};
+    const filterParams: any = {'categories': [], 'subcategories': [], 'paymentMethods': [], 'years': [], 'months': []};
     filterParams['categories'] = this.extractParams(this.mainCategoryForm.value);
     filterParams['subcategories'] = this.extractParams(this.subCategoryForm.value);
-    filterParams['payment_methods'] = this.extractParams(this.paymentMethodForm.value);
+    filterParams['paymentMethods'] = this.extractParams(this.paymentMethodForm.value);
     filterParams['years'] = this.extractParams(this.yearForm.value);
     filterParams['months'] = this.extractParams(this.monthsForm.value);
-    this.dialogRef.close({ data: filterParams });
+    this.sessionData.filters = filterParams;
+    this.dialogRef.close({refresh: true});
   }
 }

@@ -41,13 +41,122 @@
 }
 
 .data-card {
-  height: 85vh;
   overflow: hidden;
   width: 100%;
 }
 
 .data-card-content {
-  max-height: 100%;
   margin: 0 1%;
+  overflow: auto;
+}
+
+.filter-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.filter-button {
+  background-color: #555;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.filter-button:hover {
+  background-color: #777;
+}
+
+.finance-action-item {
+  margin-left: 10px;
+  font-size: 14px;
+}
+.transaction-content-container {
+  margin: 10px;
+  height: 90vh;
+}
+.transaction-add-button {
+  position: absolute;
+  bottom: 2%;
+  left: 96%;
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+
+.data-filter-content {
+  max-height: 85vh;
+  overflow: auto;
+  border-right: solid #b8b1b1;
+  padding-right: 10px;
+  width: 15%;
+}
+
+.filter-toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.search-wrapper {
+  display: flex;
+  border: 1px solid rgba(0, 0, 0, 0.276);
+  align-items: stretch;
+  border-radius: 50px;
+  background-color: #fff;
+  overflow: hidden;
+  max-width: 400px;
+  box-shadow: 2px 1px 5px 1px rgba(0, 0, 0, 0.273);
+}
+
+.filter-toolbar {
+  display: flex;
+  justify-content: space-between;
+  height: 45px;
+  margin: 10px 0 3px;
+  align-items: center;
+}
+
+.filter-toolbar-right {
+  display: flex;
+  align-items: center;
+}
+.filter-item {
+  padding: 1px;
+  margin: 0 5px;
+  border: 1px solid #999898;
+  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.main-filter-menu {
+  font-size: 12px;
+}
+
+.merge-panel {
+  display: flex;
+  padding: 5px;
+  flex-direction: row;
+  margin: 0 5px;
+  background: #dddddd;
+  border-radius: 5px;
+}
+
+.filter-bar-title {
+  margin-bottom: 0;
+}
+
+.filter-enabled {
+  border: 2px solid #2541f4;
+}
+
+.transaction-panel-container {
+  max-height: 80vh;
   overflow: auto;
 }

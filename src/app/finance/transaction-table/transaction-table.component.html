@@ -1,9 +1,9 @@
 
-<mat-expansion-panel class="transaction-panel" (opened)="panelOpened()">
+<mat-expansion-panel class="transaction-panel" (click)="panelTrigger()">
   <mat-expansion-panel-header>
     <mat-panel-title
     >{{ transactionData.year }} - {{ transactionData.month_text }} : ¥{{
-        totalCost | number: "1.2-2"
+        transactionData.total | number: "1.2-2"
       }}</mat-panel-title
     >
     <mat-panel-description> </mat-panel-description>
@@ -83,7 +83,7 @@
             <fa-icon [icon]="faScissors" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
             <span class="transaction-action-item">Split</span>
           </button>
-          <button mat-menu-item [disabled]="!element.is_merge" (click)="showMergeTransactions(element)">
+          <button mat-menu-item [disabled]="!element.is_merge">
             <fa-icon [icon]="faList" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
             <span class="transaction-action-item">Show Merge history</span>
           </button>
