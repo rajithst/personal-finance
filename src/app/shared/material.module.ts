@@ -29,6 +29,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 import {MatRippleModule} from '@angular/material/core';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatChipsModule} from '@angular/material/chips';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -61,7 +62,8 @@ import {MatChipsModule} from '@angular/material/chips';
     MatBadgeModule,
     MatRippleModule,
     MatTooltipModule,
-    MatChipsModule
+    MatChipsModule,
+    MatPaginatorModule
   ],
   exports: [
     MatButtonModule,
@@ -92,7 +94,8 @@ import {MatChipsModule} from '@angular/material/chips';
     MatBadgeModule,
     MatRippleModule,
     MatTooltipModule,
-    MatChipsModule
+    MatChipsModule,
+    MatPaginatorModule
   ],
   declarations: [],
 })

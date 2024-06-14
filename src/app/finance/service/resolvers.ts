@@ -14,3 +14,11 @@ export const financeResolver: ResolveFn<any> = (
 ): Observable<TransactionsResponse> => {
   return inject(ApiService).getTransactions()
 };
+
+
+export const payeeResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+) => {
+  return inject(ApiService).getPayees()
+};

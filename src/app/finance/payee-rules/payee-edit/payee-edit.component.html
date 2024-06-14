@@ -1,0 +1,78 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+  <span>{{data.payee.destination}}</span>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="payeeForm">
+    <table class="expense-field-table">
+      <tr>
+        <td colspan="3">
+          <mat-form-field appearance="outline" class="expense-input">
+            <mat-label>Payee</mat-label>
+            <input
+              matInput
+              placeholder="Payee"
+              formControlName="destination"
+            />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field appearance="outline" class="expense-input">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              @for (exc of TRANSACTION_CATEGORIES; track exc) {
+                <mat-option [value]="exc.value">{{
+                    exc.viewValue
+                  }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline" class="fill expense-input">
+            <mat-label>Sub Category</mat-label>
+            <mat-select formControlName="subcategory">
+              @for (exc of EXPENSE_SUB_CATEGORIES; track exc) {
+                <mat-option [value]="exc.value">{{
+                    exc.viewValue
+                  }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline" class="expense-input">
+            <mat-label>Payee Alias (English)</mat-label>
+            <input
+              matInput
+              placeholder="Destination"
+              formControlName="alias"
+            />
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+  </form>
+  <mat-divider></mat-divider>
+  <span>Mapping Keywords</span>
+  <mat-chip-listbox>
+    @for (akaChip of data.keywords; track akaChip) {
+      <mat-chip-option>{{akaChip}}</mat-chip-option>
+    }
+  </mat-chip-listbox>
+  <mat-divider></mat-divider>
+  <span>New Mappings</span>
+  <mat-form-field appearance="outline" class="expense-input">
+    <mat-label>New keywords</mat-label>
+    <input
+      matInput
+      [(ngModel)]="keywords"
+    />
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="expense-form-footer">
+  <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()">Save</button>
+</mat-dialog-actions>

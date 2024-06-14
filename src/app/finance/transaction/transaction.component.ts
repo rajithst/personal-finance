@@ -37,10 +37,13 @@ export class FinanceComponent implements OnInit {
   protected readonly faFilter = faFilter;
   protected readonly faExpand = faExpand;
 
-  loadingService = inject(LoadingService);
-  dataService = inject(DataService);
-  sessionService = inject(SessionService);
-  route = inject(Router);
+  private loadingService = inject(LoadingService);
+  private dataService = inject(DataService);
+  private sessionService = inject(SessionService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private route = inject(Router);
+
   allExpanded = false;
   filterEnabled = false;
   lastSegment = '';
@@ -49,10 +52,7 @@ export class FinanceComponent implements OnInit {
 
   sessionData = this.sessionService.getData();
 
-  constructor(
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-  ) {
+  constructor() {
     this.route.events
       .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe((val: any) => {

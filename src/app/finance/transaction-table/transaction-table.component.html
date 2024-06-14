@@ -15,12 +15,17 @@
     class="mat-elevation-z8 dividend-table"
   >
     <ng-container matColumnDef="select">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        <mat-checkbox>
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
         </mat-checkbox>
       </th>
-      <td mat-cell *matCellDef="let element">
-        <mat-checkbox></mat-checkbox>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)">
+        </mat-checkbox>
       </td>
     </ng-container>
     <ng-container matColumnDef="Date">

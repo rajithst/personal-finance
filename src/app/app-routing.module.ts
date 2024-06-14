@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { TransactionDashboardComponent } from './finance/dashboard/dashboard.component';
-import { financeResolver } from './finance/service/resolvers';
+import {financeResolver, payeeResolver} from './finance/service/resolvers';
+import {PayeeRulesComponent} from "./finance/payee-rules/payee-rules.component";
 
 
 
@@ -26,7 +27,13 @@ const routes: Routes = [
         (m) => m.FinanceModule,
       ),
   },
-
+  {
+    path: 'payee-rules',
+    component: PayeeRulesComponent,
+    resolve: {
+      payeeData: payeeResolver,
+    },
+  },
   {
     path: 'investments',
     loadChildren: () =>

@@ -28,6 +28,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SessionService } from '../service/session.service';
 import { DataService } from '../service/data.service';
+import {SelectionModel} from "@angular/cdk/collections";
+
 
 
 @Component({
@@ -54,6 +56,8 @@ export class TransactionTableComponent implements OnInit, OnChanges {
 
   transactionData: MonthlyTransaction;
   dataSource: MatTableDataSource<TransactionExpand>;
+  selection = new SelectionModel<TransactionExpand>(true, []);
+
   totalCost: number = 0;
   isOpen = false;
 
@@ -105,7 +109,7 @@ export class TransactionTableComponent implements OnInit, OnChanges {
 
     dialog.afterClosed().subscribe((result: MonthlyTransaction | null) => {
       if (result) {
-        const filteredData = this.sessionService.filterTransactions('transactions');
+        const filteredData = this.sessionService.filterTransactions('transaction');
         const target = filteredData.find(
           (x) => x.year === item.year && x.month === item.month,
         );
@@ -148,5 +152,19 @@ export class TransactionTableComponent implements OnInit, OnChanges {
       );
       this.table.renderRows()
     }
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+    this.selection.select(...this.dataSource.data);
   }
 }

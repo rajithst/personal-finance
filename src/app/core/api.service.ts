@@ -10,6 +10,7 @@ import {
 import { InvestmentResponse } from '../investments/model/investment';
 import { StockPurchase } from '../investments/model/transaction';
 import { environment } from '../../environments/environment';
+import {PayeeResponse} from "../finance/model/payee";
 
 new HttpHeaders({
   'Content-Type': 'application/json',
@@ -29,14 +30,15 @@ export class ApiService {
     );
   }
 
-  async fetchTransactions(): Promise<TransactionsResponse> {
-    const response = await fetch(`${this.SRC_URL}/finance/list`);
-    return await response.json();
-  }
-
   getInvestments(): Observable<InvestmentResponse> {
     return this.http.get<InvestmentResponse>(
       `${this.SRC_URL}/investments/list`,
+    );
+  }
+
+  getPayees(): Observable<PayeeResponse> {
+    return this.http.get<PayeeResponse>(
+      `${this.SRC_URL}/finance/payee/list`,
     );
   }
 
@@ -69,4 +71,6 @@ export class ApiService {
   updateStockPurchaseHistory(payload: StockPurchase): Observable<any> {
     return this.http.post(`${this.SRC_URL}/investments/stock-purchase/`, payload)
   }
+
+
 }

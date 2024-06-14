@@ -17,6 +17,7 @@ import { ExpensesComponent } from './transaction/expenses/expenses.component';
 import { SavingsComponent } from './transaction/savings/savings.component';
 import { IncomesComponent } from './transaction/incomes/incomes.component';
 import { PaymentsComponent } from './transaction/payments/payments.component';
+import { PayeeEditComponent } from './payee-rules/payee-edit/payee-edit.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { PaymentsComponent } from './transaction/payments/payments.component';
     SavingsComponent,
     IncomesComponent,
     PaymentsComponent,
+    PayeeEditComponent,
   ],
   imports: [
     CommonModule,

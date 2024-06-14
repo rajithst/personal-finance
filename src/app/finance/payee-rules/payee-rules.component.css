@@ -1,0 +1,19 @@
+.data-card-content {
+  margin: 0 1%;
+  overflow: auto;
+}
+
+.payee-table-container {
+  max-height: 85vh;
+  height: 78vh;
+  overflow: auto;
+}
+
+.payee-table-card {
+  height: 78vh;
+  max-height: 78vh;
+}
+
+.payee-edit-icon {
+  cursor: pointer;
+}
