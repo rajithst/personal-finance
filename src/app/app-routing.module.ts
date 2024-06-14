@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { TransactionDashboardComponent } from './finance/dashboard/dashboard.component';
 import { financeResolver } from './finance/service/resolvers';
-import {DashboardExtComponent} from "./dashboard-ext/dashboard-ext.component";
+
 
 
 const routes: Routes = [
@@ -33,10 +33,6 @@ const routes: Routes = [
       import('./investments/investments.module').then(
         (m) => m.InvestmentsModule,
       ),
-  },
-  {
-    path: 'dashboard-ext',
-    component: DashboardExtComponent,
   },
   {
     path: '**',

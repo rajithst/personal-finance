@@ -2,7 +2,7 @@ import {
   Component,
   ElementRef,
   inject,
-  OnInit, signal,
+  OnInit,
   ViewChild,
 } from '@angular/core';
 import { SessionService } from '../../service/session.service';
@@ -20,15 +20,12 @@ export class ExpensesComponent implements OnInit {
   @ViewChild('filterButton') element: ElementRef;
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
+  private sessionService = inject(SessionService);
+  private dataService = inject(DataService)
+  private loadingService = inject(LoadingService);
 
   sessionData = this.sessionService.getData();
-  transactionData = signal<MonthlyTransaction[]>([]);
-  loadingService = inject(LoadingService);
-
-  constructor(
-    private sessionService: SessionService,
-    private dataService: DataService,
-  ) {}
+  transactionData: MonthlyTransaction[] = [];
 
   ngOnInit(): void {
     this.filterData();
@@ -50,8 +47,8 @@ export class ExpensesComponent implements OnInit {
   }
 
   filterData() {
-    const currData = this.sessionService.filterTransactions();
-    this.transactionData.set(JSON.parse(JSON.stringify(currData)));
+    const currData = this.sessionService.filterTransactions('transaction');
+    this.transactionData = JSON.parse(JSON.stringify(currData));
     this.loadingService.loadingOff();
   }
 

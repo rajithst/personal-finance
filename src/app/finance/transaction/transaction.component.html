@@ -33,9 +33,20 @@
 <div class="data-card-content">
   <div class="filter-toolbar">
     <div class="filter-toolbar-left">
-      <h2 class="filter-bar-title">Transaction Activity</h2>
+      <h2 class="filter-bar-title">{{pageTitle}} Activity</h2>
     </div>
     <div class="filter-toolbar-right">
+      <mat-chip-listbox>
+        @for (catChip of categoryChipset; track catChip) {
+          <mat-chip-option color="primary">
+            cat:{{catChip.value}}
+            <button matChipRemove aria-label="'remove ' + keyword" (click)="removeFilterChip(catChip.id)">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-option>
+        }
+      </mat-chip-listbox>
+
       <!--    <div class="merge-panel">-->
       <!--      <div class="merge-item">-->
       <!--        <button mat-raised-button color="primary" matBadgePosition="before" matBadge="7" matBadgeColor="accent">-->
@@ -70,7 +81,7 @@
           [style]="{ color: '#4a4949' }"
         ></fa-icon>
       </div>
-      <div #filterButton (click)="openFilters()" class="filter-item" matRipple>
+      <div #filterButton (click)="openFilters()" class="filter-item" [ngClass]="{'filter-enabled': filterEnabled}" matRipple>
         <fa-icon
           [icon]="faFilter"
           size="1x"

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {
   faCalendar,
   faCreditCard,
@@ -6,18 +6,24 @@ import {
   faShop,
 } from '@fortawesome/free-solid-svg-icons';
 import {
+  INCOME_CATEGORIES,
   MONTHS,
   NA_CATEGORY_ID,
-  NA_SUB_CATEGORY_ID,
-  PAYMENT_METHODS,
+  NA_SUB_CATEGORY_ID, PAYMENT_CATEGORY_ID,
+  PAYMENT_METHODS, SAVINGS_CATEGORY_ID,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
   YEARS,
 } from '../../data/client.data';
-import { MatDialogRef } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DropDownType } from '../../data/shared.data';
 import { SessionService } from '../service/session.service';
+import {TransactionFilterChip} from "../model/transactions";
+
+interface FilterDialogData {
+  filterTarget: string
+}
 
 @Component({
   selector: 'app-transaction-filter',
@@ -52,10 +58,26 @@ export class TransactionFilterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private sessionService: SessionService,
     public dialogRef: MatDialogRef<TransactionFilterComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: FilterDialogData,
   ) {}
 
   ngOnInit() {
+    //this.modifyFilterOptions()
     this.createForm();
+  }
+
+  modifyFilterOptions() {
+    if(this.data.filterTarget === 'payments') {
+      this.transactionCategories = TRANSACTION_CATEGORIES.filter(x => x.value === PAYMENT_CATEGORY_ID);
+      this.transactionSubCategories = TRANSACTION_SUB_CATEGORIES[PAYMENT_CATEGORY_ID];
+    } else if (this.data.filterTarget === 'savings') {
+      this.transactionCategories = TRANSACTION_CATEGORIES.filter(x => x.value === SAVINGS_CATEGORY_ID);
+      this.transactionSubCategories = TRANSACTION_SUB_CATEGORIES[SAVINGS_CATEGORY_ID];
+    } else if (this.data.filterTarget === 'income') {
+      this.transactionCategories = INCOME_CATEGORIES;
+      this.transactionSubCategories = [];
+    }
+    this.subCategoryTitle = this.transactionSubCategories.length > 0 ? this.transactionSubCategories[0].viewValue : '';
   }
 
   createForm() {
@@ -64,25 +86,27 @@ export class TransactionFilterComponent implements OnInit {
     const paymentMethodGroup: any = {};
     const yearGroup: any = {};
     const monthsGroup: any = {};
-    const filters = this.sessionData.filters;
+    const filters = this.sessionData.filters.find(x => x.target === this.data.filterTarget);
+    const conditions = filters!.conditions;
+
     TRANSACTION_CATEGORIES.forEach((category: DropDownType) => {
-      categoryGroup[`category_${category.value}`] = new FormControl(filters.categories.includes(category.value));
+      categoryGroup[`category_${category.value}`] = new FormControl(conditions.categories.includes(category.value));
       const subCategories = TRANSACTION_SUB_CATEGORIES[category.value];
       subCategories.forEach((subcategory: DropDownType) => {
         subCategoryGroup[
           `subcategory_${subcategory.value}`
-        ] = new FormControl(filters.subcategories.includes(category.value));
+        ] = new FormControl(conditions.subcategories.includes(subcategory.value));
       });
     });
 
     PAYMENT_METHODS.forEach((category: DropDownType) => {
-      paymentMethodGroup[`paymentmethod_${category.value}`] = new FormControl(filters.paymentMethods.includes(category.value));
+      paymentMethodGroup[`paymentmethod_${category.value}`] = new FormControl(conditions.paymentMethods.includes(category.value));
     });
     YEARS.forEach((category: DropDownType) => {
-      yearGroup[`year_${category.value}`] = new FormControl(filters.years.includes(category.value));
+      yearGroup[`year_${category.value}`] = new FormControl(conditions.years.includes(category.value));
     });
     MONTHS.forEach((category: DropDownType) => {
-      monthsGroup[`month_${category.value}`] = new FormControl(filters.months.includes(category.value));
+      monthsGroup[`month_${category.value}`] = new FormControl(conditions.months.includes(category.value));
     });
     this.mainCategoryForm = this.formBuilder.group(categoryGroup);
     this.subCategoryForm = this.formBuilder.group(subCategoryGroup);
@@ -133,14 +157,8 @@ export class TransactionFilterComponent implements OnInit {
   }
 
   clear() {
-    this.sessionData.filters = {
-      categories: [],
-      subcategories: [],
-      paymentMethods: [],
-      years: [2024],
-      months: [],
-    };
-    this.dialogRef.close({refresh: true})
+    this.sessionService.clearSessionFilter(this.data.filterTarget)
+    this.dialogRef.close({refresh: true, filters: false})
   }
   submit() {
     const filterParams: any = {'categories': [], 'subcategories': [], 'paymentMethods': [], 'years': [], 'months': []};
@@ -149,7 +167,21 @@ export class TransactionFilterComponent implements OnInit {
     filterParams['paymentMethods'] = this.extractParams(this.paymentMethodForm.value);
     filterParams['years'] = this.extractParams(this.yearForm.value);
     filterParams['months'] = this.extractParams(this.monthsForm.value);
-    this.sessionData.filters = filterParams;
-    this.dialogRef.close({refresh: true});
+
+    const filterChips: TransactionFilterChip[] = [];
+    filterParams['categories'].forEach((x: Number) => {
+      const cat = TRANSACTION_CATEGORIES.find(y => y.value === x)
+      if (cat) {
+        filterChips.push({'id': x.valueOf(), 'value': cat.viewValue})
+      }
+    })
+
+    const idx = this.sessionData.filters.findIndex(x => x.target === this.data.filterTarget);
+    if (idx !== -1) {
+      this.sessionData.filters[idx] = {target: this.data.filterTarget, conditions: filterParams, filterChips: filterChips}
+    } else {
+      this.sessionData.filters.push({target: this.data.filterTarget, conditions: filterParams, filterChips: []})
+    }
+    this.dialogRef.close({refresh: true, filters: true});
   }
 }

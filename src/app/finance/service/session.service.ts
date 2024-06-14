@@ -4,7 +4,9 @@ import { Income, IncomeRequest } from '../model/income.data';
 import {
   MonthlyTransaction,
   Transaction,
-  TransactionExpand, TransactionFilterDialogData,
+  TransactionExpand,
+  TransactionFilter,
+  TransactionFilterTemplate,
   TransactionsResponse,
 } from '../model/transactions';
 
@@ -14,14 +16,23 @@ export class SessionData {
   expenses: MonthlyTransaction[] = [];
   payments: MonthlyTransaction[] = [];
   destinations: string[] = [];
-  filters: TransactionFilterDialogData = {
-    categories: [],
-    subcategories: [],
-    months: [],
-    years: [2024],
-    paymentMethods: [],
-  };
-  panelSettings: any = []
+  filters: TransactionFilterTemplate[] = [
+    { target: 'transaction', conditions: this.getEmptyFilterTemplate(), filterChips: [] },
+    { target: 'payments', conditions: this.getEmptyFilterTemplate(), filterChips: [] },
+    { target: 'savings', conditions: this.getEmptyFilterTemplate(), filterChips: [] },
+    { target: 'income', conditions: this.getEmptyFilterTemplate(), filterChips: [] },
+  ];
+  panelSettings: any = [];
+
+  getEmptyFilterTemplate(): TransactionFilter {
+    return {
+      categories: [],
+      subcategories: [],
+      months: [],
+      years: [2024],
+      paymentMethods: [],
+    };
+  }
 }
 
 @Injectable({
@@ -43,6 +54,12 @@ export class SessionService {
     this.session.destinations = resolvedData.destinations;
   }
 
+  clearSessionFilter(filter: string) {
+    const idx = this.session.filters.findIndex(x => x.target === filter);
+    if (idx !== -1) {
+      this.session.filters[idx] = {target: filter, conditions: this.session.getEmptyFilterTemplate(), filterChips: []}
+    }
+  }
   updateIncome(payload: IncomeRequest) {
     this.apiService.updateIncome(payload).subscribe((income: Income) => {
       if (income) {
@@ -101,16 +118,24 @@ export class SessionService {
     return source[idx];
   }
 
-  filterTransactions(): MonthlyTransaction[] {
-
-    let years: number[] = this.session.filters.years;
-    let months: number[] = this.session.filters.months;
-    const paymentMethods: number[] = this.session.filters.paymentMethods;
-    const categories: number[] = this.session.filters.categories;
-    const subCategories: number[] = this.session.filters.subcategories;
+  filterTransactions(target: string): MonthlyTransaction[] {
+    let source = this.session.expenses;
+    let filterSet = this.session.filters.find((x) => x.target === target);
+    if (target === 'income') {
+      source = this.session.incomes;
+    } else if (target === 'payments') {
+      source = this.session.payments;
+    } else if (target === 'savings') {
+      source = this.session.saving
+    }
+    let years: number[] = filterSet!.conditions.years;
+    let months: number[] = filterSet!.conditions.months;
+    const paymentMethods: number[] = filterSet!.conditions.paymentMethods;
+    const categories: number[] = filterSet!.conditions.categories;
+    const subCategories: number[] = filterSet!.conditions.subcategories;
     const searchQuery: string = '';
 
-    const currData = this.session.expenses
+    const currData = source
       .filter((x) => years.includes(x.year))
       .filter((x) => (months.length > 0 ? months.includes(x.month) : true))
       .sort((x, y) => y.month - x.month)
@@ -133,18 +158,18 @@ export class SessionService {
         .filter((y) =>
           searchQuery.length > 0
             ? y.destination.includes(searchQuery) ||
-            y.alias?.includes(searchQuery)
+              y.alias?.includes(searchQuery)
             : true,
         );
       x.total = x.transactions_cp.reduce(
-        (total, {amount}) => total + amount!,
+        (total, { amount }) => total + amount!,
         0,
       );
       x.transactions_cp = x.transactions_cp.sort((a, b) => {
-        const d1 = new Date(a.date)
-        const d2 = new Date(b.date)
+        const d1 = new Date(a.date);
+        const d2 = new Date(b.date);
         if (d1 < d2) {
-          return -1
+          return -1;
         } else if (d1 === d2) {
           return 0;
         } else {

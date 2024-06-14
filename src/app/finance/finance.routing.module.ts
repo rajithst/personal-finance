@@ -19,18 +19,22 @@ const routes: Routes = [
       {
         path: 'transaction',
         component: ExpensesComponent,
+        data: { name: 'transactions'}
       },
       {
         path: 'income',
         component: IncomesComponent,
+        data: { name: 'incomes'}
       },
       {
         path: 'savings',
         component: SavingsComponent,
+        data: { name: 'savings'}
       },
       {
         path: 'payments',
         component: PaymentsComponent,
+        data: { name: 'payments'}
       },
     ],
   },

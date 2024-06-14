@@ -28,6 +28,7 @@ import { MatChip, MatChipSet } from '@angular/material/chips';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatRippleModule} from '@angular/material/core';
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   imports: [
@@ -59,7 +60,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     MatChip, MatChipSet,
     MatBadgeModule,
     MatRippleModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatChipsModule
   ],
   exports: [
     MatButtonModule,
@@ -89,7 +91,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     MatChip, MatChipSet,
     MatBadgeModule,
     MatRippleModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatChipsModule
   ],
   declarations: [],
 })

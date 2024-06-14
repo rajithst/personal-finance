@@ -50,10 +50,22 @@ export interface TransactionRequest extends Transaction {
   //merged_ids: number[] | null
 }
 
-export interface TransactionFilterDialogData {
+export interface TransactionFilter {
   categories: number[];
   subcategories: number[];
   paymentMethods: number[];
   years: number[];
   months: number[];
+}
+
+export interface TransactionFilterChip {
+  id: number;
+  value: string;
+}
+
+export interface TransactionFilterTemplate {
+  target: string;
+  conditions: TransactionFilter;
+  filterChips: TransactionFilterChip[] | null;
+
 }

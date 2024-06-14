@@ -1,4 +1,10 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { LoadingService } from '../../shared/loading/loading.service';
 import {
   faCirclePlus,
@@ -11,8 +17,11 @@ import { TransactionUpdateDialog } from '../transaction-update/transaction-updat
 import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '../service/data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {TransactionFilterComponent} from "../transaction-filter/transaction-filter.component";
-
+import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
+import { SessionService } from '../service/session.service';
+import { TransactionFilterChip } from '../model/transactions';
 
 @Component({
   selector: 'app-transaction',
@@ -30,17 +39,52 @@ export class FinanceComponent implements OnInit {
 
   loadingService = inject(LoadingService);
   dataService = inject(DataService);
+  sessionService = inject(SessionService);
+  route = inject(Router);
   allExpanded = false;
+  filterEnabled = false;
   lastSegment = '';
+  categoryChipset: TransactionFilterChip[] | null = [];
+  pageTitle = 'Transaction'
+
+  sessionData = this.sessionService.getData();
 
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-  ) {}
-
+  ) {
+    this.route.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe((val: any) => {
+        const urlAfterRedirect = val.urlAfterRedirects;
+        const segments = urlAfterRedirect.split('/');
+        this.lastSegment = segments[segments.length - 1];
+        this.preparePageTitle()
+        this.prepareChips();
+      });
+  }
 
   ngOnInit(): void {
     this.loadingService.loadingOn();
+    this.prepareChips();
+  }
+
+  preparePageTitle() {
+    if (this.lastSegment === 'income') {
+      this.pageTitle = 'Income';
+    } else if (this.lastSegment === 'savings') {
+      this.pageTitle = 'Savings';
+    } else if (this.lastSegment === 'payments') {
+      this.pageTitle = 'Payments'
+    }
+  }
+  prepareChips() {
+    const filters = this.sessionData.filters.find(
+      (x) => x.target === this.lastSegment,
+    );
+    if (filters) {
+      this.categoryChipset = filters.filterChips;
+    }
   }
 
   addTransaction() {
@@ -62,23 +106,46 @@ export class FinanceComponent implements OnInit {
   }
 
   openFilters() {
-    this.dialog.closeAll()
+    this.dialog.closeAll();
     const rect = this.element.nativeElement.getBoundingClientRect();
     const dialog = this.dialog.open(TransactionFilterComponent, {
       width: '700px',
       height: '500px',
       position: { top: `${rect.bottom + 10}px`, right: `20px` },
       hasBackdrop: true,
+      data: { filterTarget: this.lastSegment },
     });
 
     dialog.afterClosed().subscribe((result) => {
       this.dataService.setFilters(result.refresh);
-      this.dataService.setPanelActions(this.allExpanded)
+      this.dataService.setPanelActions(this.allExpanded);
+      this.filterEnabled = result.filters;
+      this.prepareChips();
     });
   }
 
   panelAction() {
     this.allExpanded = !this.allExpanded;
-    this.dataService.setPanelActions(this.allExpanded)
+    this.dataService.setPanelActions(this.allExpanded);
+  }
+
+  removeFilterChip(filterId: number) {
+    const idx = this.sessionData.filters.findIndex(
+      (x) => x.target === this.lastSegment,
+    );
+    if (idx !== -1) {
+      const chipId = this.sessionData.filters[idx].filterChips?.findIndex(
+        (x) => x.id === filterId,
+      );
+      if (chipId !== -1) {
+        this.sessionData.filters[idx].filterChips?.splice(chipId!, 1);
+      }
+      this.sessionData.filters[idx].conditions.categories =
+        this.sessionData.filters[idx].conditions.categories.filter(
+          (x) => x !== filterId,
+        );
+      this.filterEnabled = false;
+      this.dataService.setFilters(true);
+    }
   }
 }

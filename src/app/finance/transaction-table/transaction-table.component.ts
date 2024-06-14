@@ -105,7 +105,7 @@ export class TransactionTableComponent implements OnInit, OnChanges {
 
     dialog.afterClosed().subscribe((result: MonthlyTransaction | null) => {
       if (result) {
-        const filteredData = this.sessionService.filterTransactions();
+        const filteredData = this.sessionService.filterTransactions('transactions');
         const target = filteredData.find(
           (x) => x.year === item.year && x.month === item.month,
         );
