@@ -10,7 +10,7 @@ import {
 import { InvestmentResponse } from '../investments/model/investment';
 import { StockPurchase } from '../investments/model/transaction';
 import { environment } from '../../environments/environment';
-import {PayeeResponse} from "../finance/model/payee";
+import {DestinationMap, PayeeResponse} from "../finance/model/payee";
 
 new HttpHeaders({
   'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export class ApiService {
 
   getPayees(): Observable<PayeeResponse> {
     return this.http.get<PayeeResponse>(
-      `${this.SRC_URL}/finance/payee/list`,
+      `${this.SRC_URL}/finance/payee`,
     );
   }
 
@@ -73,4 +73,14 @@ export class ApiService {
   }
 
 
+  updatePayeeRules(payload: DestinationMap): Observable<DestinationMap> {
+    if (payload.id) {
+      return this.http.put<DestinationMap>(
+        `${this.SRC_URL}/finance/payee/${payload.id}/`,
+        payload,
+      );
+    } else {
+      return this.http.post<DestinationMap>(`${this.SRC_URL}/finance/payee/`, payload)
+    }
+  }
 }

@@ -1,13 +1,25 @@
-<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+<h2 mat-dialog-title>
   <span>{{data.payee.destination}}</span>
 </h2>
 <mat-dialog-content>
   <form [formGroup]="payeeForm">
     <table class="expense-field-table">
       <tr>
-        <td colspan="3">
-          <mat-form-field appearance="outline" class="expense-input">
+        <td>
+          <mat-form-field appearance="outline" class="payee-input">
             <mat-label>Payee</mat-label>
+            <input
+              matInput
+              readonly
+              placeholder="Payee"
+              formControlName="destination_or"
+
+            />
+          </mat-form-field>
+        </td>
+        <td colspan="2">
+          <mat-form-field appearance="outline" class="payee-input">
+            <mat-label>Payee Rename to</mat-label>
             <input
               matInput
               placeholder="Payee"
@@ -18,7 +30,7 @@
       </tr>
       <tr>
         <td>
-          <mat-form-field appearance="outline" class="expense-input">
+          <mat-form-field appearance="outline" class="payee-input">
             <mat-label>Category</mat-label>
             <mat-select formControlName="category">
               @for (exc of TRANSACTION_CATEGORIES; track exc) {
@@ -30,7 +42,7 @@
           </mat-form-field>
         </td>
         <td>
-          <mat-form-field appearance="outline" class="fill expense-input">
+          <mat-form-field appearance="outline" class="fill payee-input">
             <mat-label>Sub Category</mat-label>
             <mat-select formControlName="subcategory">
               @for (exc of EXPENSE_SUB_CATEGORIES; track exc) {
@@ -42,12 +54,12 @@
           </mat-form-field>
         </td>
         <td>
-          <mat-form-field appearance="outline" class="expense-input">
+          <mat-form-field appearance="outline" class="payee-input">
             <mat-label>Payee Alias (English)</mat-label>
             <input
               matInput
               placeholder="Destination"
-              formControlName="alias"
+              formControlName="destination_eng"
             />
           </mat-form-field>
         </td>
@@ -55,21 +67,36 @@
     </table>
   </form>
   <mat-divider></mat-divider>
-  <span>Mapping Keywords</span>
-  <mat-chip-listbox>
-    @for (akaChip of data.keywords; track akaChip) {
-      <mat-chip-option>{{akaChip}}</mat-chip-option>
-    }
-  </mat-chip-listbox>
-  <mat-divider></mat-divider>
-  <span>New Mappings</span>
-  <mat-form-field appearance="outline" class="expense-input">
-    <mat-label>New keywords</mat-label>
-    <input
-      matInput
-      [(ngModel)]="keywords"
-    />
-  </mat-form-field>
+  <div class="payee-rules">
+    <div class="rule-title">
+      <span>If Payee name contains below keywords, map to {{payeeForm.get('destination')?.value}}. (Current and Future transactions)</span>
+    </div>
+    <mat-form-field class="keyword-chip-list">
+      <mat-label>Keywords</mat-label>
+      <mat-chip-grid #chipGrid aria-label="Enter fruits">
+        @for (akaChip of keywords; track akaChip) {
+          <mat-chip-row
+            (removed)="remove(akaChip)"
+            [editable]="true"
+            (edited)="edit(akaChip, $event)"
+            [aria-description]="'press enter to edit ' + akaChip"
+          >
+            {{akaChip}}
+            <button matChipRemove [attr.aria-label]="'remove ' + akaChip">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        }
+        <input
+          placeholder="New keyword..."
+          [matChipInputFor]="chipGrid"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="add($event)"
+        />
+      </mat-chip-grid>
+    </mat-form-field>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="expense-form-footer">

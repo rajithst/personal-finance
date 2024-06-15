@@ -1,4 +1,4 @@
-.expense-input {
+.payee-input {
   width: 100%;
   font-size: 14px;
 }
@@ -10,4 +10,8 @@
 
 .keywords-area {
   display: flex;
+}
+
+.keyword-chip-list {
+  width: 100%;
 }
