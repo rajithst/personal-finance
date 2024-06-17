@@ -10,7 +10,7 @@ import {
 import { InvestmentResponse } from '../investments/model/investment';
 import { StockPurchase } from '../investments/model/transaction';
 import { environment } from '../../environments/environment';
-import {DestinationMap, PayeeResponse} from "../finance/model/payee";
+import {DestinationMap, DestinationMapRequest, PayeeResponse} from "../finance/model/payee";
 
 new HttpHeaders({
   'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export class ApiService {
   }
 
 
-  updatePayeeRules(payload: DestinationMap): Observable<DestinationMap> {
+  updatePayeeRules(payload: DestinationMapRequest): Observable<DestinationMap> {
     if (payload.id) {
       return this.http.put<DestinationMap>(
         `${this.SRC_URL}/finance/payee/${payload.id}/`,

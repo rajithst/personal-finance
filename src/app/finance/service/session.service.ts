@@ -9,6 +9,7 @@ import {
   TransactionFilterTemplate,
   TransactionsResponse,
 } from '../model/transactions';
+import { DestinationMap } from '../model/payee';
 
 export class SessionData {
   incomes: MonthlyTransaction[] = [];
@@ -16,11 +17,28 @@ export class SessionData {
   expenses: MonthlyTransaction[] = [];
   payments: MonthlyTransaction[] = [];
   destinations: string[] = [];
+  payees: DestinationMap[] = [];
   filters: TransactionFilterTemplate[] = [
-    { target: 'transaction', conditions: this.getEmptyFilterTemplate(), filterChips: [] },
-    { target: 'payments', conditions: this.getEmptyFilterTemplate(), filterChips: [] },
-    { target: 'savings', conditions: this.getEmptyFilterTemplate(), filterChips: [] },
-    { target: 'income', conditions: this.getEmptyFilterTemplate(), filterChips: [] },
+    {
+      target: 'transaction',
+      conditions: this.getEmptyFilterTemplate(),
+      filterChips: [],
+    },
+    {
+      target: 'payments',
+      conditions: this.getEmptyFilterTemplate(),
+      filterChips: [],
+    },
+    {
+      target: 'savings',
+      conditions: this.getEmptyFilterTemplate(),
+      filterChips: [],
+    },
+    {
+      target: 'income',
+      conditions: this.getEmptyFilterTemplate(),
+      filterChips: [],
+    },
   ];
   panelSettings: any = [];
 
@@ -54,10 +72,18 @@ export class SessionService {
     this.session.destinations = resolvedData.destinations;
   }
 
+  setPayeeSessionData(payeeData: DestinationMap[]) {
+    this.session.payees = payeeData;
+  }
+
   clearSessionFilter(filter: string) {
-    const idx = this.session.filters.findIndex(x => x.target === filter);
+    const idx = this.session.filters.findIndex((x) => x.target === filter);
     if (idx !== -1) {
-      this.session.filters[idx] = {target: filter, conditions: this.session.getEmptyFilterTemplate(), filterChips: []}
+      this.session.filters[idx] = {
+        target: filter,
+        conditions: this.session.getEmptyFilterTemplate(),
+        filterChips: [],
+      };
     }
   }
   updateIncome(payload: IncomeRequest) {
@@ -126,7 +152,7 @@ export class SessionService {
     } else if (target === 'payments') {
       source = this.session.payments;
     } else if (target === 'savings') {
-      source = this.session.saving
+      source = this.session.saving;
     }
     let years: number[] = filterSet!.conditions.years;
     let months: number[] = filterSet!.conditions.months;
