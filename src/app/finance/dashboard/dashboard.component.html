@@ -1,109 +1,145 @@
+<div class="dashboard-summary-container">
+  <mat-grid-list cols="4" rowHeight="80px" [gutterSize]="'5px'">
+    <mat-grid-tile>
+      <mat-card class="summary-item total-value">
+        <mat-card-content>
+          <div class="summary-item-title">
+            <div class="summary-item-title-icon">
+              <fa-icon
+                [icon]="faSackDollar"
+                size="lg"
+                [style]="{ color: '#3699ff' }"
+              ></fa-icon>
+              <span>Total Income</span>
+            </div>
+            <div class="summary-item-title-value">
+              <span class="profit">¥{{ totalIncome | number: "1.2-2" }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card class="summary-item total-investment">
+        <mat-card-content>
+          <div class="summary-item-title">
+            <div class="summary-item-title-icon">
+              <fa-icon
+                [icon]="faFileInvoiceDollar"
+                size="lg"
+                [style]="{ color: '#3699ff' }"
+              ></fa-icon>
+              <span>Total Expenses</span>
+            </div>
+            <div class="summary-item-title-value">
+              <span class="loss">¥{{ totalExpenses | number: "1.2-2" }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card class="summary-item total-profit">
+        <mat-card-content>
+          <div class="summary-item-title">
+            <div class="summary-item-title-icon">
+              <fa-icon
+                [icon]="faCreditCard"
+                size="lg"
+                [style]="{ color: '#3699ff' }"
+              ></fa-icon>
+              <span>Total Payments</span>
+            </div>
+            <div class="summary-item-title-value">
+              <span class="loss">¥{{ totalPayments | number: "1.2-2" }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card class="summary-item forex">
+        <mat-card-content>
+          <div class="summary-item-title">
+            <div class="summary-item-title-icon">
+              <fa-icon
+                [icon]="faPiggyBank"
+                size="lg"
+                [style]="{ color: '#3699ff' }"
+              ></fa-icon>
+              <span>Total Savings</span>
+            </div>
+            <div class="summary-item-title-value">
+              <span class="profit">¥{{ totalSavings | number: "1.2-2" }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
 <div class="dashboard-container">
-  <div class="finance-summary">
-    <mat-card class="summary-item total-value">
-      <mat-card-content>
-        <div class="summary-item-title">
-          <div class="summary-item-title-icon">
-            <fa-icon [icon]="faSackDollar" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
-            <span>Total Income</span>
-          </div>
-          <div class="summary-item-title-value">
-            <span class="profit">¥{{totalIncome | number: "1.2-2"}}</span>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card class="summary-item total-investment">
-      <mat-card-content>
-        <div class="summary-item-title">
-          <div class="summary-item-title-icon">
-            <fa-icon [icon]="faFileInvoiceDollar" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
-            <span>Total Expenses</span>
-          </div>
-          <div class="summary-item-title-value">
-            <span class="loss">¥{{totalExpenses | number: "1.2-2"}}</span>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card class="summary-item total-profit">
-      <mat-card-content>
-        <div class="summary-item-title" >
-          <div class="summary-item-title-icon">
-            <fa-icon [icon]="faCreditCard" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
-            <span>Total Payments</span>
-          </div>
-          <div class="summary-item-title-value">
-            <span class="loss">¥{{totalPayments | number: "1.2-2"}}</span>
-          </div>
-        </div>
-      </mat-card-content>
+  <mat-grid-list cols="3" rowHeight="350px" [gutterSize]="'5px'">
+    <mat-grid-tile>
+      <div class="chart-item">
+        <app-chartbox
+          [chartData]="monthlyExpenses"
+          [chartOptions]="monthlyExpensesOptions"
+          [chartType]="monthlyExpensesChartType"
+          (rendered)="childRendered()"
+        ></app-chartbox>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <div class="chart-item">
+        <app-chartbox
+          [chartData]="monthlyIncome"
+          [chartOptions]="monthlyIncomeOptions"
+          [chartType]="monthlyIncomeChartType"
+          (rendered)="childRendered()"
+        ></app-chartbox>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <div class="chart-item">
+        <app-chartbox
+          [chartData]="monthlySavings"
+          [chartOptions]="monthlySavingsOptions"
+          [chartType]="monthlySavingsChartType"
+          (rendered)="childRendered()"
+        ></app-chartbox>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <div class="chart-item">
+        <app-chartbox
+          [chartData]="categoryWiseSum"
+          [chartOptions]="categoryWiseSumValueOptions"
+          [chartType]="categoryWiseSumValueChartType"
+          (rendered)="childRendered()"
+        ></app-chartbox>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <div class="chart-item">
+        <app-chartbox
+          [chartData]="categoryWiseSum"
+          [chartOptions]="categoryWiseSumOptions"
+          [chartType]="categoryWiseSumChartType"
+          (rendered)="childRendered()"
+        ></app-chartbox>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <div class="chart-item">
+        <app-chartbox
+          [chartData]="monthlyPayments"
+          [chartOptions]="monthlyPaymentsOptions"
+          [chartType]="monthlyPaymentsChartType"
+          (rendered)="childRendered()"
+        ></app-chartbox>
+      </div>
+    </mat-grid-tile>
 
-    </mat-card>
-    <mat-card class="summary-item forex">
-      <mat-card-content>
-        <div class="summary-item-title">
-          <div class="summary-item-title-icon">
-            <fa-icon [icon]="faPiggyBank" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
-            <span>Total Savings</span>
-          </div>
-          <div class="summary-item-title-value">
-            <span class="profit">¥{{totalSavings | number: "1.2-2"}}</span>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <div class="chart-row">
-    <div class="chart-item">
-      <app-chartbox
-        [chartData]="monthlyExpenses"
-        [chartOptions]="monthlyExpensesOptions"
-        [chartType]="monthlyExpensesChartType"
-        (rendered)="childRendered()"
-      ></app-chartbox>
-    </div>
-    <div class="chart-item">
-      <app-chartbox
-        [chartData]="monthlyIncome"
-        [chartOptions]="monthlyIncomeOptions"
-        [chartType]="monthlyIncomeChartType"
-        (rendered)="childRendered()"
-      ></app-chartbox>
-    </div>
-    <div class="chart-item">
-      <app-chartbox
-        [chartData]="monthlySavings"
-        [chartOptions]="monthlySavingsOptions"
-        [chartType]="monthlySavingsChartType"
-        (rendered)="childRendered()"
-      ></app-chartbox>
-    </div>
-  </div>
-  <div class="chart-row">
-    <div class="chart-item">
-      <app-chartbox
-        [chartData]="categoryWiseSum"
-        [chartOptions]="categoryWiseSumOptions"
-        [chartType]="categoryWiseSumChartType"
-        (rendered)="childRendered()"
-      ></app-chartbox>
-    </div>
-    <div class="chart-item">
-      <app-chartbox
-        [chartData]="monthlyPayments"
-        [chartOptions]="monthlyPaymentsOptions"
-        [chartType]="monthlyPaymentsChartType"
-        (rendered)="childRendered()"
-      ></app-chartbox>
-    </div>
-    <div class="chart-item">
-      <app-chartbox
-        [chartData]="categoryWiseSum"
-        [chartOptions]="categoryWiseSumValueOptions"
-        [chartType]="categoryWiseSumValueChartType"
-        (rendered)="childRendered()"
-      ></app-chartbox>
-    </div>
-  </div>
+  </mat-grid-list>
 </div>

@@ -82,7 +82,7 @@ export class PayeeEditComponent implements OnInit {
   }
 
   updateRelatedPayees() {
-    const relatedPayees = this.payeeList.filter(x => x.id !== this.data.payee.id && this.keywords.some(item => x.destination_original.toLowerCase().includes(item.toLowerCase())))
+    const relatedPayees = this.payeeList.filter(x => x.id !== this.data.payee.id && x.destination_original && this.keywords.some(item => x.destination_original.toLowerCase().includes(item.toLowerCase())))
     this.dataSource = new MatTableDataSource<DestinationMap>(relatedPayees);
     this.selection.clear();
     this.selection.select(...this.dataSource.data);

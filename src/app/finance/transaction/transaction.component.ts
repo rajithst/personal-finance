@@ -7,10 +7,10 @@ import {
 } from '@angular/core';
 import { LoadingService } from '../../shared/loading/loading.service';
 import {
-  faCirclePlus,
+  faCirclePlus, faCodeMerge,
   faExpand,
   faFilter,
-  faMinimize,
+  faMinimize, faPencil, faTrash,
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
@@ -36,6 +36,9 @@ export class FinanceComponent implements OnInit {
   protected readonly faCirclePlus = faCirclePlus;
   protected readonly faFilter = faFilter;
   protected readonly faExpand = faExpand;
+  protected readonly faPencil = faPencil;
+  protected readonly faTrash = faTrash;
+  protected readonly faCodeMerge = faCodeMerge;
 
   private loadingService = inject(LoadingService);
   private dataService = inject(DataService);
@@ -147,5 +150,9 @@ export class FinanceComponent implements OnInit {
       this.filterEnabled = false;
       this.dataService.setFilters(true);
     }
+  }
+
+  applyFilter($event: KeyboardEvent) {
+
   }
 }

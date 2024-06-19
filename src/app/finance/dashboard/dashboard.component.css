@@ -1,23 +1,22 @@
 .dashboard-container {
-  margin: 10px 20px;
+  margin: 0 10px;
   overflow: auto;
+  max-height: 80vh;
 }
 
-.chart-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 10px;
-  margin-bottom: 10px;
-  justify-items: stretch;
+.dashboard-summary-container {
+  margin: 0 10px;
 }
-.finance-summary {
-  display: flex;
-  margin: 5px 0;
+.chart-item {
+  width: 100%;
+  height: 100%;
 }
-
 .summary-item {
-  width: 25%;
-  margin-right: 5px;
+  width: 100%;
+}
+
+.summary-item > mat-card-content {
+  padding: 10px;
 }
 
 .summary-item-title-icon > span {
@@ -28,6 +27,7 @@
   flex-direction: column;
   align-content: center;
   text-align: center;
+  font-weight: 800;
 }
 .summary-item-title-value {
   font-size: 20px;

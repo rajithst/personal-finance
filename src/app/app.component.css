@@ -30,6 +30,7 @@
 .main-container {
   height: 90vh;
   overflow: hidden;
+  background: #faf7f7;
 }
 
 .sidenav-container {

@@ -30,7 +30,7 @@ import {MatRippleModule} from '@angular/material/core';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatChipsModule} from '@angular/material/chips';
 import {MatPaginatorModule} from '@angular/material/paginator';
-
+import { MatGridListModule } from '@angular/material/grid-list';
 @NgModule({
   imports: [
     CommonModule,
@@ -63,7 +63,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatRippleModule,
     MatTooltipModule,
     MatChipsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatGridListModule
   ],
   exports: [
     MatButtonModule,
@@ -95,7 +96,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatRippleModule,
     MatTooltipModule,
     MatChipsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatGridListModule
   ],
   declarations: [],
 })

@@ -4,7 +4,7 @@ import {
   SessionService,
 } from '../service/session.service';
 import {
-  MAT_DIALOG_DATA,
+  MAT_DIALOG_DATA, MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
 
@@ -135,7 +135,6 @@ export class TransactionUpdateDialog implements OnInit {
       is_deleted: new FormControl(data.is_deleted),
       is_merge: new FormControl(data.is_merge),
       merge_id: new FormControl(data.merge_id),
-      is_regular_destination: new FormControl(false),
       delete_reason: new FormControl(data.delete_reason),
     });
   }
@@ -159,7 +158,6 @@ export class TransactionUpdateDialog implements OnInit {
       is_deleted: new FormControl(false),
       is_merge: new FormControl(false),
       merge_id: new FormControl(null),
-      is_regular_destination: new FormControl(false),
       delete_reason: new FormControl(''),
     });
   }

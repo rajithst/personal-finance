@@ -59,6 +59,11 @@ export class PayeeRulesComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
@@ -75,7 +80,6 @@ export class PayeeRulesComponent implements OnInit, AfterViewInit {
   }
 
   editPayee(payee: DestinationMap) {
-    console.log(payee);
     const dialog = this.dialog.open(PayeeEditComponent, {
       width: '850px',
       height: '600px',

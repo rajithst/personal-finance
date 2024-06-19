@@ -31,90 +31,96 @@
   </ul>
 </div>
 <div class="data-card-content">
-  <div class="filter-toolbar">
-    <div class="filter-toolbar-left">
-      <h2 class="filter-bar-title">{{pageTitle}} Activity</h2>
-    </div>
-    <div class="filter-toolbar-right">
-      <mat-chip-listbox>
-        @for (catChip of categoryChipset; track catChip) {
-          <mat-chip-option color="primary">
-            cat:{{catChip.value}}
-            <button matChipRemove aria-label="'remove ' + keyword" (click)="removeFilterChip(catChip.id)">
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </mat-chip-option>
-        }
-      </mat-chip-listbox>
-
-      <!--    <div class="merge-panel">-->
-      <!--      <div class="merge-item">-->
-      <!--        <button mat-raised-button color="primary" matBadgePosition="before" matBadge="7" matBadgeColor="accent">-->
-      <!--          Merge-->
-      <!--        </button>-->
-      <!--      </div>-->
-      <!--      <div class="merge-item filter-item" matRipple>-->
-      <!--        <fa-icon-->
-      <!--          [icon]="faPencil"-->
-      <!--          size="1x"-->
-      <!--          [style]="{ color: '#4a4949' }"-->
-      <!--        ></fa-icon>-->
-      <!--      </div>-->
-      <!--      <div class="merge-item filter-item" matRipple>-->
-      <!--        <fa-icon-->
-      <!--          [icon]="faTrash"-->
-      <!--          size="1x"-->
-      <!--          [style]="{ color: '#af5252' }"-->
-      <!--        ></fa-icon>-->
-      <!--      </div>-->
-      <!--    </div>-->
-      <div
-        class="filter-item"
-        (click)="panelAction()"
-        matRipple
-        [matTooltip]="allExpanded ? 'Minimize All' : 'Expand All'"
-        matTooltipPosition="below"
-      >
-        <fa-icon
-          [icon]="allExpanded ? faMinimize : faExpand"
-          size="1x"
-          [style]="{ color: '#4a4949' }"
-        ></fa-icon>
+  <mat-grid-list
+    cols="3"
+    rowHeight="50px"
+    [gutterSize]="'5px'"
+    class="filter-toolbar"
+  >
+    <mat-grid-tile>
+      <div class="toolbar-header">
+        <h2>{{ pageTitle }} Activity</h2>
       </div>
-      <div #filterButton (click)="openFilters()" class="filter-item" [ngClass]="{'filter-enabled': filterEnabled}" matRipple>
-        <fa-icon
-          [icon]="faFilter"
-          size="1x"
-          [style]="{ color: '#4a4949' }"
-        ></fa-icon>
+    </mat-grid-tile>
+    <mat-grid-tile></mat-grid-tile>
+    <mat-grid-tile>
+      <div class="filters-right">
+        <input type="text" class="search-bar" placeholder="Search" (keyup)="applyFilter($event)">
+        <div class="filter-item" matRipple matBadge="4" matBadgeOverlap="true" matBadgeSize="small">
+          <fa-icon
+            [icon]="faCodeMerge"
+            size="1x"
+            [style]="{ color: '#4a4949' }"
+          ></fa-icon>
+        </div>
+        <div class="filter-item" matRipple>
+          <fa-icon
+            [icon]="faPencil"
+            size="1x"
+            [style]="{ color: '#4a4949' }"
+          ></fa-icon>
+        </div>
+        <div class="filter-item" matRipple>
+          <fa-icon
+            [icon]="faTrash"
+            size="1x"
+            [style]="{ color: '#af5252' }"
+          ></fa-icon>
+        </div>
+        <div
+          class="filter-item"
+          (click)="panelAction()"
+          matRipple
+          [matTooltip]="allExpanded ? 'Minimize All' : 'Expand All'"
+          matTooltipPosition="below"
+        >
+          <fa-icon
+            [icon]="allExpanded ? faMinimize : faExpand"
+            size="1x"
+            [style]="{ color: '#4a4949' }"
+          ></fa-icon>
+        </div>
+        <div
+          #filterButton
+          (click)="openFilters()"
+          class="filter-item"
+          [ngClass]="{ 'filter-enabled': filterEnabled }"
+          matRipple
+        >
+          <fa-icon
+            [icon]="faFilter"
+            size="1x"
+            [style]="{ color: '#4a4949' }"
+          ></fa-icon>
+        </div>
+        <div
+          class="filter-item"
+          matRipple
+          matTooltip="Upload Transactions"
+          matTooltipPosition="below"
+        >
+          <fa-icon
+            [icon]="faUpload"
+            size="1x"
+            [style]="{ color: '#4a4949' }"
+          ></fa-icon>
+        </div>
+        <div
+          class="filter-item"
+          (click)="addTransaction()"
+          matRipple
+          matTooltip="Add Transactions"
+          matTooltipPosition="below"
+        >
+          <fa-icon
+            [icon]="faCirclePlus"
+            size="1x"
+            [style]="{ color: '#4a4949' }"
+          ></fa-icon>
+        </div>
       </div>
-      <div
-        class="filter-item"
-        matRipple
-        matTooltip="Upload Transactions"
-        matTooltipPosition="below"
-      >
-        <fa-icon
-          [icon]="faUpload"
-          size="1x"
-          [style]="{ color: '#4a4949' }"
-        ></fa-icon>
-      </div>
-      <div
-        class="filter-item"
-        (click)="addTransaction()"
-        matRipple
-        matTooltip="Add Transactions"
-        matTooltipPosition="below"
-      >
-        <fa-icon
-          [icon]="faCirclePlus"
-          size="1x"
-          [style]="{ color: '#4a4949' }"
-        ></fa-icon>
-      </div>
-    </div>
-  </div>
+    </mat-grid-tile>
+  </mat-grid-list>
   <div class="transaction-panel-container">
     <router-outlet></router-outlet>
   </div>

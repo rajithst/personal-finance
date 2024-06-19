@@ -45,7 +45,6 @@ export interface TransactionsResponse {
 }
 
 export interface TransactionRequest extends Transaction {
-  is_regular_destination: boolean;
   update_similar: boolean;
   //merged_ids: number[] | null
 }

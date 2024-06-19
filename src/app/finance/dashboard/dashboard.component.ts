@@ -27,7 +27,7 @@ export class TransactionDashboardComponent implements OnInit {
   protected readonly faFileInvoiceDollar = faFileInvoiceDollar;
 
   today = new Date();
-  currentMonthNumber = this.today.getMonth()-2;
+  currentMonthNumber = this.today.getMonth()-1;
   currentMonthName: string = MONTHS.find(
     (x) => x.value == this.currentMonthNumber,
   )!.viewValue;
@@ -62,7 +62,7 @@ export class TransactionDashboardComponent implements OnInit {
   yearSummaryOptions: any;
   yearSummaryChartType: string = 'pie';
 
-  monthlyIncome: [[string, any]] = [['Month', 'Amount']];
+  monthlyIncome: [[string, any, any]] = [['Month', 'Income', 'Savings']];
   monthlyIncomeOptions: any;
   monthlyIncomeChartType: string = 'bar';
 
@@ -114,9 +114,8 @@ export class TransactionDashboardComponent implements OnInit {
 
   private prepareData() {
     this.prepareYearSummaryCard();
-    this.prepareMonthlyExpensesCard();
-    this.prepareMonthlyIncomeCard();
-    this.prepareMonthlySavingCard();
+    this.prepareMonthlyExpenseVsPaymentCard();
+    this.prepareMonthlyIncomeVsSavingsCard();
     this.prepareLastMonthExpenseCategories();
     this.prepareLastMonthExpenses();
     this.preparePaymentMethodCard();
@@ -127,61 +126,59 @@ export class TransactionDashboardComponent implements OnInit {
     this.yearSummary.push(['Savings', this.totalSavings]);
     this.yearSummary.push(['Payments', this.totalPayments]);
   }
-  private prepareMonthlyExpensesCard() {
+  private prepareMonthlyExpenseVsPaymentCard() {
     const expenses: MonthlyTransaction[] = this.sessionData.expenses.filter(
       (x) => x.year === this.currentYear,
     );
     const payments: MonthlyTransaction[] = this.sessionData.payments.filter(
       (x) => x.year === this.currentYear,
     );
-    const ex1 = expenses.map((x) => [x.month_text, x.total]).reverse();
-    const py1 = payments.map((x) => [x.month_text, x.total]).reverse();
-    for (let i = 0; i < ex1.length; i++) {
-      if (py1.length > i) {
-        this.monthlyExpenses.push([ex1[i][0].toString(), ex1[i][1], py1[i][1]]);
-      }
-    }
+
+    MONTHS.forEach((months) => {
+      const ex1 = expenses.find(x => x.month === months.value);
+      const py1 = payments.find(x => x.month === months.value);
+      const expenseValue = ex1 ? ex1.total : 0;
+      const paymentValue = py1 ? py1.total : 0;
+      this.monthlyExpenses.push([months.viewValue, expenseValue, paymentValue]);
+    })
+
     this.monthlyExpensesOptions = {
       title: `${this.currentYear} Monthly Expenses vs Payments`,
-      width: 420,
-      height: 250,
-      is3D: true,
-      legend: { position: 'bottom' },
+      width: 500,
+      height: 300,
+      colors: ['#cf5a5a', '#d59b6c'],
+      chartArea: { left: 0, top: 20, width: '100%', height: '70%' },
+      legend: { position: 'right', textStyle: {color: 'blue', fontSize: 10}},
     };
   }
 
-  private prepareMonthlyIncomeCard() {
-    const incomes = this.sessionData.incomes
-      .filter((x) => x.year === this.currentYear)
-      .map((x) => [x.month_text, x.total])
-      .reverse();
-    incomes.forEach((x) => {
-      this.monthlyIncome.push([x[0].toString(), x[1]]);
-    });
+  private prepareMonthlyIncomeVsSavingsCard() {
+    const incomes = this.sessionData.incomes.filter((x) => x.year === this.currentYear)
+    const savings = this.sessionData.saving.filter((x) => x.year === this.currentYear)
+    MONTHS.forEach((months) => {
+      const inc = incomes.find(x => x.month === months.value);
+      const sav = savings.find(x => x.month === months.value);
+      const incomeValue = inc ? inc.total : 0;
+      const savingValue = sav ? sav.total : 0;
+      this.monthlySavings.push([months.viewValue, savingValue])
+      this.monthlyIncome.push([months.viewValue, incomeValue, savingValue]);
+    })
 
     this.monthlyIncomeOptions = {
       title: `${this.currentYear} Monthly Income`,
-      width: 420,
-      height: 250,
-      is3D: true,
-      legend: { position: 'none' },
+      width: 500,
+      height: 300,
+      colors: ['#87dc88', '#6cacd5'],
+      chartArea: { left: 0, top: 20, width: '100%', height: '70%' },
+      legend: { position: 'right', textStyle: {color: 'blue', fontSize: 10}},
     };
-  }
-
-  private prepareMonthlySavingCard() {
-    const savings = this.sessionData.saving
-      .filter((x) => x.year === this.currentYear)
-      .map((x) => [x.month_text, x.total])
-      .reverse();
-    savings.forEach((x) => {
-      this.monthlySavings.push([x[0].toString(), x[1]]);
-    });
     this.monthlySavingsOptions = {
       title: `${this.currentYear} Monthly Savings`,
-      width: 420,
-      height: 250,
-      is3D: true,
-      legend: { position: 'none' },
+      width: 500,
+      height: 300,
+      colors: ['#23c623'],
+      chartArea: { left: 0, top: 20, width: '100%', height: '70%' },
+      legend: { position: 'none', textStyle: {color: 'blue', fontSize: 10}},
     };
   }
 
@@ -200,16 +197,16 @@ export class TransactionDashboardComponent implements OnInit {
     this.categoryWiseSumOptions = {
       title: `${this.currentYear} ${this.currentMonthName} Expenses (%)`,
       width: 500,
-      height: 350,
+      height: 300,
       pieHole: 0.2,
       pieSliceText: 'percentage',
-      chartArea: { left: 30, top: 50, width: '90%', height: '70%' },
+      chartArea: { left: 10, top: 50, width: '80%', height: '70%' },
       pieSliceTextStyle: {
         color: 'black',
         textAlign: 'left',
         fontsize: '10px',
       },
-      fontSize: 12,
+      fontSize: 10,
       legend: { position: 'right' },
     };
   }
@@ -217,10 +214,11 @@ export class TransactionDashboardComponent implements OnInit {
   private prepareLastMonthExpenses() {
     this.categoryWiseSumValueOptions = {
       title: `${this.currentYear} ${this.currentMonthName} Expenses (Value)`,
-      width: 300,
-      height: 350,
+      width: 500,
+      height: 300,
       is3D: true,
       bars: 'horizontal',
+      chartArea: { left: 10, top: 50, width: '100%', height: '70%' },
       legend: { position: 'none' },
     };
   }
@@ -239,7 +237,7 @@ export class TransactionDashboardComponent implements OnInit {
     }
     this.paymentMethodWiseSumOptions = {
       title: `${this.currentYear} ${this.currentMonthName} Payment Method`,
-      width: 350,
+      width: 500,
       height: 300,
       is3D: true,
       fontSize: 12,
@@ -267,16 +265,16 @@ export class TransactionDashboardComponent implements OnInit {
     this.monthlyPaymentsOptions = {
       title: `${this.currentYear} ${this.currentMonthName} Payments`,
       width: 500,
-      height: 350,
+      height: 300,
       pieHole: 0.2,
       pieSliceText: 'percentage',
-      chartArea: { left: 30, top: 50, width: '90%', height: '70%' },
+      chartArea: { left: 10, top: 50, width: '80%', height: '70%' },
       pieSliceTextStyle: {
         color: 'black',
         textAlign: 'left',
         fontsize: '10px',
       },
-      fontSize: 12,
+      fontSize: 10,
       legend: { position: 'right' },
     };
   }

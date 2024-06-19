@@ -151,10 +151,7 @@
         </div>
         <ul class="rules-list">
           <li>
-            <mat-checkbox color="primary" formControlName="update_similar">Update similar</mat-checkbox>
-          </li>
-          <li>
-            <mat-checkbox color="primary" formControlName="is_regular_destination">Is regular destination</mat-checkbox>
+            <mat-checkbox color="primary" formControlName="update_similar">Update all transactions for payee {{transactionForm.get('destination')?.value}}</mat-checkbox>
           </li>
         </ul>
       </div>
