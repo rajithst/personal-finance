@@ -10,7 +10,7 @@ import {
   faCirclePlus, faCodeMerge,
   faExpand,
   faFilter,
-  faMinimize, faPencil, faTrash,
+  faMinimize, faPencil, faSquareCaretLeft, faSquareCaretRight, faTrash,
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
@@ -21,7 +21,8 @@ import { TransactionFilterComponent } from '../transaction-filter/transaction-fi
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { SessionService } from '../service/session.service';
-import { TransactionFilterChip } from '../model/transactions';
+import {TransactionExpand} from '../model/transactions';
+
 
 @Component({
   selector: 'app-transaction',
@@ -39,6 +40,8 @@ export class FinanceComponent implements OnInit {
   protected readonly faPencil = faPencil;
   protected readonly faTrash = faTrash;
   protected readonly faCodeMerge = faCodeMerge;
+  protected readonly faSquareCaretRight = faSquareCaretRight;
+  protected readonly faSquareCaretLeft = faSquareCaretLeft;
 
   private loadingService = inject(LoadingService);
   private dataService = inject(DataService);
@@ -50,8 +53,10 @@ export class FinanceComponent implements OnInit {
   allExpanded = false;
   filterEnabled = false;
   lastSegment = '';
-  categoryChipset: TransactionFilterChip[] | null = [];
   pageTitle = 'Transaction'
+  today = new Date();
+  currentYear = this.today.getFullYear();
+  selectedTransactions: TransactionExpand[] = []
 
   sessionData = this.sessionService.getData();
 
@@ -63,13 +68,15 @@ export class FinanceComponent implements OnInit {
         const segments = urlAfterRedirect.split('/');
         this.lastSegment = segments[segments.length - 1];
         this.preparePageTitle()
-        this.prepareChips();
       });
   }
 
   ngOnInit(): void {
     this.loadingService.loadingOn();
-    this.prepareChips();
+
+    this.dataService.bulkSelectTransaction$.subscribe((value) => {
+      this.selectedTransactions = value;
+    })
   }
 
   preparePageTitle() {
@@ -81,14 +88,7 @@ export class FinanceComponent implements OnInit {
       this.pageTitle = 'Payments'
     }
   }
-  prepareChips() {
-    const filters = this.sessionData.filters.find(
-      (x) => x.target === this.lastSegment,
-    );
-    if (filters) {
-      this.categoryChipset = filters.filterChips;
-    }
-  }
+
 
   addTransaction() {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
@@ -120,10 +120,11 @@ export class FinanceComponent implements OnInit {
     });
 
     dialog.afterClosed().subscribe((result) => {
-      this.dataService.setFilters(result.refresh);
-      this.dataService.setPanelActions(this.allExpanded);
-      this.filterEnabled = result.filters;
-      this.prepareChips();
+      if (result) {
+        this.dataService.setFilters(result.refresh);
+        this.dataService.setPanelActions(this.allExpanded);
+        this.filterEnabled = result.filters;
+      }
     });
   }
 
@@ -132,27 +133,23 @@ export class FinanceComponent implements OnInit {
     this.dataService.setPanelActions(this.allExpanded);
   }
 
-  removeFilterChip(filterId: number) {
-    const idx = this.sessionData.filters.findIndex(
-      (x) => x.target === this.lastSegment,
-    );
-    if (idx !== -1) {
-      const chipId = this.sessionData.filters[idx].filterChips?.findIndex(
-        (x) => x.id === filterId,
-      );
-      if (chipId !== -1) {
-        this.sessionData.filters[idx].filterChips?.splice(chipId!, 1);
-      }
-      this.sessionData.filters[idx].conditions.categories =
-        this.sessionData.filters[idx].conditions.categories.filter(
-          (x) => x !== filterId,
-        );
-      this.filterEnabled = false;
-      this.dataService.setFilters(true);
+
+  applyFilter(event: KeyboardEvent) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.sessionService.setSearchQuery(filterValue)
+    this.dataService.setSearchQuery(filterValue.toLowerCase())
+  }
+
+
+  changeFilterYear(direction: string) {
+    if (direction === 'prev') {
+      this.currentYear = this.currentYear - 1;
+    } else {
+      this.currentYear = this.currentYear + 1;
     }
+    this.sessionService.setSessionFilterYear(this.currentYear)
+    this.dataService.setFilterYear(this.currentYear)
   }
 
-  applyFilter($event: KeyboardEvent) {
 
-  }
 }

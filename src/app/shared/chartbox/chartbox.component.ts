@@ -28,7 +28,6 @@ export class ChartboxComponent implements AfterViewInit {
   chartTitle: string;
 
   ngAfterViewInit() {
-    console.log('view checked --> ', this.chartData)
     google.charts.load('current', { 'packages': ['corechart', 'bar', 'line'] });
     google.charts.setOnLoadCallback(this.drawChart);
   }

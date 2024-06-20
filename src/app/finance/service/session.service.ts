@@ -18,6 +18,8 @@ export class SessionData {
   payments: MonthlyTransaction[] = [];
   destinations: string[] = [];
   payees: DestinationMap[] = [];
+  filterYear: number = new Date().getFullYear();
+  searchQuery: string = '';
   filters: TransactionFilterTemplate[] = [
     {
       target: 'transaction',
@@ -46,8 +48,6 @@ export class SessionData {
     return {
       categories: [],
       subcategories: [],
-      months: [],
-      years: [2024],
       paymentMethods: [],
     };
   }
@@ -74,6 +74,10 @@ export class SessionService {
 
   setPayeeSessionData(payeeData: DestinationMap[]) {
     this.session.payees = payeeData;
+  }
+
+  setSessionFilterYear(year: number) {
+    this.session.filterYear = year;
   }
 
   clearSessionFilter(filter: string) {
@@ -154,16 +158,14 @@ export class SessionService {
     } else if (target === 'savings') {
       source = this.session.saving;
     }
-    let years: number[] = filterSet!.conditions.years;
-    let months: number[] = filterSet!.conditions.months;
+
     const paymentMethods: number[] = filterSet!.conditions.paymentMethods;
     const categories: number[] = filterSet!.conditions.categories;
     const subCategories: number[] = filterSet!.conditions.subcategories;
-    const searchQuery: string = '';
+    const searchQuery: string = this.session.searchQuery.toLowerCase();
 
     const currData = source
-      .filter((x) => years.includes(x.year))
-      .filter((x) => (months.length > 0 ? months.includes(x.month) : true))
+      .filter(x => x.year == this.session.filterYear)
       .sort((x, y) => y.month - x.month)
       .sort((x, y) => y.year - x.year);
     currData.forEach((x) => {
@@ -183,8 +185,14 @@ export class SessionService {
         )
         .filter((y) =>
           searchQuery.length > 0
-            ? y.destination.includes(searchQuery) ||
-              y.alias?.includes(searchQuery)
+            ? y.destination.toLowerCase().includes(searchQuery) ||
+              y.alias?.toLowerCase().includes(searchQuery) ||
+            y.notes?.toLowerCase().includes(searchQuery) ||
+            y.amount?.toString().toLowerCase().includes(searchQuery) ||
+            y.category_text?.toLowerCase().includes(searchQuery) ||
+            y.subcategory_text?.toLowerCase().includes(searchQuery) ||
+            y.payment_method_text?.toLowerCase().includes(searchQuery) ||
+            y.date?.toLowerCase().includes(searchQuery)
             : true,
         );
       x.total = x.transactions_cp.reduce(
@@ -204,5 +212,9 @@ export class SessionService {
       });
     });
     return currData;
+  }
+
+  setSearchQuery(filterValue: string) {
+    this.session.searchQuery = filterValue;
   }
 }

@@ -25,7 +25,6 @@ export class SessionService {
     this.session.holdings = data.holdings;
     this.session.dividends = data.dividends;
     this.session.transactions = data.transactions;
-    console.log(this.session)
   }
 
 }

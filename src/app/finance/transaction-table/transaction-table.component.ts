@@ -78,7 +78,6 @@ export class TransactionTableComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.dataService.triggerPanels$.subscribe((value) => {
-      console.log('panel triggering', value)
       if (value !== null && value) {
         this.dataSource = new MatTableDataSource<TransactionExpand>(
           this.transactionData.transactions_cp,
@@ -163,8 +162,14 @@ export class TransactionTableComponent implements OnInit, OnChanges {
   toggleAllRows() {
     if (this.isAllSelected()) {
       this.selection.clear();
-      return;
+    } else {
+      this.selection.select(...this.dataSource.data);
     }
-    this.selection.select(...this.dataSource.data);
+    this.dataService.setBulkSelectTransactions(this.selection.selected)
+  }
+
+  toggleRow(row: TransactionExpand) {
+    this.selection.toggle(row)
+    this.dataService.setBulkSelectTransactions(this.selection.selected)
   }
 }

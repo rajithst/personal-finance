@@ -24,12 +24,17 @@ export class SavingsComponent implements OnInit{
     data.forEach(x => {
       x.transactions_cp = JSON.parse(JSON.stringify(x.transactions));
     })
+    this.transactionData = data;
+
     this.dataService.updatedFilters$.subscribe((value) => {
       if(value) {
         this.filterData();
       }
     });
-    this.transactionData = data;
+    this.dataService.yearSwitch$.subscribe((value) => {
+      this.filterData();
+    })
+
   }
 
   filterData() {

@@ -7,13 +7,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {
   INCOME_CATEGORIES,
-  MONTHS,
   NA_CATEGORY_ID,
   NA_SUB_CATEGORY_ID, PAYMENT_CATEGORY_ID,
   PAYMENT_METHODS, SAVINGS_CATEGORY_ID,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
-  YEARS,
 } from '../../data/client.data';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -44,14 +42,10 @@ export class TransactionFilterComponent implements OnInit {
   transactionCategories: DropDownType[] = TRANSACTION_CATEGORIES;
   transactionSubCategories: DropDownType[] =
     TRANSACTION_SUB_CATEGORIES[NA_SUB_CATEGORY_ID];
-  years = YEARS;
-  months = MONTHS;
   paymentMethods = PAYMENT_METHODS;
   mainCategoryForm: FormGroup;
   subCategoryForm: FormGroup;
   paymentMethodForm: FormGroup;
-  yearForm: FormGroup;
-  monthsForm: FormGroup;
   sessionData = this.sessionService.getData();
 
   constructor(
@@ -84,8 +78,6 @@ export class TransactionFilterComponent implements OnInit {
     const categoryGroup: any = {};
     const subCategoryGroup: any = {};
     const paymentMethodGroup: any = {};
-    const yearGroup: any = {};
-    const monthsGroup: any = {};
     const filters = this.sessionData.filters.find(x => x.target === this.data.filterTarget);
     const conditions = filters!.conditions;
 
@@ -102,17 +94,11 @@ export class TransactionFilterComponent implements OnInit {
     PAYMENT_METHODS.forEach((category: DropDownType) => {
       paymentMethodGroup[`paymentmethod_${category.value}`] = new FormControl(conditions.paymentMethods.includes(category.value));
     });
-    YEARS.forEach((category: DropDownType) => {
-      yearGroup[`year_${category.value}`] = new FormControl(conditions.years.includes(category.value));
-    });
-    MONTHS.forEach((category: DropDownType) => {
-      monthsGroup[`month_${category.value}`] = new FormControl(conditions.months.includes(category.value));
-    });
+
+
     this.mainCategoryForm = this.formBuilder.group(categoryGroup);
     this.subCategoryForm = this.formBuilder.group(subCategoryGroup);
     this.paymentMethodForm = this.formBuilder.group(paymentMethodGroup);
-    this.yearForm = this.formBuilder.group(yearGroup);
-    this.monthsForm = this.formBuilder.group(monthsGroup);
   }
 
   clickOnOption(filterType: string, filterOption: DropDownType) {
@@ -138,9 +124,6 @@ export class TransactionFilterComponent implements OnInit {
     } else if (filterType == 'payee') {
       this.categoryTitle = 'Payee';
       this.subCategoryTitle = '';
-    } else if (filterType == 'year') {
-      this.categoryTitle = 'Year';
-      this.subCategoryTitle = 'Month';
     }
   }
 
@@ -161,12 +144,10 @@ export class TransactionFilterComponent implements OnInit {
     this.dialogRef.close({refresh: true, filters: false})
   }
   submit() {
-    const filterParams: any = {'categories': [], 'subcategories': [], 'paymentMethods': [], 'years': [], 'months': []};
+    const filterParams: any = {'categories': [], 'subcategories': [], 'paymentMethods': []};
     filterParams['categories'] = this.extractParams(this.mainCategoryForm.value);
     filterParams['subcategories'] = this.extractParams(this.subCategoryForm.value);
     filterParams['paymentMethods'] = this.extractParams(this.paymentMethodForm.value);
-    filterParams['years'] = this.extractParams(this.yearForm.value);
-    filterParams['months'] = this.extractParams(this.monthsForm.value);
 
     const filterChips: TransactionFilterChip[] = [];
     filterParams['categories'].forEach((x: Number) => {

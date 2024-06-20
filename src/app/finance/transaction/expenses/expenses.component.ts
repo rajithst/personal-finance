@@ -9,7 +9,8 @@ import { SessionService } from '../../service/session.service';
 import { MonthlyTransaction } from '../../model/transactions';
 import { LoadingService } from '../../../shared/loading/loading.service';
 import { MatAccordion } from '@angular/material/expansion';
-import {DataService} from "../../service/data.service";
+import { DataService } from '../../service/data.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-expenses',
@@ -21,7 +22,7 @@ export class ExpensesComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
   private sessionService = inject(SessionService);
-  private dataService = inject(DataService)
+  private dataService = inject(DataService);
   private loadingService = inject(LoadingService);
 
   sessionData = this.sessionService.getData();
@@ -29,21 +30,25 @@ export class ExpensesComponent implements OnInit {
 
   ngOnInit(): void {
     this.filterData();
-    this.dataService.updatedTransaction$.subscribe((value) => {
-      if(value) {
-        this.filterData();
-      }
-    });
-    this.dataService.updatedFilters$.subscribe((value) => {
-      if(value) {
-        this.filterData();
-      }
-    });
-    this.dataService.triggerPanels$.subscribe((value) => {
-      if (value !== null) {
-        this.expandPanels(value);
-      }
-    });
+    this.dataService.updatedTransaction$
+      .pipe(filter((value) => !!value))
+      .subscribe(() => this.filterData());
+
+    this.dataService.updatedFilters$
+      .pipe(filter((value) => !!value))
+      .subscribe(() => this.filterData());
+
+    this.dataService.triggerPanels$
+      .pipe(filter((value) => value !== null))
+      .subscribe((value) => this.expandPanels(value as boolean));
+
+    this.dataService.yearSwitch$
+      .pipe(filter((value) => !!value))
+      .subscribe(() => this.filterData());
+
+    this.dataService.searchTransaction$
+      .pipe(filter((value) => !!value))
+      .subscribe(() => this.filterData());
   }
 
   filterData() {
@@ -59,5 +64,4 @@ export class ExpensesComponent implements OnInit {
       this.accordion.closeAll();
     }
   }
-
 }

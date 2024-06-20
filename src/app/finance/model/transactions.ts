@@ -53,8 +53,6 @@ export interface TransactionFilter {
   categories: number[];
   subcategories: number[];
   paymentMethods: number[];
-  years: number[];
-  months: number[];
 }
 
 export interface TransactionFilterChip {
