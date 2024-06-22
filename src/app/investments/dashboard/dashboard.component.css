@@ -1,11 +1,20 @@
+.dashboard-container {
+  overflow: auto;
+  max-height: 80vh;
+  height: 76vh;
+}
+
 .stock-summary {
   display: flex;
   margin: 5px 0;
 }
 
 .summary-item {
-  width: 25%;
-  margin-right: 5px;
+  width: 100%;
+}
+
+.summary-item > mat-card-content {
+  padding: 10px;
 }
 
 .summary-item-title-icon > span {
@@ -16,6 +25,7 @@
   flex-direction: column;
   align-content: center;
   text-align: center;
+  font-weight: 800;
 }
 .summary-item-title-value {
   font-size: 20px;
@@ -34,38 +44,7 @@
   color: #f64e60;
 }
 
-.chart-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 10px;
-  margin-bottom: 10px;
-  justify-items: stretch;
-}
-
-.chart-card-header {
-  display: flex;
-  padding: 5px 16px 0;
-  justify-content: center;
-  background: #bdbdbd;
-  height: 30px;
-  align-items: center
-}
-
-.chart-card-title {
-  font-size: 14px;
-}
-
-.chard-card-content {
-  margin-top: 10px;
-}
-
-.panel-header-content {
-  display: flex;
+.chart-item {
   width: 100%;
-  justify-content: space-between;
-}
-
-.sector-wise-breakdown {
-  width: 550px;
-  height: 400px;
+  height: 100%;
 }

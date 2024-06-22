@@ -1,7 +1,7 @@
 .content {
   flex: 1;
   overflow: hidden;
-  max-height: 98vh;
+  max-height: 100vh;
 }
 
 .nav-link {
@@ -28,7 +28,7 @@
 }
 
 .main-container {
-  height: 90vh;
+  height: 93vh;
   overflow: hidden;
   background: #faf7f7;
 }

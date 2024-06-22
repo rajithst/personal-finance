@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {CompanyInfo, Holding, StockPurchaseHistory} from "../model/investment";
 
 export interface SessionDividend {
   us: any[],
@@ -6,10 +7,10 @@ export interface SessionDividend {
 }
 
 export class SessionData {
-  holdings: any[] = [];
+  holdings: Holding[] = [];
   dividends: SessionDividend = {us: [], domestic: []};
-  transactions: any[] = [];
-  companies: any[] = [];
+  transactions: StockPurchaseHistory[] = [];
+  companies: CompanyInfo[] = [];
 }
 
 
