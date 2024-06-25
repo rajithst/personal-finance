@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {Component, inject, OnInit} from '@angular/core';
 import {SessionService} from "../service/session.service";
+import {Holding} from "../model/investment";
 
 
 @Component({
@@ -9,10 +9,10 @@ import {SessionService} from "../service/session.service";
   styleUrl: './holdings.component.css',
 })
 export class HoldingsComponent implements OnInit {
+  private sessionService = inject(SessionService)
   private sessionData = this.sessionService.getData();
-  constructor(private sessionService: SessionService) {}
-  usHoldings: any[] = [];
-  domesticHoldings: any[] = [];
+  usHoldings: Holding[] = [];
+  domesticHoldings: Holding[] = [];
 
   ngOnInit(): void {
     this.usHoldings = this.sessionData.holdings.filter(

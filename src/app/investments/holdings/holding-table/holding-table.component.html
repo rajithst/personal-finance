@@ -69,7 +69,7 @@
           <div class="holding-item-contents-1">
             <div class="company-image"><img src="{{element.image}}" alt="" class="ticker-image"></div>
             <div class="company-ticker">
-              <div class="company-name">{{element.company_name}}</div>
+              <div class="company-name"><a href="javascript:void(0)" (click)="openStockDetail(element.company)">{{element.company_name}}</a></div>
               <div class="company-symbol">{{element.company}}</div>
             </div>
           </div>

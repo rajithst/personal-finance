@@ -7,6 +7,22 @@ export interface InvestmentResponse {
   companies: any[];
 }
 
+export interface StockDailyPriceResponse {
+  symbol: string;
+  prices: StockDailyPrice[];
+}
+
+export interface StockDailyPrice {
+  id: number;
+  date: string;
+  day_high_price: number;
+  day_low_price: number;
+  current_price: number;
+  change: number;
+  change_percentage: number;
+  company_id: string;
+}
+
 export interface CompanyInfo {
   symbol: string;
   company_name: string;
@@ -55,3 +71,4 @@ export interface Holding {
   company_name: string;
   image: string;
 }
+

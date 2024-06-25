@@ -53,8 +53,8 @@ export class ChartboxComponent implements AfterViewInit {
         this.chart = new google.visualization.PieChart(this.chartArea.nativeElement);
         this.chart.draw(data, options);
       } else if (this.chartType == 'line') {
-        this.chart = new google.charts.Line(this.chartArea.nativeElement);
-        this.chart.draw(data, google.charts.Line.convertOptions(options));
+        this.chart = new google.visualization.ComboChart(this.chartArea.nativeElement);
+        this.chart.draw(data, options);
       }
     } else {
       this.chart = '';

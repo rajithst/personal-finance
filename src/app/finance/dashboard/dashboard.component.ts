@@ -127,13 +127,13 @@ export class TransactionDashboardComponent implements OnInit {
     this.yearSummary.push(['Payments', this.totalPayments]);
   }
   private prepareMonthlyExpenseVsPaymentCard() {
+
     const expenses: MonthlyTransaction[] = this.sessionData.expenses.filter(
       (x) => x.year === this.currentYear,
     );
     const payments: MonthlyTransaction[] = this.sessionData.payments.filter(
       (x) => x.year === this.currentYear,
-    );
-
+    )
     MONTHS.forEach((months) => {
       const ex1 = expenses.find(x => x.month === months.value);
       const py1 = payments.find(x => x.month === months.value);

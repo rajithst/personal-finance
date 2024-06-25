@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {SessionService} from "../service/session.service";
+import {StockPurchaseHistory} from "../model/investment";
 
 @Component({
   selector: 'app-trade-history',
@@ -8,8 +9,8 @@ import {SessionService} from "../service/session.service";
 })
 export class TradeHistoryComponent implements OnInit {
   constructor(private sessionService: SessionService) {}
-  usTrades: any[] = []
-  domesticTrades: any[] = []
+  usTrades: StockPurchaseHistory[] = []
+  domesticTrades: StockPurchaseHistory[] = []
 
   private sessionData = this.sessionService.getData();
 

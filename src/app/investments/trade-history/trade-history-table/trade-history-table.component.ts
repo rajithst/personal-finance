@@ -9,6 +9,7 @@ import {
   faEdit
 } from '@fortawesome/free-solid-svg-icons';
 import {MatTableDataSource} from "@angular/material/table";
+import {StockPurchaseHistory} from "../../model/investment";
 
 @Component({
   selector: 'app-trade-history-table',
@@ -16,7 +17,7 @@ import {MatTableDataSource} from "@angular/material/table";
   styleUrl: './trade-history-table.component.css',
 })
 export class TradeHistoryTableComponent implements OnChanges {
-  @Input() trades: any[] = [];
+  @Input() trades: StockPurchaseHistory[] = [];
 
   protected readonly faCircleCheck = faCircleCheck;
   protected readonly faCaretUp = faCaretUp;
@@ -25,10 +26,10 @@ export class TradeHistoryTableComponent implements OnChanges {
 
   displayedColumns: string[] = ['Stock', 'Date', 'Shares', 'Industry', 'Sector', 'Price', 'CurrentShareValue', 'TotalProfit', 'Actions'];
 
-  dataSource = new MatTableDataSource();
+  dataSource = new MatTableDataSource<StockPurchaseHistory>();
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.dataSource = new MatTableDataSource(this.trades);
+    this.dataSource = new MatTableDataSource<StockPurchaseHistory>(this.trades);
   }
 
   protected readonly faPlus = faPlus;

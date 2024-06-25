@@ -17,6 +17,7 @@ import { HoldingTableComponent } from './holdings/holding-table/holding-table.co
 import { DividendTableComponent } from './dividend/dividend-table/dividend-table.component';
 import { TradeHistoryTableComponent } from './trade-history/trade-history-table/trade-history-table.component';
 import { DividendFlowComponent } from './dividend/dividend-flow/dividend-flow.component';
+import { HoldingDetailsComponent } from './holdings/holding-details/holding-details.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { DividendFlowComponent } from './dividend/dividend-flow/dividend-flow.co
     DividendTableComponent,
     TradeHistoryTableComponent,
     DividendFlowComponent,
+    HoldingDetailsComponent,
   ],
   imports: [
     CommonModule,

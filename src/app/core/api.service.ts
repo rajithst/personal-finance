@@ -7,7 +7,7 @@ import {
   TransactionExpand,
   TransactionsResponse,
 } from '../finance/model/transactions';
-import { InvestmentResponse } from '../investments/model/investment';
+import {InvestmentResponse, StockDailyPriceResponse} from '../investments/model/investment';
 import { StockPurchase } from '../investments/model/transaction';
 import { environment } from '../../environments/environment';
 import {DestinationMap, DestinationMapRequest, PayeeResponse} from "../finance/model/payee";
@@ -72,6 +72,11 @@ export class ApiService {
     return this.http.post(`${this.SRC_URL}/investments/stock-purchase/`, payload)
   }
 
+  getStockPriceHistory(payload: string): Observable<StockDailyPriceResponse> {
+    return this.http.get<StockDailyPriceResponse>(
+      `${this.SRC_URL}/investments/stock-daily-price/${payload}/`,
+    );
+  }
 
   updatePayeeRules(payload: DestinationMapRequest): Observable<DestinationMap> {
     if (payload.id) {

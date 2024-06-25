@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, inject,
   Input,
   OnChanges,
   SimpleChanges,
@@ -9,12 +9,17 @@ import { MatSort } from '@angular/material/sort';
 
 import {
   faCaretDown,
-  faCaretUp, faEdit, faEllipsis,
+  faCaretUp, faEllipsis,
   faJpy,
   faLineChart, faList,
   faMoneyBill, faPlus, faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { MatTableDataSource } from '@angular/material/table';
+import {MatDialog} from "@angular/material/dialog";
+import {HoldingDetailsComponent} from "../holding-details/holding-details.component";
+import {SessionService} from "../../service/session.service";
+import {Holding, StockDailyPrice} from "../../model/investment";
+import {ApiService} from "../../../core/api.service";
 
 @Component({
   selector: 'app-holding-table',
@@ -22,7 +27,7 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrl: './holding-table.component.css',
 })
 export class HoldingTableComponent implements OnChanges {
-  @Input() holdings: any[] = [];
+  @Input() holdings: Holding[] = [];
   @ViewChild(MatSort) sort: MatSort;
 
   protected readonly faCaretDown = faCaretDown;
@@ -34,6 +39,12 @@ export class HoldingTableComponent implements OnChanges {
   protected readonly faPlus = faPlus;
   protected readonly faTrash = faTrash;
   protected readonly Math = Math;
+  protected readonly faList = faList;
+
+  private dialog = inject(MatDialog);
+  private apiService = inject(ApiService);
+  private sessionService = inject(SessionService)
+  private sessionData = this.sessionService.getData();
 
   totalShares: number = 0;
   totalInvestment: number = 0;
@@ -52,7 +63,7 @@ export class HoldingTableComponent implements OnChanges {
     'ShareInProtofolio',
     'Actions'
   ];
-  dataSource = new MatTableDataSource();
+  dataSource = new MatTableDataSource<Holding>();
 
   ngOnChanges(changes: SimpleChanges): void {
     this.currency =
@@ -72,7 +83,7 @@ export class HoldingTableComponent implements OnChanges {
     );
     this.totalProfitPercentage =
       (this.totalProfit / this.totalInvestment) * 100;
-    this.dataSource = new MatTableDataSource(this.holdings);
+    this.dataSource = new MatTableDataSource<Holding>(this.holdings);
     this.dataSource.sort = this.sort;
   }
 
@@ -83,6 +94,30 @@ export class HoldingTableComponent implements OnChanges {
   }
 
 
-  protected readonly faEdit = faEdit;
-  protected readonly faList = faList;
+
+  openStockDetail(symbol: string) {
+
+    let stockPriceHistory: StockDailyPrice[] = [];
+    this.apiService.getStockPriceHistory(symbol).subscribe(value => {
+      stockPriceHistory = value.prices;
+      this.openModal(symbol, stockPriceHistory)
+    })
+  }
+
+  openModal(symbol: string, stockPriceHistory: StockDailyPrice[]) {
+    const holdingData = this.holdings.find(h => h.company === symbol);
+    const transactions = this.sessionData.transactions;
+    const purchaseHistory = transactions.filter(x => x.company === symbol)
+    const dialog = this.dialog.open(HoldingDetailsComponent, {
+      width: '950px',
+      position: {
+        top: '50px',
+      },
+      data: { symbol: symbol, holdingData, purchaseHistory, stockPriceHistory },
+    });
+    dialog.afterClosed().subscribe((result) => {
+      if (result) {
+      }
+    });
+  }
 }
