@@ -29,6 +29,7 @@ export class ExpensesComponent implements OnInit {
   transactionData: MonthlyTransaction[] = [];
 
   ngOnInit(): void {
+    this.dataService.setBulkSelectTransactions([]);
     this.filterData();
     this.dataService.updatedTransaction$
       .pipe(filter((value) => !!value))

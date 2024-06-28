@@ -3,14 +3,19 @@ import {
   ElementRef,
   inject,
   OnInit,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { LoadingService } from '../../shared/loading/loading.service';
 import {
-  faCirclePlus, faCodeMerge,
+  faCirclePlus,
+  faCodeMerge,
   faExpand,
   faFilter,
-  faMinimize, faPencil, faSquareCaretLeft, faSquareCaretRight, faTrash,
+  faMinimize,
+  faPencil,
+  faSquareCaretLeft,
+  faSquareCaretRight,
+  faTrash,
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
@@ -21,8 +26,7 @@ import { TransactionFilterComponent } from '../transaction-filter/transaction-fi
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { SessionService } from '../service/session.service';
-import {TransactionExpand} from '../model/transactions';
-
+import { TransactionExpand } from '../model/transactions';
 
 @Component({
   selector: 'app-transaction',
@@ -30,8 +34,6 @@ import {TransactionExpand} from '../model/transactions';
   styleUrl: './transaction.component.css',
 })
 export class FinanceComponent implements OnInit {
-  @ViewChild('filterButton') element: ElementRef;
-
   protected readonly faUpload = faUpload;
   protected readonly faMinimize = faMinimize;
   protected readonly faCirclePlus = faCirclePlus;
@@ -50,13 +52,16 @@ export class FinanceComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
   private route = inject(Router);
 
+  filterButton = viewChild<ElementRef>('filterButton');
+  searchInput = viewChild<ElementRef>('searchInput');
+
   allExpanded = false;
   filterEnabled = false;
   lastSegment = '';
-  pageTitle = 'Transaction'
+  pageTitle = 'Transaction';
   today = new Date();
   currentYear = this.today.getFullYear();
-  selectedTransactions: TransactionExpand[] = []
+  selectedTransactions: TransactionExpand[] = [];
 
   sessionData = this.sessionService.getData();
 
@@ -67,16 +72,16 @@ export class FinanceComponent implements OnInit {
         const urlAfterRedirect = val.urlAfterRedirects;
         const segments = urlAfterRedirect.split('/');
         this.lastSegment = segments[segments.length - 1];
-        this.preparePageTitle()
+        this.preparePageTitle();
       });
   }
 
   ngOnInit(): void {
     this.loadingService.loadingOn();
-
+    this.dataService.setBulkSelectTransactions([]);
     this.dataService.bulkSelectTransaction$.subscribe((value) => {
       this.selectedTransactions = value;
-    })
+    });
   }
 
   preparePageTitle() {
@@ -85,10 +90,9 @@ export class FinanceComponent implements OnInit {
     } else if (this.lastSegment === 'savings') {
       this.pageTitle = 'Savings';
     } else if (this.lastSegment === 'payments') {
-      this.pageTitle = 'Payments'
+      this.pageTitle = 'Payments';
     }
   }
-
 
   addTransaction() {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
@@ -110,7 +114,7 @@ export class FinanceComponent implements OnInit {
 
   openFilters() {
     this.dialog.closeAll();
-    const rect = this.element.nativeElement.getBoundingClientRect();
+    const rect = this.filterButton()?.nativeElement.getBoundingClientRect();
     const dialog = this.dialog.open(TransactionFilterComponent, {
       width: '700px',
       height: '500px',
@@ -133,13 +137,11 @@ export class FinanceComponent implements OnInit {
     this.dataService.setPanelActions(this.allExpanded);
   }
 
-
-  applyFilter(event: KeyboardEvent) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.sessionService.setSearchQuery(filterValue)
-    this.dataService.setSearchQuery(filterValue.toLowerCase())
+  applyFilter() {
+    const filterValue = this.searchInput()?.nativeElement.value;
+    this.sessionService.setSearchQuery(filterValue);
+    this.dataService.setSearchQuery(filterValue.toLowerCase());
   }
-
 
   changeFilterYear(direction: string) {
     if (direction === 'prev') {
@@ -147,9 +149,30 @@ export class FinanceComponent implements OnInit {
     } else {
       this.currentYear = this.currentYear + 1;
     }
-    this.sessionService.setSessionFilterYear(this.currentYear)
-    this.dataService.setFilterYear(this.currentYear)
+    this.sessionService.setSessionFilterYear(this.currentYear);
+    this.dataService.setFilterYear(this.currentYear);
   }
 
-
+  mergeTransactions() {
+    const dialog = this.dialog.open(TransactionUpdateDialog, {
+      width: '850px',
+      position: {
+        top: '10%',
+      },
+      data: {
+        formData: null,
+        task: 'merge',
+        formDataList: this.selectedTransactions,
+      },
+    });
+    dialog.afterClosed().subscribe((result) => {
+      if (result.refresh) {
+        this.dataService.setTransaction(result);
+        this.dataService.setBulkSelectTransactions([]);
+        this.snackBar.open('Updated!', 'Success', {
+          duration: 3000,
+        });
+      }
+    });
+  }
 }

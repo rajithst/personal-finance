@@ -1,41 +1,10 @@
 <h2
-  mat-dialog-title
-  cdkDrag
-  cdkDragRootElement=".cdk-overlay-pane"
-  cdkDragHandle
->
-  {{ headerTitle }}
+  mat-dialog-title>
+  <span *ngIf="data.task==='add'">Add Transaction</span>
+  <span *ngIf="data.task==='edit'">Edit Transaction</span>
+  <span *ngIf="data.task==='merge'">Merge Transactions</span>
 </h2>
 <mat-dialog-content>
-
-  <ng-container *ngIf="data.task == 'merge'">
-    <h3>Following transactions will merge in to one transaction.</h3>
-    <table class="merge-table">
-      <thead>
-      <tr>
-        <th>Transaction ID</th>
-        <th>Date</th>
-        <th>Amount</th>
-        <th>Destination</th>
-      </tr>
-      </thead>
-      <tbody>
-        @for (
-            row of data.formDataList;
-          track row;
-          let tableRowId = $index
-          ) {
-          <tr>
-            <td>{{ row.id }}</td>
-            <td>{{ row.date }}</td>
-            <td>{{ row.amount | number: "1.2-2" }}</td>
-            <td>{{ row.destination }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-    <mat-divider></mat-divider>
-  </ng-container>
   <form [formGroup]="transactionForm">
     <table class="expense-field-table">
       <tr>

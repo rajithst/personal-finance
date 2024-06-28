@@ -80,7 +80,7 @@
                 ></fa-icon>
             </span>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="editRecord(element, 'update')">
+          <button mat-menu-item (click)="editRecord(element)">
             <fa-icon [icon]="faEdit" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
             <span class="transaction-action-item">Edit</span>
           </button>
@@ -92,7 +92,7 @@
             <fa-icon [icon]="faList" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
             <span class="transaction-action-item">Show Merge history</span>
           </button>
-          <button mat-menu-item (click)="deleteRecord(element, 'delete')">
+          <button mat-menu-item (click)="deleteRecord(element)">
             <fa-icon [icon]="faTrash" size="sm" [style]="{ color: 'red' }"></fa-icon>
             <span class="transaction-action-item">Delete</span>
           </button>

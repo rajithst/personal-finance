@@ -77,7 +77,8 @@
           type="text"
           class="search-bar"
           placeholder="Search"
-          (keyup)="applyFilter($event)"
+          #searchInput
+          (keyup)="applyFilter()"
         />
       </div>
 
@@ -86,6 +87,7 @@
       <div class="filters-right">
         <div class="merge-panel">
           <div class="filter-item"
+               (click)="mergeTransactions()"
                matRipple
                matBadge="{{selectedTransactions.length}}"
                [matBadgeHidden]="selectedTransactions.length<=1"

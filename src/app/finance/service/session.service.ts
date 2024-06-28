@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from '../../core/api.service';
-import { Income, IncomeRequest } from '../model/income.data';
 import {
   MonthlyTransaction,
   Transaction,
@@ -24,25 +22,20 @@ export class SessionData {
     {
       target: 'transaction',
       conditions: this.getEmptyFilterTemplate(),
-      filterChips: [],
     },
     {
       target: 'payments',
       conditions: this.getEmptyFilterTemplate(),
-      filterChips: [],
     },
     {
       target: 'savings',
       conditions: this.getEmptyFilterTemplate(),
-      filterChips: [],
     },
     {
       target: 'income',
       conditions: this.getEmptyFilterTemplate(),
-      filterChips: [],
     },
   ];
-  panelSettings: any = [];
 
   getEmptyFilterTemplate(): TransactionFilter {
     return {
@@ -58,7 +51,6 @@ export class SessionData {
 })
 export class SessionService {
   private session: SessionData = new SessionData();
-  constructor(private apiService: ApiService) {}
 
   getData() {
     return this.session;
@@ -70,6 +62,10 @@ export class SessionService {
     this.session.expenses = resolvedData.expense;
     this.session.payments = resolvedData.payment;
     this.session.destinations = resolvedData.destinations;
+  }
+
+  setSearchQuery(filterValue: string) {
+    this.session.searchQuery = filterValue;
   }
 
   setPayeeSessionData(payeeData: DestinationMap[]) {
@@ -86,35 +82,13 @@ export class SessionService {
       this.session.filters[idx] = {
         target: filter,
         conditions: this.session.getEmptyFilterTemplate(),
-        filterChips: [],
       };
     }
   }
-  updateIncome(payload: IncomeRequest) {
-    this.apiService.updateIncome(payload).subscribe((income: Income) => {
-      if (income) {
-        //this.updateSessionIncome(income);
-      } else {
-      }
-    });
-  }
 
   syncSessionTransaction(newData: TransactionExpand, target: string) {
-    let source: MonthlyTransaction[] = this.session.expenses;
-    if (target === 'payments') {
-      source = this.session.payments;
-    } else if (target === 'savings') {
-      source = this.session.saving;
-    }
-    let idx = source.findIndex(
-      (x: MonthlyTransaction) =>
-        x.year == newData.year && x.month == newData.month,
-    );
+    let [source, idx, expId] = this.getTargetTransactionIds(newData, target);
     if (idx !== -1) {
-      const currItem = source[idx];
-      const expId = currItem.transactions.findIndex(
-        (x: Transaction) => x.id == newData.id,
-      );
       if (expId !== -1) {
         if (newData.is_deleted) {
           source[idx].transactions.splice(expId, 1);
@@ -132,7 +106,7 @@ export class SessionService {
         0,
       );
     } else {
-      idx = 0;
+      idx = Date.now();
       const transactionObject: MonthlyTransaction = {
         year: newData.year!,
         month: newData.month!,
@@ -146,6 +120,39 @@ export class SessionService {
       source.push(transactionObject);
     }
     return source[idx];
+  }
+
+  deleteMergedTransactions(transactions: TransactionExpand[], target: string) {
+    transactions.forEach((transaction: TransactionExpand) => {
+      let [source, idx, expId] = this.getTargetTransactionIds(transaction, target)
+      if (idx !== -1) {
+        if (expId !== -1) {
+          source[idx].transactions.splice(expId, 1);
+        }
+      }
+    })
+
+  }
+
+  private getTargetTransactionIds(transaction: TransactionExpand, target: string): [MonthlyTransaction[], number, number] {
+    let source: MonthlyTransaction[] = this.session.expenses;
+    if (target === 'payments') {
+      source = this.session.payments;
+    } else if (target === 'savings') {
+      source = this.session.saving;
+    }
+    let childId = -1;
+    let parentId = source.findIndex(
+      (x: MonthlyTransaction) =>
+        x.year == transaction.year && x.month == transaction.month,
+    );
+    if (parentId !== -1) {
+      const currItem = source[parentId];
+      childId = currItem.transactions.findIndex(
+        (x: Transaction) => x.id == transaction.id,
+      );
+    }
+    return [source, parentId, childId];
   }
 
   filterTransactions(target: string): MonthlyTransaction[] {
@@ -214,7 +221,4 @@ export class SessionService {
     return currData;
   }
 
-  setSearchQuery(filterValue: string) {
-    this.session.searchQuery = filterValue;
-  }
 }

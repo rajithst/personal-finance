@@ -19,6 +19,7 @@ export class PaymentsComponent implements OnInit{
   transactionData: MonthlyTransaction[] = [];
 
   ngOnInit(): void {
+    this.dataService.setBulkSelectTransactions([]);
     const data= this.sessionData.payments;
     data.forEach(x => {
       x.transactions_cp = JSON.parse(JSON.stringify(x.transactions));
@@ -30,7 +31,7 @@ export class PaymentsComponent implements OnInit{
         this.filterData();
       }
     });
-    this.dataService.yearSwitch$.subscribe((value) => {
+    this.dataService.yearSwitch$.subscribe(() => {
       this.filterData();
     })
   }

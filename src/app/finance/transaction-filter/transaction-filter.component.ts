@@ -17,7 +17,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DropDownType } from '../../data/shared.data';
 import { SessionService } from '../service/session.service';
-import {TransactionFilterChip} from "../model/transactions";
 
 interface FilterDialogData {
   filterTarget: string
@@ -149,19 +148,11 @@ export class TransactionFilterComponent implements OnInit {
     filterParams['subcategories'] = this.extractParams(this.subCategoryForm.value);
     filterParams['paymentMethods'] = this.extractParams(this.paymentMethodForm.value);
 
-    const filterChips: TransactionFilterChip[] = [];
-    filterParams['categories'].forEach((x: Number) => {
-      const cat = TRANSACTION_CATEGORIES.find(y => y.value === x)
-      if (cat) {
-        filterChips.push({'id': x.valueOf(), 'value': cat.viewValue})
-      }
-    })
-
     const idx = this.sessionData.filters.findIndex(x => x.target === this.data.filterTarget);
     if (idx !== -1) {
-      this.sessionData.filters[idx] = {target: this.data.filterTarget, conditions: filterParams, filterChips: filterChips}
+      this.sessionData.filters[idx] = {target: this.data.filterTarget, conditions: filterParams}
     } else {
-      this.sessionData.filters.push({target: this.data.filterTarget, conditions: filterParams, filterChips: []})
+      this.sessionData.filters.push({target: this.data.filterTarget, conditions: filterParams})
     }
     this.dialogRef.close({refresh: true, filters: true});
   }

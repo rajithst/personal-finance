@@ -12,6 +12,7 @@ export class DataService {
   private year$ = new BehaviorSubject<number>(2024)
   private bulkSelect$ = new BehaviorSubject<TransactionExpand[]>([])
   private searchQuery$ = new BehaviorSubject<string>('')
+
   updatedTransaction$ = this.transaction$.asObservable();
   updatedFilters$ = this.filters$.asObservable();
   triggerPanels$ = this.panelActions$.asObservable();

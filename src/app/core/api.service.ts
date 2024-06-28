@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Income, IncomeRequest } from '../finance/model/income.data';
 import {
   Transaction,
-  TransactionExpand,
+  TransactionExpand, TransactionMergeRequest,
   TransactionsResponse,
 } from '../finance/model/transactions';
 import {InvestmentResponse, StockDailyPriceResponse} from '../investments/model/investment';
@@ -54,9 +54,9 @@ export class ApiService {
 
   }
 
-  mergeTransaction(payload: Transaction): Observable<Transaction> {
-    return this.http.post<Transaction>(
-      `${this.SRC_URL}/finance/transactions/merge`,
+  mergeTransaction(payload: TransactionMergeRequest): Observable<TransactionExpand> {
+    return this.http.put<TransactionExpand>(
+      `${this.SRC_URL}/finance/transaction/${payload.id}/`,
       payload,
     );
   }

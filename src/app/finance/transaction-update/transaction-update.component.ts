@@ -1,10 +1,8 @@
-import {Component, inject, Inject, OnInit} from '@angular/core';
+import { Component, inject, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { SessionService } from '../service/session.service';
 import {
-  SessionService,
-} from '../service/session.service';
-import {
-  MAT_DIALOG_DATA, MatDialog,
+  MAT_DIALOG_DATA,
   MatDialogRef,
 } from '@angular/material/dialog';
 
@@ -14,13 +12,16 @@ import {
   TRANSACTION_SUB_CATEGORIES,
   PAYMENT_METHODS,
   SAVINGS_CATEGORY_ID,
-
 } from '../../data/client.data';
-import { TransactionExpand, TransactionRequest } from '../model/transactions';
+import {
+  TransactionExpand,
+  TransactionMergeRequest,
+  TransactionRequest,
+} from '../model/transactions';
 import moment from 'moment/moment';
-import {map, Observable, startWith} from "rxjs";
-import {ApiService} from "../../core/api.service";
-import {DropDownType} from "../../data/shared.data";
+import { map, Observable, startWith } from 'rxjs';
+import { ApiService } from '../../core/api.service';
+import { DropDownType } from '../../data/shared.data';
 
 export interface TransactionUpdateDialogData {
   formData: TransactionExpand | null;
@@ -39,7 +40,7 @@ export class TransactionUpdateDialog implements OnInit {
   EXPENSE_SUB_CATEGORIES: DropDownType[] = [];
   TRANSACTION_TYPES: DropDownType[] = TRANSACTION_TYPES;
   sessionService = inject(SessionService);
-  apiService = inject(ApiService)
+  apiService = inject(ApiService);
 
   constructor(
     public dialogRef: MatDialogRef<TransactionUpdateDialog>,
@@ -48,63 +49,106 @@ export class TransactionUpdateDialog implements OnInit {
   sessionData = this.sessionService.getData();
   transactionForm: FormGroup;
   filteredDestinations: Observable<string[]>;
-  destinations: string[] = this.sessionData.destinations
-  headerTitle: string = '';
+  destinations: string[] = this.sessionData.destinations;
+  formData: TransactionExpand;
 
   ngOnInit(): void {
-    let formData = this.data.formData;
-    this.headerTitle =
-      this.data.task == 'add'
-        ? 'Create Transaction'
-        : `Update Transaction (${this.data.formData?.id})`;
-    if (formData) {
-      this.transactionForm = this.getNewTransactionForm(formData);
-    } else {
-      this.transactionForm = this.getEmptyTransactionForm();
+    if (this.data.task == 'edit') {
+      this.formData = this.data.formData!;
+      this.transactionForm = this.getNewTransactionForm(this.formData);
+    } else if (this.data.task == 'add') {
+      this.transactionForm = this.getNewTransactionForm(null);
+    } else if (this.data.task == 'merge') {
+      this.formData = this.data.formDataList![0];
+      this.transactionForm = this.getNewTransactionForm(this.formData);
+      const total = this.data.formDataList?.reduce(
+        (total, item) => total + (item.amount === null ? 0 : item.amount),
+        0,
+      );
+      this.transactionForm.get('amount')?.setValue(total);
     }
 
     this.EXPENSE_SUB_CATEGORIES =
-      TRANSACTION_SUB_CATEGORIES[formData?.category!];
+      TRANSACTION_SUB_CATEGORIES[this.formData?.category!];
 
     this.transactionForm.get('category')?.valueChanges.subscribe((value) => {
       if (value) {
         this.EXPENSE_SUB_CATEGORIES = TRANSACTION_SUB_CATEGORIES[value];
-        this.transactionForm.get('is_saving')?.setValue(value === SAVINGS_CATEGORY_ID)
+        this.transactionForm
+          .get('is_saving')
+          ?.setValue(value === SAVINGS_CATEGORY_ID);
       }
     });
 
-    this.transactionForm.get('transaction_type')?.valueChanges.subscribe((value) => {
-      if (value == 2) {
-        this.transactionForm.get('is_expense')?.setValue(true);
-        this.transactionForm.get('is_saving')?.setValue(false);
-        this.transactionForm.get('is_payment')?.setValue(false);
-      } else if (value == 3) {
-        this.transactionForm.get('is_payment')?.setValue(true);
-        this.transactionForm.get('is_expense')?.setValue(true);
-        this.transactionForm.get('is_saving')?.setValue(false);
-      }
-    });
+    this.transactionForm
+      .get('transaction_type')
+      ?.valueChanges.subscribe((value) => {
+        if (value == 2) {
+          this.transactionForm.get('is_expense')?.setValue(true);
+          this.transactionForm.get('is_saving')?.setValue(false);
+          this.transactionForm.get('is_payment')?.setValue(false);
+        } else if (value == 3) {
+          this.transactionForm.get('is_payment')?.setValue(true);
+          this.transactionForm.get('is_expense')?.setValue(true);
+          this.transactionForm.get('is_saving')?.setValue(false);
+        }
+      });
 
     // @ts-ignore
-    this.filteredDestinations = this.transactionForm.get('alias')?.valueChanges.pipe(
-      startWith(''),
-      map((alias: string | null) => this._filter(alias || ''))
-    )
+    this.filteredDestinations = this.transactionForm
+      .get('alias')
+      ?.valueChanges.pipe(
+        startWith(''),
+        map((alias: string | null) => this._filter(alias || '')),
+      );
   }
 
   submit() {
     this.transactionForm.value.date = moment(
       this.transactionForm.value.date,
     ).format('YYYY-MM-DD');
-    const payload: TransactionRequest = this.transactionForm.value;
-    this.apiService.updateTransaction(payload).subscribe((transaction: TransactionExpand) => {
-      if (transaction) {
-        const updatedData = this.sessionService.syncSessionTransaction(transaction, 'expenses');
-        this.dialogRef.close(updatedData)
-      } else {
-        this.dialogRef.close(null)
+
+    if (this.data.task == 'edit' || this.data.task == 'add') {
+      const payload: TransactionRequest = this.transactionForm.value;
+      this.apiService
+        .updateTransaction(payload)
+        .subscribe((transaction: TransactionExpand) => {
+          if (transaction) {
+            const updatedData = this.sessionService.syncSessionTransaction(
+              transaction,
+              'expenses',
+            );
+            this.dialogRef.close(updatedData);
+          } else {
+            this.dialogRef.close(null);
+          }
+        });
+    } else if (this.data.task == 'merge') {
+      const data = this.transactionForm.value;
+      const mergedTransactions = this.data.formDataList?.filter(
+        (x) => x.id !== data.id,
+      );
+      if (mergedTransactions) {
+        const payload: TransactionMergeRequest = {
+          ...data,
+          merge_ids: mergedTransactions.map((x) => x.id),
+        };
+        this.apiService
+          .mergeTransaction(payload)
+          .subscribe((transaction: TransactionExpand) => {
+            if (transaction) {
+              this.sessionService.deleteMergedTransactions(mergedTransactions, 'expense');
+              const updatedData = this.sessionService.syncSessionTransaction(
+                transaction,
+                'expenses',
+              );
+              this.dialogRef.close(updatedData);
+            } else {
+              this.dialogRef.close(null);
+            }
+          });
       }
-    });
+    }
   }
 
   cancel() {
@@ -113,29 +157,33 @@ export class TransactionUpdateDialog implements OnInit {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.destinations.filter((option: string) => option.toLowerCase().includes(filterValue));
+    return this.destinations.filter((option: string) =>
+      option.toLowerCase().includes(filterValue),
+    );
   }
 
-  getNewTransactionForm(data: TransactionExpand) {
+  getNewTransactionForm(data: TransactionExpand | null) {
     return new FormGroup({
-      id: new FormControl(data.id),
-      category: new FormControl(data.category),
-      subcategory: new FormControl(data.subcategory),
-      payment_method: new FormControl(data.payment_method),
-      amount: new FormControl(data.amount),
-      date: new FormControl(data.date),
-      destination: new FormControl(data.destination),
-      alias: new FormControl(data.alias),
-      notes: new FormControl(data.notes),
-      transaction_type: new FormControl(data.is_payment ? 3 : data.is_expense ? 2 : 1),
+      id: new FormControl(data ? data.id : null),
+      category: new FormControl(data ? data.category : null),
+      subcategory: new FormControl(data ? data.subcategory : null),
+      payment_method: new FormControl(data ? data.payment_method : null),
+      amount: new FormControl(data ? data.amount : null),
+      date: new FormControl(data ? data.date : null),
+      destination: new FormControl(data ? data.destination : null),
+      alias: new FormControl(data ? data.alias : null),
+      notes: new FormControl(data ? data.notes : null),
+      transaction_type: new FormControl(
+        data ? (data.is_payment ? 3 : data.is_expense ? 2 : 1) : null,
+      ),
       update_similar: new FormControl(false),
-      is_payment: new FormControl(data.is_payment),
-      is_saving: new FormControl(data.is_saving),
-      is_expense: new FormControl(data.is_expense),
-      is_deleted: new FormControl(data.is_deleted),
-      is_merge: new FormControl(data.is_merge),
-      merge_id: new FormControl(data.merge_id),
-      delete_reason: new FormControl(data.delete_reason),
+      is_payment: new FormControl(data ? data.is_payment : null),
+      is_saving: new FormControl(data ? data.is_saving : null),
+      is_expense: new FormControl(data ? data.is_expense : null),
+      is_deleted: new FormControl(data ? data.is_deleted : null),
+      is_merge: new FormControl(data ? data.is_merge : null),
+      merge_id: new FormControl(data ? data.merge_id : null),
+      delete_reason: new FormControl(data ? data.delete_reason : null),
     });
   }
 

@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { SessionService } from '../service/session.service';
+import {SessionData, SessionService} from '../service/session.service';
 import {
   MONTHS,
   PAYMENT_METHODS,
@@ -26,6 +26,11 @@ export class TransactionDashboardComponent implements OnInit {
   protected readonly faCreditCard = faCreditCard;
   protected readonly faFileInvoiceDollar = faFileInvoiceDollar;
 
+  private loadingService = inject(LoadingService);
+  private sessionService = inject(SessionService);
+  private activatedRoute = inject(ActivatedRoute);
+  private sessionData: SessionData = this.sessionService.getData();
+
   today = new Date();
   currentMonthNumber = this.today.getMonth()-1;
   currentMonthName: string = MONTHS.find(
@@ -34,12 +39,6 @@ export class TransactionDashboardComponent implements OnInit {
   currentYear = this.today.getFullYear();
   childComponentsRendered = 0;
   totalChildComponents = 7;
-
-  private loadingService = inject(LoadingService);
-  private sessionService = inject(SessionService);
-  private activatedRoute = inject(ActivatedRoute);
-  sessionData = this.sessionService.getData();
-
   totalIncome = 0;
   totalExpenses = 0;
   totalPayments = 0;

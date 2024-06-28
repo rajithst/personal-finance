@@ -46,7 +46,11 @@ export interface TransactionsResponse {
 
 export interface TransactionRequest extends Transaction {
   update_similar: boolean;
-  //merged_ids: number[] | null
+}
+
+export interface TransactionMergeRequest extends Transaction {
+  update_similar: boolean;
+  merge_ids: number[];
 }
 
 export interface TransactionFilter {
@@ -55,14 +59,9 @@ export interface TransactionFilter {
   paymentMethods: number[];
 }
 
-export interface TransactionFilterChip {
-  id: number;
-  value: string;
-}
 
 export interface TransactionFilterTemplate {
   target: string;
   conditions: TransactionFilter;
-  filterChips: TransactionFilterChip[] | null;
 
 }

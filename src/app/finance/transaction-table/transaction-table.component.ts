@@ -81,7 +81,7 @@ export class TransactionTableComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnInit(): void {
-    this.transactionData.update((value) => this.transactions());
+    this.transactionData.update(() => this.transactions());
     this.dataService.triggerPanels$.subscribe((value) => {
       if (value !== null && value) {
         this.dataSource = new MatTableDataSource<TransactionExpand>(
@@ -89,10 +89,15 @@ export class TransactionTableComponent implements OnInit, OnChanges {
         );
       }
     });
+    this.dataService.bulkSelectTransaction$.subscribe((value) => {
+      if (value.length == 0) {
+        this.selection.clear();
+      }
+    })
   }
 
   ngOnChanges() {
-    this.transactionData.update((value) => this.transactions());
+    this.transactionData.update(() => this.transactions());
     if (this.isOpen) {
       this.dataSource = new MatTableDataSource<TransactionExpand>(
         this.transactionData().transactions_cp,
@@ -103,13 +108,13 @@ export class TransactionTableComponent implements OnInit, OnChanges {
     this.dataSource.sort = this.sort;
   }
 
-  editRecord(item: TransactionExpand, task: string) {
+  editRecord(item: TransactionExpand) {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
       width: '850px',
       position: {
         top: '70px',
       },
-      data: { formData: item, task: task },
+      data: { formData: item, task: 'edit' },
     });
 
     dialog.afterClosed().subscribe((result: MonthlyTransaction | null) => {
@@ -120,7 +125,7 @@ export class TransactionTableComponent implements OnInit, OnChanges {
           (x) => x.year === item.year && x.month === item.month,
         );
         if (target) {
-          this.transactionData.update((value) => target);
+          this.transactionData.update(() => target);
           this.dataSource = new MatTableDataSource<TransactionExpand>(
             this.transactionData().transactions_cp,
           );
@@ -133,13 +138,13 @@ export class TransactionTableComponent implements OnInit, OnChanges {
     });
   }
 
-  deleteRecord(item: TransactionExpand, task: string) {
+  deleteRecord(item: TransactionExpand) {
     const dialog = this.dialog.open(TransactionDeleteDialog, {
       width: '850px',
       position: {
         top: '50px',
       },
-      data: { formData: item, task: task },
+      data: { formData: item, task: 'delete' },
     });
     dialog.afterClosed().subscribe((result) => {
       if (result) {
