@@ -4,7 +4,6 @@ export interface InvestmentResponse {
   holdings: any[];
   dividends: any;
   transactions: any[];
-  companies: any[];
 }
 
 export interface StockDailyPriceResponse {
@@ -29,13 +28,16 @@ export interface CompanyInfo {
   sector: string;
   industry: string;
   exchange: string;
+  stock_currency: string;
   currency: string;
   country: string;
   website: string;
   image: string;
   description: string;
-  created_at: string;
-  modified_at: string;
+}
+
+export interface CompanyResponse {
+  companies: CompanyInfo[];
 }
 
 export interface StockPurchaseHistory {

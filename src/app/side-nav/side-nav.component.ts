@@ -99,7 +99,7 @@ export class SideNavComponent {
         </div>
       </a>
     </mat-nav-list>\`,`,
-  styleUrls: ['./side-nav.component.scss']
+  styleUrl: './side-nav.component.css'
 })
 export class SideNavClosedComponent {
   protected readonly faSackDollar = faSackDollar;

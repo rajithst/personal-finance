@@ -7,8 +7,12 @@ import {
   TransactionExpand, TransactionMergeRequest,
   TransactionsResponse,
 } from '../finance/model/transactions';
-import {InvestmentResponse, StockDailyPriceResponse} from '../investments/model/investment';
-import { StockPurchase } from '../investments/model/transaction';
+import {
+  CompanyResponse,
+  InvestmentResponse,
+  StockDailyPriceResponse
+} from '../investments/model/investment';
+import {StockPurchase, StockPurchaseResponse} from '../investments/model/transaction';
 import { environment } from '../../environments/environment';
 import {DestinationMap, DestinationMapRequest, PayeeResponse} from "../finance/model/payee";
 
@@ -87,5 +91,17 @@ export class ApiService {
     } else {
       return this.http.post<DestinationMap>(`${this.SRC_URL}/finance/payee/`, payload)
     }
+  }
+
+  updateStockPurchase(payload: StockPurchase): Observable<StockPurchaseResponse> {
+    if (payload.id) {
+      return this.http.put<StockPurchaseResponse>(`${this.SRC_URL}/investments/stock-purchase-history/${payload.id}/`, payload)
+    } else {
+      return this.http.post<StockPurchaseResponse>(`${this.SRC_URL}/investments/stock-purchase-history/`, payload)
+    }
+  }
+
+  getCompanies(): Observable<CompanyResponse> {
+    return this.http.get<CompanyResponse>(`${this.SRC_URL}/investments/company`);
   }
 }

@@ -1,6 +1,6 @@
-.trade-input {
-  width: 100%;
-}
+/*.trade-input {*/
+/*  width: 100%;*/
+/*}*/
 
 .company-image {
   width: 50px;
@@ -22,4 +22,17 @@
 
 .holding-item-contents-1 {
   display: flex;
+}
+
+.expense-field-table {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.selected-company {
+  display: flex;
+}
+
+.trade-input {
+  width: 100%;
 }

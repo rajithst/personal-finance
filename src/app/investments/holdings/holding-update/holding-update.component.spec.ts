@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TradeDialogComponent } from './trade-dialog.component';
+import { HoldingUpdateComponent } from './holding-update.component';
 
-describe('TradeComponent', () => {
-  let component: TradeDialogComponent;
-  let fixture: ComponentFixture<TradeDialogComponent>;
+describe('HoldingUpdateComponent', () => {
+  let component: HoldingUpdateComponent;
+  let fixture: ComponentFixture<HoldingUpdateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TradeDialogComponent]
+      declarations: [HoldingUpdateComponent]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(TradeDialogComponent);
+    
+    fixture = TestBed.createComponent(HoldingUpdateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

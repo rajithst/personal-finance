@@ -1,0 +1,98 @@
+<h2 mat-dialog-title>
+  {{ data.task == "add" ? "New" : "Update" }} Transaction
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="transactionForm">
+    <ng-container *ngIf="data.task == 'update' || data.task == 'add'">
+      <table class="expense-field-table">
+        <tr>
+          <td colspan="3">
+            <mat-form-field class="fill trade-input" appearance="outline">
+              <mat-label>Company</mat-label>
+              <mat-select formControlName="company">
+                <mat-select-trigger>
+                  <div class="selected-company">
+                    <div class="selected-company-image">
+                      <img src="{{companyImage()}}" alt="" class="ticker-image"/>
+                    </div>
+                    <div class="selected-company-name">
+                      <span>{{companyName()}}</span>
+                    </div>
+                  </div>
+                </mat-select-trigger>
+                @for (cmp of companies(); track cmp) {
+                  <mat-option [value]="cmp.symbol">
+                    <div class="holding-item-contents-1">
+                      <div class="company-image"><img src="{{cmp.image}}" alt="" class="ticker-image"></div>
+                      <div class="company-ticker">
+                        <div class="company-name">{{cmp.company_name}}</div>
+                        <div class="company-symbol">{{cmp.symbol}}</div>
+                      </div>
+                    </div>
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="fill trade-input" appearance="outline">
+              <mat-label>Share Price <span *ngIf="company()">({{currency()}})</span></mat-label>
+              <input matInput placeholder="Share price" formControlName="purchase_price" />
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="fill trade-input" appearance="outline">
+              <mat-label>Shares</mat-label>
+              <input matInput placeholder="Shares" formControlName="quantity" />
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="fill trade-input" appearance="outline">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="purchase_date" />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="fill trade-input" appearance="outline">
+              <mat-label>Settlement Currency</mat-label>
+              <mat-select formControlName="settlement_currency">
+                <mat-option [value]="'円'">JPY</mat-option>
+                <mat-option [value]="'$'">USD</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="fill trade-input" appearance="outline">
+              <mat-label>Exchange Rate </mat-label>
+              <input matInput placeholder="Exchange Rate" formControlName="exchange_rate" />
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="fill trade-input" appearance="outline">
+              <mat-label>Notes</mat-label>
+              <input
+                matInput
+                placeholder="Notes"
+                formControlName="notes"
+              />
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </ng-container>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="expense-form-footer">
+  <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()">Save</button>
+</mat-dialog-actions>

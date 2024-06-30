@@ -9,7 +9,6 @@ import { HoldingsComponent } from './holdings/holdings.component';
 import { DividendComponent } from './dividend/dividend.component';
 import { SessionService } from './service/session.service';
 import { HomeComponent } from './home/home.component';
-import { TradeDialogComponent } from './trade-dialog/trade-dialog.component';
 import { MaterialModule } from '../shared/material.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TradeHistoryComponent } from './trade-history/trade-history.component';
@@ -18,6 +17,7 @@ import { DividendTableComponent } from './dividend/dividend-table/dividend-table
 import { TradeHistoryTableComponent } from './trade-history/trade-history-table/trade-history-table.component';
 import { DividendFlowComponent } from './dividend/dividend-flow/dividend-flow.component';
 import { HoldingDetailsComponent } from './holdings/holding-details/holding-details.component';
+import { HoldingUpdateComponent } from './holdings/holding-update/holding-update.component';
 
 @NgModule({
   declarations: [
@@ -26,13 +26,13 @@ import { HoldingDetailsComponent } from './holdings/holding-details/holding-deta
     HoldingsComponent,
     DividendComponent,
     HomeComponent,
-    TradeDialogComponent,
     TradeHistoryComponent,
     HoldingTableComponent,
     DividendTableComponent,
     TradeHistoryTableComponent,
     DividendFlowComponent,
     HoldingDetailsComponent,
+    HoldingUpdateComponent,
   ],
   imports: [
     CommonModule,
