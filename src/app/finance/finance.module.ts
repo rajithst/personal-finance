@@ -1,7 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FinanceComponent } from './transaction/transaction.component';
+import {
+  ExpensesComponent,
+  FinanceComponent, PaymentsComponent,
+  SavingsComponent,
+  TransactionDetailComponent
+} from './transaction/transaction.component';
 import {
   TransactionDeleteDialog,
   TransactionUpdateDialog,
@@ -13,16 +18,14 @@ import { FinanceRoutingModule } from './finance.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../shared/material.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ExpensesComponent } from './transaction/expenses/expenses.component';
-import { SavingsComponent } from './transaction/savings/savings.component';
 import { IncomesComponent } from './transaction/incomes/incomes.component';
-import { PaymentsComponent } from './transaction/payments/payments.component';
 import { PayeeEditComponent } from './payee-rules/payee-edit/payee-edit.component';
 
 
 @NgModule({
   declarations: [
     FinanceComponent,
+    TransactionDetailComponent,
     TransactionUpdateDialog,
     TransactionDeleteDialog,
     TransactionTableComponent,

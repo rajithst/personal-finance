@@ -3,18 +3,28 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Income, IncomeRequest } from '../finance/model/income.data';
 import {
+  DashboardResponse,
+  ExpenseResponse,
   Transaction,
-  TransactionExpand, TransactionMergeRequest,
-  TransactionsResponse,
+  TransactionExpand,
+  TransactionFilter,
+  TransactionMergeRequest,
 } from '../finance/model/transactions';
 import {
   CompanyResponse,
   InvestmentResponse,
-  StockDailyPriceResponse
+  StockDailyPriceResponse,
 } from '../investments/model/investment';
-import {StockPurchase, StockPurchaseResponse} from '../investments/model/transaction';
+import {
+  StockPurchase,
+  StockPurchaseResponse,
+} from '../investments/model/transaction';
 import { environment } from '../../environments/environment';
-import {DestinationMap, DestinationMapRequest, PayeeResponse} from "../finance/model/payee";
+import {
+  DestinationMap,
+  DestinationMapRequest,
+  PayeeResponse,
+} from '../finance/model/payee';
 
 new HttpHeaders({
   'Content-Type': 'application/json',
@@ -28,9 +38,21 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  getTransactions(): Observable<TransactionsResponse> {
-    return this.http.get<TransactionsResponse>(
-      `${this.SRC_URL}/finance/list`,
+  getDashboard(): Observable<DashboardResponse> {
+    return this.http.get<DashboardResponse>(
+      `${this.SRC_URL}/finance/dashboard`,
+    );
+  }
+
+  getTransactions(payload: TransactionFilter): Observable<ExpenseResponse> {
+    const year = payload.year;
+    const target = payload.target;
+    const categories = payload.categories ? payload.categories.join(',') : '';
+    const subcategories = payload.subcategories
+      ? payload.subcategories.join(',')
+      : '';
+    return this.http.get<ExpenseResponse>(
+      `${this.SRC_URL}/finance/transaction?year=${year}&target=${target}&cat=${categories}&subcat=${subcategories}`,
     );
   }
 
@@ -41,9 +63,7 @@ export class ApiService {
   }
 
   getPayees(): Observable<PayeeResponse> {
-    return this.http.get<PayeeResponse>(
-      `${this.SRC_URL}/finance/payee`,
-    );
+    return this.http.get<PayeeResponse>(`${this.SRC_URL}/finance/payee`);
   }
 
   updateTransaction(payload: Transaction): Observable<TransactionExpand> {
@@ -53,12 +73,16 @@ export class ApiService {
         payload,
       );
     } else {
-      return this.http.post<TransactionExpand>(`${this.SRC_URL}/finance/transaction/`, payload)
+      return this.http.post<TransactionExpand>(
+        `${this.SRC_URL}/finance/transaction/`,
+        payload,
+      );
     }
-
   }
 
-  mergeTransaction(payload: TransactionMergeRequest): Observable<TransactionExpand> {
+  mergeTransaction(
+    payload: TransactionMergeRequest,
+  ): Observable<TransactionExpand> {
     return this.http.put<TransactionExpand>(
       `${this.SRC_URL}/finance/transaction/${payload.id}/`,
       payload,
@@ -73,7 +97,10 @@ export class ApiService {
   }
 
   updateStockPurchaseHistory(payload: StockPurchase): Observable<any> {
-    return this.http.post(`${this.SRC_URL}/investments/stock-purchase/`, payload)
+    return this.http.post(
+      `${this.SRC_URL}/investments/stock-purchase/`,
+      payload,
+    );
   }
 
   getStockPriceHistory(payload: string): Observable<StockDailyPriceResponse> {
@@ -89,19 +116,32 @@ export class ApiService {
         payload,
       );
     } else {
-      return this.http.post<DestinationMap>(`${this.SRC_URL}/finance/payee/`, payload)
+      return this.http.post<DestinationMap>(
+        `${this.SRC_URL}/finance/payee/`,
+        payload,
+      );
     }
   }
 
-  updateStockPurchase(payload: StockPurchase): Observable<StockPurchaseResponse> {
+  updateStockPurchase(
+    payload: StockPurchase,
+  ): Observable<StockPurchaseResponse> {
     if (payload.id) {
-      return this.http.put<StockPurchaseResponse>(`${this.SRC_URL}/investments/stock-purchase-history/${payload.id}/`, payload)
+      return this.http.put<StockPurchaseResponse>(
+        `${this.SRC_URL}/investments/stock-purchase-history/${payload.id}/`,
+        payload,
+      );
     } else {
-      return this.http.post<StockPurchaseResponse>(`${this.SRC_URL}/investments/stock-purchase-history/`, payload)
+      return this.http.post<StockPurchaseResponse>(
+        `${this.SRC_URL}/investments/stock-purchase-history/`,
+        payload,
+      );
     }
   }
 
   getCompanies(): Observable<CompanyResponse> {
-    return this.http.get<CompanyResponse>(`${this.SRC_URL}/investments/company`);
+    return this.http.get<CompanyResponse>(
+      `${this.SRC_URL}/investments/company`,
+    );
   }
 }

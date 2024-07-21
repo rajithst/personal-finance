@@ -1,105 +1,141 @@
+<mat-accordion multi="true" class="transaction-item-panel">
+  @for (data of allTransactions; track data; let i = $index) {
+    <mat-expansion-panel class="transaction-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title
+          >{{ data.year }} - {{ data.month_text }} : ¥{{
+            data.total | number: "1.2-2"
+          }}</mat-panel-title
+        >
+        <mat-panel-description> </mat-panel-description>
+      </mat-expansion-panel-header>
+      <table
+        mat-table
+        matSort
+        [dataSource]="allDataSource[i]"
+        class="mat-elevation-z8 dividend-table"
+      >
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+              (change)="$event ? toggleAllRows(i) : null"
+              [checked]="selection.hasValue() && isAllSelected(i)"
+              [indeterminate]="
+                selection.hasValue() &&
+                !isAllSelected(i) &&
+                bulkSelectedTableIndex == i
+              "
+              [disabled]="
+                bulkSelectedTableIndex != i && bulkSelectedTableIndex != -1
+              "
+            >
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? toggleRow(row, i) : null"
+              [checked]="selection.isSelected(row)"
+              [disabled]="
+                bulkSelectedTableIndex != i && bulkSelectedTableIndex != -1
+              "
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Date">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+        </ng-container>
+        <ng-container matColumnDef="Destination">
+          <th mat-header-cell *matHeaderCellDef>Payee</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.alias ? element.alias : element.destination }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Category">
+          <th mat-header-cell *matHeaderCellDef>Category</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.category_text }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Notes">
+          <th mat-header-cell *matHeaderCellDef>Notes</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.notes }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="SubCategory">
+          <th mat-header-cell *matHeaderCellDef>Sub Category</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.subcategory_text }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="PaymentMethod">
+          <th mat-header-cell *matHeaderCellDef>Payment Method</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.payment_method_text }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Amount">
+          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <td mat-cell *matCellDef="let element">
+            ¥{{ element.amount | number: "1.2-2" }}
+          </td>
+        </ng-container>
 
-<mat-expansion-panel class="transaction-panel" (click)="panelTrigger()">
-  <mat-expansion-panel-header>
-    <mat-panel-title
-    >{{ transactionData().year }} - {{ transactionData().month_text }} : ¥{{
-        transactionData().total | number: "1.2-2"
-      }}</mat-panel-title
-    >
-    <mat-panel-description> </mat-panel-description>
-  </mat-expansion-panel-header>
-  <table
-    mat-table
-    matSort
-    [dataSource]="dataSource"
-    class="mat-elevation-z8 dividend-table"
-  >
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()">
-        </mat-checkbox>
-      </th>
-      <td mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? toggleRow(row) : null"
-                      [checked]="selection.isSelected(row)">
-        </mat-checkbox>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="Date">
-      <th mat-header-cell mat-sort-header *matHeaderCellDef >Date</th>
-      <td mat-cell *matCellDef="let element">{{ element.date }}</td>
-    </ng-container>
-    <ng-container matColumnDef="Destination">
-      <th mat-header-cell *matHeaderCellDef>Payee</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.alias ? element.alias : element.destination }}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="Category">
-      <th mat-header-cell *matHeaderCellDef>Category</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.category_text }}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="Notes">
-      <th mat-header-cell *matHeaderCellDef>Notes</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.notes }}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="SubCategory">
-      <th mat-header-cell *matHeaderCellDef>Sub Category</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.subcategory_text }}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="PaymentMethod">
-      <th mat-header-cell *matHeaderCellDef>Payment Method</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.payment_method_text }}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="Amount">
-      <th mat-header-cell *matHeaderCellDef>Amount</th>
-      <td mat-cell *matCellDef="let element">
-        ¥{{ element.amount | number: "1.2-2"}}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Actions">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element">
+        <ng-container matColumnDef="Actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
             <span class="transaction-actions" [matMenuTriggerFor]="menu">
+              <fa-icon
+                [icon]="faEllipsisV"
+                size="lg"
+                [style]="{ color: '#3699ff' }"
+              ></fa-icon>
+            </span>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editRecord(element, i)">
                 <fa-icon
-                  [icon]="faEllipsisV"
-                  size="lg"
+                  [icon]="faEdit"
+                  size="sm"
                   [style]="{ color: '#3699ff' }"
                 ></fa-icon>
-            </span>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="editRecord(element)">
-            <fa-icon [icon]="faEdit" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
-            <span class="transaction-action-item">Edit</span>
-          </button>
-          <button mat-menu-item>
-            <fa-icon [icon]="faScissors" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
-            <span class="transaction-action-item">Split</span>
-          </button>
-          <button mat-menu-item [disabled]="!element.is_merge">
-            <fa-icon [icon]="faList" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
-            <span class="transaction-action-item">Show Merge history</span>
-          </button>
-          <button mat-menu-item (click)="deleteRecord(element)">
-            <fa-icon [icon]="faTrash" size="sm" [style]="{ color: 'red' }"></fa-icon>
-            <span class="transaction-action-item">Delete</span>
-          </button>
-        </mat-menu>
-      </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-</mat-expansion-panel>
+                <span class="transaction-action-item">Edit</span>
+              </button>
+              <button mat-menu-item>
+                <fa-icon
+                  [icon]="faScissors"
+                  size="sm"
+                  [style]="{ color: '#3699ff' }"
+                ></fa-icon>
+                <span class="transaction-action-item">Split</span>
+              </button>
+              <button mat-menu-item [disabled]="!element.is_merge">
+                <fa-icon
+                  [icon]="faList"
+                  size="sm"
+                  [style]="{ color: '#3699ff' }"
+                ></fa-icon>
+                <span class="transaction-action-item">Show Merge history</span>
+              </button>
+              <button mat-menu-item (click)="deleteRecord(element)">
+                <fa-icon
+                  [icon]="faTrash"
+                  size="sm"
+                  [style]="{ color: 'red' }"
+                ></fa-icon>
+                <span class="transaction-action-item">Delete</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </mat-expansion-panel>
+  }
+</mat-accordion>

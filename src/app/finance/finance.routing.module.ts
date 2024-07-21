@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FinanceComponent } from './transaction/transaction.component';
-import {ExpensesComponent} from "./transaction/expenses/expenses.component";
+import {
+  ExpensesComponent,
+  FinanceComponent,
+  PaymentsComponent,
+  SavingsComponent
+} from './transaction/transaction.component';
 import {IncomesComponent} from "./transaction/incomes/incomes.component";
-import {SavingsComponent} from "./transaction/savings/savings.component";
-import {PaymentsComponent} from "./transaction/payments/payments.component";
+import {EXPENSE, INCOME, PAYMENT, SAVING} from "../data/shared.data";
 
 const routes: Routes = [
   {
@@ -13,28 +16,28 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'transaction',
+        redirectTo: 'expense',
         pathMatch: 'full',
       },
       {
-        path: 'transaction',
+        path: EXPENSE,
         component: ExpensesComponent,
-        data: { name: 'transactions'}
+        title: 'Expense Activity'
       },
       {
-        path: 'income',
+        path: INCOME,
         component: IncomesComponent,
-        data: { name: 'incomes'}
+        title: 'Income Activity'
       },
       {
-        path: 'savings',
+        path: SAVING,
         component: SavingsComponent,
-        data: { name: 'savings'}
+        title: 'Savings Activity'
       },
       {
-        path: 'payments',
+        path: PAYMENT,
         component: PaymentsComponent,
-        data: { name: 'payments'}
+        title: 'Payments Activity'
       },
     ],
   },

@@ -101,13 +101,7 @@
               matInput
               placeholder="Destination"
               formControlName="alias"
-              [matAutocomplete]="destinationAc"
             />
-            <mat-autocomplete #destinationAc="matAutocomplete">
-              @for (dst of filteredDestinations | async; track dst) {
-                <mat-option [value]="dst">{{ dst }}</mat-option>
-              }
-            </mat-autocomplete>
           </mat-form-field>
         </td>
       </tr>

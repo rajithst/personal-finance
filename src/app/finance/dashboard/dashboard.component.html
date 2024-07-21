@@ -79,8 +79,8 @@
   </mat-grid-list>
 </div>
 <div class="dashboard-container">
-  <mat-grid-list cols="3" rowHeight="350px" [gutterSize]="'5px'">
-    <mat-grid-tile>
+  <mat-grid-list cols="4" rowHeight="350px" [gutterSize]="'5px'">
+    <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
           [chartData]="monthlyExpenses"
@@ -90,7 +90,7 @@
         ></app-chartbox>
       </div>
     </mat-grid-tile>
-    <mat-grid-tile>
+    <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
           [chartData]="monthlyIncome"
@@ -100,7 +100,7 @@
         ></app-chartbox>
       </div>
     </mat-grid-tile>
-    <mat-grid-tile>
+    <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
           [chartData]="monthlySavings"
@@ -110,7 +110,7 @@
         ></app-chartbox>
       </div>
     </mat-grid-tile>
-    <mat-grid-tile>
+    <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
           [chartData]="categoryWiseSum"
@@ -120,7 +120,7 @@
         ></app-chartbox>
       </div>
     </mat-grid-tile>
-    <mat-grid-tile>
+    <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
           [chartData]="categoryWiseSum"
@@ -130,7 +130,7 @@
         ></app-chartbox>
       </div>
     </mat-grid-tile>
-    <mat-grid-tile>
+    <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
           [chartData]="monthlyPayments"
@@ -140,6 +140,15 @@
         ></app-chartbox>
       </div>
     </mat-grid-tile>
-
+    <mat-grid-tile colspan="2">
+      <div class="chart-item">
+        <app-chartbox
+          [chartData]="paymentMethodWiseSum"
+          [chartOptions]="paymentMethodWiseSumOptions"
+          [chartType]="paymentMethodWiseSumChartType"
+          (rendered)="childRendered()"
+        ></app-chartbox>
+      </div>
+    </mat-grid-tile>
   </mat-grid-list>
 </div>

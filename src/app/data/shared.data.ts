@@ -4,7 +4,7 @@ export interface DropDownType {
   checked: boolean;
 }
 
-export interface DropDownTypeString {
-  value: string;
-  viewValue: string;
-}
+export const EXPENSE: string = 'expense'
+export const PAYMENT: string = 'payment'
+export const SAVING: string = 'saving'
+export const INCOME: string = 'income'

@@ -2,9 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { TransactionDashboardComponent } from './finance/dashboard/dashboard.component';
-import {financeResolver, payeeResolver} from './finance/service/resolvers';
+import {dashboardResolver, payeeResolver} from './finance/service/resolvers';
 import {PayeeRulesComponent} from "./finance/payee-rules/payee-rules.component";
-
 
 
 const routes: Routes = [
@@ -17,7 +16,7 @@ const routes: Routes = [
     path: 'dashboard',
     component: TransactionDashboardComponent,
     resolve: {
-      finance: financeResolver,
+      finance: dashboardResolver,
     },
   },
   {

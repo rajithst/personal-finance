@@ -17,7 +17,7 @@ export class IncomesComponent implements OnInit{
   constructor(private sessionService: SessionService) {}
 
   ngOnInit(): void {
-    this.dataService.setBulkSelectTransactions([]);
+    //this.dataService.setBulkSelectTransactions([]);
     const data= this.sessionData.incomes
     data.forEach(x => {
       x.transactions_cp = JSON.parse(JSON.stringify(x.transactions));
