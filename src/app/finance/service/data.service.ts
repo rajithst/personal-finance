@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { TransactionExpand, TransactionFilter } from '../model/transactions';
+import {DestinationMap} from "../model/payee";
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,7 @@ export class DataService {
   private filterParams$ = new BehaviorSubject<TransactionFilter | null>(null);
   private bulkSelect$ = new BehaviorSubject<TransactionExpand[]>([]);
   private panels$ = new BehaviorSubject<boolean>(false);
+  private payees$ = new BehaviorSubject<DestinationMap[]>([]);
 
   yearSwitch$ = this.year$.asObservable();
   transactionFilters$ = this.filterParams$.asObservable();
@@ -28,6 +30,13 @@ export class DataService {
     this.filterParams$.next(filters);
   }
 
+  setPayees(payees: DestinationMap[]) {
+    this.payees$.next(payees)
+  }
+
+  getPayees(): DestinationMap[] {
+    return this.payees$.value;
+  }
   getFilterParams() {
     return this.filterParams$.value
       ? this.filterParams$.value

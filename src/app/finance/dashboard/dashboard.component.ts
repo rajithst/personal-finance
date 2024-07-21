@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {SessionData, SessionService} from '../service/session.service';
 import {
   MONTHS,
   PAYMENT_METHODS,
@@ -13,8 +12,7 @@ import {
   faCreditCard,
   faFileInvoiceDollar,
 } from '@fortawesome/free-solid-svg-icons';
-import {DashboardResponse, MonthlyTransaction} from '../model/transactions';
-import {map, Observable} from "rxjs";
+import { DashboardResponse } from '../model/transactions';
 
 @Component({
   selector: 'app-transaction-dashboard',
@@ -28,9 +26,7 @@ export class TransactionDashboardComponent implements OnInit {
   protected readonly faFileInvoiceDollar = faFileInvoiceDollar;
 
   private loadingService = inject(LoadingService);
-  private sessionService = inject(SessionService);
   private activatedRoute = inject(ActivatedRoute);
-  private sessionData: SessionData = this.sessionService.getData();
 
   today = new Date();
   currentMonthNumber = this.today.getMonth();
@@ -87,7 +83,7 @@ export class TransactionDashboardComponent implements OnInit {
   categoryWiseSumValueChartType: string = 'bar';
 
   prepareAnalytics() {
-    this.totalIncome  = this.dashboardData.income
+    this.totalIncome = this.dashboardData.income
       .filter((x) => x.year === this.currentYear)
       .map((x) => x.amount)
       .reduce((a, b) => a + b, 0);
@@ -128,20 +124,17 @@ export class TransactionDashboardComponent implements OnInit {
     this.yearSummary.push(['Payments', this.totalPayments]);
   }
   private prepareMonthlyExpenseVsPaymentCard() {
-
-    const expenses: MonthlyTransaction[] = this.sessionData.expenses.filter(
-      (x) => x.year === this.currentYear,
-    );
-    const payments: MonthlyTransaction[] = this.sessionData.payments.filter(
-      (x) => x.year === this.currentYear,
-    )
     MONTHS.forEach((months) => {
-      const ex1 = this.dashboardData.expense.find(x => x.month === months.value);
-      const py1 = this.dashboardData.payment.find(x => x.month === months.value);
+      const ex1 = this.dashboardData.expense.find(
+        (x) => x.month === months.value,
+      );
+      const py1 = this.dashboardData.payment.find(
+        (x) => x.month === months.value,
+      );
       const expenseValue = ex1 ? ex1.amount : 0;
       const paymentValue = py1 ? py1.amount : 0;
       this.monthlyExpenses.push([months.viewValue, expenseValue, paymentValue]);
-    })
+    });
 
     this.monthlyExpensesOptions = {
       title: `${this.currentYear} Monthly Expenses vs Payments`,
@@ -149,21 +142,25 @@ export class TransactionDashboardComponent implements OnInit {
       height: 300,
       colors: ['#cf5a5a', '#d59b6c'],
       chartArea: { left: 0, top: 20, width: '100%', height: '70%' },
-      legend: { position: 'right', textStyle: {color: 'blue', fontSize: 10}},
+      legend: { position: 'right', textStyle: { color: 'blue', fontSize: 10 } },
     };
   }
 
   private prepareMonthlyIncomeVsSavingsCard() {
-    const incomes = this.dashboardData.income.filter((x) => x.year === this.currentYear)
-    const savings = this.dashboardData.saving.filter((x) => x.year === this.currentYear)
+    const incomes = this.dashboardData.income.filter(
+      (x) => x.year === this.currentYear,
+    );
+    const savings = this.dashboardData.saving.filter(
+      (x) => x.year === this.currentYear,
+    );
     MONTHS.forEach((months) => {
-      const inc = incomes.find(x => x.month === months.value);
-      const sav = savings.find(x => x.month === months.value);
+      const inc = incomes.find((x) => x.month === months.value);
+      const sav = savings.find((x) => x.month === months.value);
       const incomeValue = inc ? inc.amount : 0;
       const savingValue = sav ? sav.amount : 0;
-      this.monthlySavings.push([months.viewValue, savingValue])
+      this.monthlySavings.push([months.viewValue, savingValue]);
       this.monthlyIncome.push([months.viewValue, incomeValue, savingValue]);
-    })
+    });
 
     this.monthlyIncomeOptions = {
       title: `${this.currentYear} Monthly Income vs Savings`,
@@ -171,7 +168,7 @@ export class TransactionDashboardComponent implements OnInit {
       height: 300,
       colors: ['#87dc88', '#6cacd5'],
       chartArea: { left: 0, top: 20, width: '100%', height: '70%' },
-      legend: { position: 'right', textStyle: {color: 'blue', fontSize: 10}},
+      legend: { position: 'right', textStyle: { color: 'blue', fontSize: 10 } },
     };
     this.monthlySavingsOptions = {
       title: `${this.currentYear} Monthly Savings`,
@@ -179,7 +176,7 @@ export class TransactionDashboardComponent implements OnInit {
       height: 300,
       colors: ['#23c623'],
       chartArea: { left: 0, top: 20, width: '100%', height: '70%' },
-      legend: { position: 'none', textStyle: {color: 'blue', fontSize: 10}},
+      legend: { position: 'none', textStyle: { color: 'blue', fontSize: 10 } },
     };
   }
 
@@ -188,8 +185,11 @@ export class TransactionDashboardComponent implements OnInit {
     if ('2024-04-01' in transactions) {
       const categoryData = transactions['2024-04-01'];
       TRANSACTION_CATEGORIES.forEach((x) => {
-        const categorySum = categoryData.find(y => y.category_id === x.value);
-        this.categoryWiseSum.push([x.viewValue, categorySum ? categorySum.amount : 0]);
+        const categorySum = categoryData.find((y) => y.category_id === x.value);
+        this.categoryWiseSum.push([
+          x.viewValue,
+          categorySum ? categorySum.amount : 0,
+        ]);
       });
     }
 
@@ -228,8 +228,11 @@ export class TransactionDashboardComponent implements OnInit {
     if ('2024-04-01' in transactions) {
       const categoryData = transactions['2024-04-01'];
       PAYMENT_METHODS.forEach((x) => {
-        const categorySum = categoryData.find(y => y.category_id === x.value);
-        this.paymentMethodWiseSum.push([x.viewValue, categorySum ? categorySum.amount : 0]);
+        const categorySum = categoryData.find((y) => y.category_id === x.value);
+        this.paymentMethodWiseSum.push([
+          x.viewValue,
+          categorySum ? categorySum.amount : 0,
+        ]);
       });
     }
     this.paymentMethodWiseSumOptions = {
@@ -251,7 +254,10 @@ export class TransactionDashboardComponent implements OnInit {
     if ('2024-04-01' in transactions) {
       const categoryData = transactions['2024-04-01'];
       categoryData.forEach((x) => {
-        this.monthlyPayments.push([x.destination ? x.destination : x.destination_original, x.amount]);
+        this.monthlyPayments.push([
+          x.destination ? x.destination : x.destination_original,
+          x.amount,
+        ]);
       });
     }
     this.monthlyPaymentsOptions = {

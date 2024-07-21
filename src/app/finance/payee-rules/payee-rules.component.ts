@@ -8,14 +8,14 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { DestinationMap } from '../model/payee';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PayeeEditComponent } from './payee-edit/payee-edit.component';
-import {SessionService} from "../service/session.service";
-import {MatSort} from "@angular/material/sort";
+import { MatSort } from '@angular/material/sort';
+import { DataService } from '../service/data.service';
 
 @Component({
   selector: 'app-payee-rules',
@@ -30,13 +30,11 @@ export class PayeeRulesComponent implements OnInit, AfterViewInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   private activatedRoute = inject(ActivatedRoute);
-  private sessionService = inject(SessionService);
-  protected readonly faPencil = faPencil;
-  sessionData = this.sessionService.getData();
+  private dataService = inject(DataService);
 
+  protected readonly faPencil = faPencil;
   dataSource: MatTableDataSource<DestinationMap>;
   selection = new SelectionModel<DestinationMap>(true, []);
-
   displayedColumns: string[] = [
     'select',
     'Payee',
@@ -48,10 +46,10 @@ export class PayeeRulesComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ payeeData }) => {
-      this.sessionService.setPayeeSessionData(payeeData);
-      this.sessionData = this.sessionService.getData();
-      this.dataSource = new MatTableDataSource<DestinationMap>(this.sessionData.payees);
+      this.dataService.setPayees(payeeData);
+      this.dataSource = new MatTableDataSource<DestinationMap>(payeeData);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
   }
 
@@ -89,11 +87,21 @@ export class PayeeRulesComponent implements OnInit, AfterViewInit {
       data: { payee },
     });
     dialog.afterClosed().subscribe((result) => {
-      if (result.refresh) {
-        this.sessionData = this.sessionService.getData();
-        this.dataSource = new MatTableDataSource<DestinationMap>(this.sessionData.payees);
+      if (result.payee) {
+        const updatedPayee = result.payee;
+        const id = this.dataSource.data.findIndex(
+          (x) => x.id === updatedPayee.id,
+        );
+        if (id !== -1) {
+          this.dataSource.data[id] = updatedPayee;
+        }
+        if (result.mergeIds) {
+          result.mergeIds.forEach((mergeId: number) => {
+            const idx = this.dataSource.data.findIndex((x) => x.id === mergeId);
+            this.dataSource.data.splice(idx, 1);
+          });
+        }
         this.dataSource.paginator = this.paginator;
-        this.table.renderRows();
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });

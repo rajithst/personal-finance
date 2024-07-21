@@ -1,21 +1,19 @@
-import {Component, inject, Inject, OnInit} from '@angular/core';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { Component, inject, Inject, OnInit } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DestinationMap } from '../../model/payee';
 import {
   SAVINGS_CATEGORY_ID,
-  TRANSACTION_CATEGORIES, TRANSACTION_SUB_CATEGORIES,
+  TRANSACTION_CATEGORIES,
+  TRANSACTION_SUB_CATEGORIES,
 } from '../../../data/client.data';
-import {FormControl, FormGroup} from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { DropDownType } from '../../../data/shared.data';
-import {MatChipEditedEvent, MatChipInputEvent} from "@angular/material/chips";
-import {ApiService} from "../../../core/api.service";
-import {SessionService} from "../../service/session.service";
-import {MatTableDataSource} from "@angular/material/table";
-import {SelectionModel} from "@angular/cdk/collections";
+import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
+import { ApiService } from '../../../core/api.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
+import { DataService } from '../../service/data.service';
 
 interface PayeeEditDialogData {
   payee: DestinationMap;
@@ -26,27 +24,17 @@ interface PayeeEditDialogData {
   styleUrl: './payee-edit.component.css',
 })
 export class PayeeEditComponent implements OnInit {
-
-  apiService = inject(ApiService)
-  sessionService = inject(SessionService)
-  readonly addOnBlur = true;
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  sessionData = this.sessionService.getData();
-  payeeList: DestinationMap[] = [];
-  allToggledFirstTime = false;
-  payeeForm: FormGroup;
-  keywords: string[] = [];
   protected TRANSACTION_CATEGORIES: DropDownType[] = TRANSACTION_CATEGORIES;
   protected EXPENSE_SUB_CATEGORIES: DropDownType[] = [];
-  displayedColumns: string[] = [
-    'select',
-    'Payee',
-    'Category',
-    'SubCategory',
-  ];
+  readonly addOnBlur = true;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  apiService = inject(ApiService);
+  dataService = inject(DataService);
+  payeeForm: FormGroup;
+  keywords: string[] = [];
+  displayedColumns: string[] = ['select', 'Payee', 'Category', 'SubCategory'];
   dataSource: MatTableDataSource<DestinationMap>;
   selection = new SelectionModel<DestinationMap>(true, []);
-
 
   constructor(
     public dialogRef: MatDialogRef<PayeeEditComponent>,
@@ -55,7 +43,6 @@ export class PayeeEditComponent implements OnInit {
 
   ngOnInit(): void {
     const payeeData = this.data.payee;
-    this.payeeList = this.sessionData.payees;
     this.payeeForm = new FormGroup({
       id: new FormControl(payeeData.id),
       category: new FormControl(payeeData.category),
@@ -67,7 +54,7 @@ export class PayeeEditComponent implements OnInit {
       destination_eng: new FormControl(payeeData.destination_eng),
     });
     if (this.data.payee.keywords) {
-      this.keywords = this.data.payee.keywords.split(',')
+      this.keywords = this.data.payee.keywords.split(',');
     }
     this.EXPENSE_SUB_CATEGORIES =
       TRANSACTION_SUB_CATEGORIES[payeeData.category!];
@@ -75,14 +62,25 @@ export class PayeeEditComponent implements OnInit {
     this.payeeForm.get('category')?.valueChanges.subscribe((value) => {
       if (value) {
         this.EXPENSE_SUB_CATEGORIES = TRANSACTION_SUB_CATEGORIES[value];
-        this.payeeForm.get('is_saving')?.setValue(value === SAVINGS_CATEGORY_ID)
+        this.payeeForm
+          .get('is_saving')
+          ?.setValue(value === SAVINGS_CATEGORY_ID);
       }
     });
     this.updateRelatedPayees();
   }
 
   updateRelatedPayees() {
-    const relatedPayees = this.payeeList.filter(x => x.id !== this.data.payee.id && x.destination_original && this.keywords.some(item => x.destination_original.toLowerCase().includes(item.toLowerCase())))
+    const relatedPayees = this.dataService
+      .getPayees()
+      .filter(
+        (x) =>
+          x.id !== this.data.payee.id &&
+          x.destination_original &&
+          this.keywords.some((item) =>
+            x.destination_original.toLowerCase().includes(item.toLowerCase()),
+          ),
+      );
     this.dataSource = new MatTableDataSource<DestinationMap>(relatedPayees);
     this.selection.clear();
     this.selection.select(...this.dataSource.data);
@@ -90,7 +88,7 @@ export class PayeeEditComponent implements OnInit {
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    if (this.keywords.includes(value)){
+    if (this.keywords.includes(value)) {
       event.chipInput!.clear();
       return;
     }
@@ -140,26 +138,23 @@ export class PayeeEditComponent implements OnInit {
 
   submit() {
     const formValues = this.payeeForm.value;
-    formValues['keywords'] = this.keywords.join(',')
-    formValues['merge_ids'] = this.selection.selected.map(x => x.id)
-    this.apiService.updatePayeeRules(formValues).subscribe((payee: DestinationMap) => {
-      if (payee && payee.id) {
-        if (formValues['merge_ids'].length > 0) {
-          this.payeeList = this.payeeList.filter(x => !formValues['merge_ids'].includes(x.id));
-          const idx = this.payeeList.findIndex(x => x.id === payee.id);
-          if (idx > -1) {
-            this.payeeList[idx] = payee;
-          }
-          this.sessionService.setPayeeSessionData(this.payeeList);
+    formValues['keywords'] = this.keywords.join(',');
+    formValues['merge_ids'] = this.selection.selected.map((x) => x.id);
+    this.apiService
+      .updatePayeeRules(formValues)
+      .subscribe((payee: DestinationMap) => {
+        if (payee && payee.id) {
+          this.dialogRef.close({
+            payee: payee,
+            mergeIds: formValues['merge_ids'],
+          });
+        } else {
+          this.dialogRef.close({ payee: null, mergeIds: null });
         }
-        this.dialogRef.close({'refresh': true});
-      } else {
-        this.dialogRef.close({'refresh': false});
-      }
-    });
+      });
   }
 
   cancel() {
-    this.dialogRef.close({'refresh': false});
+    this.dialogRef.close({ payee: null, mergeIds: null });
   }
 }

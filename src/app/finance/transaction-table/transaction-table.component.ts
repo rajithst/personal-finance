@@ -1,15 +1,12 @@
 import {
   Component,
-  inject, Input,
-  input,
+  inject,
+  Input,
   OnChanges,
-  OnInit, signal, viewChild,
-  ViewChild,
+  OnInit,
+  viewChild,
 } from '@angular/core';
-import {
-  MonthlyTransaction, Transaction,
-  TransactionExpand,
-} from '../model/transactions';
+import { MonthlyTransaction, TransactionExpand } from '../model/transactions';
 import {
   TransactionDeleteDialog,
   TransactionUpdateDialog,
@@ -23,14 +20,10 @@ import {
   faScissors,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { SessionService } from '../service/session.service';
+import { MatTableDataSource } from '@angular/material/table';
 import { DataService } from '../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
-import {MatAccordion} from "@angular/material/expansion";
-
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-transaction-table',
@@ -47,11 +40,9 @@ export class TransactionTableComponent implements OnInit, OnChanges {
   protected readonly faScissors = faScissors;
   protected readonly faEllipsisV = faEllipsisV;
 
-  private sessionService = inject(SessionService);
   private dataService = inject(DataService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
-
 
   dataSource: MatTableDataSource<TransactionExpand>;
   selection = new SelectionModel<TransactionExpand>(true, []);
@@ -72,7 +63,7 @@ export class TransactionTableComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.dataService.expandPanels$.subscribe((value) => {
-      if(value) {
+      if (value) {
         this.accordion().openAll();
       } else {
         this.accordion().closeAll();
@@ -81,14 +72,18 @@ export class TransactionTableComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.allTransactions = this.transactions.length > 0 ? this.transactions : [];
+    this.allTransactions =
+      this.transactions.length > 0 ? this.transactions : [];
     this.allTransactions.forEach((x: MonthlyTransaction, index: number) => {
-      this.allDataSource.splice(index, 0, new MatTableDataSource<TransactionExpand>(x.transactions))
-    })
+      this.allDataSource.splice(
+        index,
+        0,
+        new MatTableDataSource<TransactionExpand>(x.transactions),
+      );
+    });
   }
 
   editRecord(item: TransactionExpand, tableIndex: number) {
-
     const dialog = this.dialog.open(TransactionUpdateDialog, {
       width: '850px',
       position: {
@@ -102,10 +97,16 @@ export class TransactionTableComponent implements OnInit, OnChanges {
         const orAmount = item.amount;
         const newAmount = result.amount;
         const tableData = this.allDataSource[tableIndex].data;
-        const transactionId = tableData.findIndex((x: TransactionExpand) => x.id == result.id);
+        const transactionId = tableData.findIndex(
+          (x: TransactionExpand) => x.id == result.id,
+        );
         tableData[transactionId] = result;
-        this.allTransactions[tableIndex].total += newAmount!-orAmount!
-        this.allDataSource.splice(tableIndex, 0, new MatTableDataSource<TransactionExpand>(tableData))
+        this.allTransactions[tableIndex].total += newAmount! - orAmount!;
+        this.allDataSource.splice(
+          tableIndex,
+          0,
+          new MatTableDataSource<TransactionExpand>(tableData),
+        );
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
@@ -123,7 +124,6 @@ export class TransactionTableComponent implements OnInit, OnChanges {
     });
     dialog.afterClosed().subscribe((result) => {
       if (result) {
-
       }
     });
   }
@@ -150,5 +150,4 @@ export class TransactionTableComponent implements OnInit, OnChanges {
     this.bulkSelectedTableIndex = tableIndex;
     this.dataService.setBulkSelectTransactions(this.selection.selected);
   }
-
 }
