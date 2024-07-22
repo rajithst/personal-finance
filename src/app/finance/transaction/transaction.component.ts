@@ -24,7 +24,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '../service/data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
-import { Router } from '@angular/router';
 import { map, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import {
   MonthlyTransaction,
@@ -34,6 +33,7 @@ import {
 import { Title } from '@angular/platform-browser';
 import { EXPENSE, INCOME, PAYMENT, SAVING } from '../../data/shared.data';
 import { ApiService } from '../../core/api.service';
+import { Income, MonthlyIncome } from '../model/income';
 
 @Component({
   selector: 'app-transaction',
@@ -56,12 +56,11 @@ export class FinanceComponent implements OnInit, OnDestroy {
   protected readonly SAVING = SAVING;
   protected readonly EXPENSE = EXPENSE;
 
-  private readonly destroyed$ = new ReplaySubject<void>(1);
-  private loadingService = inject(LoadingService);
+  protected readonly destroyed$ = new ReplaySubject<void>(1);
+  protected loadingService = inject(LoadingService);
   private dataService = inject(DataService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
-  private route = inject(Router);
   title = inject(Title);
 
   filterButton = viewChild<ElementRef>('filterButton');
@@ -80,8 +79,8 @@ export class FinanceComponent implements OnInit, OnDestroy {
     this.dataService.bulkSelectTransaction$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
-      this.selectedTransactions = value;
-    });
+        this.selectedTransactions = value;
+      });
   }
 
   addTransaction() {
@@ -127,7 +126,7 @@ export class FinanceComponent implements OnInit, OnDestroy {
   }
 
   applyFilter() {
-    const filterValue = this.searchInput()?.nativeElement.value;
+    //const filterValue = this.searchInput()?.nativeElement.value;
     //this.dataService.setSearchQuery(filterValue.toLowerCase());
   }
 
@@ -184,10 +183,10 @@ export class FinanceComponent implements OnInit, OnDestroy {
   styles: '',
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
-  private apiService = inject(ApiService);
-  private loadingService = inject(LoadingService);
+  protected apiService = inject(ApiService);
+  protected loadingService = inject(LoadingService);
   private dataService = inject(DataService);
-  private readonly destroyed$ = new ReplaySubject<void>(1);
+  protected readonly destroyed$ = new ReplaySubject<void>(1);
   target: string = EXPENSE;
   data$: Observable<MonthlyTransaction[]>;
 
@@ -208,7 +207,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  private extracted(filters: TransactionFilter) {
+  extracted(filters: TransactionFilter) {
     const transactions$ = this.apiService.getTransactions(filters);
     this.data$ = transactions$
       .pipe(takeUntil(this.destroyed$))
@@ -251,4 +250,70 @@ export class PaymentsComponent extends TransactionDetailComponent {
 })
 export class SavingsComponent extends TransactionDetailComponent {
   override target: string = SAVING;
+}
+
+@Component({
+  selector: 'app-income',
+  template:
+    '<app-transaction-table [transactions]="(data$ | async) ?? []"></app-transaction-table>',
+  styles: '',
+})
+export class IncomesComponent extends TransactionDetailComponent {
+  override target: string = INCOME;
+
+  override extracted(filters: TransactionFilter) {
+    const transactions$ = this.apiService.getIncome(filters);
+    this.data$ = transactions$
+      .pipe(takeUntil(this.destroyed$))
+      .pipe(map((value) => value.payload))
+      .pipe(map((payload) => this.mapToTransaction(payload)));
+    this.loadingService.loadingOff();
+  }
+
+  private mapToTransaction(payload: MonthlyIncome[]) {
+    const monthlyIncomes: MonthlyTransaction[] = [];
+    payload.forEach((x) => {
+      const newTransactionItem: MonthlyTransaction = {
+        month: x.month,
+        month_text: x.month_text,
+        total: x.total,
+        transactions: [],
+        year: x.year,
+      };
+      const allIncomeTransactions: TransactionExpand[] = [];
+      x.transactions.forEach((y) => {
+        allIncomeTransactions.push(this.fillTransactionExpand(y));
+      });
+      newTransactionItem.transactions = allIncomeTransactions;
+      monthlyIncomes.push(newTransactionItem);
+    });
+    return monthlyIncomes;
+  }
+
+  private fillTransactionExpand(income: Income): TransactionExpand {
+    return {
+      id: income.id,
+      amount: income.amount,
+      category: income.category,
+      category_text: income.category_text || '',
+      destination: income.destination,
+      date: income.date,
+      year: income.year,
+      month: income.month,
+      month_text: income.month_text,
+      notes: income.notes || '',
+      alias: '',
+      delete_reason: '',
+      is_deleted: false,
+      is_expense: false,
+      is_merge: false,
+      is_payment: false,
+      is_saving: false,
+      merge_id: null,
+      payment_method: 0,
+      payment_method_text: '',
+      subcategory: 0,
+      subcategory_text: '',
+    };
+  }
 }

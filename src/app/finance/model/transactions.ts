@@ -43,7 +43,6 @@ export interface MonthlyTransaction {
   month_text: string;
   total: number;
   transactions: TransactionExpand[];
-  transactions_cp: TransactionExpand[];
 }
 
 export interface Transaction {
@@ -72,7 +71,6 @@ export interface TransactionExpand extends Transaction {
   year: number;
   month: number;
   month_text: string;
-  checked: boolean | false;
 }
 
 export interface TransactionsResponse {
@@ -100,9 +98,3 @@ export interface TransactionFilter {
   paymentMethods?: number[];
 }
 
-
-export interface TransactionFilterTemplate {
-  target: string;
-  conditions: TransactionFilter;
-
-}

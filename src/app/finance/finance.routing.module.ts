@@ -2,11 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {
   ExpensesComponent,
-  FinanceComponent,
+  FinanceComponent, IncomesComponent,
   PaymentsComponent,
   SavingsComponent
 } from './transaction/transaction.component';
-import {IncomesComponent} from "./transaction/incomes/incomes.component";
 import {EXPENSE, INCOME, PAYMENT, SAVING} from "../data/shared.data";
 
 const routes: Routes = [

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   ExpensesComponent,
-  FinanceComponent, PaymentsComponent,
+  FinanceComponent, IncomesComponent, PaymentsComponent,
   SavingsComponent,
   TransactionDetailComponent
 } from './transaction/transaction.component';
@@ -18,7 +18,6 @@ import { FinanceRoutingModule } from './finance.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../shared/material.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { IncomesComponent } from './transaction/incomes/incomes.component';
 import { PayeeEditComponent } from './payee-rules/payee-edit/payee-edit.component';
 
 

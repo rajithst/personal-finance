@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Income, IncomeRequest } from '../finance/model/income.data';
 import {
   DashboardResponse,
   ExpenseResponse,
@@ -25,10 +24,12 @@ import {
   DestinationMapRequest,
   PayeeResponse,
 } from '../finance/model/payee';
+import {IncomeResponse} from "../finance/model/income";
 
 new HttpHeaders({
   'Content-Type': 'application/json',
 });
+
 
 @Injectable({
   providedIn: 'root',
@@ -53,6 +54,15 @@ export class ApiService {
       : '';
     return this.http.get<ExpenseResponse>(
       `${this.SRC_URL}/finance/transaction?year=${year}&target=${target}&cat=${categories}&subcat=${subcategories}`,
+    );
+  }
+
+  getIncome(payload: TransactionFilter) {
+    const year = payload.year;
+    const target = payload.target;
+    const categories = payload.categories ? payload.categories.join(',') : '';
+    return this.http.get<IncomeResponse>(
+      `${this.SRC_URL}/finance/income?year=${year}&target=${target}&cat=${categories}`,
     );
   }
 
@@ -85,13 +95,6 @@ export class ApiService {
   ): Observable<TransactionExpand> {
     return this.http.put<TransactionExpand>(
       `${this.SRC_URL}/finance/transaction/${payload.id}/`,
-      payload,
-    );
-  }
-
-  updateIncome(payload: IncomeRequest): Observable<Income> {
-    return this.http.post<Income>(
-      `${this.SRC_URL}/transactions/income/`,
       payload,
     );
   }
