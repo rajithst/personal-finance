@@ -1,4 +1,4 @@
-import {DropDownType} from "./shared.data";
+import { DropDownType } from './shared.data';
 
 export const SAVINGS_CATEGORY_ID = 6;
 export const PAYMENT_CATEGORY_ID = 14;
@@ -9,7 +9,7 @@ export const TRANSACTION_TYPES: DropDownType[] = [
   { value: 1, viewValue: 'Income', checked: false },
   { value: 2, viewValue: 'Expense', checked: false },
   { value: 3, viewValue: 'Payment', checked: false },
-]
+];
 export const INCOME_CATEGORIES: DropDownType[] = [
   { value: 1, viewValue: 'Salary/Wages', checked: false },
   { value: 2, viewValue: 'Freelance Income', checked: false },
@@ -151,7 +151,13 @@ export const TRANSACTION_SUB_CATEGORIES: { [key: number]: DropDownType[] } = {
     { value: 57, viewValue: 'Credit Card Payments', checked: false },
     { value: 58, viewValue: 'Cash Payments', checked: false },
   ],
-  15: [{ value: 59, viewValue: 'Donations to Charities/Organizations', checked: false }],
+  15: [
+    {
+      value: 59,
+      viewValue: 'Donations to Charities/Organizations',
+      checked: false,
+    },
+  ],
   16: [
     { value: 60, viewValue: 'Gifts', checked: false },
     { value: 61, viewValue: 'Pet Expenses', checked: false },
@@ -160,9 +166,6 @@ export const TRANSACTION_SUB_CATEGORIES: { [key: number]: DropDownType[] } = {
     { value: 64, viewValue: 'Legal/Professional Fees', checked: false },
   ],
 };
-
-
-
 
 export const MONTHS: DropDownType[] = [
   { value: 1, viewValue: 'January', checked: false },

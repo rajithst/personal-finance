@@ -6,13 +6,13 @@ import {
 import { inject } from '@angular/core';
 import { ApiService } from '../../core/api.service';
 import {Observable} from 'rxjs';
-import {TransactionsResponse} from "../model/transactions";
+import {DashboardResponse, TransactionsResponse} from "../model/transactions";
 
-export const financeResolver: ResolveFn<any> = (
+export const dashboardResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
-): Observable<TransactionsResponse> => {
-  return inject(ApiService).getTransactions()
+): Observable<DashboardResponse> => {
+  return inject(ApiService).getDashboard()
 };
 
 

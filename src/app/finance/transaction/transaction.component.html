@@ -2,28 +2,28 @@
   <ul class="menu">
     <li
       class="menu-item"
-      routerLink="transaction"
+      routerLink="{{EXPENSE}}"
       routerLinkActive="active-menu-item"
     >
       <span>Transactions</span>
     </li>
     <li
       class="menu-item"
-      routerLink="income"
+      routerLink="{{INCOME}}"
       routerLinkActive="active-menu-item"
     >
       <span>Income</span>
     </li>
     <li
       class="menu-item"
-      routerLink="payments"
+      routerLink="{{PAYMENT}}"
       routerLinkActive="active-menu-item"
     >
       <span>Payments</span>
     </li>
     <li
       class="menu-item"
-      routerLink="savings"
+      routerLink="{{SAVING}}"
       routerLinkActive="active-menu-item"
     >
       <span>Savings</span>
@@ -39,7 +39,7 @@
   >
     <mat-grid-tile>
       <div class="toolbar-header">
-        <h2>{{ pageTitle }} Activity</h2>
+        <h2>{{ title.getTitle() }}</h2>
       </div>
       <div class="range-filter">
         <div class="range-filter-actions">
@@ -84,17 +84,16 @@
 
     </mat-grid-tile>
     <mat-grid-tile>
-      <div class="filters-right">
-        <div class="merge-panel">
+      <div class="filters-right" [ngClass]="{'highlight-merge-panel': selectedTransactions.length>=2}">
+        <div class="merge-description" *ngIf="selectedTransactions.length>=2">
+          <span>Selected {{selectedTransactions.length}} Transactions!</span>
+        </div>
+        <div class="merge-panel" *ngIf="selectedTransactions.length>=2">
           <div class="filter-item"
                (click)="mergeTransactions()"
                matRipple
-               matBadge="{{selectedTransactions.length}}"
-               [matBadgeHidden]="selectedTransactions.length<=1"
-               matBadgeSize="small"
                matTooltip="Merge Transactions"
-               matTooltipPosition="below"
-               [ngClass]="{'disable-merge-action': selectedTransactions.length <= 1}">
+               matTooltipPosition="below">
             <fa-icon
               [icon]="faCodeMerge"
               size="1x"
@@ -103,9 +102,6 @@
           </div>
           <div class="filter-item"
                matRipple
-               matBadge="{{selectedTransactions.length}}"
-               [matBadgeHidden]="selectedTransactions.length<=1"
-               matBadgeSize="small"
                matTooltip="Bulk Edit"
                matTooltipPosition="below"
                [ngClass]="{'disable-merge-action': selectedTransactions.length <= 1}">
@@ -117,9 +113,6 @@
           </div>
           <div class="filter-item"
                matRipple
-               matBadge="{{selectedTransactions.length}}"
-               [matBadgeHidden]="selectedTransactions.length<=1"
-               matBadgeSize="small"
                matTooltip="Bulk Delete"
                [ngClass]="{'disable-merge-action': selectedTransactions.length <= 1}">
             <fa-icon
@@ -129,7 +122,7 @@
             ></fa-icon>
           </div>
         </div>
-        <div class="edit-panel">
+        <div class="edit-panel" *ngIf="selectedTransactions.length<=1">
           <div
             class="filter-item"
             (click)="panelAction()"

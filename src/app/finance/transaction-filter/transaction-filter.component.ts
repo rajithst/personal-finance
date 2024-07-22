@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, inject, Inject, OnInit} from '@angular/core';
 import {
   faCalendar,
   faCreditCard,
@@ -13,14 +13,14 @@ import {
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
 } from '../../data/client.data';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { DropDownType } from '../../data/shared.data';
-import { SessionService } from '../service/session.service';
+import {DropDownType, INCOME, PAYMENT, SAVING} from '../../data/shared.data';
+import {TransactionFilter} from "../model/transactions";
+import {DataService} from "../service/data.service";
+import {Router} from "@angular/router";
+import {LoadingService} from "../../shared/loading/loading.service";
 
-interface FilterDialogData {
-  filterTarget: string
-}
 
 @Component({
   selector: 'app-transaction-filter',
@@ -32,7 +32,14 @@ export class TransactionFilterComponent implements OnInit {
   protected readonly faShop = faShop;
   protected readonly faCreditCard = faCreditCard;
   protected readonly faCalendar = faCalendar;
+  private dataService = inject(DataService);
+  private router = inject(Router);
+  private formBuilder = inject(FormBuilder);
+  private dialogRef = inject(MatDialogRef<TransactionFilterComponent>);
+  private loadingService = inject(LoadingService);
 
+  filterParams: TransactionFilter;
+  lastSegment = '';
   clickedType: string = 'categories';
   categoryTitle = 'Categories';
   subCategoryTitle =
@@ -45,28 +52,25 @@ export class TransactionFilterComponent implements OnInit {
   mainCategoryForm: FormGroup;
   subCategoryForm: FormGroup;
   paymentMethodForm: FormGroup;
-  sessionData = this.sessionService.getData();
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private sessionService: SessionService,
-    public dialogRef: MatDialogRef<TransactionFilterComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: FilterDialogData,
-  ) {}
 
   ngOnInit() {
-    //this.modifyFilterOptions()
+    const segments = this.router.url.split('/')
+    this.lastSegment = segments[segments.length - 1];
+    this.filterParams = this.dataService.getFilterParams()
+    this.filterParams.target = this.lastSegment;
+    this.modifyFilterOptions()
     this.createForm();
+
   }
 
   modifyFilterOptions() {
-    if(this.data.filterTarget === 'payments') {
+    if(this.filterParams?.target === PAYMENT) {
       this.transactionCategories = TRANSACTION_CATEGORIES.filter(x => x.value === PAYMENT_CATEGORY_ID);
       this.transactionSubCategories = TRANSACTION_SUB_CATEGORIES[PAYMENT_CATEGORY_ID];
-    } else if (this.data.filterTarget === 'savings') {
+    } else if (this.filterParams?.target === SAVING) {
       this.transactionCategories = TRANSACTION_CATEGORIES.filter(x => x.value === SAVINGS_CATEGORY_ID);
       this.transactionSubCategories = TRANSACTION_SUB_CATEGORIES[SAVINGS_CATEGORY_ID];
-    } else if (this.data.filterTarget === 'income') {
+    } else if (this.filterParams?.target === INCOME) {
       this.transactionCategories = INCOME_CATEGORIES;
       this.transactionSubCategories = [];
     }
@@ -77,21 +81,19 @@ export class TransactionFilterComponent implements OnInit {
     const categoryGroup: any = {};
     const subCategoryGroup: any = {};
     const paymentMethodGroup: any = {};
-    const filters = this.sessionData.filters.find(x => x.target === this.data.filterTarget);
-    const conditions = filters!.conditions;
 
     TRANSACTION_CATEGORIES.forEach((category: DropDownType) => {
-      categoryGroup[`category_${category.value}`] = new FormControl(conditions.categories.includes(category.value));
+      categoryGroup[`category_${category.value}`] = new FormControl(this.filterParams.categories?.includes(category.value));
       const subCategories = TRANSACTION_SUB_CATEGORIES[category.value];
       subCategories.forEach((subcategory: DropDownType) => {
         subCategoryGroup[
           `subcategory_${subcategory.value}`
-        ] = new FormControl(conditions.subcategories.includes(subcategory.value));
+        ] = new FormControl(this.filterParams.subcategories?.includes(subcategory.value));
       });
     });
 
     PAYMENT_METHODS.forEach((category: DropDownType) => {
-      paymentMethodGroup[`paymentmethod_${category.value}`] = new FormControl(conditions.paymentMethods.includes(category.value));
+      paymentMethodGroup[`paymentmethod_${category.value}`] = new FormControl(this.filterParams.paymentMethods?.includes(category.value));
     });
 
 
@@ -139,21 +141,19 @@ export class TransactionFilterComponent implements OnInit {
   }
 
   clear() {
-    this.sessionService.clearSessionFilter(this.data.filterTarget)
-    this.dialogRef.close({refresh: true, filters: false})
+    const filterParams = this.dataService.getEmptyFilterParams();
+    filterParams.target = this.lastSegment;
+    this.dialogRef.close({refresh: true, filters: filterParams})
   }
   submit() {
-    const filterParams: any = {'categories': [], 'subcategories': [], 'paymentMethods': []};
-    filterParams['categories'] = this.extractParams(this.mainCategoryForm.value);
-    filterParams['subcategories'] = this.extractParams(this.subCategoryForm.value);
-    filterParams['paymentMethods'] = this.extractParams(this.paymentMethodForm.value);
-
-    const idx = this.sessionData.filters.findIndex(x => x.target === this.data.filterTarget);
-    if (idx !== -1) {
-      this.sessionData.filters[idx] = {target: this.data.filterTarget, conditions: filterParams}
-    } else {
-      this.sessionData.filters.push({target: this.data.filterTarget, conditions: filterParams})
+    this.loadingService.loadingOn();
+    const filterParams: TransactionFilter = {
+      year: this.dataService.getFilterYear(),
+      target: this.lastSegment,
+      categories: this.extractParams(this.mainCategoryForm.value),
+      subcategories: this.extractParams(this.subCategoryForm.value),
+      paymentMethods: this.extractParams(this.paymentMethodForm.value)
     }
-    this.dialogRef.close({refresh: true, filters: true});
+    this.dialogRef.close({refresh: true, filters: filterParams});
   }
 }

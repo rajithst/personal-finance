@@ -1,46 +1,73 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { TransactionExpand } from '../model/transactions';
+import { TransactionExpand, TransactionFilter } from '../model/transactions';
+import {DestinationMap} from "../model/payee";
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
-  private transaction$ = new BehaviorSubject<TransactionExpand | null>(null);
-  private filters$ = new BehaviorSubject<boolean | null>(null);
-  private panelActions$ = new BehaviorSubject<boolean | null>(null);
-  private year$ = new BehaviorSubject<number>(2024)
-  private bulkSelect$ = new BehaviorSubject<TransactionExpand[]>([])
-  private searchQuery$ = new BehaviorSubject<string>('')
+  private year$ = new BehaviorSubject<number>(2024);
+  private filterParams$ = new BehaviorSubject<TransactionFilter | null>(null);
+  private bulkSelect$ = new BehaviorSubject<TransactionExpand[]>([]);
+  private panels$ = new BehaviorSubject<boolean>(false);
+  private payees$ = new BehaviorSubject<DestinationMap[]>([]);
 
-  updatedTransaction$ = this.transaction$.asObservable();
-  updatedFilters$ = this.filters$.asObservable();
-  triggerPanels$ = this.panelActions$.asObservable();
   yearSwitch$ = this.year$.asObservable();
+  transactionFilters$ = this.filterParams$.asObservable();
   bulkSelectTransaction$ = this.bulkSelect$.asObservable();
-  searchTransaction$ = this.searchQuery$.asObservable();
-
-  setTransaction(transaction: TransactionExpand) {
-    this.transaction$.next(transaction);
-  }
-
-  setFilters(filter = true) {
-    this.filters$.next(filter);
-  }
-
-  setPanelActions(action: boolean) {
-    this.panelActions$.next(action);
-  }
+  expandPanels$ = this.panels$.asObservable();
 
   setFilterYear(year: number) {
-    this.year$.next(year)
+    this.year$.next(year);
   }
 
-  setBulkSelectTransactions(transactions: TransactionExpand[]) {
-    this.bulkSelect$.next(transactions)
+  getFilterYear() {
+    return this.year$.value;
   }
 
-  setSearchQuery(query: string) {
-    this.searchQuery$.next(query)
+  setFilterParams(filters: TransactionFilter) {
+    this.filterParams$.next(filters);
+  }
+
+  setPayees(payees: DestinationMap[]) {
+    this.payees$.next(payees)
+  }
+
+  getPayees(): DestinationMap[] {
+    return this.payees$.value;
+  }
+  getFilterParams() {
+    return this.filterParams$.value
+      ? this.filterParams$.value
+      : this.getEmptyFilterParams();
+  }
+
+  setPanelActions(allExpanded: boolean) {
+    this.panels$.next(allExpanded);
+  }
+
+  setBulkSelectTransactions(selected: TransactionExpand[]) {
+    this.bulkSelect$.next(selected);
+  }
+
+  getEmptyFilterParams(): TransactionFilter {
+    return {
+      year: this.year$.value,
+      target: '',
+      categories: [],
+      subcategories: [],
+      paymentMethods: [],
+    };
+  }
+
+  clearTransactionFilters() {
+    this.filterParams$.next(this.getEmptyFilterParams())
+  }
+
+  clearAllFiltersAndSelections() {
+    this.clearTransactionFilters();
+    this.bulkSelect$.next([]);
+    this.panels$.next(false);
   }
 }

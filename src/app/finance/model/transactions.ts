@@ -1,10 +1,48 @@
+export interface ExpenseResponse {
+  payload: MonthlyTransaction[]
+}
+
+interface CategoryAmount {
+  category_id: number;
+  amount: number;
+}
+
+interface DestinationAmount {
+  amount: number;
+  destination: string;
+  destination_original: string;
+}
+
+interface MonthlyCategorySum {
+  [date: string]: CategoryAmount[];
+}
+
+interface DashboardTransaction {
+  year: number,
+  month: number,
+  amount: number,
+}
+
+interface MonthlyPayment {
+  [date: string]: DestinationAmount[];
+}
+
+export interface DashboardResponse {
+  expense: DashboardTransaction[];
+  payment: DashboardTransaction[];
+  saving: DashboardTransaction[];
+  income: DashboardTransaction[];
+  category_wise_expenses: MonthlyCategorySum;
+  payment_method_wise_expenses: MonthlyCategorySum;
+  payment_by_destination: MonthlyPayment;
+}
+
 export interface MonthlyTransaction {
   year: number;
   month: number;
   month_text: string;
   total: number;
   transactions: TransactionExpand[];
-  transactions_cp: TransactionExpand[];
 }
 
 export interface Transaction {
@@ -33,7 +71,6 @@ export interface TransactionExpand extends Transaction {
   year: number;
   month: number;
   month_text: string;
-  checked: boolean | false;
 }
 
 export interface TransactionsResponse {
@@ -54,14 +91,10 @@ export interface TransactionMergeRequest extends Transaction {
 }
 
 export interface TransactionFilter {
-  categories: number[];
-  subcategories: number[];
-  paymentMethods: number[];
-}
-
-
-export interface TransactionFilterTemplate {
+  year: number;
   target: string;
-  conditions: TransactionFilter;
-
+  categories?: number[];
+  subcategories?: number[];
+  paymentMethods?: number[];
 }
+

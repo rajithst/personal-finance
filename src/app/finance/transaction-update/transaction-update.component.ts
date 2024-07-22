@@ -1,10 +1,6 @@
 import { Component, inject, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { SessionService } from '../service/session.service';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import {
   TRANSACTION_TYPES,
@@ -19,13 +15,12 @@ import {
   TransactionRequest,
 } from '../model/transactions';
 import moment from 'moment/moment';
-import { map, Observable, startWith } from 'rxjs';
 import { ApiService } from '../../core/api.service';
 import { DropDownType } from '../../data/shared.data';
 
 export interface TransactionUpdateDialogData {
-  formData: TransactionExpand | null;
-  formDataList: TransactionExpand[] | null;
+  formData: TransactionExpand;
+  mergeIds: number[] | null;
   task: string;
 }
 
@@ -39,33 +34,22 @@ export class TransactionUpdateDialog implements OnInit {
   TRANSACTION_CATEGORIES: DropDownType[] = TRANSACTION_CATEGORIES;
   EXPENSE_SUB_CATEGORIES: DropDownType[] = [];
   TRANSACTION_TYPES: DropDownType[] = TRANSACTION_TYPES;
-  sessionService = inject(SessionService);
   apiService = inject(ApiService);
 
   constructor(
     public dialogRef: MatDialogRef<TransactionUpdateDialog>,
     @Inject(MAT_DIALOG_DATA) public data: TransactionUpdateDialogData,
   ) {}
-  sessionData = this.sessionService.getData();
+
   transactionForm: FormGroup;
-  filteredDestinations: Observable<string[]>;
-  destinations: string[] = this.sessionData.destinations;
   formData: TransactionExpand;
 
   ngOnInit(): void {
-    if (this.data.task == 'edit') {
+    if (this.data.task == 'edit' || this.data.task == 'merge') {
       this.formData = this.data.formData!;
       this.transactionForm = this.getNewTransactionForm(this.formData);
     } else if (this.data.task == 'add') {
       this.transactionForm = this.getNewTransactionForm(null);
-    } else if (this.data.task == 'merge') {
-      this.formData = this.data.formDataList![0];
-      this.transactionForm = this.getNewTransactionForm(this.formData);
-      const total = this.data.formDataList?.reduce(
-        (total, item) => total + (item.amount === null ? 0 : item.amount),
-        0,
-      );
-      this.transactionForm.get('amount')?.setValue(total);
     }
 
     this.EXPENSE_SUB_CATEGORIES =
@@ -93,14 +77,6 @@ export class TransactionUpdateDialog implements OnInit {
           this.transactionForm.get('is_saving')?.setValue(false);
         }
       });
-
-    // @ts-ignore
-    this.filteredDestinations = this.transactionForm
-      .get('alias')
-      ?.valueChanges.pipe(
-        startWith(''),
-        map((alias: string | null) => this._filter(alias || '')),
-      );
   }
 
   submit() {
@@ -114,52 +90,31 @@ export class TransactionUpdateDialog implements OnInit {
         .updateTransaction(payload)
         .subscribe((transaction: TransactionExpand) => {
           if (transaction) {
-            const updatedData = this.sessionService.syncSessionTransaction(
-              transaction,
-              'expenses',
-            );
-            this.dialogRef.close(updatedData);
+            this.dialogRef.close(transaction);
           } else {
             this.dialogRef.close(null);
           }
         });
     } else if (this.data.task == 'merge') {
       const data = this.transactionForm.value;
-      const mergedTransactions = this.data.formDataList?.filter(
-        (x) => x.id !== data.id,
-      );
-      if (mergedTransactions) {
-        const payload: TransactionMergeRequest = {
-          ...data,
-          merge_ids: mergedTransactions.map((x) => x.id),
-        };
-        this.apiService
-          .mergeTransaction(payload)
-          .subscribe((transaction: TransactionExpand) => {
-            if (transaction) {
-              this.sessionService.deleteMergedTransactions(mergedTransactions, 'expense');
-              const updatedData = this.sessionService.syncSessionTransaction(
-                transaction,
-                'expenses',
-              );
-              this.dialogRef.close(updatedData);
-            } else {
-              this.dialogRef.close(null);
-            }
-          });
-      }
+      const payload: TransactionMergeRequest = {
+        ...data,
+        merge_ids: this.data.mergeIds,
+      };
+      this.apiService
+        .mergeTransaction(payload)
+        .subscribe((transaction: TransactionExpand) => {
+          if (transaction) {
+            this.dialogRef.close(transaction);
+          } else {
+            this.dialogRef.close(null);
+          }
+        });
     }
   }
 
   cancel() {
     this.dialogRef.close(null);
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.destinations.filter((option: string) =>
-      option.toLowerCase().includes(filterValue),
-    );
   }
 
   getNewTransactionForm(data: TransactionExpand | null) {

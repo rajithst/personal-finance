@@ -1,15 +1,12 @@
 import {
   Component,
   inject,
-  input,
+  Input,
   OnChanges,
-  OnInit, signal,
-  ViewChild,
+  OnInit,
+  viewChild,
 } from '@angular/core';
-import {
-  MonthlyTransaction,
-  TransactionExpand,
-} from '../model/transactions';
+import { MonthlyTransaction, TransactionExpand } from '../model/transactions';
 import {
   TransactionDeleteDialog,
   TransactionUpdateDialog,
@@ -23,13 +20,10 @@ import {
   faScissors,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { SessionService } from '../service/session.service';
+import { MatTableDataSource } from '@angular/material/table';
 import { DataService } from '../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
-
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-transaction-table',
@@ -37,10 +31,8 @@ import { SelectionModel } from '@angular/cdk/collections';
   styleUrl: './transaction-table.component.css',
 })
 export class TransactionTableComponent implements OnInit, OnChanges {
-  transactions = input.required<MonthlyTransaction>();
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<TransactionExpand>;
+  @Input() transactions: MonthlyTransaction[];
+  accordion = viewChild.required(MatAccordion);
 
   protected readonly faTrash = faTrash;
   protected readonly faEdit = faEdit;
@@ -48,24 +40,15 @@ export class TransactionTableComponent implements OnInit, OnChanges {
   protected readonly faScissors = faScissors;
   protected readonly faEllipsisV = faEllipsisV;
 
-  private sessionService = inject(SessionService);
   private dataService = inject(DataService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
-  transactionData = signal<MonthlyTransaction>({
-    year: 0,
-    month: 0,
-    month_text: '',
-    total: 0,
-    transactions: [],
-    transactions_cp: [],
-  });
-
   dataSource: MatTableDataSource<TransactionExpand>;
   selection = new SelectionModel<TransactionExpand>(true, []);
-  isOpen = false;
-
+  allDataSource: MatTableDataSource<TransactionExpand>[] = [];
+  allTransactions: MonthlyTransaction[] = [];
+  bulkSelectedTableIndex: number = -1;
   displayedColumns: string[] = [
     'select',
     'Date',
@@ -78,37 +61,29 @@ export class TransactionTableComponent implements OnInit, OnChanges {
     'Actions',
   ];
 
-  constructor() {}
-
   ngOnInit(): void {
-    this.transactionData.update(() => this.transactions());
-    this.dataService.triggerPanels$.subscribe((value) => {
-      if (value !== null && value) {
-        this.dataSource = new MatTableDataSource<TransactionExpand>(
-          this.transactionData().transactions_cp,
-        );
+    this.dataService.expandPanels$.subscribe((value) => {
+      if (value) {
+        this.accordion().openAll();
+      } else {
+        this.accordion().closeAll();
       }
     });
-    this.dataService.bulkSelectTransaction$.subscribe((value) => {
-      if (value.length == 0) {
-        this.selection.clear();
-      }
-    })
   }
 
   ngOnChanges() {
-    this.transactionData.update(() => this.transactions());
-    if (this.isOpen) {
-      this.dataSource = new MatTableDataSource<TransactionExpand>(
-        this.transactionData().transactions_cp,
+    this.allTransactions =
+      this.transactions.length > 0 ? this.transactions : [];
+    this.allTransactions.forEach((x: MonthlyTransaction, index: number) => {
+      this.allDataSource.splice(
+        index,
+        0,
+        new MatTableDataSource<TransactionExpand>(x.transactions),
       );
-    } else {
-      this.dataSource = new MatTableDataSource<TransactionExpand>([]);
-    }
-    this.dataSource.sort = this.sort;
+    });
   }
 
-  editRecord(item: TransactionExpand) {
+  editRecord(item: TransactionExpand, tableIndex: number) {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
       width: '850px',
       position: {
@@ -117,20 +92,21 @@ export class TransactionTableComponent implements OnInit, OnChanges {
       data: { formData: item, task: 'edit' },
     });
 
-    dialog.afterClosed().subscribe((result: MonthlyTransaction | null) => {
+    dialog.afterClosed().subscribe((result: TransactionExpand | null) => {
       if (result) {
-        const filteredData =
-          this.sessionService.filterTransactions('transaction');
-        const target = filteredData.find(
-          (x) => x.year === item.year && x.month === item.month,
+        const orAmount = item.amount;
+        const newAmount = result.amount;
+        const tableData = this.allDataSource[tableIndex].data;
+        const transactionId = tableData.findIndex(
+          (x: TransactionExpand) => x.id == result.id,
         );
-        if (target) {
-          this.transactionData.update(() => target);
-          this.dataSource = new MatTableDataSource<TransactionExpand>(
-            this.transactionData().transactions_cp,
-          );
-          this.table.renderRows();
-        }
+        tableData[transactionId] = result;
+        this.allTransactions[tableIndex].total += newAmount! - orAmount!;
+        this.allDataSource.splice(
+          tableIndex,
+          0,
+          new MatTableDataSource<TransactionExpand>(tableData),
+        );
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
@@ -148,45 +124,30 @@ export class TransactionTableComponent implements OnInit, OnChanges {
     });
     dialog.afterClosed().subscribe((result) => {
       if (result) {
-        this.transactionData = result;
-        this.dataSource = new MatTableDataSource<TransactionExpand>(
-          result.transactions_cp,
-        );
-        this.snackBar.open('Deleted!', 'Success', {
-          duration: 3000,
-        });
       }
     });
   }
 
-  panelTrigger() {
-    this.isOpen = !this.isOpen;
-    if (this.isOpen) {
-      this.dataSource = new MatTableDataSource<TransactionExpand>(
-        this.transactionData().transactions_cp,
-      );
-      this.table.renderRows();
-    }
-  }
-
-  isAllSelected() {
+  isAllSelected(tableIndex: number) {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.allDataSource[tableIndex].data.length;
     return numSelected === numRows;
   }
 
-  toggleAllRows() {
-    if (this.isAllSelected()) {
+  toggleAllRows(tableIndex: number) {
+    if (this.isAllSelected(tableIndex)) {
       this.selection.clear();
+      this.bulkSelectedTableIndex = -1;
     } else {
-      this.selection.select(...this.dataSource.data);
+      this.selection.select(...this.allDataSource[tableIndex].data);
+      this.bulkSelectedTableIndex = tableIndex;
     }
     this.dataService.setBulkSelectTransactions(this.selection.selected);
   }
 
-  toggleRow(row: TransactionExpand) {
+  toggleRow(row: TransactionExpand, tableIndex: number) {
     this.selection.toggle(row);
+    this.bulkSelectedTableIndex = tableIndex;
     this.dataService.setBulkSelectTransactions(this.selection.selected);
   }
-
 }
