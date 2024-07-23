@@ -1,4 +1,4 @@
-import {Component, inject, Inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {
   faCalendar,
   faCreditCard,
@@ -13,14 +13,17 @@ import {
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
 } from '../../data/client.data';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {DropDownType, INCOME, PAYMENT, SAVING} from '../../data/shared.data';
 import {TransactionFilter} from "../model/transactions";
-import {DataService} from "../service/data.service";
 import {Router} from "@angular/router";
 import {LoadingService} from "../../shared/loading/loading.service";
+import {DataService} from "../service/data.service";
 
+interface TransactionFilterData {
+  filterParams: TransactionFilter;
+}
 
 @Component({
   selector: 'app-transaction-filter',
@@ -32,11 +35,13 @@ export class TransactionFilterComponent implements OnInit {
   protected readonly faShop = faShop;
   protected readonly faCreditCard = faCreditCard;
   protected readonly faCalendar = faCalendar;
-  private dataService = inject(DataService);
+
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<TransactionFilterComponent>);
   private loadingService = inject(LoadingService);
+  private data: TransactionFilterData = inject(MAT_DIALOG_DATA)
+  private dataService = inject(DataService);
 
   filterParams: TransactionFilter;
   lastSegment = '';
@@ -53,10 +58,11 @@ export class TransactionFilterComponent implements OnInit {
   subCategoryForm: FormGroup;
   paymentMethodForm: FormGroup;
 
+
   ngOnInit() {
     const segments = this.router.url.split('/')
     this.lastSegment = segments[segments.length - 1];
-    this.filterParams = this.dataService.getFilterParams()
+    this.filterParams = this.data.filterParams;
     this.filterParams.target = this.lastSegment;
     this.modifyFilterOptions()
     this.createForm();
@@ -141,9 +147,7 @@ export class TransactionFilterComponent implements OnInit {
   }
 
   clear() {
-    const filterParams = this.dataService.getEmptyFilterParams();
-    filterParams.target = this.lastSegment;
-    this.dialogRef.close({refresh: true, filters: filterParams})
+    this.dialogRef.close({refresh: true, filters: this.getEmptyFilterParams()})
   }
   submit() {
     this.loadingService.loadingOn();
@@ -155,5 +159,15 @@ export class TransactionFilterComponent implements OnInit {
       paymentMethods: this.extractParams(this.paymentMethodForm.value)
     }
     this.dialogRef.close({refresh: true, filters: filterParams});
+  }
+
+  private getEmptyFilterParams(): TransactionFilter {
+    return {
+      year: this.dataService.getFilterYear(),
+      target: '',
+      categories: [],
+      subcategories: [],
+      paymentMethods: [],
+    };
   }
 }
