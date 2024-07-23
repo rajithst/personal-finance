@@ -45,7 +45,7 @@ export class TransactionUpdateDialog implements OnInit {
   formData: TransactionExpand;
 
   ngOnInit(): void {
-    if (this.data.task == 'edit' || this.data.task == 'merge') {
+    if (this.data.task == 'edit' || this.data.task == 'merge' || this.data.task == 'delete') {
       this.formData = this.data.formData!;
       this.transactionForm = this.getNewTransactionForm(this.formData);
     } else if (this.data.task == 'add') {
@@ -84,7 +84,7 @@ export class TransactionUpdateDialog implements OnInit {
       this.transactionForm.value.date,
     ).format('YYYY-MM-DD');
 
-    if (this.data.task == 'edit' || this.data.task == 'add') {
+    if (this.data.task == 'edit' || this.data.task == 'add' || this.data.task == 'delete') {
       const payload: TransactionRequest = this.transactionForm.value;
       this.apiService
         .updateTransaction(payload)
@@ -141,29 +141,6 @@ export class TransactionUpdateDialog implements OnInit {
       delete_reason: new FormControl(data ? data.delete_reason : null),
     });
   }
-
-  getEmptyTransactionForm() {
-    return new FormGroup({
-      id: new FormControl(null),
-      category: new FormControl(null),
-      subcategory: new FormControl(null),
-      payment_method: new FormControl(null),
-      amount: new FormControl(null),
-      date: new FormControl(''),
-      destination: new FormControl(''),
-      alias: new FormControl(''),
-      notes: new FormControl(''),
-      update_similar: new FormControl(false),
-      transaction_type: new FormControl(2),
-      is_payment: new FormControl(false),
-      is_saving: new FormControl(false),
-      is_expense: new FormControl(true),
-      is_deleted: new FormControl(false),
-      is_merge: new FormControl(false),
-      merge_id: new FormControl(null),
-      delete_reason: new FormControl(''),
-    });
-  }
 }
 
 @Component({
@@ -173,10 +150,6 @@ export class TransactionUpdateDialog implements OnInit {
 })
 export class TransactionDeleteDialog extends TransactionUpdateDialog {
   deleteReason: string = '';
-
-  override cancel() {
-    this.dialogRef.close({ refresh: false, data: null });
-  }
 
   confirm() {
     this.transactionForm.get('is_deleted')?.setValue(true);

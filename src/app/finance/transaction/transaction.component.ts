@@ -8,22 +8,10 @@ import {
 } from '@angular/core';
 import { LoadingService } from '../../shared/loading/loading.service';
 import {
-  faCirclePlus,
-  faCodeMerge,
-  faExpand,
-  faFilter,
-  faMinimize,
-  faPencil,
   faSquareCaretLeft,
   faSquareCaretRight,
-  faTrash,
-  faUpload,
 } from '@fortawesome/free-solid-svg-icons';
-import { TransactionUpdateDialog } from '../transaction-update/transaction-update.component';
-import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '../service/data.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
 import { map, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import {
   MonthlyTransaction,
@@ -40,15 +28,7 @@ import { Income, MonthlyIncome } from '../model/income';
   templateUrl: './transaction.component.html',
   styleUrl: './transaction.component.css',
 })
-export class FinanceComponent implements OnInit, OnDestroy {
-  protected readonly faUpload = faUpload;
-  protected readonly faMinimize = faMinimize;
-  protected readonly faCirclePlus = faCirclePlus;
-  protected readonly faFilter = faFilter;
-  protected readonly faExpand = faExpand;
-  protected readonly faPencil = faPencil;
-  protected readonly faTrash = faTrash;
-  protected readonly faCodeMerge = faCodeMerge;
+export class FinanceComponent {
   protected readonly faSquareCaretRight = faSquareCaretRight;
   protected readonly faSquareCaretLeft = faSquareCaretLeft;
   protected readonly INCOME = INCOME;
@@ -56,74 +36,15 @@ export class FinanceComponent implements OnInit, OnDestroy {
   protected readonly SAVING = SAVING;
   protected readonly EXPENSE = EXPENSE;
 
-  protected readonly destroyed$ = new ReplaySubject<void>(1);
   protected loadingService = inject(LoadingService);
   private dataService = inject(DataService);
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
+
   title = inject(Title);
 
-  filterButton = viewChild<ElementRef>('filterButton');
   searchInput = viewChild<ElementRef>('searchInput');
 
-  allExpanded = false;
-  filterEnabled = false;
   today = new Date();
   currentYear = this.today.getFullYear();
-  selectedTransactions: TransactionExpand[] = [];
-
-  constructor() {}
-
-  ngOnInit(): void {
-    this.loadingService.loadingOn();
-    this.dataService.bulkSelectTransaction$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((value) => {
-        this.selectedTransactions = value;
-      });
-  }
-
-  addTransaction() {
-    const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: '850px',
-      position: {
-        top: '50px',
-      },
-      data: { formData: null, task: 'add' },
-    });
-    dialog.afterClosed().subscribe((result) => {
-      if (result) {
-        //this.dataService.setTransaction(result);
-        this.snackBar.open('Updated!', 'Success', {
-          duration: 3000,
-        });
-      }
-    });
-  }
-
-  openFilters() {
-    this.dialog.closeAll();
-    const rect = this.filterButton()?.nativeElement.getBoundingClientRect();
-    const dialog = this.dialog.open(TransactionFilterComponent, {
-      width: '700px',
-      height: '500px',
-      position: { top: `${rect.bottom + 10}px`, right: `20px` },
-      hasBackdrop: true,
-    });
-
-    dialog.afterClosed().subscribe((result) => {
-      if (result) {
-        this.dataService.setFilterParams(result.filters);
-        this.dataService.setPanelActions(this.allExpanded);
-        //this.filterEnabled = result.filters;
-      }
-    });
-  }
-
-  panelAction() {
-    this.allExpanded = !this.allExpanded;
-    this.dataService.setPanelActions(this.allExpanded);
-  }
 
   applyFilter() {
     //const filterValue = this.searchInput()?.nativeElement.value;
@@ -138,42 +59,6 @@ export class FinanceComponent implements OnInit, OnDestroy {
       this.currentYear = this.currentYear + 1;
     }
     this.dataService.setFilterYear(this.currentYear);
-    this.dataService.clearAllFiltersAndSelections();
-  }
-
-  mergeTransactions() {
-    const formData = this.selectedTransactions[0];
-    formData.amount = this.selectedTransactions.reduce(
-      (total, item) => total + (item.amount === null ? 0 : item.amount),
-      0,
-    );
-    const mergeIds = this.selectedTransactions
-      .filter((x) => x.id !== formData.id)
-      .map((x) => x.id);
-    const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: '850px',
-      position: {
-        top: '10%',
-      },
-      data: {
-        formData: formData,
-        task: 'merge',
-        mergeIds: mergeIds,
-      },
-    });
-    dialog.afterClosed().subscribe((result: TransactionExpand | null) => {
-      if (result) {
-        //this.dataService.setBulkSelectTransactions(result);
-        this.snackBar.open('Updated!', 'Success', {
-          duration: 3000,
-        });
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }
 
@@ -195,13 +80,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       target: this.target,
       year: this.dataService.getFilterYear(),
     });
-    this.dataService.transactionFilters$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((filters) => {
-        if (filters?.target === this.target) {
-          this.extracted(filters);
-        }
-      });
     this.dataService.yearSwitch$.subscribe((year) => {
       this.extracted({ target: this.target, year: year });
     });
@@ -218,7 +96,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-    this.dataService.clearAllFiltersAndSelections();
   }
 }
 

@@ -72,6 +72,8 @@
       </div>
     </mat-grid-tile>
     <mat-grid-tile>
+    </mat-grid-tile>
+    <mat-grid-tile>
       <div class="search-bar-wrapper">
         <input
           type="text"
@@ -81,104 +83,8 @@
           (keyup)="applyFilter()"
         />
       </div>
-
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <div class="filters-right" [ngClass]="{'highlight-merge-panel': selectedTransactions.length>=2}">
-        <div class="merge-description" *ngIf="selectedTransactions.length>=2">
-          <span>Selected {{selectedTransactions.length}} Transactions!</span>
-        </div>
-        <div class="merge-panel" *ngIf="selectedTransactions.length>=2">
-          <div class="filter-item"
-               (click)="mergeTransactions()"
-               matRipple
-               matTooltip="Merge Transactions"
-               matTooltipPosition="below">
-            <fa-icon
-              [icon]="faCodeMerge"
-              size="1x"
-              [style]="{ color: '#4a4949' }"
-            ></fa-icon>
-          </div>
-          <div class="filter-item"
-               matRipple
-               matTooltip="Bulk Edit"
-               matTooltipPosition="below"
-               [ngClass]="{'disable-merge-action': selectedTransactions.length <= 1}">
-            <fa-icon
-              [icon]="faPencil"
-              size="1x"
-              [style]="{ color: '#4a4949' }"
-            ></fa-icon>
-          </div>
-          <div class="filter-item"
-               matRipple
-               matTooltip="Bulk Delete"
-               [ngClass]="{'disable-merge-action': selectedTransactions.length <= 1}">
-            <fa-icon
-              [icon]="faTrash"
-              size="1x"
-              [style]="{ color: '#af5252' }"
-            ></fa-icon>
-          </div>
-        </div>
-        <div class="edit-panel" *ngIf="selectedTransactions.length<=1">
-          <div
-            class="filter-item"
-            (click)="panelAction()"
-            matRipple
-            [matTooltip]="allExpanded ? 'Minimize All' : 'Expand All'"
-            matTooltipPosition="below"
-          >
-            <fa-icon
-              [icon]="allExpanded ? faMinimize : faExpand"
-              size="1x"
-              [style]="{ color: '#4a4949' }"
-            ></fa-icon>
-          </div>
-          <div
-            #filterButton
-            (click)="openFilters()"
-            class="filter-item"
-            [ngClass]="{ 'filter-enabled': filterEnabled }"
-            matRipple
-          >
-            <fa-icon
-              [icon]="faFilter"
-              size="1x"
-              [style]="{ color: '#4a4949' }"
-            ></fa-icon>
-          </div>
-          <div
-            class="filter-item"
-            matRipple
-            matTooltip="Upload Transactions"
-            matTooltipPosition="below"
-          >
-            <fa-icon
-              [icon]="faUpload"
-              size="1x"
-              [style]="{ color: '#4a4949' }"
-            ></fa-icon>
-          </div>
-          <div
-            class="filter-item"
-            (click)="addTransaction()"
-            matRipple
-            matTooltip="Add Transactions"
-            matTooltipPosition="below"
-          >
-            <fa-icon
-              [icon]="faCirclePlus"
-              size="1x"
-              [style]="{ color: '#4a4949' }"
-            ></fa-icon>
-          </div>
-        </div>
-      </div>
     </mat-grid-tile>
   </mat-grid-list>
-  <div class="transaction-panel-container">
-    <router-outlet></router-outlet>
-  </div>
+  <router-outlet></router-outlet>
+
 </div>
