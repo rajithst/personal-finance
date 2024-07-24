@@ -11,7 +11,7 @@ describe('PayeeRulesComponent', () => {
       declarations: [PayeeRulesComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(PayeeRulesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -16,17 +16,11 @@ export class AppComponent implements OnInit {
   isExpanded = true;
   closedWidth = 60;
   openedWidth = 200;
-  isMobile!: boolean;
   sideNavMode: 'side' | 'over' = 'side';
   hasBackdrop: boolean = false;
-  toolBarHeight = 64;
 
   onToolbarMenuToggle() {
-    if (this.isMobile) {
-      this.sideNav.toggle();
-    } else {
-      this.showFullMenu = !this.isExpanded;
-    }
+    this.showFullMenu = !this.isExpanded;
     this.isExpanded = !this.isExpanded;
   }
 

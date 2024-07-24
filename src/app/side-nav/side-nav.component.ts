@@ -102,7 +102,6 @@ export class SideNavComponent {
   styleUrl: './side-nav.component.css'
 })
 export class SideNavClosedComponent {
-  protected readonly faSackDollar = faSackDollar;
   protected readonly faChartSimple = faChartSimple;
   protected readonly faMoneyBillTransfer = faMoneyBillTransfer;
   protected readonly faShop = faShop;

@@ -1,18 +1,33 @@
-
 <div class="content">
-  <app-top-nav (sideNavToggled)="onToolbarMenuToggle()"></app-top-nav>
+  <mat-toolbar color="primary" class="fix-nav">
+    <button type="button" mat-icon-button (click)="onToolbarMenuToggle()">
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+    <div class="nav-brand">
+      CoinCraft
+    </div>
+  </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container" [hasBackdrop]="hasBackdrop">
-    <mat-sidenav #snav position="start" disableClose="true" role="navigation" class="sidenav mat-elevation-z10"
-                 [mode]="sideNavMode" [opened]="sideNavDefaultOpened"
-                 [ngStyle]="{'width.px': isExpanded ? openedWidth :  closedWidth}">
+    <mat-sidenav
+      #snav
+      position="start"
+      disableClose="true"
+      role="navigation"
+      class="sidenav mat-elevation-z10"
+      [mode]="sideNavMode"
+      [opened]="sideNavDefaultOpened"
+      [ngStyle]="{ 'width.px': isExpanded ? openedWidth : closedWidth }"
+    >
       <app-side-nav *ngIf="showFullMenu; else elseBlock"></app-side-nav>
       <ng-template #elseBlock>
         <app-side-nav-closed></app-side-nav-closed>
       </ng-template>
     </mat-sidenav>
-    <mat-sidenav-content id="sidenav-content"
-                         [ngStyle]="{'margin-left.px': isExpanded && !isMobile ? openedWidth :  closedWidth}">
+    <mat-sidenav-content
+      id="sidenav-content"
+      [ngStyle]="{ 'margin-left.px': isExpanded ? openedWidth : closedWidth }"
+    >
       <loading></loading>
       <main class="main-container">
         <router-outlet></router-outlet>
