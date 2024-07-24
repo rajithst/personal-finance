@@ -21,7 +21,6 @@ import {
   SideNavClosedComponent,
   SideNavComponent,
 } from './side-nav/side-nav.component';
-import { TopNavComponent } from './top-nav/top-nav.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
@@ -35,7 +34,6 @@ import { MatButtonModule } from '@angular/material/button';
     PageNotFoundComponent,
     SideNavComponent,
     SideNavClosedComponent,
-    TopNavComponent,
   ],
   bootstrap: [AppComponent],
   imports: [

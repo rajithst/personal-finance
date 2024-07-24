@@ -33,6 +33,10 @@
   background: #faf7f7;
 }
 
-.sidenav-container {
-  margin-top: 55px;
+.nav-brand {
+  text-align: center;
+}
+
+.fix-nav {
+  height: 55px;
 }
