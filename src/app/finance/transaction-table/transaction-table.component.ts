@@ -5,6 +5,8 @@ import {
   inject,
   Input,
   OnChanges,
+  OnDestroy,
+  OnInit,
   signal,
   viewChild,
 } from '@angular/core';
@@ -49,13 +51,14 @@ import {
 } from '../../data/client.data';
 import { Router } from '@angular/router';
 import { INCOME, PAYMENT, SAVING } from '../../data/shared.data';
+import { ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-table',
   templateUrl: './transaction-table.component.html',
   styleUrl: './transaction-table.component.css',
 })
-export class TransactionTableComponent implements OnChanges {
+export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() transactions: MonthlyTransaction[];
   accordion = viewChild.required(MatAccordion);
   filterButton = viewChild<ElementRef>('filterButton');
@@ -78,6 +81,8 @@ export class TransactionTableComponent implements OnChanges {
   private snackBar = inject(MatSnackBar);
   private loadingService = inject(LoadingService);
   private dataService = inject(DataService);
+
+  protected readonly destroyed$ = new ReplaySubject<void>(1);
 
   totalAnnualAmount = signal<number>(0);
   segments = signal(this.router.url.split('/'));
@@ -138,6 +143,20 @@ export class TransactionTableComponent implements OnChanges {
     'Actions',
   ];
 
+  ngOnInit(): void {
+    this.dataService.yearSwitch$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((value) => {
+        this.filterParams.update((x) => {
+          return {
+            year: value,
+            target: x.target,
+            categories: x.categories,
+            subcategories: x.subcategories,
+          };
+        });
+      });
+  }
   ngOnChanges() {
     this.allTransactions =
       this.transactions.length > 0 ? this.transactions : [];
@@ -153,6 +172,7 @@ export class TransactionTableComponent implements OnChanges {
         (x) => x + this.allTransactions[index].total,
       );
     });
+    this.applyFiltersToTables();
   }
 
   editTransaction(item: TransactionExpand, tableIndex: number) {
@@ -466,5 +486,10 @@ export class TransactionTableComponent implements OnChanges {
       subcategories: [],
       paymentMethods: [],
     };
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

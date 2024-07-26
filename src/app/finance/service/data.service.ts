@@ -6,7 +6,7 @@ import { DestinationMap } from '../model/payee';
   providedIn: 'root',
 })
 export class DataService {
-  private year$ = new BehaviorSubject<number>(2024);
+  private year$ = new BehaviorSubject<number>(new Date().getFullYear());
   private payees$ = new BehaviorSubject<DestinationMap[]>([]);
 
   yearSwitch$ = this.year$.asObservable();

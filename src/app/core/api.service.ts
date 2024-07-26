@@ -24,12 +24,11 @@ import {
   DestinationMapRequest,
   PayeeResponse,
 } from '../finance/model/payee';
-import {IncomeResponse} from "../finance/model/income";
+import { IncomeResponse } from '../finance/model/income';
 
 new HttpHeaders({
   'Content-Type': 'application/json',
 });
-
 
 @Injectable({
   providedIn: 'root',
@@ -52,6 +51,7 @@ export class ApiService {
     const subcategories = payload.subcategories
       ? payload.subcategories.join(',')
       : '';
+    console.log('calling http request to get transactions');
     return this.http.get<ExpenseResponse>(
       `${this.SRC_URL}/finance/transaction?year=${year}&target=${target}&cat=${categories}&subcat=${subcategories}`,
     );

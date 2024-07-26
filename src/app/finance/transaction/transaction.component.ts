@@ -12,7 +12,7 @@ import {
   faSquareCaretRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { DataService } from '../service/data.service';
-import { map, Observable, ReplaySubject, takeUntil } from 'rxjs';
+import {map, Observable, ReplaySubject, takeUntil} from 'rxjs';
 import {
   MonthlyTransaction,
   TransactionExpand,
@@ -76,20 +76,18 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   data$: Observable<MonthlyTransaction[]>;
 
   ngOnInit(): void {
-    this.extracted({
-      target: this.target,
-      year: this.dataService.getFilterYear(),
-    });
-    this.dataService.yearSwitch$.subscribe((year) => {
-      this.extracted({ target: this.target, year: year });
-    });
+    this.dataService.yearSwitch$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((value) => {
+        this.extracted({ target: this.target, year: value });
+      });
   }
 
   extracted(filters: TransactionFilter) {
     const transactions$ = this.apiService.getTransactions(filters);
     this.data$ = transactions$
       .pipe(takeUntil(this.destroyed$))
-      .pipe(map((value) => value.payload));
+      .pipe(map((value) => value.payload))
     this.loadingService.loadingOff();
   }
 
