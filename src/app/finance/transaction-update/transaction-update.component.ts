@@ -129,16 +129,17 @@ export class TransactionUpdateDialog implements OnInit {
       alias: new FormControl(data ? data.alias : null),
       notes: new FormControl(data ? data.notes : null),
       transaction_type: new FormControl(
-        data ? (data.is_payment ? 3 : data.is_expense ? 2 : 1) : null,
+        data ? (data.is_payment ? 3 : data.is_expense ? 2 : 1) : 2,
       ),
       update_similar: new FormControl(false),
-      is_payment: new FormControl(data ? data.is_payment : null),
-      is_saving: new FormControl(data ? data.is_saving : null),
-      is_expense: new FormControl(data ? data.is_expense : null),
-      is_deleted: new FormControl(data ? data.is_deleted : null),
-      is_merge: new FormControl(data ? data.is_merge : null),
+      is_payment: new FormControl(data ? data.is_payment : false),
+      is_saving: new FormControl(data ? data.is_saving : false),
+      is_expense: new FormControl(data ? data.is_expense : true),
+      is_deleted: new FormControl(data ? data.is_deleted : false),
+      is_merge: new FormControl(data ? data.is_merge : false),
       merge_id: new FormControl(data ? data.merge_id : null),
       delete_reason: new FormControl(data ? data.delete_reason : null),
+      source: new FormControl(data ? data.source : 2)
     });
   }
 }

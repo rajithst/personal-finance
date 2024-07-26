@@ -1,9 +1,11 @@
 import {
   Component,
+  computed,
   ElementRef,
   inject,
   Input,
   OnChanges,
+  signal,
   viewChild,
 } from '@angular/core';
 import {
@@ -38,6 +40,17 @@ import { MatAccordion } from '@angular/material/expansion';
 import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
 import { LoadingService } from '../../shared/loading/loading.service';
 import { Sort } from '@angular/material/sort';
+import {
+  INCOME_CATEGORIES,
+  PAYMENT_CATEGORIES,
+  PAYMENT_CATEGORY_ID,
+  SAVING_CATEGORIES,
+  SAVINGS_CATEGORY_ID,
+  TRANSACTION_CATEGORIES,
+  TRANSACTION_SUB_CATEGORIES,
+} from '../../data/client.data';
+import { Router } from '@angular/router';
+import { EXPENSE, INCOME, PAYMENT, SAVING } from '../../data/shared.data';
 
 @Component({
   selector: 'app-transaction-table',
@@ -62,18 +75,59 @@ export class TransactionTableComponent implements OnChanges {
   protected readonly faUpload = faUpload;
   protected readonly faFilter = faFilter;
 
+  private router = inject(Router);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   private loadingService = inject(LoadingService);
   private dataService = inject(DataService);
 
+  totalAnnualAmount = signal<number>(0);
+  segments = signal(this.router.url.split('/'));
+  lastSegment = computed(() => {
+    const segmentLength = this.segments().length;
+    return this.segments().at(segmentLength - 1);
+  });
   dataSource: MatTableDataSource<TransactionExpand>;
   selection = new SelectionModel<TransactionExpand>(true, []);
   allDataSource: MatTableDataSource<TransactionExpand>[] = [];
   allTransactions: MonthlyTransaction[] = [];
   bulkSelectedTableIndex: number = -1;
   allExpanded = false;
-  filterParams: TransactionFilter;
+
+  filterParams = signal<TransactionFilter>(this.getEmptyFilterParams());
+  filterParamChips = computed(() => {
+    const getTargets = (targetId: number) => {
+      if (this.filterParams().target === SAVING) {
+        return TRANSACTION_SUB_CATEGORIES[SAVINGS_CATEGORY_ID].find(
+          (y) => y.value === targetId,
+        )?.viewValue;
+      } else if (this.filterParams().target === PAYMENT) {
+        return TRANSACTION_SUB_CATEGORIES[PAYMENT_CATEGORY_ID].find(
+          (y) => y.value === targetId,
+        )?.viewValue;
+      } else {
+        const allTransactionSubCategories = Object.values(
+          TRANSACTION_SUB_CATEGORIES,
+        ).flat();
+        return allTransactionSubCategories.find((y) => y.value === targetId)
+          ?.viewValue;
+      }
+    };
+    const categoryChips = this.filterParams().categories?.map((x) => ({
+      id: x,
+      type: 'category',
+      name:
+        this.filterParams().target === INCOME
+          ? INCOME_CATEGORIES.find((y) => y.value === x)?.viewValue
+          : TRANSACTION_CATEGORIES.find((y) => y.value === x)?.viewValue,
+    }));
+    const subCategoryChips = this.filterParams().subcategories?.map((x) => ({
+      id: x,
+      type: 'subcategory',
+      name: getTargets(x),
+    }));
+    return [...categoryChips!, ...subCategoryChips!];
+  });
   displayedColumns: string[] = [
     'select',
     'Date',
@@ -89,6 +143,7 @@ export class TransactionTableComponent implements OnChanges {
   ngOnChanges() {
     this.allTransactions =
       this.transactions.length > 0 ? this.transactions : [];
+    this.totalAnnualAmount.set(0);
     this.allTransactions.forEach((x: MonthlyTransaction, index: number) => {
       this.allDataSource.splice(
         index,
@@ -96,33 +151,20 @@ export class TransactionTableComponent implements OnChanges {
         new MatTableDataSource<TransactionExpand>(x.transactions),
       );
       this.allDataSource[index].filterPredicate = this.createFilterPredicate();
+      this.totalAnnualAmount.update(
+        (x) => x + this.allTransactions[index].total,
+      );
     });
-    this.filterParams = this.dataService.getEmptyFilterParams();
   }
 
-  editRecord(item: TransactionExpand, tableIndex: number) {
+  editTransaction(item: TransactionExpand, tableIndex: number) {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: '850px',
-      position: {
-        top: '10%',
-      },
       data: { formData: item, task: 'edit' },
     });
 
     dialog.afterClosed().subscribe((result: TransactionExpand | null) => {
       if (result) {
-        const orAmount = item.amount;
-        const newAmount = result.amount;
-        const tableData = this.allDataSource[tableIndex].data;
-        const transactionId = tableData.findIndex(
-          (x: TransactionExpand) => x.id == result.id,
-        );
-        tableData[transactionId] = result;
-        const dataSource = new MatTableDataSource<TransactionExpand>(tableData);
-        dataSource.filterPredicate = this.createFilterPredicate();
-        dataSource.filter = JSON.stringify(this.filterParams).trim();
-        this.allDataSource[tableIndex] = dataSource;
-        this.allTransactions[tableIndex].total += newAmount! - orAmount!;
+        this.updateTransactionDataSource(result);
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
@@ -130,26 +172,123 @@ export class TransactionTableComponent implements OnChanges {
     });
   }
 
-  deleteRecord(item: TransactionExpand, tableIndex: number) {
+  deleteTransaction(item: TransactionExpand, tableIndex: number) {
     const dialog = this.dialog.open(TransactionDeleteDialog, {
-      width: '850px',
-      position: {
-        top: '10%',
-      },
       data: { formData: item, task: 'delete' },
     });
     dialog.afterClosed().subscribe((result) => {
       if (result) {
-        const newAmount = result.amount;
-        const tableData = this.allDataSource[tableIndex].data.filter(
-          (x) => x.id !== result.id,
-        );
-        const dataSource = new MatTableDataSource<TransactionExpand>(tableData);
-        dataSource.filterPredicate = this.createFilterPredicate();
-        dataSource.filter = JSON.stringify(this.filterParams).trim();
-        this.allDataSource[tableIndex] = dataSource;
-        this.allTransactions[tableIndex].total -= newAmount;
+        this.updateTransactionDataSource(result);
+        this.snackBar.open('Deleted!', 'Success', {
+          duration: 3000,
+        });
       }
+    });
+  }
+
+  addTransaction() {
+    const dialog = this.dialog.open(TransactionUpdateDialog, {
+      data: { formData: null, task: 'add' },
+    });
+    dialog.afterClosed().subscribe((result) => {
+      if (result) {
+        this.updateTransactionDataSource(result);
+        this.snackBar.open('Updated!', 'Success', {
+          duration: 3000,
+        });
+      }
+    });
+  }
+
+  mergeTransactions() {
+    const formData = JSON.parse(JSON.stringify(this.selection.selected[0]));
+    if (!formData) return;
+    formData.amount = this.selection.selected.reduce(
+      (total, item) => total + (item.amount === null ? 0 : item.amount),
+      0,
+    );
+    formData.is_merge = true;
+    const mergeIds = this.selection.selected
+      .filter((x) => x.id !== formData.id)
+      .map((x) => x.id);
+    const dialog = this.dialog.open(TransactionUpdateDialog, {
+      data: {
+        formData: formData,
+        task: 'merge',
+        mergeIds: mergeIds,
+      },
+    });
+    dialog.afterClosed().subscribe((result: TransactionExpand | null) => {
+      if (result) {
+        const year = result.year;
+        const month = result.month;
+        let parentIndex = this.allTransactions.findIndex(
+          (x) => x.year === year && x.month === month,
+        );
+        if (parentIndex !== -1) {
+          this.allTransactions[parentIndex].transactions = this.allTransactions[
+            parentIndex
+          ].transactions.filter((x) => !mergeIds.includes(x.id));
+        }
+        this.updateTransactionDataSource(result);
+        this.selection.clear();
+        this.snackBar.open('Updated!', 'Success', {
+          duration: 3000,
+        });
+      }
+    });
+  }
+
+  private updateTransactionDataSource(newTransaction: TransactionExpand) {
+    const year = newTransaction.year;
+    const month = newTransaction.month;
+    let parentIndex = this.allTransactions.findIndex(
+      (x) => x.year === year && x.month === month,
+    );
+    let childIndex = -1;
+    if (parentIndex !== -1) {
+      const transactions = this.allTransactions[parentIndex].transactions;
+      childIndex = transactions.findIndex((x) => x.id === newTransaction.id);
+      if (childIndex !== -1) {
+        if (newTransaction.is_deleted) {
+          this.allTransactions[parentIndex].transactions = this.allTransactions[
+            parentIndex
+          ].transactions.filter((x) => x.id !== newTransaction.id);
+        } else {
+          this.allTransactions[parentIndex].transactions[childIndex] =
+            newTransaction;
+        }
+      } else {
+        this.allTransactions[parentIndex].transactions.push(newTransaction);
+      }
+    } else {
+      const transactionItem: MonthlyTransaction = {
+        year: newTransaction.year,
+        month: newTransaction.month,
+        month_text: newTransaction.month_text,
+        total: newTransaction.amount || 0,
+        transactions: [newTransaction],
+      };
+      this.allTransactions.push(transactionItem);
+      parentIndex = this.allTransactions.length - 1;
+    }
+    const dataSource = new MatTableDataSource<TransactionExpand>(
+      this.allTransactions[parentIndex].transactions,
+    );
+    dataSource.filterPredicate = this.createFilterPredicate();
+    dataSource.filter = JSON.stringify(this.filterParams()).trim();
+    if (parentIndex < this.allDataSource.length) {
+      this.allDataSource[parentIndex] = dataSource;
+    } else {
+      this.allDataSource.push(dataSource);
+    }
+    this.allTransactions[parentIndex].total = dataSource.filteredData.reduce(
+      (total, item) => total + (item.amount === null ? 0 : item.amount),
+      0,
+    );
+    this.totalAnnualAmount.set(0);
+    this.allTransactions.forEach((table) => {
+      this.totalAnnualAmount.update((x) => x + table.total);
     });
   }
 
@@ -174,56 +313,6 @@ export class TransactionTableComponent implements OnChanges {
     this.bulkSelectedTableIndex = tableIndex;
   }
 
-  mergeTransactions() {
-    const formData = JSON.parse(JSON.stringify(this.selection.selected[0]));
-    if (!formData) return;
-    formData.amount = this.selection.selected.reduce(
-      (total, item) => total + (item.amount === null ? 0 : item.amount),
-      0,
-    );
-    const mergeIds = this.selection.selected
-      .filter((x) => x.id !== formData.id)
-      .map((x) => x.id);
-    const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: '850px',
-      position: {
-        top: '10%',
-      },
-      data: {
-        formData: formData,
-        task: 'merge',
-        mergeIds: mergeIds,
-      },
-    });
-    dialog.afterClosed().subscribe((result: TransactionExpand | null) => {
-      if (result) {
-        const orAmount = formData.amount;
-        const newAmount = result.amount;
-        const tableData = this.allDataSource[this.bulkSelectedTableIndex].data;
-        const transactionId = tableData.findIndex(
-          (x: TransactionExpand) => x.id == result.id,
-        );
-        tableData[transactionId] = result;
-        mergeIds.forEach((mergeId) => {
-          const idx = tableData.findIndex((x) => x.id === mergeId);
-          tableData.splice(idx, 1);
-        });
-
-        this.allTransactions[this.bulkSelectedTableIndex].total +=
-          newAmount! - orAmount!;
-        this.allDataSource.splice(
-          this.bulkSelectedTableIndex,
-          0,
-          new MatTableDataSource<TransactionExpand>(tableData),
-        );
-        this.selection.clear();
-        this.snackBar.open('Updated!', 'Success', {
-          duration: 3000,
-        });
-      }
-    });
-  }
-
   openFilters() {
     this.dialog.closeAll();
     const rect = this.filterButton()?.nativeElement.getBoundingClientRect();
@@ -232,30 +321,53 @@ export class TransactionTableComponent implements OnChanges {
       height: '500px',
       position: { top: `${rect.bottom + 10}px`, right: `20px` },
       hasBackdrop: true,
-      data: { filterParams: this.filterParams },
+      data: { filterParams: this.filterParams() },
     });
 
     dialog.afterClosed().subscribe((result) => {
       if (result) {
-        this.filterParams = result.filters;
-        const filterValue = JSON.stringify(result.filters);
-        this.allDataSource.forEach((y) => {
-          y.filter = filterValue.trim();
+        this.filterParams.update(() => {
+          return {
+            year: result.filters.year,
+            target: result.filters.target,
+            categories: result.filters.categories,
+            subcategories: result.filters.subcategories,
+            paymentMethods: result.filters.paymentMethods,
+          };
         });
-        let tableIndex = 0;
-        this.allTransactions.forEach((x: MonthlyTransaction) => {
-          x.total = this.allDataSource[tableIndex].filteredData.reduce(
-            (a, b) => a + b.amount!,
-            0,
-          );
-          tableIndex += 1;
-        });
+        this.applyFiltersToTables();
         this.loadingService.loadingOff();
       }
     });
   }
 
-  createFilterPredicate(): (
+  private applyFiltersToTables() {
+    const filters = this.filterParams();
+    this.totalAnnualAmount.set(0);
+    this.allDataSource.forEach((y) => {
+      y.filter = JSON.stringify(filters).trim();
+    });
+    let tableIndex = 0;
+    this.allTransactions.forEach((x: MonthlyTransaction) => {
+      x.total = this.allDataSource[tableIndex].filteredData.reduce(
+        (a, b) => a + b.amount!,
+        0,
+      );
+      this.totalAnnualAmount.update((y) => y + x.total);
+      tableIndex += 1;
+    });
+  }
+
+  panelAction() {
+    this.allExpanded = !this.allExpanded;
+    if (this.allExpanded) {
+      this.accordion().openAll();
+    } else {
+      this.accordion().closeAll();
+    }
+  }
+
+  private createFilterPredicate(): (
     data: TransactionExpand,
     filter: string,
   ) => boolean {
@@ -288,32 +400,6 @@ export class TransactionTableComponent implements OnChanges {
     };
   }
 
-  panelAction() {
-    this.allExpanded = !this.allExpanded;
-    if (this.allExpanded) {
-      this.accordion().openAll();
-    } else {
-      this.accordion().closeAll();
-    }
-  }
-
-  addTransaction() {
-    const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: '850px',
-      position: {
-        top: '50px',
-      },
-      data: { formData: null, task: 'add' },
-    });
-    dialog.afterClosed().subscribe((result) => {
-      if (result) {
-        this.snackBar.open('Updated!', 'Success', {
-          duration: 3000,
-        });
-      }
-    });
-  }
-
   onSortData(sort: Sort, tableIndex: number) {
     let data = this.allDataSource[tableIndex].data;
     if (sort.active && sort.direction !== '') {
@@ -321,7 +407,11 @@ export class TransactionTableComponent implements OnChanges {
         const isAsc = sort.direction === 'asc';
         switch (sort.active) {
           case 'PaymentMethod':
-            return this.compare(a.payment_method_text, b.payment_method_text, isAsc);
+            return this.compare(
+              a.payment_method_text,
+              b.payment_method_text,
+              isAsc,
+            );
           case 'Date':
             return this.compare(a.date, b.date, isAsc);
           case 'Destination':
@@ -329,7 +419,11 @@ export class TransactionTableComponent implements OnChanges {
           case 'Category':
             return this.compare(+a.category_text, +b.category_text, isAsc);
           case 'SubCategory':
-            return this.compare(+a.subcategory_text, +b.subcategory_text, isAsc);
+            return this.compare(
+              +a.subcategory_text,
+              +b.subcategory_text,
+              isAsc,
+            );
           case 'Amount':
             return this.compare(+a.amount!, +b.amount!, isAsc);
           default:
@@ -338,9 +432,7 @@ export class TransactionTableComponent implements OnChanges {
       });
     }
 
-    const dataSource = new MatTableDataSource<TransactionExpand>(
-        data,
-      );
+    const dataSource = new MatTableDataSource<TransactionExpand>(data);
     dataSource.filterPredicate = this.createFilterPredicate();
     dataSource.filter = JSON.stringify(this.filterParams).trim();
     this.allDataSource[tableIndex] = dataSource;
@@ -348,5 +440,33 @@ export class TransactionTableComponent implements OnChanges {
 
   private compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  removeChip(chip: { name: string | undefined; id: number; type: string }) {
+    this.filterParams.update((x) => {
+      return {
+        year: x.year,
+        target: x.target,
+        categories:
+          chip.type === 'category'
+            ? x.categories?.filter((y) => y !== chip.id)
+            : x.categories,
+        subcategories:
+          chip.type === 'subcategory'
+            ? x.subcategories?.filter((y) => y !== chip.id)
+            : x.subcategories,
+      };
+    });
+    this.applyFiltersToTables();
+  }
+
+  getEmptyFilterParams(): TransactionFilter {
+    return {
+      year: this.dataService.getFilterYear(),
+      target: this.lastSegment() || '',
+      categories: [],
+      subcategories: [],
+      paymentMethods: [],
+    };
   }
 }

@@ -96,7 +96,7 @@ table.transaction-table tbody td:last-child {
 
 .filters-right {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-bottom: 5px;
   background: #dadada;
   padding: 5px;
@@ -107,6 +107,19 @@ table.transaction-table tbody td:last-child {
   max-height: 75vh;
   overflow: auto;
 }
-.edit-panel {
+.filters-right > .edit-panel {
   display: flex;
+}
+
+.filters-right > .info-panel {
+  display: flex;
+  align-items: center;
+}
+
+.filters-right > .info-panel > mat-chip {
+  background: #9bddf8;
+}
+
+.filter-chip {
+  background-color: #b1d8b7 !important;
 }

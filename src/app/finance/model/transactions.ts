@@ -62,6 +62,7 @@ export interface Transaction {
   merge_id: number | null;
   delete_reason: string;
   payment_method: number;
+  source: number;
 }
 
 export interface TransactionExpand extends Transaction {

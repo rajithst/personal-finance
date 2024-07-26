@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   ExpensesComponent,
-  FinanceComponent, IncomesComponent, PaymentsComponent,
+  FinanceComponent,
+  IncomesComponent,
+  PaymentsComponent,
   SavingsComponent,
-  TransactionDetailComponent
+  TransactionDetailComponent,
 } from './transaction/transaction.component';
 import {
   TransactionDeleteDialog,
@@ -19,7 +21,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../shared/material.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PayeeEditComponent } from './payee-rules/payee-edit/payee-edit.component';
-
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,16 @@ import { PayeeEditComponent } from './payee-rules/payee-edit/payee-edit.componen
     FontAwesomeModule,
     FinanceRoutingModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
+        width: '850px',
+        position: {
+          top: '10%',
+        },
+      },
+    },
+  ],
 })
 export class FinanceModule {}

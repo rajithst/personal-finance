@@ -138,7 +138,7 @@ export class TransactionDashboardComponent implements OnInit {
 
     this.monthlyExpensesOptions = {
       title: `${this.currentYear} Monthly Expenses vs Payments`,
-      width: 550,
+      width: 580,
       height: 300,
       colors: ['#cf5a5a', '#d59b6c'],
       chartArea: { left: 0, top: 20, width: '100%', height: '70%' },
@@ -164,7 +164,7 @@ export class TransactionDashboardComponent implements OnInit {
 
     this.monthlyIncomeOptions = {
       title: `${this.currentYear} Monthly Income vs Savings`,
-      width: 550,
+      width: 580,
       height: 300,
       colors: ['#87dc88', '#6cacd5'],
       chartArea: { left: 0, top: 20, width: '100%', height: '70%' },
@@ -172,7 +172,7 @@ export class TransactionDashboardComponent implements OnInit {
     };
     this.monthlySavingsOptions = {
       title: `${this.currentYear} Monthly Savings`,
-      width: 400,
+      width: 580,
       height: 300,
       colors: ['#23c623'],
       chartArea: { left: 0, top: 20, width: '100%', height: '70%' },

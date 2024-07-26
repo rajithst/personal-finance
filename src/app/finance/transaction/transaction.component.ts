@@ -191,6 +191,7 @@ export class IncomesComponent extends TransactionDetailComponent {
       payment_method_text: '',
       subcategory: 0,
       subcategory_text: '',
+      source: 1,
     };
   }
 }
