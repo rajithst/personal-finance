@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
-  faCalendar,
   faCreditCard,
   faLayerGroup,
   faShop,
@@ -35,7 +34,6 @@ export class TransactionFilterComponent implements OnInit {
   protected readonly faLayerGroup = faLayerGroup;
   protected readonly faShop = faShop;
   protected readonly faCreditCard = faCreditCard;
-  protected readonly faCalendar = faCalendar;
 
   private formBuilder = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<TransactionFilterComponent>);

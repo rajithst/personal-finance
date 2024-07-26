@@ -56,8 +56,6 @@ export class TransactionDashboardComponent implements OnInit {
   monthlyExpensesChartType: string = 'bar';
 
   yearSummary: [[string, any]] = [['Category', 'Total']];
-  yearSummaryOptions: any;
-  yearSummaryChartType: string = 'pie';
 
   monthlyIncome: [[string, any, any]] = [['Month', 'Income', 'Savings']];
   monthlyIncomeOptions: any;

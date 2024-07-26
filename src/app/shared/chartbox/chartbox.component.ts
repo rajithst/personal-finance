@@ -7,7 +7,6 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import {faEllipsisV} from "@fortawesome/free-solid-svg-icons";
 declare var google: any;
 
 @Component({
@@ -22,7 +21,6 @@ export class ChartboxComponent implements AfterViewInit {
   @Input() chartOptions: any = {};
   @Output() rendered: EventEmitter<void> = new EventEmitter<void>()
   @ViewChild('chartArea') chartArea: ElementRef;
-  protected readonly faEllipsisV = faEllipsisV;
 
   chart: any = null;
   chartTitle: string;

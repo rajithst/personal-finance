@@ -5,20 +5,19 @@ import {
 } from '@angular/router';
 import { inject } from '@angular/core';
 import { ApiService } from '../../core/api.service';
-import {Observable} from 'rxjs';
-import {DashboardResponse, TransactionsResponse} from "../model/transactions";
+import { Observable } from 'rxjs';
+import { DashboardResponse } from '../model/transactions';
 
 export const dashboardResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
 ): Observable<DashboardResponse> => {
-  return inject(ApiService).getDashboard()
+  return inject(ApiService).getDashboard();
 };
-
 
 export const payeeResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
 ) => {
-  return inject(ApiService).getPayees()
+  return inject(ApiService).getPayees();
 };

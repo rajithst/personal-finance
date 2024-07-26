@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {faChartLine, faChartSimple, faMoneyBillTransfer, faSackDollar, faShop} from "@fortawesome/free-solid-svg-icons";
+import {faChartLine, faChartSimple, faMoneyBillTransfer, faShop} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-side-nav',
@@ -41,7 +41,6 @@ import {faChartLine, faChartSimple, faMoneyBillTransfer, faSackDollar, faShop} f
   styleUrl: './side-nav.component.css'
 })
 export class SideNavComponent {
-  protected readonly faSackDollar = faSackDollar;
   protected readonly faChartSimple = faChartSimple;
   protected readonly faMoneyBillTransfer = faMoneyBillTransfer;
   protected readonly faShop = faShop;

@@ -23,19 +23,6 @@ export const INCOME_CATEGORIES: DropDownType[] = [
   { value: 10, viewValue: 'Other', checked: false },
 ];
 
-export const SAVING_CATEGORIES: DropDownType[] = [
-  { value: 1, viewValue: 'Emergency Fund', checked: false },
-  { value: 2, viewValue: 'Investments (Securities)', checked: false },
-  { value: 3, viewValue: 'Retirement Savings', checked: false },
-  { value: 4, viewValue: 'Cash Deposits', checked: false },
-];
-
-export const PAYMENT_CATEGORIES: DropDownType[] = [
-  { value: 1, viewValue: 'Personal Loan Payments', checked: false },
-  { value: 2, viewValue: 'Credit Card Payment', checked: false },
-  { value: 3, viewValue: 'Cash Payment/Withdrawals', checked: false },
-];
-
 export const PAYMENT_METHODS: DropDownType[] = [
   { value: 1, viewValue: 'Rakuten Card', checked: false },
   { value: 2, viewValue: 'EPOS Card', checked: false },
