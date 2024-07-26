@@ -42,15 +42,13 @@ import { LoadingService } from '../../shared/loading/loading.service';
 import { Sort } from '@angular/material/sort';
 import {
   INCOME_CATEGORIES,
-  PAYMENT_CATEGORIES,
   PAYMENT_CATEGORY_ID,
-  SAVING_CATEGORIES,
   SAVINGS_CATEGORY_ID,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
 } from '../../data/client.data';
 import { Router } from '@angular/router';
-import { EXPENSE, INCOME, PAYMENT, SAVING } from '../../data/shared.data';
+import { INCOME, PAYMENT, SAVING } from '../../data/shared.data';
 
 @Component({
   selector: 'app-transaction-table',

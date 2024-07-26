@@ -19,7 +19,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DropDownType, INCOME, PAYMENT, SAVING } from '../../data/shared.data';
 import { TransactionFilter } from '../model/transactions';
-import { Router } from '@angular/router';
 import { LoadingService } from '../../shared/loading/loading.service';
 import { DataService } from '../service/data.service';
 
