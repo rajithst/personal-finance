@@ -14,7 +14,7 @@ import {
   MonthlyTransaction,
   TransactionExpand,
   TransactionFilter,
-} from '../model/transactions';
+} from '../../model/transactions';
 import {
   TransactionDeleteDialog,
   TransactionUpdateDialog,
@@ -22,6 +22,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
+  faChartBar,
   faCirclePlus,
   faCodeMerge,
   faEdit,
@@ -36,11 +37,11 @@ import {
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { MatTableDataSource } from '@angular/material/table';
-import { DataService } from '../service/data.service';
+import { DataService } from '../../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatAccordion } from '@angular/material/expansion';
 import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
-import { LoadingService } from '../../shared/loading/loading.service';
+import { LoadingService } from '../../../shared/loading/loading.service';
 import { Sort } from '@angular/material/sort';
 import {
   INCOME_CATEGORIES,
@@ -48,10 +49,11 @@ import {
   SAVINGS_CATEGORY_ID,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
-} from '../../data/client.data';
+} from '../../../data/client.data';
 import { Router } from '@angular/router';
-import { INCOME, PAYMENT, SAVING } from '../../data/shared.data';
+import { INCOME, PAYMENT, SAVING } from '../../../data/shared.data';
 import { ReplaySubject, takeUntil } from 'rxjs';
+import {faChartColumn} from "@fortawesome/free-solid-svg-icons/faChartColumn";
 
 @Component({
   selector: 'app-transaction-table',
@@ -452,7 +454,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
     const dataSource = new MatTableDataSource<TransactionExpand>(data);
     dataSource.filterPredicate = this.createFilterPredicate();
-    dataSource.filter = JSON.stringify(this.filterParams).trim();
+    dataSource.filter = JSON.stringify(this.filterParams()).trim();
     this.allDataSource[tableIndex] = dataSource;
   }
 
@@ -491,5 +493,12 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  protected readonly faChartBar = faChartBar;
+  protected readonly faChartColumn = faChartColumn;
+
+  showAnalytics(tableIndex: number) {
+
   }
 }

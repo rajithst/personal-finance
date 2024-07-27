@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
-import { TransactionDashboardComponent } from './finance/dashboard/dashboard.component';
-import {dashboardResolver, payeeResolver} from './finance/service/resolvers';
-import {PayeeRulesComponent} from "./finance/payee-rules/payee-rules.component";
+import { dashboardResolver, payeeResolver } from './finance/service/resolvers';
 
 
 const routes: Routes = [
@@ -14,7 +12,10 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: TransactionDashboardComponent,
+    loadChildren: () =>
+      import('./finance/dashboard/dashboard.module').then(
+        (m) => m.DashboardModule,
+      ),
     resolve: {
       finance: dashboardResolver,
     },
@@ -22,16 +23,24 @@ const routes: Routes = [
   {
     path: 'finance',
     loadChildren: () =>
-      import('./finance/finance.module').then(
-        (m) => m.FinanceModule,
+      import('./finance/transaction/transaction.module').then(
+        (m) => m.TransactionModule,
       ),
   },
   {
     path: 'payee-rules',
-    component: PayeeRulesComponent,
+    loadChildren: () =>
+      import('./finance/payee-rules/payee-rules.module').then(
+        (m) => m.PayeeRulesModuleModule,
+      ),
     resolve: {
       payeeData: payeeResolver,
     },
+  },
+  {
+    path: 'reports',
+    loadChildren: () =>
+      import('./finance/reports/reports.module').then((m) => m.ReportsModule),
   },
   {
     path: 'investments',

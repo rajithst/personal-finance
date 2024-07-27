@@ -5,8 +5,8 @@ import {
   FinanceComponent, IncomesComponent,
   PaymentsComponent,
   SavingsComponent
-} from './transaction/transaction.component';
-import {EXPENSE, INCOME, PAYMENT, SAVING} from "../data/shared.data";
+} from './transaction.component';
+import {EXPENSE, INCOME, PAYMENT, SAVING} from "../../data/shared.data";
 
 const routes: Routes = [
   {
@@ -46,4 +46,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class FinanceRoutingModule {}
+export class TransactionRoutingModule {}

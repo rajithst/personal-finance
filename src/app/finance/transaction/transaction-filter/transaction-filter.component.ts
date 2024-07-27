@@ -13,13 +13,13 @@ import {
   SAVINGS_CATEGORY_ID,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
-} from '../../data/client.data';
+} from '../../../data/client.data';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { DropDownType, INCOME, PAYMENT, SAVING } from '../../data/shared.data';
-import { TransactionFilter } from '../model/transactions';
-import { LoadingService } from '../../shared/loading/loading.service';
-import { DataService } from '../service/data.service';
+import { DropDownType, INCOME, PAYMENT, SAVING } from '../../../data/shared.data';
+import { TransactionFilter } from '../../model/transactions';
+import { LoadingService } from '../../../shared/loading/loading.service';
+import { DataService } from '../../service/data.service';
 
 interface TransactionFilterData {
   filterParams: TransactionFilter;

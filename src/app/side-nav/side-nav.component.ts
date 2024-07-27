@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {faChartLine, faChartSimple, faMoneyBillTransfer, faShop} from "@fortawesome/free-solid-svg-icons";
+import {faChartLine, faChartSimple, faMoneyBillTransfer, faPieChart, faShop} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-side-nav',
@@ -29,6 +29,14 @@ import {faChartLine, faChartSimple, faMoneyBillTransfer, faShop} from "@fortawes
           <div class="link-text"><span>Payee Settings</span></div>
         </div>
       </a>
+      <a mat-list-item [routerLinkActive]="'active-link'" [routerLink]="['/', 'reports']">
+        <div class="link-items">
+          <div class="link-icon">
+            <fa-icon [icon]="faPieChart" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+          </div>
+          <div class="link-text"><span>Reports</span></div>
+        </div>
+      </a>
       <a mat-list-item [routerLinkActive]="'active-link'" [routerLink]="['/', 'investments']">
         <div class="link-items">
           <div class="link-icon">
@@ -45,6 +53,7 @@ export class SideNavComponent {
   protected readonly faMoneyBillTransfer = faMoneyBillTransfer;
   protected readonly faShop = faShop;
   protected readonly faChartLine = faChartLine;
+  protected readonly faPieChart = faPieChart;
 }
 
 
@@ -88,6 +97,17 @@ export class SideNavComponent {
       </a>
       <a mat-list-item
          [routerLinkActive]="'active-link'"
+         [routerLink]="['/', 'reports']"
+         matTooltip="Reports"
+         matTooltipPosition="right">
+        <div class="link-items">
+          <div class="link-icon">
+            <fa-icon [icon]="faPieChart" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+          </div>
+        </div>
+      </a>
+      <a mat-list-item
+         [routerLinkActive]="'active-link'"
          [routerLink]="['/', 'investments']"
          matTooltip="Investments"
          matTooltipPosition="right">
@@ -106,4 +126,5 @@ export class SideNavClosedComponent {
   protected readonly faShop = faShop;
   protected readonly faChartLine = faChartLine;
 
+  protected readonly faPieChart = faPieChart;
 }

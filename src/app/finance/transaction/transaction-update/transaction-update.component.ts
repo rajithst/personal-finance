@@ -8,15 +8,15 @@ import {
   TRANSACTION_SUB_CATEGORIES,
   PAYMENT_METHODS,
   SAVINGS_CATEGORY_ID,
-} from '../../data/client.data';
+} from '../../../data/client.data';
 import {
   TransactionExpand,
   TransactionMergeRequest,
   TransactionRequest,
-} from '../model/transactions';
+} from '../../model/transactions';
 import moment from 'moment/moment';
-import { ApiService } from '../../core/api.service';
-import { DropDownType } from '../../data/shared.data';
+import { ApiService } from '../../../core/api.service';
+import { DropDownType } from '../../../data/shared.data';
 
 export interface TransactionUpdateDialogData {
   formData: TransactionExpand;

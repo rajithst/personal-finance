@@ -13,7 +13,6 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { MaterialModule } from './shared/material.module';
-import { TransactionDashboardComponent } from './finance/dashboard/dashboard.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { SharedModule } from './shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -30,7 +29,6 @@ import { MatButtonModule } from '@angular/material/button';
 @NgModule({
   declarations: [
     AppComponent,
-    TransactionDashboardComponent,
     PageNotFoundComponent,
     SideNavComponent,
     SideNavClosedComponent,

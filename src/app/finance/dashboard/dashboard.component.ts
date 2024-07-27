@@ -29,11 +29,13 @@ export class TransactionDashboardComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
 
   today = new Date();
+  currentYear = this.today.getFullYear();
   currentMonthNumber = this.today.getMonth();
+  currentDataKey = `${this.currentYear}-${String(this.currentMonthNumber).padStart(2, '0')}-01`;
   currentMonthName: string = MONTHS.find(
     (x) => x.value == this.currentMonthNumber,
   )!.viewValue;
-  currentYear = this.today.getFullYear();
+
   childComponentsRendered = 0;
   totalChildComponents = 7;
   totalIncome = 0;
@@ -180,8 +182,8 @@ export class TransactionDashboardComponent implements OnInit {
 
   private prepareLastMonthExpenseCategories() {
     const transactions = this.dashboardData.category_wise_expenses;
-    if ('2024-04-01' in transactions) {
-      const categoryData = transactions['2024-04-01'];
+    if (this.currentDataKey in transactions) {
+      const categoryData = transactions[this.currentDataKey];
       TRANSACTION_CATEGORIES.forEach((x) => {
         const categorySum = categoryData.find((y) => y.category_id === x.value);
         this.categoryWiseSum.push([
@@ -223,8 +225,8 @@ export class TransactionDashboardComponent implements OnInit {
 
   private preparePaymentMethodCard() {
     const transactions = this.dashboardData.payment_method_wise_expenses;
-    if ('2024-04-01' in transactions) {
-      const categoryData = transactions['2024-04-01'];
+    if (this.currentDataKey in transactions) {
+      const categoryData = transactions[this.currentDataKey];
       PAYMENT_METHODS.forEach((x) => {
         const categorySum = categoryData.find((y) => y.category_id === x.value);
         this.paymentMethodWiseSum.push([
@@ -249,8 +251,8 @@ export class TransactionDashboardComponent implements OnInit {
 
   private prepareMonthlyPaymentsCard() {
     const transactions = this.dashboardData.payment_by_destination;
-    if ('2024-04-01' in transactions) {
-      const categoryData = transactions['2024-04-01'];
+    if (this.currentDataKey in transactions) {
+      const categoryData = transactions[this.currentDataKey];
       categoryData.forEach((x) => {
         this.monthlyPayments.push([
           x.destination ? x.destination : x.destination_original,

@@ -8,19 +8,17 @@ import {
   PaymentsComponent,
   SavingsComponent,
   TransactionDetailComponent,
-} from './transaction/transaction.component';
+} from './transaction.component';
 import {
   TransactionDeleteDialog,
   TransactionUpdateDialog,
 } from './transaction-update/transaction-update.component';
 import { TransactionTableComponent } from './transaction-table/transaction-table.component';
 import { TransactionFilterComponent } from './transaction-filter/transaction-filter.component';
-import { PayeeRulesComponent } from './payee-rules/payee-rules.component';
-import { FinanceRoutingModule } from './finance.routing.module';
-import { SharedModule } from '../shared/shared.module';
-import { MaterialModule } from '../shared/material.module';
+import { TransactionRoutingModule } from './transaction.routing.module';
+import { SharedModule } from '../../shared/shared.module';
+import { MaterialModule } from '../../shared/material.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { PayeeEditComponent } from './payee-rules/payee-edit/payee-edit.component';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 @NgModule({
@@ -31,12 +29,10 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
     TransactionDeleteDialog,
     TransactionTableComponent,
     TransactionFilterComponent,
-    PayeeRulesComponent,
     ExpensesComponent,
     SavingsComponent,
     IncomesComponent,
     PaymentsComponent,
-    PayeeEditComponent,
   ],
   imports: [
     CommonModule,
@@ -45,7 +41,7 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
     SharedModule,
     MaterialModule,
     FontAwesomeModule,
-    FinanceRoutingModule,
+    TransactionRoutingModule,
   ],
   providers: [
     {
@@ -59,4 +55,4 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
     },
   ],
 })
-export class FinanceModule {}
+export class TransactionModule {}

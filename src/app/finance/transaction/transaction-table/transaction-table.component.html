@@ -108,12 +108,20 @@
     @for (data of allTransactions; track data; let i = $index) {
       <mat-expansion-panel class="transaction-panel">
         <mat-expansion-panel-header>
-          <mat-panel-title
-            >{{ data.year }} - {{ data.month_text }} : ¥{{
+          <mat-panel-title>{{ data.year }} - {{ data.month_text }} : ¥{{
               data.total | number: "1.2-2"
-            }}</mat-panel-title
-          >
-          <mat-panel-description> </mat-panel-description>
+            }}</mat-panel-title>
+
+          <mat-panel-description>
+            <div class="panel-actions" (click)="$event.stopPropagation()">
+              <fa-icon
+                (click)="showAnalytics(i)"
+                [icon]="faChartColumn"
+                size="sm"
+                [style]="{ color: '#3699ff' }"
+              ></fa-icon>
+            </div>
+          </mat-panel-description>
         </mat-expansion-panel-header>
         <table
           mat-table
