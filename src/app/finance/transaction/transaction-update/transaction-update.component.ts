@@ -34,6 +34,7 @@ export class TransactionUpdateDialog implements OnInit {
   TRANSACTION_CATEGORIES: DropDownType[] = TRANSACTION_CATEGORIES;
   EXPENSE_SUB_CATEGORIES: DropDownType[] = [];
   TRANSACTION_TYPES: DropDownType[] = TRANSACTION_TYPES;
+
   apiService = inject(ApiService);
 
   constructor(

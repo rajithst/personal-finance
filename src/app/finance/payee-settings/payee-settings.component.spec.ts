@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PayeeRulesComponent } from './payee-rules.component';
+import { PayeeSettingsComponent } from './payee-settings.component';
 
 describe('PayeeRulesComponent', () => {
-  let component: PayeeRulesComponent;
-  let fixture: ComponentFixture<PayeeRulesComponent>;
+  let component: PayeeSettingsComponent;
+  let fixture: ComponentFixture<PayeeSettingsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PayeeRulesComponent]
+      declarations: [PayeeSettingsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PayeeRulesComponent);
+    fixture = TestBed.createComponent(PayeeSettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>
+  Split Transaction
+  <span>({{ data.formData.id }})</span>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="splitForm">
+    <h3>Transaction Information</h3>
+    <ul>
+      <li>Date: {{ data.formData.date | date: "MMMM d, y" }}</li>
+      <li>
+        Payee: {{ data.formData.destination }} ({{ data.formData.alias }})
+      </li>
+      <li>Amount: ¥{{ data.formData.amount | number: "1.2-2" }}</li>
+    </ul>
+    <mat-divider></mat-divider>
+    <div class="split-header">
+      <div class="split-title">
+        <h3>Add Splits</h3>
+      </div>
+      <div class="split-actions">
+        <button mat-raised-button color="primary" (click)="onAddSplit()">
+          Add Split
+        </button>
+      </div>
+    </div>
+    <table>
+      <ng-container formArrayName="splits">
+        @for (data of splits; track data; let i = $index) {
+          <tr [formGroupName]="i">
+            <td></td>
+            <td>
+              <mat-form-field appearance="outline" class="expense-input">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="category">
+                  @for (exc of TRANSACTION_CATEGORIES; track exc) {
+                    <mat-option [value]="exc.value"
+                      >{{ exc.viewValue }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field appearance="outline" class="expense-input">
+                <mat-label>Amount</mat-label>
+                <input matInput placeholder="Amount" formControlName="amount" />
+                <span matTextPrefix>¥&nbsp;</span>
+              </mat-form-field>
+            </td>
+          </tr>
+        }
+      </ng-container>
+    </table>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()">Split</button>
+</mat-dialog-actions>

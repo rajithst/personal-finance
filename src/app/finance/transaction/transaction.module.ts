@@ -20,6 +20,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { MaterialModule } from '../../shared/material.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { TransactionSplitComponent } from './transaction-split/transaction-split.component';
+import { TransactionBulkEditComponent } from './transaction-bulk-edit/transaction-bulk-edit.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
     SavingsComponent,
     IncomesComponent,
     PaymentsComponent,
+    TransactionSplitComponent,
+    TransactionBulkEditComponent,
   ],
   imports: [
     CommonModule,

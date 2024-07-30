@@ -5,24 +5,24 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { DestinationMap } from '../model/payee';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { DestinationMap } from '../../model/payee';
+import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PayeeEditComponent } from './payee-edit/payee-edit.component';
-import { MatSort } from '@angular/material/sort';
-import { DataService } from '../service/data.service';
+import { ActivatedRoute } from '@angular/router';
+import { DataService } from '../../service/data.service';
+import { SelectionModel } from '@angular/cdk/collections';
+import { PayeeEditComponent } from '../payee-edit/payee-edit.component';
 
 @Component({
-  selector: 'app-payee-rules',
-  templateUrl: './payee-rules.component.html',
-  styleUrl: './payee-rules.component.css',
+  selector: 'app-payees',
+  templateUrl: './payees.component.html',
+  styleUrl: './payees.component.css',
 })
-export class PayeeRulesComponent implements OnInit, AfterViewInit {
+export class PayeesComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatTable) table: MatTable<DestinationMap>;
   @ViewChild(MatSort) sort: MatSort;

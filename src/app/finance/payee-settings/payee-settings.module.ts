@@ -6,11 +6,13 @@ import { MaterialModule } from '../../shared/material.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PayeeEditComponent } from './payee-edit/payee-edit.component';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
-import { PayeeRulesComponent } from './payee-rules.component';
-import { PayeeRulesRoutingModule } from './payee-rules.routing.module';
+import { PayeeSettingsComponent } from './payee-settings.component';
+import { PayeeSettingsRoutingModule } from './payee-settings.routing.module';
+import { PayeesComponent } from './payees/payees.component';
+import { RecurringComponent } from './recurring/recurring.component';
 
 @NgModule({
-  declarations: [PayeeRulesComponent, PayeeEditComponent],
+  declarations: [PayeeSettingsComponent, PayeeEditComponent, PayeesComponent, RecurringComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -18,7 +20,7 @@ import { PayeeRulesRoutingModule } from './payee-rules.routing.module';
     SharedModule,
     MaterialModule,
     FontAwesomeModule,
-    PayeeRulesRoutingModule,
+    PayeeSettingsRoutingModule,
   ],
   providers: [
     {
@@ -32,4 +34,4 @@ import { PayeeRulesRoutingModule } from './payee-rules.routing.module';
     },
   ],
 })
-export class PayeeRulesModuleModule {}
+export class PayeeSettingsModule {}

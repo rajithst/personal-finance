@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>
+  Bulk Edit Transaction
+</h2>
+<mat-dialog-content>
+  <ng-container *ngIf="data.task == 'delete'">
+    <span>Do you want to bulk delete?</span>
+  </ng-container>
+  <ng-container *ngIf="data.task == 'edit'">
+
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()">Save</button>
+</mat-dialog-actions>

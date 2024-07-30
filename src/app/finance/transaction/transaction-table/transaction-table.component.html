@@ -21,6 +21,7 @@
   </div>
   <div
     class="filter-item"
+    (click)="bulkEditTransactions()"
     matRipple
     matTooltip="Bulk Edit"
     matTooltipPosition="below"
@@ -31,7 +32,13 @@
       [style]="{ color: '#4a4949' }"
     ></fa-icon>
   </div>
-  <div class="filter-item" matRipple matTooltip="Bulk Delete">
+  <div
+    class="filter-item"
+    (click)="bulkDeleteTransactions()"
+    matRipple
+    matTooltip="Bulk Delete"
+    matTooltipPosition="below"
+  >
     <fa-icon
       [icon]="faTrash"
       size="1x"
@@ -108,9 +115,11 @@
     @for (data of allTransactions; track data; let i = $index) {
       <mat-expansion-panel class="transaction-panel">
         <mat-expansion-panel-header>
-          <mat-panel-title>{{ data.year }} - {{ data.month_text }} : ¥{{
+          <mat-panel-title
+            >{{ data.year }} - {{ data.month_text }} : ¥{{
               data.total | number: "1.2-2"
-            }}</mat-panel-title>
+            }}</mat-panel-title
+          >
 
           <mat-panel-description>
             <div class="panel-actions" (click)="$event.stopPropagation()">
@@ -216,7 +225,7 @@
                 ></fa-icon>
               </span>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="editTransaction(element, i)">
+                <button mat-menu-item (click)="editTransaction(element)">
                   <fa-icon
                     [icon]="faEdit"
                     size="sm"
@@ -224,7 +233,7 @@
                   ></fa-icon>
                   <span class="transaction-action-item">Edit</span>
                 </button>
-                <button mat-menu-item>
+                <button mat-menu-item (click)="splitTransaction(element, i)">
                   <fa-icon
                     [icon]="faScissors"
                     size="sm"
@@ -242,7 +251,7 @@
                     >Show Merge history</span
                   >
                 </button>
-                <button mat-menu-item (click)="deleteTransaction(element, i)">
+                <button mat-menu-item (click)="deleteTransaction(element)">
                   <fa-icon
                     [icon]="faTrash"
                     size="sm"

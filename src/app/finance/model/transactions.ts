@@ -99,3 +99,12 @@ export interface TransactionFilter {
   paymentMethods?: number[];
 }
 
+export interface BulkUpdateRequest {
+  task: string,
+  delete_ids: number[] | null
+}
+
+export interface BulkUpdateResponse {
+  status: number,
+  data: number[]
+}

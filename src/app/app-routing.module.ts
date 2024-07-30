@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
-import { dashboardResolver, payeeResolver } from './finance/service/resolvers';
-
+import { dashboardResolver } from './finance/service/resolvers';
 
 const routes: Routes = [
   {
@@ -28,14 +27,11 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'payee-rules',
+    path: 'payee-settings',
     loadChildren: () =>
-      import('./finance/payee-rules/payee-rules.module').then(
-        (m) => m.PayeeRulesModuleModule,
+      import('./finance/payee-settings/payee-settings.module').then(
+        (m) => m.PayeeSettingsModule,
       ),
-    resolve: {
-      payeeData: payeeResolver,
-    },
   },
   {
     path: 'reports',

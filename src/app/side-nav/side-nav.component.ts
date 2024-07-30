@@ -21,7 +21,7 @@ import {faChartLine, faChartSimple, faMoneyBillTransfer, faPieChart, faShop} fro
           <div class="link-text"><span>Transactions</span></div>
         </div>
       </a>
-      <a mat-list-item [routerLinkActive]="'active-link'" [routerLink]="['/', 'payee-rules']">
+      <a mat-list-item [routerLinkActive]="'active-link'" [routerLink]="['/', 'payee-settings']">
         <div class="link-items">
           <div class="link-icon">
             <fa-icon [icon]="faShop" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
@@ -86,7 +86,7 @@ export class SideNavComponent {
       </a>
       <a mat-list-item
          [routerLinkActive]="'active-link'"
-         [routerLink]="['/', 'payee-rules']"
+         [routerLink]="['/', 'payee-settings']"
          matTooltip="Payee Settings"
          matTooltipPosition="right">
         <div class="link-items">

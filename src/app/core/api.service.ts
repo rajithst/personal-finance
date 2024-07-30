@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
+  BulkUpdateRequest,
+  BulkUpdateResponse,
   DashboardResponse,
   ExpenseResponse,
   Transaction,
@@ -66,12 +68,6 @@ export class ApiService {
     );
   }
 
-  getInvestments(): Observable<InvestmentResponse> {
-    return this.http.get<InvestmentResponse>(
-      `${this.SRC_URL}/investments/list`,
-    );
-  }
-
   getPayees(): Observable<PayeeResponse> {
     return this.http.get<PayeeResponse>(`${this.SRC_URL}/finance/payee`);
   }
@@ -99,19 +95,6 @@ export class ApiService {
     );
   }
 
-  updateStockPurchaseHistory(payload: StockPurchase): Observable<any> {
-    return this.http.post(
-      `${this.SRC_URL}/investments/stock-purchase/`,
-      payload,
-    );
-  }
-
-  getStockPriceHistory(payload: string): Observable<StockDailyPriceResponse> {
-    return this.http.get<StockDailyPriceResponse>(
-      `${this.SRC_URL}/investments/stock-daily-price/${payload}/`,
-    );
-  }
-
   updatePayeeRules(payload: DestinationMapRequest): Observable<DestinationMap> {
     if (payload.id) {
       return this.http.put<DestinationMap>(
@@ -124,6 +107,32 @@ export class ApiService {
         payload,
       );
     }
+  }
+
+  updateBulkTransactions(payload: BulkUpdateRequest) {
+    return this.http.put<BulkUpdateResponse>(
+      `${this.SRC_URL}/finance/bulk/transaction`,
+      payload,
+    );
+  }
+
+  getInvestments(): Observable<InvestmentResponse> {
+    return this.http.get<InvestmentResponse>(
+      `${this.SRC_URL}/investments/list`,
+    );
+  }
+
+  updateStockPurchaseHistory(payload: StockPurchase): Observable<any> {
+    return this.http.post(
+      `${this.SRC_URL}/investments/stock-purchase/`,
+      payload,
+    );
+  }
+
+  getStockPriceHistory(payload: string): Observable<StockDailyPriceResponse> {
+    return this.http.get<StockDailyPriceResponse>(
+      `${this.SRC_URL}/investments/stock-daily-price/${payload}/`,
+    );
   }
 
   updateStockPurchase(

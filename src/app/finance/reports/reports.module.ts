@@ -7,9 +7,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { ReportsComponent } from './reports.component';
 import { ReportsRoutingModule } from './reports.routing.module';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 @NgModule({
-  declarations: [ReportsComponent],
+  declarations: [ReportsComponent, AnalyticsComponent],
   imports: [
     CommonModule,
     FormsModule,
