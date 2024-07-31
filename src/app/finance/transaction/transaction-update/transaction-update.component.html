@@ -1,8 +1,7 @@
-<h2
-  mat-dialog-title>
-  <span *ngIf="data.task==='add'">Add Transaction</span>
-  <span *ngIf="data.task==='edit'">Edit Transaction</span>
-  <span *ngIf="data.task==='merge'">Merge Transactions</span>
+<h2 mat-dialog-title>
+  <span *ngIf="data.task === 'add'">Add Transaction</span>
+  <span *ngIf="data.task === 'edit'">Edit Transaction</span>
+  <span *ngIf="data.task === 'merge'">Merge Transactions</span>
 </h2>
 <mat-dialog-content>
   <form [formGroup]="transactionForm">
@@ -13,9 +12,7 @@
             <mat-label>Payment Method</mat-label>
             <mat-select formControlName="payment_method">
               @for (pm of PAYMENT_METHODS; track pm) {
-                <mat-option [value]="pm.value">{{
-                    pm.viewValue
-                  }}</mat-option>
+                <mat-option [value]="pm.value">{{ pm.viewValue }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -26,7 +23,7 @@
             <mat-select formControlName="transaction_type">
               @for (exc of TRANSACTION_TYPES; track exc) {
                 <mat-option [value]="exc.value">
-                  {{exc.viewValue }}
+                  {{ exc.viewValue }}
                 </mat-option>
               }
             </mat-select>
@@ -35,11 +32,7 @@
         <td>
           <mat-form-field appearance="outline" class="expense-input">
             <mat-label>Date</mat-label>
-            <input
-              matInput
-              [matDatepicker]="picker"
-              formControlName="date"
-            />
+            <input matInput [matDatepicker]="picker" formControlName="date" />
             <mat-datepicker-toggle
               matIconSuffix
               [for]="picker"
@@ -49,15 +42,10 @@
         </td>
       </tr>
       <tr>
-
         <td colspan="2">
           <mat-form-field appearance="outline" class="expense-input">
             <mat-label>Payee</mat-label>
-            <input
-              matInput
-              placeholder="Payee"
-              formControlName="destination"
-            />
+            <input matInput placeholder="Payee" formControlName="destination" />
           </mat-form-field>
         </td>
         <td>
@@ -67,7 +55,6 @@
             <span matTextPrefix>¥&nbsp;</span>
           </mat-form-field>
         </td>
-
       </tr>
       <tr>
         <td>
@@ -75,9 +62,7 @@
             <mat-label>Category</mat-label>
             <mat-select formControlName="category">
               @for (exc of TRANSACTION_CATEGORIES; track exc) {
-                <mat-option [value]="exc.value">{{
-                    exc.viewValue
-                  }}</mat-option>
+                <mat-option [value]="exc.value">{{ exc.viewValue }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -87,9 +72,7 @@
             <mat-label>Sub Category</mat-label>
             <mat-select formControlName="subcategory">
               @for (exc of EXPENSE_SUB_CATEGORIES; track exc) {
-                <mat-option [value]="exc.value">{{
-                    exc.viewValue
-                  }}</mat-option>
+                <mat-option [value]="exc.value">{{ exc.viewValue }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -97,11 +80,7 @@
         <td>
           <mat-form-field appearance="outline" class="expense-input">
             <mat-label>Payee Alias (English)</mat-label>
-            <input
-              matInput
-              placeholder="Destination"
-              formControlName="alias"
-            />
+            <input matInput placeholder="Destination" formControlName="alias" />
           </mat-form-field>
         </td>
       </tr>
@@ -114,7 +93,10 @@
         </div>
         <ul class="rules-list">
           <li>
-            <mat-checkbox color="primary" formControlName="update_similar">Update all transactions for payee {{transactionForm.get('destination')?.value}}</mat-checkbox>
+            <mat-checkbox color="primary" formControlName="update_similar"
+              >Update all transactions for payee
+              {{ transactionForm.get("destination")?.value }}</mat-checkbox
+            >
           </li>
         </ul>
       </div>

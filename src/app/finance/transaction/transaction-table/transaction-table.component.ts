@@ -550,7 +550,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     this.applyFiltersToTables();
   }
 
-  getEmptyFilterParams(): TransactionFilter {
+  private getEmptyFilterParams(): TransactionFilter {
     return {
       year: this.dataService.getFilterYear(),
       target: this.lastSegment() || '',

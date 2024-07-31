@@ -24,12 +24,37 @@
       </div>
     </div>
     <table>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
       <ng-container formArrayName="splits">
         @for (data of splits; track data; let i = $index) {
           <tr [formGroupName]="i">
-            <td></td>
+            <td colspan="2">
+              <mat-form-field appearance="outline" class="split-input">
+                <mat-label>Payee</mat-label>
+                <input
+                  type="text"
+                  placeholder="Payee Name"
+                  aria-label="Number"
+                  matInput
+                  formControlName="destination"
+                  [matAutocomplete]="auto"
+                />
+
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                  @for (option of filteredPayees[i] | async; track option) {
+                    <mat-option [value]="option.destination">{{ option.destination }}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </td>
             <td>
-              <mat-form-field appearance="outline" class="expense-input">
+              <mat-form-field appearance="outline" class="split-input">
                 <mat-label>Category</mat-label>
                 <mat-select formControlName="category">
                   @for (exc of TRANSACTION_CATEGORIES; track exc) {
@@ -41,11 +66,20 @@
               </mat-form-field>
             </td>
             <td>
-              <mat-form-field appearance="outline" class="expense-input">
+              <mat-form-field appearance="outline" class="split-input">
                 <mat-label>Amount</mat-label>
                 <input matInput placeholder="Amount" formControlName="amount" />
                 <span matTextPrefix>¥&nbsp;</span>
               </mat-form-field>
+            </td>
+            <td>
+              <div class="filter-item" (click)="removeSplit(i)">
+                <fa-icon
+                  [icon]="faTrash"
+                  size="xl"
+                  [style]="{ color: '#af5252' }"
+                ></fa-icon>
+              </div>
             </td>
           </tr>
         }

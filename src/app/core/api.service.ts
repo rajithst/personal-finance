@@ -9,7 +9,7 @@ import {
   Transaction,
   TransactionExpand,
   TransactionFilter,
-  TransactionMergeRequest,
+  TransactionMergeRequest, TransactionSplitRequest, TransactionSplitResponse,
 } from '../finance/model/transactions';
 import {
   CompanyResponse,
@@ -95,6 +95,12 @@ export class ApiService {
     );
   }
 
+  splitTransaction(payload: TransactionSplitRequest): Observable<TransactionSplitResponse> {
+    return this.http.put<TransactionSplitResponse>(
+      `${this.SRC_URL}/finance/bulk/transaction`,
+      payload,
+    );
+  }
   updatePayeeRules(payload: DestinationMapRequest): Observable<DestinationMap> {
     if (payload.id) {
       return this.http.put<DestinationMap>(

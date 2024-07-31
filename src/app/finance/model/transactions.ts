@@ -99,6 +99,12 @@ export interface TransactionFilter {
   paymentMethods?: number[];
 }
 
+export interface TransactionSplit {
+  destination: string;
+  category: number;
+  amount: number;
+}
+
 export interface BulkUpdateRequest {
   task: string,
   delete_ids: number[] | null
@@ -107,4 +113,14 @@ export interface BulkUpdateRequest {
 export interface BulkUpdateResponse {
   status: number,
   data: number[]
+}
+
+export interface TransactionSplitRequest {
+  task: string,
+  main: TransactionExpand;
+  splits: TransactionSplit[]
+}
+
+export interface TransactionSplitResponse {
+
 }
