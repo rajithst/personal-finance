@@ -5,6 +5,14 @@ export const PAYMENT_CATEGORY_ID = 14;
 export const NA_CATEGORY_ID = 1000;
 export const NA_SUB_CATEGORY_ID = 1000;
 
+export const SUCCESS_ACTION: string = 'UPDATE_ACTION';
+export const ERROR_ACTION: string = 'ERROR_ACTION';
+export const CANCEL_ACTION: string = 'CANCEL_ACTION';
+
+export const UPDATE_SUCCESS_ALERT: string = 'Successfully updated.';
+export const UPDATE_ERROR_ALERT: string = 'Failed to update.';
+export const CANCEL_UPDATE_ALERT: string = 'Failed to update.';
+
 export const TRANSACTION_TYPES: DropDownType[] = [
   { value: 1, viewValue: 'Income', checked: false },
   { value: 2, viewValue: 'Expense', checked: false },

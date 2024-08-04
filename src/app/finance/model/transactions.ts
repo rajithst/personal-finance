@@ -105,14 +105,14 @@ export interface TransactionSplit {
   amount: number;
 }
 
-export interface BulkUpdateRequest {
+export interface BulkDeleteRequest {
   task: string,
   delete_ids: number[] | null
 }
 
-export interface BulkUpdateResponse {
+export interface BulkDeleteResponse {
   status: number,
-  data: number[]
+  data: TransactionExpand[] | null
 }
 
 export interface TransactionSplitRequest {
@@ -122,5 +122,6 @@ export interface TransactionSplitRequest {
 }
 
 export interface TransactionSplitResponse {
-
+  status: number,
+  data: TransactionExpand[] | null
 }

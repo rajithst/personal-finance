@@ -1,5 +1,5 @@
 import { Component, inject, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import {
@@ -7,7 +7,7 @@ import {
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
   PAYMENT_METHODS,
-  SAVINGS_CATEGORY_ID,
+  SAVINGS_CATEGORY_ID, SUCCESS_ACTION, ERROR_ACTION, CANCEL_ACTION,
 } from '../../../data/client.data';
 import {
   TransactionExpand,
@@ -84,6 +84,7 @@ export class TransactionUpdateDialog implements OnInit {
     this.transactionForm.value.date = moment(
       this.transactionForm.value.date,
     ).format('YYYY-MM-DD');
+    this.transactionForm.value.amount = Number(this.transactionForm.value.amount);
 
     if (this.data.task == 'edit' || this.data.task == 'add' || this.data.task == 'delete') {
       const payload: TransactionRequest = this.transactionForm.value;
@@ -91,9 +92,9 @@ export class TransactionUpdateDialog implements OnInit {
         .updateTransaction(payload)
         .subscribe((transaction: TransactionExpand) => {
           if (transaction) {
-            this.dialogRef.close(transaction);
+            this.dialogRef.close({refresh: true, data: transaction, action: SUCCESS_ACTION});
           } else {
-            this.dialogRef.close(null);
+            this.dialogRef.close({refresh: false, data: null, action: ERROR_ACTION});
           }
         });
     } else if (this.data.task == 'merge') {
@@ -106,41 +107,41 @@ export class TransactionUpdateDialog implements OnInit {
         .mergeTransaction(payload)
         .subscribe((transaction: TransactionExpand) => {
           if (transaction) {
-            this.dialogRef.close(transaction);
+            this.dialogRef.close({refresh: true, data: transaction, action: SUCCESS_ACTION});
           } else {
-            this.dialogRef.close(null);
+            this.dialogRef.close({refresh: false, data: null, action: ERROR_ACTION});
           }
         });
     }
   }
 
   cancel() {
-    this.dialogRef.close(null);
+    this.dialogRef.close({refresh: false, data: null, action: CANCEL_ACTION});
   }
 
   getNewTransactionForm(data: TransactionExpand | null) {
     return new FormGroup({
-      id: new FormControl(data ? data.id : null),
-      category: new FormControl(data ? data.category : null),
-      subcategory: new FormControl(data ? data.subcategory : null),
-      payment_method: new FormControl(data ? data.payment_method : null),
-      amount: new FormControl(data ? data.amount : null),
-      date: new FormControl(data ? data.date : null),
-      destination: new FormControl(data ? data.destination : null),
-      alias: new FormControl(data ? data.alias : null),
-      notes: new FormControl(data ? data.notes : null),
-      transaction_type: new FormControl(
-        data ? (data.is_payment ? 3 : data.is_expense ? 2 : 1) : 2,
-      ),
-      update_similar: new FormControl(false),
-      is_payment: new FormControl(data ? data.is_payment : false),
-      is_saving: new FormControl(data ? data.is_saving : false),
-      is_expense: new FormControl(data ? data.is_expense : true),
-      is_deleted: new FormControl(data ? data.is_deleted : false),
-      is_merge: new FormControl(data ? data.is_merge : false),
-      merge_id: new FormControl(data ? data.merge_id : null),
-      delete_reason: new FormControl(data ? data.delete_reason : null),
-      source: new FormControl(data ? data.source : 2)
+      id: new FormControl<number | null>(data ? data.id : null),
+      category: new FormControl<number | null>(data ? data.category : null, [Validators.required]),
+      subcategory: new FormControl<number | null>(data ? data.subcategory : null, [Validators.required]),
+      payment_method: new FormControl<number | null>(data ? data.payment_method : null, [Validators.required]),
+      amount: new FormControl<number | null>(data ? data.amount : null, [Validators.required]),
+      date: new FormControl<string | null>(data ? data.date : null, [Validators.required]),
+      destination: new FormControl<string | null>(data ? data.destination : null, [Validators.required]),
+      alias: new FormControl<string | null>(data ? data.alias : null),
+      notes: new FormControl<string | null>(data ? data.notes : null),
+      transaction_type: new FormControl<number | null>(
+        data ? (data.is_payment ? 3 : data.is_expense ? 2 : 1) : 2
+        , [Validators.required]),
+      update_similar: new FormControl<boolean>(false),
+      is_payment: new FormControl<boolean>(data ? data.is_payment : false),
+      is_saving: new FormControl<boolean>(data ? data.is_saving : false),
+      is_expense: new FormControl<boolean>(data ? data.is_expense : true),
+      is_deleted: new FormControl<boolean>(data ? data.is_deleted : false),
+      is_merge: new FormControl<boolean>(data ? data.is_merge : false),
+      merge_id: new FormControl<number | null>(data ? data.merge_id : null),
+      delete_reason: new FormControl<string | null>(data ? data.delete_reason : null),
+      source: new FormControl<number | null>(data ? data.source : 2)
     });
   }
 }

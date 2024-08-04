@@ -119,5 +119,5 @@
 
 <mat-dialog-actions align="end" class="expense-form-footer">
   <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="submit()">Save</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="transactionForm.invalid">Save</button>
 </mat-dialog-actions>

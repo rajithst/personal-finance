@@ -2,8 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  BulkUpdateRequest,
-  BulkUpdateResponse,
+  BulkDeleteRequest,
+  BulkDeleteResponse,
   DashboardResponse,
   ExpenseResponse,
   Transaction,
@@ -115,8 +115,8 @@ export class ApiService {
     }
   }
 
-  updateBulkTransactions(payload: BulkUpdateRequest) {
-    return this.http.put<BulkUpdateResponse>(
+  bulkDeleteTransactions(payload: BulkDeleteRequest) {
+    return this.http.put<BulkDeleteResponse>(
       `${this.SRC_URL}/finance/bulk/transaction`,
       payload,
     );

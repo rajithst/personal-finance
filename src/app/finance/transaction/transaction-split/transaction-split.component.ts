@@ -1,8 +1,30 @@
-import { Component, inject, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  Inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {TransactionExpand, TransactionSplit, TransactionSplitRequest} from '../../model/transactions';
-import { FormBuilder, FormControl, FormGroup, FormArray } from '@angular/forms';
-import { TRANSACTION_CATEGORIES } from '../../../data/client.data';
+import {
+  TransactionExpand,
+  TransactionSplit,
+  TransactionSplitRequest,
+} from '../../model/transactions';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormArray,
+  Validators,
+} from '@angular/forms';
+import {
+  CANCEL_ACTION, ERROR_ACTION,
+  NA_CATEGORY_ID,
+  TRANSACTION_CATEGORIES, SUCCESS_ACTION,
+} from '../../../data/client.data';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../../../core/api.service';
 import { map, Observable, startWith } from 'rxjs';
@@ -27,16 +49,23 @@ export class TransactionSplitComponent implements OnInit, OnDestroy {
   splitForm: FormGroup;
   filteredPayees: Observable<DestinationMap[]>[] = [];
   payees: DestinationMap[];
-
-  constructor(
-    public dialogRef: MatDialogRef<TransactionSplitComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: TransactionSplitData,
-  ) {}
+  transaction = this.data.formData;
+  disableCategorySelect  = true;
+  transactionAmount = signal<number>(this.transaction.amount || 0);
+  splitTotal = signal<number>(0);
+  remainAmount = computed(() => {
+    return this.transactionAmount() - this.splitTotal();
+  });
 
   get splits(): FormControl[] {
     return (this.splitForm.get('splits') as FormArray)
       .controls as FormControl[];
   }
+
+  constructor(
+    public dialogRef: MatDialogRef<TransactionSplitComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: TransactionSplitData,
+  ) {}
 
   ngOnInit(): void {
     this.apiService.getPayees().subscribe((result) => {
@@ -46,21 +75,18 @@ export class TransactionSplitComponent implements OnInit, OnDestroy {
     this.splitForm = this.formBuilder.group({
       splits: this.formBuilder.array([this.getNewFormArray()]),
     });
+
+    this.splitForm.valueChanges.subscribe((value) => {
+      if (value) {
+        this.splitTotal.set(0);
+        this.refillCategoryForPayee();
+      }
+    });
   }
 
-  filterPayeeControlValues(formIndex: number) {
-    const arrayControl = this.splitForm.get('splits') as FormArray;
-    this.filteredPayees[formIndex] = arrayControl
-      .at(formIndex)
-      .get('destination')!
-      .valueChanges.pipe(
-        startWith(''),
-        map((value) => this._filter(value) || ''),
-      );
-  }
   onAddSplit() {
     const controls = <FormArray>this.splitForm.controls['splits'];
-    controls.push(this.getNewFormArray());
+    controls.push(this.getNewFormArray(), { emitEvent: false });
     this.filterPayeeControlValues(controls.length - 1);
   }
 
@@ -72,10 +98,43 @@ export class TransactionSplitComponent implements OnInit, OnDestroy {
 
   private getNewFormArray() {
     return new FormGroup({
-      destination: new FormControl(null),
-      category: new FormControl(null),
-      amount: new FormControl(null),
+      destination: new FormControl<number | null>(null, [Validators.required]),
+      category: new FormControl<number>(NA_CATEGORY_ID, [Validators.required]),
+      amount: new FormControl<number | null>(null, [Validators.required]),
     });
+  }
+
+  private refillCategoryForPayee() {
+    const formArray = <FormArray>this.splitForm.controls['splits'];
+    formArray.controls.forEach((x) => {
+      x.patchValue(
+        { category: this.getCategoryForPayee(x.get('destination')?.value) },
+        { emitEvent: false },
+      );
+      const splitAmount: number = Number(x.get('amount')?.value || 0);
+      if (splitAmount) {
+        this.splitTotal.update((y) => y + splitAmount);
+      }
+    });
+  }
+
+  private getCategoryForPayee(payee: string) {
+    const targetPayee = this.payees.find((x) => x.destination === payee);
+    if (targetPayee) {
+      return targetPayee.category;
+    }
+    return NA_CATEGORY_ID;
+  }
+
+  private filterPayeeControlValues(formIndex: number) {
+    const arrayControl = this.splitForm.get('splits') as FormArray;
+    this.filteredPayees[formIndex] = arrayControl
+      .at(formIndex)
+      .get('destination')!
+      .valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filter(value) || ''),
+      );
   }
 
   private _filter(value: string): DestinationMap[] {
@@ -88,19 +147,34 @@ export class TransactionSplitComponent implements OnInit, OnDestroy {
     );
   }
 
-  cancel() {}
+  cancel() {
+    this.dialogRef.close({ refresh: false, data: null, action: CANCEL_ACTION});
+  }
 
   submit() {
-    const splitItems: TransactionSplit[] = this.splitForm.get('splits')?.value
+    const splitItems: TransactionSplit[] = this.splitForm.get('splits')?.value;
     if (splitItems) {
       const splitPayload: TransactionSplitRequest = {
         task: 'split',
-        main: this.data.formData,
+        main: this.transaction,
         splits: splitItems,
-      }
+      };
       this.apiService.splitTransaction(splitPayload).subscribe((result) => {
-        if (result) {}
-      })
+        if (result.status === 200 && result.data) {
+          const responseData = result.data;
+          this.dialogRef.close({
+            refresh: true,
+            data: responseData,
+            action: SUCCESS_ACTION
+          });
+        } else {
+          this.dialogRef.close({
+            refresh: false,
+            data: null,
+            alert: ERROR_ACTION
+          });
+        }
+      });
     }
   }
 

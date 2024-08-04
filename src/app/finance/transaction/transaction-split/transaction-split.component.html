@@ -6,11 +6,15 @@
   <form [formGroup]="splitForm">
     <h3>Transaction Information</h3>
     <ul>
-      <li>Date: {{ data.formData.date | date: "MMMM d, y" }}</li>
+      <li>Date: {{ transaction.date | date: "MMMM d, y" }}</li>
+      <li>Payee: {{ transaction.destination }}</li>
       <li>
-        Payee: {{ data.formData.destination }} ({{ data.formData.alias }})
+        Amount: ¥{{ transactionAmount() | number: "1.2-2" }}
+        <span *ngIf="splitTotal() > 0"
+          >(New Amount: ¥{{ remainAmount() | number: "1.2-2" }})</span
+        >
       </li>
-      <li>Amount: ¥{{ data.formData.amount | number: "1.2-2" }}</li>
+      <li>Split Total: ¥{{ splitTotal() | number: "1.2-2" }}</li>
     </ul>
     <mat-divider></mat-divider>
     <div class="split-header">
@@ -24,13 +28,6 @@
       </div>
     </div>
     <table>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
       <ng-container formArrayName="splits">
         @for (data of splits; track data; let i = $index) {
           <tr [formGroupName]="i">
@@ -48,7 +45,9 @@
 
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                   @for (option of filteredPayees[i] | async; track option) {
-                    <mat-option [value]="option.destination">{{ option.destination }}</mat-option>
+                    <mat-option [value]="option.destination">{{
+                      option.destination
+                    }}</mat-option>
                   }
                 </mat-autocomplete>
               </mat-form-field>
@@ -90,5 +89,12 @@
 
 <mat-dialog-actions align="end">
   <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="submit()">Split</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="submit()"
+    [disabled]="splitForm.invalid || splits.length == 0"
+  >
+    Split
+  </button>
 </mat-dialog-actions>

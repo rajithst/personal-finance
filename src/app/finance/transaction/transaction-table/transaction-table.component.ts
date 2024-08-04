@@ -43,11 +43,13 @@ import { TransactionFilterComponent } from '../transaction-filter/transaction-fi
 import { LoadingService } from '../../../shared/loading/loading.service';
 import { Sort } from '@angular/material/sort';
 import {
+  ERROR_ACTION,
   INCOME_CATEGORIES,
   PAYMENT_CATEGORY_ID,
   SAVINGS_CATEGORY_ID,
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
+  SUCCESS_ACTION,
 } from '../../../data/client.data';
 import { Router } from '@angular/router';
 import { INCOME, PAYMENT, SAVING } from '../../../data/shared.data';
@@ -55,6 +57,12 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { faChartColumn } from '@fortawesome/free-solid-svg-icons/faChartColumn';
 import { TransactionSplitComponent } from '../transaction-split/transaction-split.component';
 import { TransactionBulkEditComponent } from '../transaction-bulk-edit/transaction-bulk-edit.component';
+
+interface TransactionActionResult {
+  refresh: boolean;
+  data: TransactionExpand | TransactionExpand[] | null;
+  action: string;
+}
 
 @Component({
   selector: 'app-transaction-table',
@@ -185,12 +193,17 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       data: { formData: item, task: 'edit' },
     });
 
-    dialog.afterClosed().subscribe((result: TransactionExpand | null) => {
-      if (result) {
-        let targetTableIndex = this.getTableIndexFromTransaction(result);
-        this.updateInAllTransactions(targetTableIndex, result);
+    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
+      if (result.action === SUCCESS_ACTION) {
+        const responseData = result.data as TransactionExpand;
+        let targetTableIndex = this.getTableIndexFromTransaction(responseData);
+        this.updateInAllTransactions(targetTableIndex, responseData);
         this.refreshUpdatedDataSourceTable(targetTableIndex);
         this.snackBar.open('Updated!', 'Success', {
+          duration: 3000,
+        });
+      } else if (result.action === ERROR_ACTION) {
+        this.snackBar.open('Failed to update!', 'Error', {
           duration: 3000,
         });
       }
@@ -201,14 +214,17 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     const dialog = this.dialog.open(TransactionDeleteDialog, {
       data: { formData: item, task: 'delete' },
     });
-    dialog.afterClosed().subscribe((result) => {
-      if (result) {
-        let targetTableIndex = this.getTableIndexFromTransaction(result);
-        this.removeFromTransactions(targetTableIndex, [result.id]);
+    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
+      if (result.action === SUCCESS_ACTION) {
+        const responseData = result.data as TransactionExpand;
+        let targetTableIndex = this.getTableIndexFromTransaction(responseData);
+        this.removeFromTransactions(targetTableIndex, [responseData.id!]);
         this.refreshUpdatedDataSourceTable(targetTableIndex);
         this.snackBar.open('Deleted!', 'Success', {
           duration: 3000,
         });
+      } else if (result.action === ERROR_ACTION) {
+        this.snackBar.open('Failed to delete!', 'Error', {});
       }
     });
   }
@@ -217,17 +233,22 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
       data: { formData: null, task: 'add' },
     });
-    dialog.afterClosed().subscribe((result) => {
-      if (result) {
-        let targetTableIndex = this.getTableIndexFromTransaction(result);
+    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
+      if (result.action === SUCCESS_ACTION) {
+        const responseData = result.data as TransactionExpand;
+        let targetTableIndex = this.getTableIndexFromTransaction(responseData);
         if (targetTableIndex === -1) {
-          this.insertNewTransactionToDataSource(result);
-          targetTableIndex = this.getTableIndexFromTransaction(result);
+          this.insertNewTransactionToDataSource(responseData);
+          targetTableIndex = this.getTableIndexFromTransaction(responseData);
         } else {
-          this.updateInAllTransactions(targetTableIndex, result);
+          this.updateInAllTransactions(targetTableIndex, responseData);
         }
         this.refreshUpdatedDataSourceTable(targetTableIndex);
-        this.snackBar.open('Updated!', 'Success', {
+        this.snackBar.open('Added Successfully!', 'Success', {
+          duration: 3000,
+        });
+      } else if (result.action === ERROR_ACTION) {
+        this.snackBar.open('Failed to add!', 'Error', {
           duration: 3000,
         });
       }
@@ -254,16 +275,21 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         mergeIds: mergeIds,
       },
     });
-    dialog.afterClosed().subscribe((result: TransactionExpand | null) => {
-      if (result) {
-        const targetTableIndex = this.getTableIndexFromTransaction(result);
+    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
+      if (result.action === SUCCESS_ACTION) {
+        const responseData = result.data as TransactionExpand;
+        const targetTableIndex =
+          this.getTableIndexFromTransaction(responseData);
         this.removeFromTransactions(targetTableIndex, mergeIds as number[]);
-        this.updateInAllTransactions(targetTableIndex, result);
+        this.updateInAllTransactions(targetTableIndex, responseData);
         this.refreshUpdatedDataSourceTable(targetTableIndex);
         this.selection.clear();
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
+      } else if (result.action === ERROR_ACTION) {
+        this.selection.clear();
+        this.snackBar.open('Failed to merge!', 'Error', {});
       }
     });
   }
@@ -274,7 +300,21 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         formData: item,
       },
     });
-    dialog.afterClosed().subscribe((result: TransactionExpand | null) => {});
+    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
+      if (result.action === SUCCESS_ACTION) {
+        const responseData = result.data as TransactionExpand[];
+        const targetTableIndex = this.getTableIndexFromTransaction(item);
+        responseData.forEach((updatedTransaction) => {
+          this.updateInAllTransactions(targetTableIndex, updatedTransaction);
+        });
+        this.refreshUpdatedDataSourceTable(targetTableIndex);
+        this.snackBar.open('Updated!', 'Success', {
+          duration: 3000,
+        });
+      } else if (result.action === ERROR_ACTION) {
+        this.snackBar.open('Failed to split!', 'Error', {});
+      }
+    });
   }
 
   bulkEditTransactions() {
@@ -294,22 +334,22 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         task: 'delete',
       },
     });
-    dialog
-      .afterClosed()
-      .subscribe((result: { refresh: boolean; data: any }) => {
-        if (result.refresh) {
-          const tempTransaction = JSON.parse(
-            JSON.stringify(this.selection.selected[0]),
-          );
-          const targetTableIndex =
-            this.getTableIndexFromTransaction(tempTransaction);
-          this.removeFromTransactions(targetTableIndex, result.data);
-          this.refreshUpdatedDataSourceTable(targetTableIndex);
-          this.selection.clear();
-          this.bulkSelectedTableIndex = -1;
-        }
-      });
+    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
+      if (result.action === SUCCESS_ACTION) {
+        const responseData = result.data as TransactionExpand[];
+        const tempTransaction = responseData[0];
+        const deleteIds = responseData.map((x) => x.id as number);
+        const targetTableIndex =
+          this.getTableIndexFromTransaction(tempTransaction);
+        this.removeFromTransactions(targetTableIndex, deleteIds);
+        this.refreshUpdatedDataSourceTable(targetTableIndex);
+        this.selection.clear();
+        this.bulkSelectedTableIndex = -1;
+      }
+    });
   }
+
+  showAnalytics(tableIndex: number) {}
 
   private removeFromTransactions(tableIndex: number, deleteIds: number[]) {
     if (tableIndex !== -1) {
@@ -382,6 +422,66 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  private applyFiltersToTables() {
+    const filters = this.filterParams();
+    this.totalAnnualAmount.set(0);
+    this.allDataSource.forEach((y) => {
+      y.filter = JSON.stringify(filters).trim();
+    });
+    let tableIndex = 0;
+    this.allTransactions.forEach((x: MonthlyTransaction) => {
+      x.total = this.allDataSource[tableIndex].filteredData.reduce(
+        (a, b) => a + b.amount!,
+        0,
+      );
+      this.totalAnnualAmount.update((y) => y + x.total);
+      tableIndex += 1;
+    });
+  }
+
+  private createFilterPredicate(): (
+    data: TransactionExpand,
+    filter: string,
+  ) => boolean {
+    return (data: TransactionExpand, filter: string): boolean => {
+      const filterObject: TransactionFilter = JSON.parse(filter);
+      const c1 =
+        filterObject.categories?.length === 0 &&
+        filterObject.subcategories?.length === 0;
+      const c2 =
+        filterObject.categories?.length === 0 &&
+        filterObject.subcategories?.length !== 0;
+      const c3 =
+        filterObject.categories?.length !== 0 &&
+        filterObject.subcategories?.length === 0;
+      const c4 =
+        filterObject.categories?.length !== 0 &&
+        filterObject.subcategories?.length !== 0;
+      const categoryIncludes = filterObject.categories?.includes(data.category);
+      const subCategoryIncludes = filterObject.subcategories?.includes(
+        data.subcategory,
+      );
+
+      return <boolean>(
+        (data.year === filterObject.year &&
+          (c1 ||
+            (c2 && subCategoryIncludes) ||
+            (c3 && categoryIncludes) ||
+            (c4 && (categoryIncludes || subCategoryIncludes))))
+      );
+    };
+  }
+
+  private getEmptyFilterParams(): TransactionFilter {
+    return {
+      year: this.dataService.getFilterYear(),
+      target: this.lastSegment() || '',
+      categories: [],
+      subcategories: [],
+      paymentMethods: [],
+    };
+  }
+
   isAllSelected(tableIndex: number) {
     const numSelected = this.selection.selected.length;
     const numRows = this.allDataSource[tableIndex].data.length;
@@ -431,23 +531,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  private applyFiltersToTables() {
-    const filters = this.filterParams();
-    this.totalAnnualAmount.set(0);
-    this.allDataSource.forEach((y) => {
-      y.filter = JSON.stringify(filters).trim();
-    });
-    let tableIndex = 0;
-    this.allTransactions.forEach((x: MonthlyTransaction) => {
-      x.total = this.allDataSource[tableIndex].filteredData.reduce(
-        (a, b) => a + b.amount!,
-        0,
-      );
-      this.totalAnnualAmount.update((y) => y + x.total);
-      tableIndex += 1;
-    });
-  }
-
   panelAction() {
     this.allExpanded = !this.allExpanded;
     if (this.allExpanded) {
@@ -457,37 +540,22 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private createFilterPredicate(): (
-    data: TransactionExpand,
-    filter: string,
-  ) => boolean {
-    return (data: TransactionExpand, filter: string): boolean => {
-      const filterObject: TransactionFilter = JSON.parse(filter);
-      const c1 =
-        filterObject.categories?.length === 0 &&
-        filterObject.subcategories?.length === 0;
-      const c2 =
-        filterObject.categories?.length === 0 &&
-        filterObject.subcategories?.length !== 0;
-      const c3 =
-        filterObject.categories?.length !== 0 &&
-        filterObject.subcategories?.length === 0;
-      const c4 =
-        filterObject.categories?.length !== 0 &&
-        filterObject.subcategories?.length !== 0;
-      const categoryIncludes = filterObject.categories?.includes(data.category);
-      const subCategoryIncludes = filterObject.subcategories?.includes(
-        data.subcategory,
-      );
-
-      return <boolean>(
-        (data.year === filterObject.year &&
-          (c1 ||
-            (c2 && subCategoryIncludes) ||
-            (c3 && categoryIncludes) ||
-            (c4 && (categoryIncludes || subCategoryIncludes))))
-      );
-    };
+  removeChip(chip: { name: string | undefined; id: number; type: string }) {
+    this.filterParams.update((x) => {
+      return {
+        year: x.year,
+        target: x.target,
+        categories:
+          chip.type === 'category'
+            ? x.categories?.filter((y) => y !== chip.id)
+            : x.categories,
+        subcategories:
+          chip.type === 'subcategory'
+            ? x.subcategories?.filter((y) => y !== chip.id)
+            : x.subcategories,
+      };
+    });
+    this.applyFiltersToTables();
   }
 
   onSortData(sort: Sort, tableIndex: number) {
@@ -532,38 +600,8 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  removeChip(chip: { name: string | undefined; id: number; type: string }) {
-    this.filterParams.update((x) => {
-      return {
-        year: x.year,
-        target: x.target,
-        categories:
-          chip.type === 'category'
-            ? x.categories?.filter((y) => y !== chip.id)
-            : x.categories,
-        subcategories:
-          chip.type === 'subcategory'
-            ? x.subcategories?.filter((y) => y !== chip.id)
-            : x.subcategories,
-      };
-    });
-    this.applyFiltersToTables();
-  }
-
-  private getEmptyFilterParams(): TransactionFilter {
-    return {
-      year: this.dataService.getFilterYear(),
-      target: this.lastSegment() || '',
-      categories: [],
-      subcategories: [],
-      paymentMethods: [],
-    };
-  }
-
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
-
-  showAnalytics(tableIndex: number) {}
 }

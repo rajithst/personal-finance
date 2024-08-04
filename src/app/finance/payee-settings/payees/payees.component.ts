@@ -46,8 +46,10 @@ export class PayeesComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ payeeData }) => {
-      this.dataService.setPayees(payeeData);
-      this.dataSource = new MatTableDataSource<DestinationMap>(payeeData);
+      this.dataService.setPayees(payeeData.payees);
+      this.dataSource = new MatTableDataSource<DestinationMap>(
+        payeeData.payees,
+      );
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     });
