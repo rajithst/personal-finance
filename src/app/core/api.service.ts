@@ -9,7 +9,9 @@ import {
   Transaction,
   TransactionExpand,
   TransactionFilter,
-  TransactionMergeRequest, TransactionSplitRequest, TransactionSplitResponse,
+  TransactionMergeRequest,
+  TransactionSplitRequest,
+  TransactionSplitResponse,
 } from '../finance/model/transactions';
 import {
   CompanyResponse,
@@ -95,7 +97,9 @@ export class ApiService {
     );
   }
 
-  splitTransaction(payload: TransactionSplitRequest): Observable<TransactionSplitResponse> {
+  splitTransaction(
+    payload: TransactionSplitRequest,
+  ): Observable<TransactionSplitResponse> {
     return this.http.put<TransactionSplitResponse>(
       `${this.SRC_URL}/finance/bulk/transaction`,
       payload,
@@ -137,7 +141,7 @@ export class ApiService {
 
   getStockPriceHistory(payload: string): Observable<StockDailyPriceResponse> {
     return this.http.get<StockDailyPriceResponse>(
-      `${this.SRC_URL}/investments/stock-daily-price/${payload}/`,
+      `${this.SRC_URL}/investments/stock-summary/${payload}/`,
     );
   }
 
