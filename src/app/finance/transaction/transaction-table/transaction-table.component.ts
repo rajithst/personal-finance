@@ -50,6 +50,7 @@ import {
   TRANSACTION_CATEGORIES,
   TRANSACTION_SUB_CATEGORIES,
   SUCCESS_ACTION,
+  PAYMENT_METHODS,
 } from '../../../data/client.data';
 import { Router } from '@angular/router';
 import { INCOME, PAYMENT, SAVING } from '../../../data/shared.data';
@@ -141,7 +142,12 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       type: 'subcategory',
       name: getTargets(x),
     }));
-    return [...categoryChips!, ...subCategoryChips!];
+    const paymentMethodChips = this.filterParams().paymentMethods?.map((x) => ({
+      id: x,
+      type: 'paymentMethod',
+      name: PAYMENT_METHODS.find((y) => y.value === x)?.viewValue,
+    }));
+    return [...categoryChips!, ...subCategoryChips!, ...paymentMethodChips!];
   });
   displayedColumns: string[] = [
     'select',
@@ -165,6 +171,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
             target: x.target,
             categories: x.categories,
             subcategories: x.subcategories,
+            paymentMethods: x.paymentMethods,
           };
         });
       });
@@ -461,13 +468,18 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       const subCategoryIncludes = filterObject.subcategories?.includes(
         data.subcategory,
       );
+      const paymentMethodIncludes =
+        filterObject.paymentMethods?.length !== 0
+          ? filterObject.paymentMethods?.includes(data.payment_method)
+          : true;
 
       return <boolean>(
         (data.year === filterObject.year &&
           (c1 ||
             (c2 && subCategoryIncludes) ||
             (c3 && categoryIncludes) ||
-            (c4 && (categoryIncludes || subCategoryIncludes))))
+            (c4 && (categoryIncludes || subCategoryIncludes))) &&
+          paymentMethodIncludes)
       );
     };
   }
@@ -553,6 +565,10 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
           chip.type === 'subcategory'
             ? x.subcategories?.filter((y) => y !== chip.id)
             : x.subcategories,
+        paymentMethods:
+          chip.type === 'paymentMethod'
+            ? x.paymentMethods?.filter((y) => y !== chip.id)
+            : x.paymentMethods,
       };
     });
     this.applyFiltersToTables();
