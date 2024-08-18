@@ -2,18 +2,17 @@ import { Component, inject, Inject, OnInit } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DestinationMap } from '../../model/payee';
-import {
-  SAVINGS_CATEGORY_ID,
-  TRANSACTION_CATEGORIES,
-  TRANSACTION_SUB_CATEGORIES,
-} from '../../../data/client.data';
+import { SAVINGS_CATEGORY_ID } from '../../../data/client.data';
 import { FormControl, FormGroup } from '@angular/forms';
-import { DropDownType } from '../../../data/shared.data';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 import { ApiService } from '../../../core/api.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DataService } from '../../service/data.service';
+import {
+  TransactionCategory,
+  TransactionSubCategory,
+} from '../../model/common';
 
 interface PayeeEditDialogData {
   payee: DestinationMap;
@@ -24,12 +23,16 @@ interface PayeeEditDialogData {
   styleUrl: './payee-edit.component.css',
 })
 export class PayeeEditComponent implements OnInit {
-  protected TRANSACTION_CATEGORIES: DropDownType[] = TRANSACTION_CATEGORIES;
-  protected EXPENSE_SUB_CATEGORIES: DropDownType[] = [];
   readonly addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   apiService = inject(ApiService);
   dataService = inject(DataService);
+  protected TRANSACTION_CATEGORIES: TransactionCategory[] =
+    this.dataService.getClientSettings().transaction_categories;
+  protected TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
+    this.dataService.getClientSettings().transaction_sub_categories;
+  protected EXPENSE_SUB_CATEGORIES: TransactionSubCategory[] = [];
+
   payeeForm: FormGroup;
   keywords: string[] = [];
   displayedColumns: string[] = ['select', 'Payee', 'Category', 'SubCategory'];
@@ -56,12 +59,15 @@ export class PayeeEditComponent implements OnInit {
     if (this.data.payee.keywords) {
       this.keywords = this.data.payee.keywords.split(',');
     }
-    this.EXPENSE_SUB_CATEGORIES =
-      TRANSACTION_SUB_CATEGORIES[payeeData.category!];
+    this.EXPENSE_SUB_CATEGORIES = this.TRANSACTION_SUB_CATEGORIES.filter(
+      (x) => x.category === Number(payeeData.category)!,
+    );
 
     this.payeeForm.get('category')?.valueChanges.subscribe((value) => {
       if (value) {
-        this.EXPENSE_SUB_CATEGORIES = TRANSACTION_SUB_CATEGORIES[value];
+        this.EXPENSE_SUB_CATEGORIES = this.TRANSACTION_SUB_CATEGORIES.filter(
+          (x) => x.category === Number(value),
+        );
         this.payeeForm
           .get('is_saving')
           ?.setValue(value === SAVINGS_CATEGORY_ID);

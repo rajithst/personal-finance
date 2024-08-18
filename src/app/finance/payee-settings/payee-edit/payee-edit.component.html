@@ -28,8 +28,8 @@
           <mat-form-field appearance="outline" class="payee-input">
             <mat-label>Category</mat-label>
             <mat-select formControlName="category">
-              @for (exc of TRANSACTION_CATEGORIES; track exc) {
-                <mat-option [value]="exc.value">{{ exc.viewValue }}</mat-option>
+              @for (exc of this.TRANSACTION_CATEGORIES; track exc) {
+                <mat-option [value]="exc.id">{{ exc.category }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -38,8 +38,8 @@
           <mat-form-field appearance="outline" class="fill payee-input">
             <mat-label>Sub Category</mat-label>
             <mat-select formControlName="subcategory">
-              @for (exc of EXPENSE_SUB_CATEGORIES; track exc) {
-                <mat-option [value]="exc.value">{{ exc.viewValue }}</mat-option>
+              @for (exc of this.EXPENSE_SUB_CATEGORIES; track exc) {
+                <mat-option [value]="exc.id">{{ exc.name }}</mat-option>
               }
             </mat-select>
           </mat-form-field>

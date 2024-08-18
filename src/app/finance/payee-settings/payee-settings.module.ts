@@ -10,9 +10,10 @@ import { PayeeSettingsComponent } from './payee-settings.component';
 import { PayeeSettingsRoutingModule } from './payee-settings.routing.module';
 import { PayeesComponent } from './payees/payees.component';
 import { RecurringComponent } from './recurring/recurring.component';
+import { PayeeDetailComponent } from './payee-detail/payee-detail.component';
 
 @NgModule({
-  declarations: [PayeeSettingsComponent, PayeeEditComponent, PayeesComponent, RecurringComponent],
+  declarations: [PayeeSettingsComponent, PayeeEditComponent, PayeesComponent, RecurringComponent, PayeeDetailComponent],
   imports: [
     CommonModule,
     FormsModule,

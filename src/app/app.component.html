@@ -6,6 +6,28 @@
     <div class="nav-brand">
       CoinCraft
     </div>
+    <span class="example-spacer"></span>
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" [matMenuTriggerFor]="menu">
+      <mat-icon>person</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <fa-icon
+          [icon]="faPerson"
+          size="sm"
+          [style]="{ color: '#3699ff' }"
+        ></fa-icon>
+        <span class="transaction-action-item">Profile</span>
+      </button>
+      <button mat-menu-item>
+        <fa-icon
+          [icon]="faList"
+          size="sm"
+          [style]="{ color: '#3699ff' }"
+        ></fa-icon>
+        <span class="transaction-action-item">Activity Log</span>
+      </button>
+    </mat-menu>
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container" [hasBackdrop]="hasBackdrop">

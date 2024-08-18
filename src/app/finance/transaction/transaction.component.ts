@@ -12,7 +12,7 @@ import {
   faSquareCaretRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { DataService } from '../service/data.service';
-import {map, Observable, ReplaySubject, takeUntil} from 'rxjs';
+import { map, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import {
   MonthlyTransaction,
   TransactionExpand,
@@ -21,7 +21,7 @@ import {
 import { Title } from '@angular/platform-browser';
 import { EXPENSE, INCOME, PAYMENT, SAVING } from '../../data/shared.data';
 import { ApiService } from '../../core/api.service';
-import { Income, MonthlyIncome } from '../model/income';
+import { IncomeExpand, MonthlyIncome } from '../model/income';
 
 @Component({
   selector: 'app-transaction',
@@ -87,7 +87,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     const transactions$ = this.apiService.getTransactions(filters);
     this.data$ = transactions$
       .pipe(takeUntil(this.destroyed$))
-      .pipe(map((value) => value.payload))
+      .pipe(map((value) => value.payload));
     this.loadingService.loadingOff();
   }
 
@@ -100,7 +100,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 @Component({
   selector: 'app-expenses',
   template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []"></app-transaction-table>',
+    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
   styles: '',
 })
 export class ExpensesComponent extends TransactionDetailComponent {
@@ -110,7 +110,7 @@ export class ExpensesComponent extends TransactionDetailComponent {
 @Component({
   selector: 'app-payments',
   template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []"></app-transaction-table>',
+    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
   styles: '',
 })
 export class PaymentsComponent extends TransactionDetailComponent {
@@ -120,7 +120,7 @@ export class PaymentsComponent extends TransactionDetailComponent {
 @Component({
   selector: 'app-savings',
   template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []"></app-transaction-table>',
+    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
   styles: '',
 })
 export class SavingsComponent extends TransactionDetailComponent {
@@ -130,7 +130,7 @@ export class SavingsComponent extends TransactionDetailComponent {
 @Component({
   selector: 'app-income',
   template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []"></app-transaction-table>',
+    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
   styles: '',
 })
 export class IncomesComponent extends TransactionDetailComponent {
@@ -165,7 +165,7 @@ export class IncomesComponent extends TransactionDetailComponent {
     return monthlyIncomes;
   }
 
-  private fillTransactionExpand(income: Income): TransactionExpand {
+  private fillTransactionExpand(income: IncomeExpand): TransactionExpand {
     return {
       id: income.id,
       amount: income.amount,
@@ -185,8 +185,9 @@ export class IncomesComponent extends TransactionDetailComponent {
       is_payment: false,
       is_saving: false,
       merge_id: null,
-      payment_method: 0,
-      payment_method_text: '',
+      account: 0,
+      account_name: '',
+      account_type: '',
       subcategory: 0,
       subcategory_text: '',
       source: 1,

@@ -4,8 +4,7 @@ import { Observable } from 'rxjs';
 import {
   BulkDeleteRequest,
   BulkDeleteResponse,
-  DashboardResponse,
-  ExpenseResponse,
+  TransactionsResponse,
   Transaction,
   TransactionExpand,
   TransactionFilter,
@@ -25,10 +24,12 @@ import {
 import { environment } from '../../environments/environment';
 import {
   DestinationMap,
-  DestinationMapRequest,
+  DestinationMapRequest, PayeeDetail,
   PayeeResponse,
 } from '../finance/model/payee';
-import { IncomeResponse } from '../finance/model/income';
+import {Income, IncomeExpand, IncomeResponse} from '../finance/model/income';
+import {DashboardResponse} from "../finance/model/dashboard";
+import {ClientSettings} from "../finance/model/common";
 
 new HttpHeaders({
   'Content-Type': 'application/json',
@@ -48,15 +49,14 @@ export class ApiService {
     );
   }
 
-  getTransactions(payload: TransactionFilter): Observable<ExpenseResponse> {
+  getTransactions(payload: TransactionFilter): Observable<TransactionsResponse> {
     const year = payload.year;
     const target = payload.target;
     const categories = payload.categories ? payload.categories.join(',') : '';
     const subcategories = payload.subcategories
       ? payload.subcategories.join(',')
       : '';
-    console.log('calling http request to get transactions');
-    return this.http.get<ExpenseResponse>(
+    return this.http.get<TransactionsResponse>(
       `${this.SRC_URL}/finance/transaction?year=${year}&target=${target}&cat=${categories}&subcat=${subcategories}`,
     );
   }
@@ -74,6 +74,14 @@ export class ApiService {
     return this.http.get<PayeeResponse>(`${this.SRC_URL}/finance/payee`);
   }
 
+  getPayeeDetail(payeeId: number | string): Observable<PayeeDetail> {
+    return this.http.get<PayeeDetail>(`${this.SRC_URL}/finance/payee/id/${payeeId}`)
+  }
+
+  getPayeeDetailByName(payeeName: string): Observable<PayeeDetail> {
+    return this.http.get<PayeeDetail>(`${this.SRC_URL}/finance/payee/name/${payeeName}`)
+  }
+
   updateTransaction(payload: Transaction): Observable<TransactionExpand> {
     if (payload.id) {
       return this.http.put<TransactionExpand>(
@@ -88,6 +96,19 @@ export class ApiService {
     }
   }
 
+  updateIncome(payload: Income) {
+    if (payload.id) {
+      return this.http.put<IncomeExpand>(
+        `${this.SRC_URL}/finance/income/${payload.id}/`,
+        payload,
+      );
+    } else {
+      return this.http.post<IncomeExpand>(
+        `${this.SRC_URL}/finance/income/`,
+        payload,
+      );
+    }
+  }
   mergeTransaction(
     payload: TransactionMergeRequest,
   ): Observable<TransactionExpand> {
@@ -165,5 +186,10 @@ export class ApiService {
     return this.http.get<CompanyResponse>(
       `${this.SRC_URL}/investments/company`,
     );
+  }
+
+
+  initSettings(): Observable<ClientSettings> {
+    return this.http.get<ClientSettings>(`${this.SRC_URL}/finance/settings`)
   }
 }

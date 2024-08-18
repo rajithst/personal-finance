@@ -22,6 +22,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { TransactionSplitComponent } from './transaction-split/transaction-split.component';
 import { TransactionBulkEditComponent } from './transaction-bulk-edit/transaction-bulk-edit.component';
+import { IncomeUpdateDialog, IncomeDeleteDialog } from './income-update/income-update.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,8 @@ import { TransactionBulkEditComponent } from './transaction-bulk-edit/transactio
     PaymentsComponent,
     TransactionSplitComponent,
     TransactionBulkEditComponent,
+    IncomeUpdateDialog,
+    IncomeDeleteDialog
   ],
   imports: [
     CommonModule,

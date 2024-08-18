@@ -60,11 +60,11 @@
                 <div class="list-item-actions">
                   <div class="checkbox">
                     <mat-checkbox
-                      [formControlName]="'category_' + exec.value"
+                      [formControlName]="'category_' + exec.id"
                       class="example-margin"
                     ></mat-checkbox>
                   </div>
-                  <div class="item-text">{{ exec.viewValue }}</div>
+                  <div class="item-text">{{ exec.category }}</div>
                 </div>
               </mat-list-item>
             }
@@ -81,11 +81,11 @@
                 <div class="list-item-actions">
                   <div class="checkbox">
                     <mat-checkbox
-                      [formControlName]="'paymentmethod_' + exec.value"
+                      [formControlName]="'paymentmethod_' + exec.id"
                       class="example-margin"
                     ></mat-checkbox>
                   </div>
-                  <div class="item-text">{{ exec.viewValue }}</div>
+                  <div class="item-text">{{ exec.account_name }}</div>
                 </div>
               </mat-list-item>
             }
@@ -116,7 +116,7 @@
 <!--        </form>-->
       </div>
       <div class="subcategory-section">
-        <div class="subcategory-title">{{subCategoryTitle}}</div>
+<!--        <div class="subcategory-title">{{subCategoryTitle}}</div>-->
         <form [formGroup]="subCategoryForm">
           <mat-list
             role="list"
@@ -128,11 +128,11 @@
                 <div class="list-item-actions">
                   <div class="checkbox">
                     <mat-checkbox
-                      [formControlName]="'subcategory_' + exec.value"
+                      [formControlName]="'subcategory_' + exec.id"
                       class="example-margin"
                     ></mat-checkbox>
                   </div>
-                  <div class="item-text">{{ exec.viewValue }}</div>
+                  <div class="item-text">{{ exec.name }}</div>
                 </div>
               </mat-list-item>
             }

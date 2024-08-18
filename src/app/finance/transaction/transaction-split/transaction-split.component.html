@@ -56,9 +56,9 @@
               <mat-form-field appearance="outline" class="split-input">
                 <mat-label>Category</mat-label>
                 <mat-select formControlName="category">
-                  @for (exc of TRANSACTION_CATEGORIES; track exc) {
-                    <mat-option [value]="exc.value"
-                      >{{ exc.viewValue }}
+                  @for (exc of this.TRANSACTION_CATEGORIES; track exc) {
+                    <mat-option [value]="exc.id"
+                      >{{ exc.category }}
                     </mat-option>
                   }
                 </mat-select>

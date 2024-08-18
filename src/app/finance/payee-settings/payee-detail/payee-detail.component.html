@@ -1,0 +1,123 @@
+<ng-container *ngIf="payeeInfo">
+  <mat-card>
+    <mat-card-header>
+      <div class="card-title">
+        <div class="title">
+          <mat-card-title> {{ payeeInfo.destination_original }}</mat-card-title>
+          <mat-card-subtitle>{{ payeeInfo.destination }}</mat-card-subtitle>
+        </div>
+        <div class="actions">
+          <mat-card-title> Test message </mat-card-title>
+        </div>
+      </div>
+
+
+
+    </mat-card-header>
+    <mat-card-content>
+      <div class="partner-info-summary">
+        <div class="info-card">
+          <div>
+            <ul>
+              <li>
+                <span class="field-label">Name:</span>
+                <span class="field-value">{{
+                    payeeInfo.destination_original
+                  }}</span>
+              </li>
+              <li>
+                <span class="field-label">Name Renamed:</span>
+                <span class="field-value">{{ payeeInfo.destination }}</span>
+              </li>
+              <li>
+                <span class="field-label">Alias:</span>
+                <span class="field-value">{{ payeeInfo.destination_eng }}</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li>
+                <span class="field-label">Category:</span>
+                <span class="field-value">{{ payeeInfo.category_text }}</span>
+              </li>
+              <li>
+                <span class="field-label">Sub-Category:</span>
+                <span class="field-value">{{ payeeInfo.subcategory_text }}</span>
+              </li>
+              <li>
+                <span class="field-label">Keywords:</span>
+                <span class="field-value">{{ payeeInfo.keywords }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-card">
+          <ul>
+            <li>
+              <span class="field-label">Total Payment:</span>
+              <span class="field-value"></span>¥{{
+                totalPayment() | number: "1.2-2"
+              }}
+            </li>
+            <li>
+              <span class="field-label">Last Month Payment: </span>
+              <span class="field-value"></span>
+            </li>
+            <li>
+              <span class="field-label">Last Month Payment: </span>
+              <span class="field-value"></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="payee-transaction-table">
+        <table
+          mat-table
+          matSort
+          [dataSource]="dataSource"
+          class="mat-elevation-z8 dividend-table"
+        >
+          <ng-container matColumnDef="Date">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.date | date: "MMMM d, y" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Notes">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Notes</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.notes }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Account">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>
+              Account
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.account_name }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Amount">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Amount</th>
+            <td mat-cell *matCellDef="let element">
+              ¥{{ element.amount | number: "1.2-2" }}
+            </td>
+          </ng-container>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
+
+<ng-container *ngIf="!payeeInfo">
+  <h3>Payee data not available.</h3>
+</ng-container>

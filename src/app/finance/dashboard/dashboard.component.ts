@@ -1,8 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
-  MONTHS,
-  PAYMENT_METHODS,
-  TRANSACTION_CATEGORIES,
+  MONTHS
 } from '../../data/client.data';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingService } from '../../shared/loading/loading.service';
@@ -12,7 +10,8 @@ import {
   faCreditCard,
   faFileInvoiceDollar,
 } from '@fortawesome/free-solid-svg-icons';
-import { DashboardResponse } from '../model/transactions';
+import {DashboardResponse} from "../model/dashboard";
+import {DataService} from "../service/data.service";
 
 @Component({
   selector: 'app-transaction-dashboard',
@@ -27,6 +26,9 @@ export class TransactionDashboardComponent implements OnInit {
 
   private loadingService = inject(LoadingService);
   private activatedRoute = inject(ActivatedRoute);
+  private dataService = inject(DataService);
+  PAYMENT_METHODS = this.dataService.getClientSettings().accounts
+  TRANSACTION_CATEGORIES = this.dataService.getClientSettings().transaction_categories
 
   today = new Date();
   currentYear = this.today.getFullYear();
@@ -184,10 +186,10 @@ export class TransactionDashboardComponent implements OnInit {
     const transactions = this.dashboardData.category_wise_expenses;
     if (this.currentDataKey in transactions) {
       const categoryData = transactions[this.currentDataKey];
-      TRANSACTION_CATEGORIES.forEach((x) => {
-        const categorySum = categoryData.find((y) => y.category_id === x.value);
+      this.TRANSACTION_CATEGORIES.forEach((x) => {
+        const categorySum = categoryData.find((y) => y.category_id === x.id);
         this.categoryWiseSum.push([
-          x.viewValue,
+          x.category,
           categorySum ? categorySum.amount : 0,
         ]);
       });
@@ -224,13 +226,13 @@ export class TransactionDashboardComponent implements OnInit {
   }
 
   private preparePaymentMethodCard() {
-    const transactions = this.dashboardData.payment_method_wise_expenses;
+    const transactions = this.dashboardData.account_wise_expenses;
     if (this.currentDataKey in transactions) {
       const categoryData = transactions[this.currentDataKey];
-      PAYMENT_METHODS.forEach((x) => {
-        const categorySum = categoryData.find((y) => y.category_id === x.value);
+      this.PAYMENT_METHODS.forEach((x) => {
+        const categorySum = categoryData.find((y) => y.category_id === x.id);
         this.paymentMethodWiseSum.push([
-          x.viewValue,
+          x.account_name,
           categorySum ? categorySum.amount : 0,
         ]);
       });

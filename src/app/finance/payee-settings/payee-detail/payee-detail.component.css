@@ -1,0 +1,46 @@
+.partner-info-summary {
+  display: flex;
+}
+.info-card {
+  display: flex;
+  border-radius: 10px;
+  width: 100%;
+  margin: 0 5px;
+  justify-content: space-around;
+}
+
+ul {
+  list-style: none;
+  line-height: 30px;
+}
+
+.field-label {
+  font-weight: 700;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.field-value {
+  font-size: 12px;
+}
+
+mat-card {
+  margin-top: 1%;
+}
+
+mat-card-content {
+  margin-top: 1%;
+}
+
+.payee-transaction-table {
+  margin: 10px 0;
+  max-height: 50vh;
+  height: 50vh;
+  overflow: auto;
+}
+
+.card-title {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}

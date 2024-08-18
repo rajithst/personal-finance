@@ -1,13 +1,13 @@
 import { Component, inject, Inject, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import {
   TRANSACTION_TYPES,
-  TRANSACTION_CATEGORIES,
-  TRANSACTION_SUB_CATEGORIES,
-  PAYMENT_METHODS,
-  SAVINGS_CATEGORY_ID, SUCCESS_ACTION, ERROR_ACTION, CANCEL_ACTION,
+  SAVINGS_CATEGORY_ID,
+  SUCCESS_ACTION,
+  ERROR_ACTION,
+  CANCEL_ACTION,
 } from '../../../data/client.data';
 import {
   TransactionExpand,
@@ -17,6 +17,12 @@ import {
 import moment from 'moment/moment';
 import { ApiService } from '../../../core/api.service';
 import { DropDownType } from '../../../data/shared.data';
+import { DataService } from '../../service/data.service';
+import {
+  Account,
+  TransactionCategory,
+  TransactionSubCategory,
+} from '../../model/common';
 
 export interface TransactionUpdateDialogData {
   formData: TransactionExpand;
@@ -30,12 +36,17 @@ export interface TransactionUpdateDialogData {
   styleUrl: './transaction-update.component.css',
 })
 export class TransactionUpdateDialog implements OnInit {
-  PAYMENT_METHODS: DropDownType[] = PAYMENT_METHODS;
-  TRANSACTION_CATEGORIES: DropDownType[] = TRANSACTION_CATEGORIES;
-  EXPENSE_SUB_CATEGORIES: DropDownType[] = [];
+  EXPENSE_SUB_CATEGORIES: TransactionSubCategory[] = [];
   TRANSACTION_TYPES: DropDownType[] = TRANSACTION_TYPES;
 
   apiService = inject(ApiService);
+  dataService = inject(DataService);
+
+  PAYMENT_METHODS: Account[] = this.dataService.getClientSettings().accounts;
+  TRANSACTION_CATEGORIES: TransactionCategory[] =
+    this.dataService.getClientSettings().transaction_categories;
+  TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
+    this.dataService.getClientSettings().transaction_sub_categories;
 
   constructor(
     public dialogRef: MatDialogRef<TransactionUpdateDialog>,
@@ -46,19 +57,26 @@ export class TransactionUpdateDialog implements OnInit {
   formData: TransactionExpand;
 
   ngOnInit(): void {
-    if (this.data.task == 'edit' || this.data.task == 'merge' || this.data.task == 'delete') {
+    if (
+      this.data.task == 'edit' ||
+      this.data.task == 'merge' ||
+      this.data.task == 'delete'
+    ) {
       this.formData = this.data.formData!;
       this.transactionForm = this.getNewTransactionForm(this.formData);
     } else if (this.data.task == 'add') {
       this.transactionForm = this.getNewTransactionForm(null);
     }
 
-    this.EXPENSE_SUB_CATEGORIES =
-      TRANSACTION_SUB_CATEGORIES[this.formData?.category!];
+    this.EXPENSE_SUB_CATEGORIES = this.TRANSACTION_SUB_CATEGORIES.filter(
+      (x) => x.category === this.formData?.category!,
+    );
 
     this.transactionForm.get('category')?.valueChanges.subscribe((value) => {
       if (value) {
-        this.EXPENSE_SUB_CATEGORIES = TRANSACTION_SUB_CATEGORIES[value];
+        this.EXPENSE_SUB_CATEGORIES = this.TRANSACTION_SUB_CATEGORIES.filter(
+          (x) => x.category === value,
+        );
         this.transactionForm
           .get('is_saving')
           ?.setValue(value === SAVINGS_CATEGORY_ID);
@@ -84,17 +102,31 @@ export class TransactionUpdateDialog implements OnInit {
     this.transactionForm.value.date = moment(
       this.transactionForm.value.date,
     ).format('YYYY-MM-DD');
-    this.transactionForm.value.amount = Number(this.transactionForm.value.amount);
+    this.transactionForm.value.amount = Number(
+      this.transactionForm.value.amount,
+    );
 
-    if (this.data.task == 'edit' || this.data.task == 'add' || this.data.task == 'delete') {
+    if (
+      this.data.task == 'edit' ||
+      this.data.task == 'add' ||
+      this.data.task == 'delete'
+    ) {
       const payload: TransactionRequest = this.transactionForm.value;
       this.apiService
         .updateTransaction(payload)
         .subscribe((transaction: TransactionExpand) => {
           if (transaction) {
-            this.dialogRef.close({refresh: true, data: transaction, action: SUCCESS_ACTION});
+            this.dialogRef.close({
+              refresh: true,
+              data: transaction,
+              action: SUCCESS_ACTION,
+            });
           } else {
-            this.dialogRef.close({refresh: false, data: null, action: ERROR_ACTION});
+            this.dialogRef.close({
+              refresh: false,
+              data: null,
+              action: ERROR_ACTION,
+            });
           }
         });
     } else if (this.data.task == 'merge') {
@@ -107,32 +139,56 @@ export class TransactionUpdateDialog implements OnInit {
         .mergeTransaction(payload)
         .subscribe((transaction: TransactionExpand) => {
           if (transaction) {
-            this.dialogRef.close({refresh: true, data: transaction, action: SUCCESS_ACTION});
+            this.dialogRef.close({
+              refresh: true,
+              data: transaction,
+              action: SUCCESS_ACTION,
+            });
           } else {
-            this.dialogRef.close({refresh: false, data: null, action: ERROR_ACTION});
+            this.dialogRef.close({
+              refresh: false,
+              data: null,
+              action: ERROR_ACTION,
+            });
           }
         });
     }
   }
 
   cancel() {
-    this.dialogRef.close({refresh: false, data: null, action: CANCEL_ACTION});
+    this.dialogRef.close({ refresh: false, data: null, action: CANCEL_ACTION });
   }
 
   getNewTransactionForm(data: TransactionExpand | null) {
     return new FormGroup({
       id: new FormControl<number | null>(data ? data.id : null),
-      category: new FormControl<number | null>(data ? data.category : null, [Validators.required]),
-      subcategory: new FormControl<number | null>(data ? data.subcategory : null, [Validators.required]),
-      payment_method: new FormControl<number | null>(data ? data.payment_method : null, [Validators.required]),
-      amount: new FormControl<number | null>(data ? data.amount : null, [Validators.required]),
-      date: new FormControl<string | null>(data ? data.date : null, [Validators.required]),
-      destination: new FormControl<string | null>(data ? data.destination : null, [Validators.required]),
+      category: new FormControl<number | null>(data ? data.category : null, [
+        Validators.required,
+      ]),
+      subcategory: new FormControl<number | null>(
+        data ? data.subcategory : null,
+        [Validators.required],
+      ),
+      payment_method: new FormControl<number | null>(
+        data ? data.account : null,
+        [Validators.required],
+      ),
+      amount: new FormControl<number | null>(data ? data.amount : null, [
+        Validators.required,
+      ]),
+      date: new FormControl<string | null>(data ? data.date : null, [
+        Validators.required,
+      ]),
+      destination: new FormControl<string | null>(
+        data ? data.destination : null,
+        [Validators.required],
+      ),
       alias: new FormControl<string | null>(data ? data.alias : null),
       notes: new FormControl<string | null>(data ? data.notes : null),
       transaction_type: new FormControl<number | null>(
-        data ? (data.is_payment ? 3 : data.is_expense ? 2 : 1) : 2
-        , [Validators.required]),
+        data ? (data.is_payment ? 3 : data.is_expense ? 2 : 1) : 2,
+        [Validators.required],
+      ),
       update_similar: new FormControl<boolean>(false),
       is_payment: new FormControl<boolean>(data ? data.is_payment : false),
       is_saving: new FormControl<boolean>(data ? data.is_saving : false),
@@ -140,8 +196,10 @@ export class TransactionUpdateDialog implements OnInit {
       is_deleted: new FormControl<boolean>(data ? data.is_deleted : false),
       is_merge: new FormControl<boolean>(data ? data.is_merge : false),
       merge_id: new FormControl<number | null>(data ? data.merge_id : null),
-      delete_reason: new FormControl<string | null>(data ? data.delete_reason : null),
-      source: new FormControl<number | null>(data ? data.source : 2)
+      delete_reason: new FormControl<string | null>(
+        data ? data.delete_reason : null,
+      ),
+      source: new FormControl<number | null>(data ? data.source : 2),
     });
   }
 }

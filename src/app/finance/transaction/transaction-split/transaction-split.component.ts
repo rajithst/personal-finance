@@ -21,14 +21,17 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  CANCEL_ACTION, ERROR_ACTION,
+  CANCEL_ACTION,
+  ERROR_ACTION,
   NA_CATEGORY_ID,
-  TRANSACTION_CATEGORIES, SUCCESS_ACTION,
+  SUCCESS_ACTION,
 } from '../../../data/client.data';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../../../core/api.service';
 import { map, Observable, startWith } from 'rxjs';
 import { DestinationMap } from '../../model/payee';
+import { DataService } from '../../service/data.service';
+import { TransactionCategory } from '../../model/common';
 
 export interface TransactionSplitData {
   formData: TransactionExpand;
@@ -44,13 +47,15 @@ export class TransactionSplitComponent implements OnInit, OnDestroy {
 
   private formBuilder = inject(FormBuilder);
   private apiService = inject(ApiService);
+  private dataService = inject(DataService);
 
-  TRANSACTION_CATEGORIES = TRANSACTION_CATEGORIES;
+  TRANSACTION_CATEGORIES: TransactionCategory[] =
+    this.dataService.getClientSettings().transaction_categories;
   splitForm: FormGroup;
   filteredPayees: Observable<DestinationMap[]>[] = [];
   payees: DestinationMap[];
   transaction = this.data.formData;
-  disableCategorySelect  = true;
+  disableCategorySelect = true;
   transactionAmount = signal<number>(this.transaction.amount || 0);
   splitTotal = signal<number>(0);
   remainAmount = computed(() => {
@@ -148,7 +153,7 @@ export class TransactionSplitComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.dialogRef.close({ refresh: false, data: null, action: CANCEL_ACTION});
+    this.dialogRef.close({ refresh: false, data: null, action: CANCEL_ACTION });
   }
 
   submit() {
@@ -165,13 +170,13 @@ export class TransactionSplitComponent implements OnInit, OnDestroy {
           this.dialogRef.close({
             refresh: true,
             data: responseData,
-            action: SUCCESS_ACTION
+            action: SUCCESS_ACTION,
           });
         } else {
           this.dialogRef.close({
             refresh: false,
             data: null,
-            alert: ERROR_ACTION
+            alert: ERROR_ACTION,
           });
         }
       });
