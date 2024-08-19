@@ -28,6 +28,7 @@ import {
   faEllipsisV,
   faExpand,
   faFilter,
+  faLink,
   faList,
   faMinimize,
   faPencil,
@@ -387,6 +388,13 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  showPayeeDetail(destination: string) {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/payee-settings/${destination}`]),
+    );
+    window.open(url, '_blank');
+  }
+
   showAnalytics(tableIndex: number) {}
 
   private removeFromTransactions(tableIndex: number, deleteIds: number[]) {
@@ -647,4 +655,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
+
+  protected readonly faLink = faLink;
 }

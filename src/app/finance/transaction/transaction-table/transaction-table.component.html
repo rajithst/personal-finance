@@ -176,7 +176,9 @@
           <ng-container matColumnDef="Destination">
             <th mat-header-cell mat-sort-header *matHeaderCellDef>Payee</th>
             <td mat-cell *matCellDef="let element">
-              <a routerLink="/payee-settings/{{element.destination}}">{{ element.alias ? element.alias : element.destination }}</a>
+              <div class="destination-chip">
+                {{ element.alias ? element.alias : element.destination }}
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="Category">
@@ -200,9 +202,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="Account">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-              Account
-            </th>
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Account</th>
             <td mat-cell *matCellDef="let element">
               {{ element.account_name }}
             </td>
@@ -233,7 +233,11 @@
                   ></fa-icon>
                   <span class="transaction-action-item">Edit</span>
                 </button>
-                <button mat-menu-item (click)="splitTransaction(element, i)" *ngIf="transactionType!==INCOME">
+                <button
+                  mat-menu-item
+                  (click)="splitTransaction(element, i)"
+                  *ngIf="transactionType !== INCOME"
+                >
                   <fa-icon
                     [icon]="faScissors"
                     size="sm"
@@ -241,7 +245,24 @@
                   ></fa-icon>
                   <span class="transaction-action-item">Split</span>
                 </button>
-                <button mat-menu-item [disabled]="!element.is_merge" *ngIf="transactionType!==INCOME">
+                <button
+                  mat-menu-item
+                  (click)="showPayeeDetail(element.destination)"
+                >
+                  <fa-icon
+                    [icon]="faLink"
+                    size="sm"
+                    [style]="{ color: '#3699ff' }"
+                  ></fa-icon>
+                  <span class="transaction-action-item"
+                    >View Payee Details</span
+                  >
+                </button>
+                <button
+                  mat-menu-item
+                  [disabled]="!element.is_merge"
+                  *ngIf="transactionType !== INCOME"
+                >
                   <fa-icon
                     [icon]="faList"
                     size="sm"

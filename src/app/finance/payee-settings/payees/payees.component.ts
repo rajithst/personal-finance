@@ -88,7 +88,7 @@ export class PayeesComponent implements OnInit, AfterViewInit {
       },
       data: { payee },
     });
-    dialog.afterClosed().subscribe((result) => {
+    dialog.afterClosed().subscribe((result: {payee: DestinationMap | null, mergeIds: number[] | null}) => {
       if (result.payee) {
         const updatedPayee = result.payee;
         const id = this.dataSource.data.findIndex(

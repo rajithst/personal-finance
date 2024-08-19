@@ -25,8 +25,9 @@ interface PayeeEditDialogData {
 export class PayeeEditComponent implements OnInit {
   readonly addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  apiService = inject(ApiService);
-  dataService = inject(DataService);
+
+  private apiService = inject(ApiService);
+  private dataService = inject(DataService);
   protected TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getClientSettings().transaction_categories;
   protected TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =

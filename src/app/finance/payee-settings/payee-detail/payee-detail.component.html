@@ -7,7 +7,16 @@
           <mat-card-subtitle>{{ payeeInfo.destination }}</mat-card-subtitle>
         </div>
         <div class="actions">
-          <mat-card-title> Test message </mat-card-title>
+          <div
+            (click)="editPayee()"
+            class="filter-item"
+          >
+            <fa-icon
+              [icon]="faPencil"
+              size="1x"
+              [style]="{ color: '#4a4949' }"
+            ></fa-icon>
+          </div>
         </div>
       </div>
 
