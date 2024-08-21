@@ -91,32 +91,9 @@
             }
           </mat-list>
         </form>
-<!--        <form [formGroup]="yearForm">-->
-<!--          <mat-list-->
-<!--            role="list"-->
-<!--            *ngIf="clickedType === 'year'"-->
-<!--            class="option-list"-->
-<!--          >-->
-<!--            @for (exec of years; track exec) {-->
-<!--              <mat-list-item-->
-<!--                matRipple-->
-<!--                (click)="clickOnOption('year', exec)"-->
-<!--              >-->
-<!--                <div class="list-item-actions">-->
-<!--                  <div class="checkbox">-->
-<!--                    <mat-checkbox-->
-<!--                      [formControlName]="'year_' + exec.value"-->
-<!--                    ></mat-checkbox>-->
-<!--                  </div>-->
-<!--                  <div class="item-text">{{ exec.viewValue }}</div>-->
-<!--                </div>-->
-<!--              </mat-list-item>-->
-<!--            }-->
-<!--          </mat-list>-->
-<!--        </form>-->
       </div>
       <div class="subcategory-section">
-<!--        <div class="subcategory-title">{{subCategoryTitle}}</div>-->
+        <div class="subcategory-title">{{subCategoryTitle}}</div>
         <form [formGroup]="subCategoryForm">
           <mat-list
             role="list"
@@ -138,26 +115,6 @@
             }
           </mat-list>
         </form>
-<!--        <form [formGroup]="monthsForm">-->
-<!--          <mat-list-->
-<!--            role="list"-->
-<!--            *ngIf="clickedType === 'year'"-->
-<!--            class="option-list"-->
-<!--          >-->
-<!--            @for (exec of months; track exec) {-->
-<!--              <mat-list-item matRipple>-->
-<!--                <div class="list-item-actions">-->
-<!--                  <div class="checkbox">-->
-<!--                    <mat-checkbox-->
-<!--                      [formControlName]="'month_' + exec.value"-->
-<!--                    ></mat-checkbox>-->
-<!--                  </div>-->
-<!--                  <div class="item-text">{{ exec.viewValue }}</div>-->
-<!--                </div>-->
-<!--              </mat-list-item>-->
-<!--            }-->
-<!--          </mat-list>-->
-<!--        </form>-->
       </div>
     </div>
 </mat-dialog-content>

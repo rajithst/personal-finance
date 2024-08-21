@@ -129,14 +129,14 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       if (this.filterParams().target === SAVING) {
         return this.TRANSACTION_SUB_CATEGORIES.find(
           (y) => y.id === targetId && y.category === SAVINGS_CATEGORY_ID,
-        )?.category;
+        )?.name;
       } else if (this.filterParams().target === PAYMENT) {
         return this.TRANSACTION_SUB_CATEGORIES.find(
           (y) => y.id === targetId && y.category === PAYMENT_CATEGORY_ID,
-        )?.category;
+        )?.name;
       } else {
         return this.TRANSACTION_SUB_CATEGORIES.find((y) => y.id === targetId)
-          ?.category;
+          ?.name;
       }
     };
     const categoryChips = this.filterParams().categories?.map((x) => ({

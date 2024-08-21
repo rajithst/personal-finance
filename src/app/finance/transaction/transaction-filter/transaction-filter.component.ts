@@ -41,7 +41,7 @@ export class TransactionFilterComponent implements OnInit {
   filterParams: TransactionFilter;
   clickedType: string = 'categories';
   categoryTitle = 'Categories';
-  selectedCategory: number = NA_SUB_CATEGORY_ID;
+  subCategoryTitle: string = 'Sub Categories';
 
   TRANSACTION_CATEGORIES: TransactionCategory[] = this.dataService.getClientSettings().transaction_categories;
   TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] = this.dataService.getClientSettings().transaction_sub_categories;
@@ -51,6 +51,7 @@ export class TransactionFilterComponent implements OnInit {
   transactionCategories: TransactionCategory[] = this.dataService.getClientSettings().transaction_categories;
   transactionSubCategories: TransactionSubCategory[] = this.dataService.getClientSettings().transaction_sub_categories;
   paymentMethods = this.dataService.getClientSettings().accounts;
+  selectedCategory: number = NA_SUB_CATEGORY_ID;
   mainCategoryForm: FormGroup;
   subCategoryForm: FormGroup;
   paymentMethodForm: FormGroup;
@@ -77,6 +78,10 @@ export class TransactionFilterComponent implements OnInit {
     } else if (this.filterParams?.target === INCOME) {
       this.transactionCategories = this.INCOME_CATEGORIES;
       this.transactionSubCategories = [];
+    } else {
+      const firstCategory = this.TRANSACTION_CATEGORIES.at(0);
+      this.transactionSubCategories = this.TRANSACTION_SUB_CATEGORIES.filter((x) => x.category === (firstCategory ? firstCategory.id : NA_CATEGORY_ID));
+      this.subCategoryTitle = firstCategory ? firstCategory.category : 'N/A'
     }
 
   }
@@ -111,7 +116,7 @@ export class TransactionFilterComponent implements OnInit {
 
   clickOnOption(filterType: string, filterOption: TransactionCategory | IncomeCategory) {
     this.selectedCategory = filterOption.id;
-    //this.subCategoryTitle = filterOption.viewValue;
+    this.subCategoryTitle = filterOption.category;
     if (filterType == 'categories' && this.filterParams.target !== INCOME) {
       this.transactionSubCategories = this.TRANSACTION_SUB_CATEGORIES.filter((x) => x.category === filterOption.id);
     }
@@ -121,17 +126,17 @@ export class TransactionFilterComponent implements OnInit {
     this.clickedType = filterType;
     if (filterType == 'categories') {
       this.categoryTitle = 'Categories';
-      // this.subCategoryTitle =
-      //   TRANSACTION_SUB_CATEGORIES[NA_SUB_CATEGORY_ID][0].viewValue;
-      this.selectedCategory = NA_CATEGORY_ID;
+      const firstCategory = this.transactionCategories.at(0);
+      this.selectedCategory = firstCategory ? firstCategory.id : NA_CATEGORY_ID;
+      this.subCategoryTitle = firstCategory ? firstCategory.category : 'N/A';
       this.transactionSubCategories =
-        this.TRANSACTION_SUB_CATEGORIES.filter((x) => x.id === NA_SUB_CATEGORY_ID);
+        this.TRANSACTION_SUB_CATEGORIES.filter((x) => x.category === this.selectedCategory);
     } else if (filterType == 'payment_method') {
       this.categoryTitle = 'Payment Method';
-      //this.subCategoryTitle = '';
+      this.subCategoryTitle = '';
     } else if (filterType == 'payee') {
       this.categoryTitle = 'Payee';
-      //this.subCategoryTitle = '';
+      this.subCategoryTitle = '';
     }
   }
 
