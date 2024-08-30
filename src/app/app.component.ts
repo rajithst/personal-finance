@@ -1,6 +1,5 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
-import { LoadingService } from './shared/loading/loading.service';
 import { faList, faPerson } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from './core/api.service';
 import { DataService } from './finance/service/data.service';

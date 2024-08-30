@@ -1,6 +1,5 @@
 import {Component, inject} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
-import {ApiService} from "../core/api.service";
 import {AuthService} from "./auth.service";
 import {Router} from "@angular/router";
 

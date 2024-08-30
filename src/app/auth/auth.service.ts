@@ -1,5 +1,12 @@
-import {computed, effect, inject, Injectable, OnInit, signal} from '@angular/core';
-import { firstValueFrom, Observable } from 'rxjs';
+import {
+  computed,
+  effect,
+  inject,
+  Injectable,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { ApiService } from '../core/api.service';
 import { Router } from '@angular/router';
 
