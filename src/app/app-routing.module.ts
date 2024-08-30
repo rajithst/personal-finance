@@ -2,12 +2,20 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { dashboardResolver } from './finance/service/resolvers';
+import {isUserAuthenticated} from "./auth/auth.guard";
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     redirectTo: 'dashboard',
+  },
+  {
+    path: 'login',
+    loadChildren: () =>
+      import('./auth/auth.module').then(
+        (m) => m.AuthModule,
+      ),
   },
   {
     path: 'dashboard',
@@ -18,6 +26,7 @@ const routes: Routes = [
     resolve: {
       finance: dashboardResolver,
     },
+    canActivate: [isUserAuthenticated]
   },
   {
     path: 'finance',
@@ -25,6 +34,7 @@ const routes: Routes = [
       import('./finance/transaction/transaction.module').then(
         (m) => m.TransactionModule,
       ),
+    canActivate: [isUserAuthenticated]
   },
   {
     path: 'payee-settings',
@@ -32,11 +42,13 @@ const routes: Routes = [
       import('./finance/payee-settings/payee-settings.module').then(
         (m) => m.PayeeSettingsModule,
       ),
+    canActivate: [isUserAuthenticated]
   },
   {
     path: 'reports',
     loadChildren: () =>
       import('./finance/reports/reports.module').then((m) => m.ReportsModule),
+    canActivate: [isUserAuthenticated]
   },
   {
     path: 'investments',
@@ -44,6 +56,7 @@ const routes: Routes = [
       import('./investments/investments.module').then(
         (m) => m.InvestmentsModule,
       ),
+    canActivate: [isUserAuthenticated]
   },
   {
     path: 'settings',
@@ -51,6 +64,7 @@ const routes: Routes = [
       import('./settings/settings.module').then(
         (m) => m.SettingsModule,
       ),
+    canActivate: [isUserAuthenticated]
   },
   {
     path: '**',

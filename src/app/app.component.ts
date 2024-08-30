@@ -4,6 +4,7 @@ import { LoadingService } from './shared/loading/loading.service';
 import { faList, faPerson } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from './core/api.service';
 import { DataService } from './finance/service/data.service';
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,7 @@ export class AppComponent implements OnInit {
   protected readonly faList = faList;
   protected readonly faPerson = faPerson;
 
-  loadingService = inject(LoadingService);
+  authService = inject(AuthService);
   apiService = inject(ApiService);
   dataService = inject(DataService);
 
@@ -34,14 +35,21 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadInitSettings();
-    this.loadingService.loadingOn();
+    if (this.authService.isLoggedIn()) {
+      this.loadInitSettings();
+    }
   }
 
   private loadInitSettings(): void {
     this.apiService.initSettings().subscribe((value) => {
       console.log(value);
       this.dataService.setClientSettings(value);
+    });
+  }
+
+  logout() {
+    this.authService.logout().then((r) => {
+      console.log(r);
     });
   }
 }

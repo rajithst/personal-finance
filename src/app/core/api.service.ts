@@ -30,6 +30,7 @@ import {
 import {Income, IncomeExpand, IncomeResponse} from '../finance/model/income';
 import {DashboardResponse} from "../finance/model/dashboard";
 import {ClientSettings} from "../finance/model/common";
+import {User} from "../auth/auth.service";
 
 new HttpHeaders({
   'Content-Type': 'application/json',
@@ -191,5 +192,9 @@ export class ApiService {
 
   initSettings(): Observable<ClientSettings> {
     return this.http.get<ClientSettings>(`${this.SRC_URL}/finance/settings`)
+  }
+
+  login(loginPayload: { username: string; password: string }) {
+    return this.http.post<User>(`${this.SRC_URL}/auth/jwt/create`, loginPayload);
   }
 }

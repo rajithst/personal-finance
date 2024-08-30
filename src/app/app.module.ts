@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   provideHttpClient,
-  withFetch,
+  withFetch, withInterceptors,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { MaterialModule } from './shared/material.module';
@@ -25,6 +25,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import {authInterceptor} from "./auth/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -51,8 +52,9 @@ import { MatButtonModule } from '@angular/material/button';
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch()),
-    provideHttpClient(withInterceptorsFromDi()),
+    // provideHttpClient(withFetch()),
+    // provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([authInterceptor])),
   ],
 })
 export class AppModule {}
