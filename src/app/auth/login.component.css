@@ -1,10 +1,13 @@
-.mat-form-field {
-  width: 100%;
-  min-width: 300px;
-}
-
-mat-card-title,
-mat-card-content {
+mat-card {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  margin: 100px auto;
+  max-width: 400px;
+  padding: 15px;
+}
+mat-card-title {
+  text-align: center;
+}
+.form-field {
+  width: 100%;
 }

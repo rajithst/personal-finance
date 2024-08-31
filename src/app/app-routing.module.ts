@@ -19,6 +19,7 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
       import('./finance/dashboard/dashboard.module').then(
         (m) => m.DashboardModule,
@@ -26,45 +27,46 @@ const routes: Routes = [
     resolve: {
       finance: dashboardResolver,
     },
-    canActivate: [isUserAuthenticated]
+
   },
   {
     path: 'finance',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
       import('./finance/transaction/transaction.module').then(
         (m) => m.TransactionModule,
       ),
-    canActivate: [isUserAuthenticated]
+
   },
   {
     path: 'payee-settings',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
       import('./finance/payee-settings/payee-settings.module').then(
         (m) => m.PayeeSettingsModule,
-      ),
-    canActivate: [isUserAuthenticated]
+      )
   },
   {
     path: 'reports',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
-      import('./finance/reports/reports.module').then((m) => m.ReportsModule),
-    canActivate: [isUserAuthenticated]
+      import('./finance/reports/reports.module').then((m) => m.ReportsModule)
   },
   {
     path: 'investments',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
       import('./investments/investments.module').then(
         (m) => m.InvestmentsModule,
-      ),
-    canActivate: [isUserAuthenticated]
+      )
   },
   {
     path: 'settings',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
       import('./settings/settings.module').then(
         (m) => m.SettingsModule,
-      ),
-    canActivate: [isUserAuthenticated]
+      )
   },
   {
     path: '**',

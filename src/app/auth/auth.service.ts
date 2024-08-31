@@ -1,11 +1,4 @@
-import {
-  computed,
-  effect,
-  inject,
-  Injectable,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { effect, inject, Injectable, OnInit, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiService } from '../core/api.service';
 import { Router } from '@angular/router';
@@ -23,11 +16,10 @@ export interface User {
 export class AuthService implements OnInit {
   #userSignal = signal<User | null>(null);
   user = this.#userSignal.asReadonly();
-  isLoggedIn = computed(() => !!this.user());
 
   apiService = inject(ApiService);
   router = inject(Router);
-  private USER_STORAGE_KEY: string = 'USER_STORAGE_KEY';
+  private USER_STORAGE_KEY: string = 'iva2zK2d7p';
 
   constructor() {
     effect(() => {
@@ -39,15 +31,16 @@ export class AuthService implements OnInit {
   }
 
   ngOnInit() {
-    this.loadFromLocalStorage();
+    const user = this.loadFromLocalStorage();
+    this.#userSignal.set(user);
   }
 
-  loadFromLocalStorage(): void {
+  loadFromLocalStorage(): User | null {
     const userJson = localStorage.getItem(this.USER_STORAGE_KEY);
     if (userJson) {
-      const user = JSON.parse(userJson);
-      this.#userSignal.set(user);
+      return JSON.parse(userJson);
     }
+    return null;
   }
 
   async login(username: string, password: string): Promise<User> {
@@ -67,5 +60,15 @@ export class AuthService implements OnInit {
   getToken() {
     const user = this.user();
     return user ? user.access : null;
+  }
+
+  isLoggedIn() {
+    if (!this.user()) {
+      const user = this.loadFromLocalStorage();
+      if (user) {
+        this.#userSignal.set(user);
+      }
+    }
+    return !!this.user();
   }
 }
