@@ -69,6 +69,14 @@ const routes: Routes = [
       )
   },
   {
+    path: 'profile',
+    canActivate: [isUserAuthenticated],
+    loadChildren: () =>
+      import('./profile/profile.module').then(
+        (m) => m.ProfileModule,
+      )
+  },
+  {
     path: '**',
     component: PageNotFoundComponent,
   },

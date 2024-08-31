@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
-import { faList, faPerson } from '@fortawesome/free-solid-svg-icons';
+import {faGear, faList, faPerson, faSignOut, faUserCircle} from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from './core/api.service';
 import { DataService } from './finance/service/data.service';
 import { AuthService } from './auth/auth.service';
@@ -41,7 +41,6 @@ export class AppComponent implements OnInit {
 
   private loadInitSettings(): void {
     this.apiService.initSettings().subscribe((value) => {
-      console.log(value);
       this.dataService.setClientSettings(value);
     });
   }
@@ -51,4 +50,8 @@ export class AppComponent implements OnInit {
       console.log(r);
     });
   }
+
+  protected readonly faSignOut = faSignOut;
+  protected readonly faUserCircle = faUserCircle;
+  protected readonly faGear = faGear;
 }

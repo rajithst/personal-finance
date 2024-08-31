@@ -24,13 +24,14 @@ import {
 import { environment } from '../../environments/environment';
 import {
   DestinationMap,
-  DestinationMapRequest, PayeeDetail,
+  DestinationMapRequest,
+  PayeeDetail,
   PayeeResponse,
 } from '../finance/model/payee';
-import {Income, IncomeExpand, IncomeResponse} from '../finance/model/income';
-import {DashboardResponse} from "../finance/model/dashboard";
-import {ClientSettings} from "../finance/model/common";
-import {User} from "../auth/auth.service";
+import { Income, IncomeExpand, IncomeResponse } from '../finance/model/income';
+import { DashboardResponse } from '../finance/model/dashboard';
+import { ClientSettings } from '../finance/model/common';
+import { User, UserProfile } from '../auth/model';
 
 new HttpHeaders({
   'Content-Type': 'application/json',
@@ -50,7 +51,9 @@ export class ApiService {
     );
   }
 
-  getTransactions(payload: TransactionFilter): Observable<TransactionsResponse> {
+  getTransactions(
+    payload: TransactionFilter,
+  ): Observable<TransactionsResponse> {
     const year = payload.year;
     const target = payload.target;
     const categories = payload.categories ? payload.categories.join(',') : '';
@@ -76,11 +79,15 @@ export class ApiService {
   }
 
   getPayeeDetail(payeeId: number | string): Observable<PayeeDetail> {
-    return this.http.get<PayeeDetail>(`${this.SRC_URL}/finance/payee/id/${payeeId}`)
+    return this.http.get<PayeeDetail>(
+      `${this.SRC_URL}/finance/payee/id/${payeeId}`,
+    );
   }
 
   getPayeeDetailByName(payeeName: string): Observable<PayeeDetail> {
-    return this.http.get<PayeeDetail>(`${this.SRC_URL}/finance/payee/name/${payeeName}`)
+    return this.http.get<PayeeDetail>(
+      `${this.SRC_URL}/finance/payee/name/${payeeName}`,
+    );
   }
 
   updateTransaction(payload: Transaction): Observable<TransactionExpand> {
@@ -189,12 +196,18 @@ export class ApiService {
     );
   }
 
-
   initSettings(): Observable<ClientSettings> {
-    return this.http.get<ClientSettings>(`${this.SRC_URL}/finance/settings`)
+    return this.http.get<ClientSettings>(`${this.SRC_URL}/finance/settings`);
   }
 
   login(loginPayload: { username: string; password: string }) {
-    return this.http.post<User>(`${this.SRC_URL}/auth/jwt/create`, loginPayload);
+    return this.http.post<User>(
+      `${this.SRC_URL}/auth/jwt/create`,
+      loginPayload,
+    );
+  }
+
+  getMyProfile() {
+    return this.http.get<UserProfile>(`${this.SRC_URL}/oauth/profile/me`);
   }
 }

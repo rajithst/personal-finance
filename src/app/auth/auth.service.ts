@@ -2,14 +2,8 @@ import { effect, inject, Injectable, OnInit, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiService } from '../core/api.service';
 import { Router } from '@angular/router';
+import {User} from "./model";
 
-export interface User {
-  profile_id: string;
-  email: string;
-  access: string;
-  refresh: string;
-  is_premium: boolean;
-}
 @Injectable({
   providedIn: 'root',
 })
@@ -70,5 +64,9 @@ export class AuthService implements OnInit {
       }
     }
     return !!this.user();
+  }
+
+  getMyProfile() {
+    return this.apiService.getMyProfile()
   }
 }
