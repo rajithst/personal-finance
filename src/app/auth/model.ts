@@ -7,7 +7,7 @@ export interface User {
 }
 
 export interface UserProfile {
-  id: number,
+  id: number;
   username: string;
   first_name: string;
   last_name: string;

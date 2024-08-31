@@ -1,7 +1,7 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {AuthService} from "./auth.service";
-import {Router} from "@angular/router";
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',

@@ -48,8 +48,6 @@ import { authInterceptor } from './auth/auth.interceptor';
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
-    // provideHttpClient(withFetch()),
-    // provideHttpClient(withInterceptorsFromDi()),
     provideHttpClient(withInterceptors([authInterceptor])),
   ],
 })

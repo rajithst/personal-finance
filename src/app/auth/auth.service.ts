@@ -2,7 +2,7 @@ import { effect, inject, Injectable, OnInit, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiService } from '../core/api.service';
 import { Router } from '@angular/router';
-import {User} from "./model";
+import { User } from './model';
 
 @Injectable({
   providedIn: 'root',
@@ -67,6 +67,6 @@ export class AuthService implements OnInit {
   }
 
   getMyProfile() {
-    return this.apiService.getMyProfile()
+    return this.apiService.getMyProfile();
   }
 }

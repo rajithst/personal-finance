@@ -5,19 +5,28 @@
       <mat-form-field appearance="outline" class="form-field">
         <mat-icon matSuffix>account_circle</mat-icon>
         <mat-label>User name</mat-label>
-        <input matInput placeholder="User name" formControlName="username"/>
+        <input matInput placeholder="User name" formControlName="username" />
       </mat-form-field>
       <mat-form-field appearance="outline" class="form-field">
         <mat-icon matSuffix>password</mat-icon>
         <mat-label>Password</mat-label>
-        <input matInput type="password" placeholder="Password" formControlName="password"/>
+        <input
+          matInput
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+        />
       </mat-form-field>
       <div class="submit-button">
-        <button mat-raised-button color="primary" class="form-field" [disabled]="loginForm.invalid">
+        <button
+          mat-raised-button
+          color="primary"
+          class="form-field"
+          [disabled]="loginForm.invalid"
+        >
           Login
         </button>
       </div>
-
     </mat-card-content>
   </form>
 </mat-card>
