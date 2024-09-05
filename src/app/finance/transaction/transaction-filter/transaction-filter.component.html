@@ -70,18 +70,18 @@
             }
           </mat-list>
         </form>
-        <form [formGroup]="paymentMethodForm">
+        <form [formGroup]="accountForm">
           <mat-list
             role="list"
             *ngIf="clickedType === 'payment_method'"
             class="option-list"
           >
-            @for (exec of paymentMethods; track exec) {
+            @for (exec of accounts; track exec) {
               <mat-list-item matRipple>
                 <div class="list-item-actions">
                   <div class="checkbox">
                     <mat-checkbox
-                      [formControlName]="'paymentmethod_' + exec.id"
+                      [formControlName]="'account_' + exec.id"
                       class="example-margin"
                     ></mat-checkbox>
                   </div>

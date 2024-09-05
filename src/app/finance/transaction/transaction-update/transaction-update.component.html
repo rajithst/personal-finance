@@ -9,9 +9,9 @@
       <tr>
         <td>
           <mat-form-field class="fill expense-input" appearance="outline">
-            <mat-label>Payment Method</mat-label>
-            <mat-select formControlName="payment_method">
-              @for (pm of this.PAYMENT_METHODS; track pm) {
+            <mat-label>Account</mat-label>
+            <mat-select formControlName="account">
+              @for (pm of this.ACCOUNTS; track pm) {
                 <mat-option [value]="pm.id">{{ pm.account_name }}</mat-option>
               }
             </mat-select>
@@ -61,7 +61,7 @@
           <mat-form-field appearance="outline" class="expense-input">
             <mat-label>Category</mat-label>
             <mat-select formControlName="category">
-              @for (exc of this.TRANSACTION_CATEGORIES; track exc) {
+              @for (exc of this.transactionCategories; track exc) {
                 <mat-option [value]="exc.id">{{ exc.category }}</mat-option>
               }
             </mat-select>
@@ -71,7 +71,7 @@
           <mat-form-field appearance="outline" class="fill expense-input">
             <mat-label>Sub Category</mat-label>
             <mat-select formControlName="subcategory">
-              @for (exc of this.EXPENSE_SUB_CATEGORIES; track exc) {
+              @for (exc of this.transactionSubCategories; track exc) {
                 <mat-option [value]="exc.id">{{ exc.name }}</mat-option>
               }
             </mat-select>

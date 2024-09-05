@@ -27,6 +27,8 @@ import {
   faEdit,
   faEllipsisV,
   faExpand,
+  faEye,
+  faEyeSlash,
   faFilter,
   faLink,
   faList,
@@ -55,13 +57,12 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { faChartColumn } from '@fortawesome/free-solid-svg-icons/faChartColumn';
 import { TransactionSplitComponent } from '../transaction-split/transaction-split.component';
 import { TransactionBulkEditComponent } from '../transaction-bulk-edit/transaction-bulk-edit.component';
-import { IncomeDeleteDialog } from '../income-update/income-update.component';
 import {
   Account,
-  IncomeCategory,
   TransactionCategory,
   TransactionSubCategory,
 } from '../../model/common';
+import { TransactionImportComponent } from '../transaction-import/transaction-import.component';
 
 interface TransactionActionResult {
   refresh: boolean;
@@ -93,6 +94,10 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   protected readonly faUpload = faUpload;
   protected readonly faFilter = faFilter;
   protected readonly faChartColumn = faChartColumn;
+  protected readonly faLink = faLink;
+  protected readonly faEye = faEye;
+  protected readonly faEyeSlash = faEyeSlash;
+
   protected readonly INCOME = INCOME;
 
   private router = inject(Router);
@@ -101,13 +106,13 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   private loadingService = inject(LoadingService);
   private dataService = inject(DataService);
 
-  PAYMENT_METHODS: Account[] = this.dataService.getClientSettings().accounts;
-  INCOME_CATEGORIES: IncomeCategory[] =
-    this.dataService.getClientSettings().income_categories;
+  ACCOUNTS: Account[] = this.dataService.getClientSettings().accounts;
+  INCOME_CATEGORIES: TransactionCategory[] =
+    this.dataService.getIncomeCategories();
   TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
-    this.dataService.getClientSettings().transaction_sub_categories;
+    this.dataService.getTransactionSubCategories();
   TRANSACTION_CATEGORIES: TransactionCategory[] =
-    this.dataService.getClientSettings().transaction_categories;
+    this.dataService.getTransactionCategories();
 
   protected readonly destroyed$ = new ReplaySubject<void>(1);
 
@@ -122,6 +127,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   allTransactions: MonthlyTransaction[] = [];
   bulkSelectedTableIndex: number = -1;
   allExpanded = false;
+  showValues = false;
 
   filterParams = signal<TransactionFilter>(this.getEmptyFilterParams());
   filterParamChips = computed(() => {
@@ -152,12 +158,12 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       type: 'subcategory',
       name: getTargets(x),
     }));
-    const paymentMethodChips = this.filterParams().paymentMethods?.map((x) => ({
+    const accountChips = this.filterParams().accounts?.map((x) => ({
       id: x,
-      type: 'paymentMethod',
-      name: this.PAYMENT_METHODS.find((y) => y.id === x)?.account_name,
+      type: 'account',
+      name: this.ACCOUNTS.find((y) => y.id === x)?.account_name,
     }));
-    return [...categoryChips!, ...subCategoryChips!, ...paymentMethodChips!];
+    return [...categoryChips!, ...subCategoryChips!, ...accountChips!];
   });
   displayedColumns: string[] = [];
 
@@ -171,7 +177,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
             target: x.target,
             categories: x.categories,
             subcategories: x.subcategories,
-            paymentMethods: x.paymentMethods,
+            accounts: x.accounts,
           };
         });
       });
@@ -243,29 +249,22 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   deleteTransaction(item: TransactionExpand) {
-    if (this.transactionType === INCOME) {
-      const dialog = this.dialog.open(IncomeDeleteDialog, {
-        data: { formData: item, task: 'delete' },
-      });
-    } else {
-      const dialog = this.dialog.open(TransactionDeleteDialog, {
-        data: { formData: item, task: 'delete' },
-      });
-      dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-        if (result.action === SUCCESS_ACTION) {
-          const responseData = result.data as TransactionExpand;
-          let targetTableIndex =
-            this.getTableIndexFromTransaction(responseData);
-          this.removeFromTransactions(targetTableIndex, [responseData.id!]);
-          this.refreshUpdatedDataSourceTable(targetTableIndex);
-          this.snackBar.open('Deleted!', 'Success', {
-            duration: 3000,
-          });
-        } else if (result.action === ERROR_ACTION) {
-          this.snackBar.open('Failed to delete!', 'Error', {});
-        }
-      });
-    }
+    const dialog = this.dialog.open(TransactionDeleteDialog, {
+      data: { formData: item, task: 'delete' },
+    });
+    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
+      if (result.action === SUCCESS_ACTION) {
+        const responseData = result.data as TransactionExpand;
+        let targetTableIndex = this.getTableIndexFromTransaction(responseData);
+        this.removeFromTransactions(targetTableIndex, [responseData.id!]);
+        this.refreshUpdatedDataSourceTable(targetTableIndex);
+        this.snackBar.open('Deleted!', 'Success', {
+          duration: 3000,
+        });
+      } else if (result.action === ERROR_ACTION) {
+        this.snackBar.open('Failed to delete!', 'Error', {});
+      }
+    });
   }
 
   addTransaction() {
@@ -395,6 +394,10 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     window.open(url, '_blank');
   }
 
+  importTransaction() {
+    const dialog = this.dialog.open(TransactionImportComponent);
+  }
+
   showAnalytics(tableIndex: number) {}
 
   private removeFromTransactions(tableIndex: number, deleteIds: number[]) {
@@ -508,8 +511,8 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         data.subcategory,
       );
       const paymentMethodIncludes =
-        filterObject.paymentMethods?.length !== 0
-          ? filterObject.paymentMethods?.includes(data.account)
+        filterObject.accounts?.length !== 0
+          ? filterObject.accounts?.includes(data.account)
           : true;
 
       return <boolean>(
@@ -529,7 +532,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       target: this.lastSegment() || '',
       categories: [],
       subcategories: [],
-      paymentMethods: [],
+      accounts: [],
     };
   }
 
@@ -573,7 +576,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
             target: result.filters.target,
             categories: result.filters.categories,
             subcategories: result.filters.subcategories,
-            paymentMethods: result.filters.paymentMethods,
+            accounts: result.filters.accounts,
           };
         });
         this.applyFiltersToTables();
@@ -591,6 +594,10 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  showValueAction() {
+    this.showValues = !this.showValues;
+  }
+
   removeChip(chip: any) {
     this.filterParams.update((x) => {
       return {
@@ -604,10 +611,10 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
           chip.type === 'subcategory'
             ? x.subcategories?.filter((y) => y !== chip.id)
             : x.subcategories,
-        paymentMethods:
-          chip.type === 'paymentMethod'
-            ? x.paymentMethods?.filter((y) => y !== chip.id)
-            : x.paymentMethods,
+        accounts:
+          chip.type === 'account'
+            ? x.accounts?.filter((y) => y !== chip.id)
+            : x.accounts,
       };
     });
     this.applyFiltersToTables();
@@ -655,6 +662,4 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
-
-  protected readonly faLink = faLink;
 }

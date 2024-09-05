@@ -28,7 +28,7 @@ import {
   PayeeDetail,
   PayeeResponse,
 } from '../finance/model/payee';
-import { Income, IncomeExpand, IncomeResponse } from '../finance/model/income';
+
 import { DashboardResponse } from '../finance/model/dashboard';
 import { ClientSettings } from '../finance/model/common';
 import { User, UserProfile } from '../auth/model';
@@ -65,15 +65,6 @@ export class ApiService {
     );
   }
 
-  getIncome(payload: TransactionFilter) {
-    const year = payload.year;
-    const target = payload.target;
-    const categories = payload.categories ? payload.categories.join(',') : '';
-    return this.http.get<IncomeResponse>(
-      `${this.SRC_URL}/finance/income?year=${year}&target=${target}&cat=${categories}`,
-    );
-  }
-
   getPayees(): Observable<PayeeResponse> {
     return this.http.get<PayeeResponse>(`${this.SRC_URL}/finance/payee`);
   }
@@ -104,19 +95,6 @@ export class ApiService {
     }
   }
 
-  updateIncome(payload: Income) {
-    if (payload.id) {
-      return this.http.put<IncomeExpand>(
-        `${this.SRC_URL}/finance/income/${payload.id}/`,
-        payload,
-      );
-    } else {
-      return this.http.post<IncomeExpand>(
-        `${this.SRC_URL}/finance/income/`,
-        payload,
-      );
-    }
-  }
   mergeTransaction(
     payload: TransactionMergeRequest,
   ): Observable<TransactionExpand> {
