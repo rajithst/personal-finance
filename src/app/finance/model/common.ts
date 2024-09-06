@@ -6,26 +6,25 @@ export interface Account {
   description: string | null
 }
 
-export interface IncomeCategory {
-  id: number,
-  category: string
-}
-
 export interface TransactionCategory {
   id: number,
-  category: string
+  category: string,
+  category_type: number,
+  category_type_text: string,
+  description: string
 }
 
 export interface TransactionSubCategory {
   id: number,
   name: string,
+  category: number;
+  category_text: string;
   description: string | null
-  category: number
-}
-export interface ClientSettings {
-  accounts: Account[],
-  income_categories: IncomeCategory[],
-  transaction_categories: TransactionCategory[],
-  transaction_sub_categories: TransactionSubCategory[],
 
+}
+
+export interface ClientSettings {
+  accounts: Account[];
+  transaction_categories: TransactionCategory[];
+  transaction_sub_categories: TransactionSubCategory[];
 }

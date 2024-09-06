@@ -28,3 +28,8 @@
 .example-spacer {
   flex: 1 1 auto;
 }
+
+.profile-menu-item {
+  margin-left: 10px;
+  font-size: 14px;
+}

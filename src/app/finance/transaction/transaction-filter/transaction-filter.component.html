@@ -17,13 +17,13 @@
             ></fa-icon>
             Categories</mat-list-option
           >
-          <mat-list-option (click)="clickOnMainFilter('payment_method')">
+          <mat-list-option (click)="clickOnMainFilter('accounts')">
             <fa-icon
               [icon]="faCreditCard"
               size="1x"
               [style]="{ color: '#4a4949' }"
             ></fa-icon>
-            Payment Method</mat-list-option
+            Accounts</mat-list-option
           >
           <mat-list-option (click)="clickOnMainFilter('payee')">
             <fa-icon
@@ -33,14 +33,6 @@
             ></fa-icon>
             Payee</mat-list-option
           >
-<!--          <mat-list-option (click)="clickOnMainFilter('year')">-->
-<!--            <fa-icon-->
-<!--              [icon]="faCalendar"-->
-<!--              size="1x"-->
-<!--              [style]="{ color: '#4a4949' }"-->
-<!--            ></fa-icon>-->
-<!--            Year/Month</mat-list-option-->
-<!--          >-->
         </mat-selection-list>
       </div>
 
@@ -52,7 +44,7 @@
             *ngIf="clickedType === 'categories'"
             class="option-list"
           >
-            @for (exec of transactionCategories; track exec) {
+            @for (exec of transactionCategories; track exec.id) {
               <mat-list-item
                 matRipple
                 (click)="clickOnOption('categories', exec)"
@@ -70,18 +62,18 @@
             }
           </mat-list>
         </form>
-        <form [formGroup]="paymentMethodForm">
+        <form [formGroup]="accountForm">
           <mat-list
             role="list"
-            *ngIf="clickedType === 'payment_method'"
+            *ngIf="clickedType === 'accounts'"
             class="option-list"
           >
-            @for (exec of paymentMethods; track exec) {
+            @for (exec of accounts; track exec.id) {
               <mat-list-item matRipple>
                 <div class="list-item-actions">
                   <div class="checkbox">
                     <mat-checkbox
-                      [formControlName]="'paymentmethod_' + exec.id"
+                      [formControlName]="'account_' + exec.id"
                       class="example-margin"
                     ></mat-checkbox>
                   </div>
@@ -100,7 +92,7 @@
             *ngIf="clickedType === 'categories'"
             class="option-list"
           >
-            @for (exec of transactionSubCategories; track exec) {
+            @for (exec of transactionSubCategories; track exec.id) {
               <mat-list-item matRipple>
                 <div class="list-item-actions">
                   <div class="checkbox">

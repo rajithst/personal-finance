@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {UserLogComponent} from "./user-log/user-log.component";
-import {SettingsComponent} from "./settings.component";
+import { UserLogComponent } from './user-log/user-log.component';
+import { SettingsComponent } from './settings.component';
+import {TransactionCategoryComponent} from "./transaction-category/transaction-category.component";
 
 const routes: Routes = [
   {
@@ -10,12 +11,16 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'user-log',
+        redirectTo: 'category-settings',
         pathMatch: 'full',
       },
       {
+        path: 'category-settings',
+        component: TransactionCategoryComponent,
+      },
+      {
         path: 'user-log',
-       component: UserLogComponent
+        component: UserLogComponent,
       },
     ],
   },
@@ -23,6 +28,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class SettingsRoutingModule { }
+export class SettingsRoutingModule {}

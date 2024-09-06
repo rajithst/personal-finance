@@ -1,0 +1,81 @@
+<div class="profile-container">
+  <div class="section profile-section">
+    <mat-card>
+      <mat-card-content>
+        <mat-nav-list>
+          <mat-list-item
+            (click)="onSelected(item)"
+            *ngFor="let item of profileSections"
+            [ngClass]="{'activated': item.selected}"
+          >
+            {{ item.label }}
+          </mat-list-item>
+        </mat-nav-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="section section-data">
+    <mat-card *ngIf="selectedSection === 'info'">
+      <mat-card-header>
+        <mat-card-title>Profile</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <div class="profile-value">
+              <div class="field-label">User Name</div>
+              <div class="field-value">{{ myAccount.username }}</div>
+              <div class="field-edit"><span>Edit</span></div>
+            </div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <div class="profile-value">
+              <div class="field-label">First Name</div>
+              <div class="field-value">{{ myAccount.first_name }}</div>
+              <div class="field-edit"><span>Edit</span></div>
+            </div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <div class="profile-value">
+              <div class="field-label">Last Name</div>
+              <div class="field-value">{{ myAccount.last_name }}</div>
+              <div class="field-edit"><span>Edit</span></div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+
+
+      </mat-card-content>
+    </mat-card>
+    <mat-card *ngIf="selectedSection === 'account'">
+      <mat-card-header>
+        <mat-card-title>Profile</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <div class="profile-value">
+              <div class="field-label">Email</div>
+              <div class="field-value">{{ myAccount.email }}</div>
+              <div class="field-edit"><span>Edit</span></div>
+            </div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <div class="profile-value">
+              <div class="field-label">Password</div>
+              <div class="field-value">{{ myAccount.password }}</div>
+              <div class="field-edit"><span>Edit</span></div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+    <mat-card *ngIf="selectedSection === 'privacy'">
+    </mat-card>
+    <mat-card *ngIf="selectedSection === 'subscription'">
+    </mat-card>
+  </div>
+</div>

@@ -7,7 +7,6 @@ import { ChartboxComponent } from './chartbox/chartbox.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { RouterModule } from '@angular/router';
-
 @NgModule({
   declarations: [LoadingComponent, ChartboxComponent, BreadcrumbComponent],
   imports: [

@@ -1,0 +1,13 @@
+mat-card {
+  display: flex;
+  flex-direction: column;
+  margin: 100px auto;
+  max-width: 400px;
+  padding: 15px;
+}
+mat-card-title {
+  text-align: center;
+}
+.form-field {
+  width: 100%;
+}

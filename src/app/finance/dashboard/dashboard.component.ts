@@ -32,7 +32,7 @@ export class TransactionDashboardComponent implements OnInit {
 
   today = new Date();
   currentYear = this.today.getFullYear();
-  currentMonthNumber = this.today.getMonth() -3;
+  currentMonthNumber = this.today.getMonth() - 1;
   currentDataKey = `${this.currentYear}-${String(this.currentMonthNumber).padStart(2, '0')}-01`;
   currentMonthName: string = MONTHS.find(
     (x) => x.value == this.currentMonthNumber,

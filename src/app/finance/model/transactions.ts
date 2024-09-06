@@ -9,7 +9,6 @@ export interface MonthlyTransaction {
   total: number;
   transactions: TransactionExpand[];
 }
-
 export interface Transaction {
   id: number | null;
   amount: number | null;
@@ -23,6 +22,7 @@ export interface Transaction {
   is_payment: boolean;
   is_expense: boolean;
   is_deleted: boolean;
+  is_income: boolean;
   is_merge: boolean;
   merge_id: number | null;
   delete_reason: string;
@@ -54,7 +54,7 @@ export interface TransactionFilter {
   target: string;
   categories?: number[];
   subcategories?: number[];
-  paymentMethods?: number[];
+  accounts?: number[];
 }
 
 export interface TransactionSplit {

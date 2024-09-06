@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { dashboardResolver } from './finance/service/resolvers';
+import { isUserAuthenticated } from './auth/auth.guard';
 
 const routes: Routes = [
   {
@@ -10,7 +11,12 @@ const routes: Routes = [
     redirectTo: 'dashboard',
   },
   {
+    path: 'login',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+  },
+  {
     path: 'dashboard',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
       import('./finance/dashboard/dashboard.module').then(
         (m) => m.DashboardModule,
@@ -21,6 +27,7 @@ const routes: Routes = [
   },
   {
     path: 'finance',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
       import('./finance/transaction/transaction.module').then(
         (m) => m.TransactionModule,
@@ -28,6 +35,7 @@ const routes: Routes = [
   },
   {
     path: 'payee-settings',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
       import('./finance/payee-settings/payee-settings.module').then(
         (m) => m.PayeeSettingsModule,
@@ -35,11 +43,13 @@ const routes: Routes = [
   },
   {
     path: 'reports',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
       import('./finance/reports/reports.module').then((m) => m.ReportsModule),
   },
   {
     path: 'investments',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
       import('./investments/investments.module').then(
         (m) => m.InvestmentsModule,
@@ -47,10 +57,15 @@ const routes: Routes = [
   },
   {
     path: 'settings',
+    canActivate: [isUserAuthenticated],
     loadChildren: () =>
-      import('./settings/settings.module').then(
-        (m) => m.SettingsModule,
-      ),
+      import('./settings/settings.module').then((m) => m.SettingsModule),
+  },
+  {
+    path: 'profile',
+    canActivate: [isUserAuthenticated],
+    loadChildren: () =>
+      import('./profile/profile.module').then((m) => m.ProfileModule),
   },
   {
     path: '**',

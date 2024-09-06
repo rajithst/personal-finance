@@ -1,0 +1,46 @@
+.profile-container {
+  display: flex;
+  width: 80%;
+  margin: 2% 10%;
+}
+
+mat-card {
+  height: 100%;
+}
+
+.profile-section {
+  min-width: 30%;
+}
+
+.section {
+  margin-right: 10px;
+
+}
+
+.section-data {
+  width: 100%;
+}
+
+.activated {
+  background: #659fdf;
+}
+
+.profile-value {
+  display: flex;
+}
+
+.field-label {
+  font-weight: 800;
+  width: 10%;
+}
+
+.field-value {
+  width: 50%;
+  text-align: left;
+  margin-left: 10%;
+}
+
+
+.field-edit {
+  width: 10%;
+}

@@ -4,10 +4,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import {
   TRANSACTION_TYPES,
-  SAVINGS_CATEGORY_ID,
   SUCCESS_ACTION,
   ERROR_ACTION,
   CANCEL_ACTION,
+  TRANSACTION_TYPE_PAYMENTS_ID,
+  TRANSACTION_TYPE_SAVINGS_ID,
+  TRANSACTION_TYPE_INCOME_ID,
+  TRANSACTION_TYPE_EXPENSE_ID,
 } from '../../../data/client.data';
 import {
   TransactionExpand,
@@ -36,17 +39,21 @@ export interface TransactionUpdateDialogData {
   styleUrl: './transaction-update.component.css',
 })
 export class TransactionUpdateDialog implements OnInit {
-  EXPENSE_SUB_CATEGORIES: TransactionSubCategory[] = [];
   TRANSACTION_TYPES: DropDownType[] = TRANSACTION_TYPES;
 
   apiService = inject(ApiService);
   dataService = inject(DataService);
 
-  PAYMENT_METHODS: Account[] = this.dataService.getClientSettings().accounts;
-  TRANSACTION_CATEGORIES: TransactionCategory[] =
-    this.dataService.getClientSettings().transaction_categories;
+  ACCOUNTS: Account[] = this.dataService.getClientSettings().accounts;
+  EXPENSE_CATEGORIES: TransactionCategory[] =
+    this.dataService.getExpenseCategories();
   TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
-    this.dataService.getClientSettings().transaction_sub_categories;
+    this.dataService.getAllSubCategories();
+  INCOME_CATEGORIES = this.dataService.getIncomeCategories();
+  PAYMENT_CATEGORIES = this.dataService.getPaymentCategories();
+  SAVINGS_CATEGORIES = this.dataService.getSavingsCategories();
+  transactionCategories: TransactionCategory[] = [];
+  transactionSubCategories: TransactionSubCategory[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<TransactionUpdateDialog>,
@@ -64,38 +71,75 @@ export class TransactionUpdateDialog implements OnInit {
     ) {
       this.formData = this.data.formData!;
       this.transactionForm = this.getNewTransactionForm(this.formData);
+      const transactionType =
+        this.transactionForm.get('transaction_type')?.value;
+      const transactionCategory = this.transactionForm.get('category')?.value;
+      this.setTransactionCategories(transactionType!);
+      this.setTransactionSubCategories(transactionCategory);
     } else if (this.data.task == 'add') {
       this.transactionForm = this.getNewTransactionForm(null);
     }
 
-    this.EXPENSE_SUB_CATEGORIES = this.TRANSACTION_SUB_CATEGORIES.filter(
-      (x) => x.category === this.formData?.category!,
-    );
-
     this.transactionForm.get('category')?.valueChanges.subscribe((value) => {
       if (value) {
-        this.EXPENSE_SUB_CATEGORIES = this.TRANSACTION_SUB_CATEGORIES.filter(
-          (x) => x.category === value,
-        );
-        this.transactionForm
-          .get('is_saving')
-          ?.setValue(value === SAVINGS_CATEGORY_ID);
+        this.setTransactionSubCategories(value);
       }
     });
 
     this.transactionForm
       .get('transaction_type')
       ?.valueChanges.subscribe((value) => {
-        if (value == 2) {
-          this.transactionForm.get('is_expense')?.setValue(true);
-          this.transactionForm.get('is_saving')?.setValue(false);
-          this.transactionForm.get('is_payment')?.setValue(false);
-        } else if (value == 3) {
-          this.transactionForm.get('is_payment')?.setValue(true);
-          this.transactionForm.get('is_expense')?.setValue(true);
-          this.transactionForm.get('is_saving')?.setValue(false);
-        }
+        this.transactionForm.get('subcategory')?.setValue(null);
+        this.transactionForm.get('category')?.setValue(null);
+        this.setTransactionCategories(value);
       });
+  }
+
+  private setTransactionSubCategories(category: number) {
+    this.transactionSubCategories = this.TRANSACTION_SUB_CATEGORIES.filter(
+      (x) => x.category === category,
+    );
+    if (this.transactionSubCategories.length === 1) {
+      this.transactionForm
+        .get('subcategory')
+        ?.setValue(this.transactionSubCategories.at(0)!.id);
+    }
+  }
+
+  private setTransactionCategories(transactionType: number) {
+    if (transactionType === TRANSACTION_TYPE_EXPENSE_ID) {
+      this.transactionCategories = this.EXPENSE_CATEGORIES;
+      this.transactionForm.get('is_payment')?.setValue(false);
+      this.transactionForm.get('is_saving')?.setValue(false);
+      this.transactionForm.get('is_expense')?.setValue(true);
+      this.transactionForm.get('is_income')?.setValue(false);
+    } else if (transactionType === TRANSACTION_TYPE_INCOME_ID) {
+      this.transactionCategories = this.INCOME_CATEGORIES;
+      this.transactionForm.get('is_expense')?.setValue(false);
+      this.transactionForm.get('is_payment')?.setValue(false);
+      this.transactionForm.get('is_saving')?.setValue(false);
+      this.transactionForm.get('is_income')?.setValue(true);
+    } else if (transactionType === TRANSACTION_TYPE_SAVINGS_ID) {
+      this.transactionCategories = this.SAVINGS_CATEGORIES;
+      this.transactionForm.get('is_expense')?.setValue(true);
+      this.transactionForm.get('is_payment')?.setValue(false);
+      this.transactionForm.get('is_saving')?.setValue(true);
+      this.transactionForm.get('is_income')?.setValue(false);
+    } else if (transactionType === TRANSACTION_TYPE_PAYMENTS_ID) {
+      this.transactionCategories = [
+        ...this.PAYMENT_CATEGORIES,
+        ...this.EXPENSE_CATEGORIES,
+      ];
+      this.transactionForm.get('is_expense')?.setValue(true);
+      this.transactionForm.get('is_payment')?.setValue(true);
+      this.transactionForm.get('is_saving')?.setValue(false);
+      this.transactionForm.get('is_income')?.setValue(false);
+    }
+    if (this.transactionCategories.length === 1) {
+      this.transactionForm
+        .get('category')
+        ?.setValue(this.transactionCategories.at(0)!.id);
+    }
   }
 
   submit() {
@@ -160,6 +204,18 @@ export class TransactionUpdateDialog implements OnInit {
   }
 
   getNewTransactionForm(data: TransactionExpand | null) {
+    let transactionType = null;
+    if (data) {
+      if (data.is_payment) {
+        transactionType = TRANSACTION_TYPE_PAYMENTS_ID;
+      } else if (data.is_saving) {
+        transactionType = TRANSACTION_TYPE_SAVINGS_ID;
+      } else if (data.is_income) {
+        transactionType = TRANSACTION_TYPE_INCOME_ID;
+      } else {
+        transactionType = TRANSACTION_TYPE_EXPENSE_ID;
+      }
+    }
     return new FormGroup({
       id: new FormControl<number | null>(data ? data.id : null),
       category: new FormControl<number | null>(data ? data.category : null, [
@@ -169,10 +225,9 @@ export class TransactionUpdateDialog implements OnInit {
         data ? data.subcategory : null,
         [Validators.required],
       ),
-      payment_method: new FormControl<number | null>(
-        data ? data.account : null,
-        [Validators.required],
-      ),
+      account: new FormControl<number | null>(data ? data.account : null, [
+        Validators.required,
+      ]),
       amount: new FormControl<number | null>(data ? data.amount : null, [
         Validators.required,
       ]),
@@ -186,11 +241,12 @@ export class TransactionUpdateDialog implements OnInit {
       alias: new FormControl<string | null>(data ? data.alias : null),
       notes: new FormControl<string | null>(data ? data.notes : null),
       transaction_type: new FormControl<number | null>(
-        data ? (data.is_payment ? 3 : data.is_expense ? 2 : 1) : 2,
+        data ? transactionType : null,
         [Validators.required],
       ),
       update_similar: new FormControl<boolean>(false),
       is_payment: new FormControl<boolean>(data ? data.is_payment : false),
+      is_income: new FormControl<boolean>(data ? data.is_income : false),
       is_saving: new FormControl<boolean>(data ? data.is_saving : false),
       is_expense: new FormControl<boolean>(data ? data.is_expense : true),
       is_deleted: new FormControl<boolean>(data ? data.is_deleted : false),

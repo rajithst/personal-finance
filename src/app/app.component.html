@@ -1,51 +1,78 @@
 <div class="content">
   <mat-toolbar color="primary" class="fix-nav">
-    <button type="button" mat-icon-button (click)="onToolbarMenuToggle()">
+    <button
+      *ngIf="authService.isLoggedIn()"
+      type="button"
+      mat-icon-button
+      (click)="onToolbarMenuToggle()"
+    >
       <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
     </button>
-    <div class="nav-brand">
-      CoinCraft
-    </div>
+    <div class="nav-brand">CoinCraft</div>
     <span class="example-spacer"></span>
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" [matMenuTriggerFor]="menu">
+    <button
+      *ngIf="authService.isLoggedIn()"
+      mat-icon-button
+      class="example-icon"
+      aria-label="Example icon-button with share icon"
+      [matMenuTriggerFor]="menu"
+    >
       <mat-icon>person</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item routerLink="profile">
         <fa-icon
-          [icon]="faPerson"
+          [icon]="faUserCircle"
           size="sm"
           [style]="{ color: '#3699ff' }"
         ></fa-icon>
-        <span class="transaction-action-item">Profile</span>
+        <span class="profile-menu-item">Profile</span>
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item routerLink="settings">
+        <fa-icon
+          [icon]="faGear"
+          size="sm"
+          [style]="{ color: '#3699ff' }"
+        ></fa-icon>
+        <span class="profile-menu-item">Settings</span>
+      </button>
+      <button mat-menu-item routerLink="settings/user-log">
         <fa-icon
           [icon]="faList"
           size="sm"
           [style]="{ color: '#3699ff' }"
         ></fa-icon>
-        <span class="transaction-action-item">Activity Log</span>
+        <span class="profile-menu-item">Activity Log</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <fa-icon
+          [icon]="faSignOut"
+          size="sm"
+          [style]="{ color: '#3699ff' }"
+        ></fa-icon>
+        <span class="profile-menu-item">Log Out</span>
       </button>
     </mat-menu>
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container" [hasBackdrop]="hasBackdrop">
-    <mat-sidenav
-      #snav
-      position="start"
-      disableClose="true"
-      role="navigation"
-      class="sidenav mat-elevation-z10"
-      [mode]="sideNavMode"
-      [opened]="sideNavDefaultOpened"
-      [ngStyle]="{ 'width.px': isExpanded ? openedWidth : closedWidth }"
-    >
-      <app-side-nav *ngIf="showFullMenu; else elseBlock"></app-side-nav>
-      <ng-template #elseBlock>
-        <app-side-nav-closed></app-side-nav-closed>
-      </ng-template>
-    </mat-sidenav>
+    @if (authService.isLoggedIn()) {
+      <mat-sidenav
+        #snav
+        position="start"
+        disableClose="true"
+        role="navigation"
+        class="sidenav mat-elevation-z10"
+        [mode]="sideNavMode"
+        [opened]="sideNavDefaultOpened"
+        [ngStyle]="{ 'width.px': isExpanded ? openedWidth : closedWidth }"
+      >
+        <app-side-nav *ngIf="showFullMenu; else elseBlock"></app-side-nav>
+        <ng-template #elseBlock>
+          <app-side-nav-closed></app-side-nav-closed>
+        </ng-template>
+      </mat-sidenav>
+    }
     <mat-sidenav-content
       id="sidenav-content"
       [ngStyle]="{ 'margin-left.px': isExpanded ? openedWidth : closedWidth }"
