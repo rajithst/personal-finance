@@ -18,9 +18,10 @@ export class DataService {
   private settings$ = new BehaviorSubject<ClientSettings>(
     this.getEmptyClientSettings(),
   );
+  private valueVisible$ = new BehaviorSubject<boolean>(false);
 
   yearSwitch$ = this.year$.asObservable();
-  clientSettings$ = this.settings$.asObservable();
+  valueVisibility$ = this.valueVisible$.asObservable();
 
   setClientSettings(clientSettings: ClientSettings) {
     this.settings$.next(clientSettings);
@@ -38,6 +39,14 @@ export class DataService {
     return this.year$.value;
   }
 
+  setValueVisibility(value: boolean) {
+    this.valueVisible$.next(value);
+  }
+
+  getValueVisibility() {
+    return this.valueVisibility$;
+  }
+
   setPayees(payees: DestinationMap[]) {
     this.payees$.next(payees);
   }
@@ -46,14 +55,22 @@ export class DataService {
     return this.payees$.value;
   }
 
-  getTransactionCategories() {
+  getAllCategories() {
+    return this.getClientSettings().transaction_categories;
+  }
+
+  getAllSubCategories() {
+    return this.getClientSettings().transaction_sub_categories;
+  }
+
+  getAccounts() {
+    return this.getClientSettings().accounts;
+  }
+
+  getExpenseCategories() {
     return this.getClientSettings().transaction_categories.filter(
       (x) => x.category_type === TRANSACTION_TYPE_EXPENSE_ID,
     );
-  }
-
-  getTransactionSubCategories() {
-    return this.getClientSettings().transaction_sub_categories;
   }
 
   getIncomeCategories() {
@@ -80,4 +97,6 @@ export class DataService {
       transaction_sub_categories: [],
     };
   }
+
+
 }

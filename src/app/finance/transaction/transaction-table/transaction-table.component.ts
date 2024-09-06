@@ -45,14 +45,8 @@ import { MatAccordion } from '@angular/material/expansion';
 import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
 import { LoadingService } from '../../../shared/loading/loading.service';
 import { Sort } from '@angular/material/sort';
-import {
-  ERROR_ACTION,
-  PAYMENT_CATEGORY_ID,
-  SAVINGS_CATEGORY_ID,
-  SUCCESS_ACTION,
-} from '../../../data/client.data';
+import { ERROR_ACTION, SUCCESS_ACTION } from '../../../data/client.data';
 import { Router } from '@angular/router';
-import { INCOME, PAYMENT, SAVING } from '../../../data/shared.data';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { faChartColumn } from '@fortawesome/free-solid-svg-icons/faChartColumn';
 import { TransactionSplitComponent } from '../transaction-split/transaction-split.component';
@@ -63,6 +57,7 @@ import {
   TransactionSubCategory,
 } from '../../model/common';
 import { TransactionImportComponent } from '../transaction-import/transaction-import.component';
+import {INCOME} from "../../../data/shared.data";
 
 interface TransactionActionResult {
   refresh: boolean;
@@ -70,6 +65,11 @@ interface TransactionActionResult {
   action: string;
 }
 
+interface FilterParamChip {
+  id: number;
+  type: string;
+  name: string | undefined;
+}
 @Component({
   selector: 'app-transaction-table',
   templateUrl: './transaction-table.component.html',
@@ -97,8 +97,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   protected readonly faLink = faLink;
   protected readonly faEye = faEye;
   protected readonly faEyeSlash = faEyeSlash;
-
-  protected readonly INCOME = INCOME;
+  protected readonly destroyed$ = new ReplaySubject<void>(1);
 
   private router = inject(Router);
   private dialog = inject(MatDialog);
@@ -106,15 +105,13 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   private loadingService = inject(LoadingService);
   private dataService = inject(DataService);
 
-  ACCOUNTS: Account[] = this.dataService.getClientSettings().accounts;
-  INCOME_CATEGORIES: TransactionCategory[] =
-    this.dataService.getIncomeCategories();
+  ACCOUNTS: Account[] = this.dataService.getAccounts();
   TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
-    this.dataService.getTransactionSubCategories();
+    this.dataService.getAllSubCategories();
   TRANSACTION_CATEGORIES: TransactionCategory[] =
-    this.dataService.getTransactionCategories();
+    this.dataService.getAllCategories();
 
-  protected readonly destroyed$ = new ReplaySubject<void>(1);
+  showValues = false;
 
   totalAnnualAmount = signal<number>(0);
   segments = signal(this.router.url.split('/'));
@@ -127,88 +124,35 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   allTransactions: MonthlyTransaction[] = [];
   bulkSelectedTableIndex: number = -1;
   allExpanded = false;
-  showValues = false;
 
-  filterParams = signal<TransactionFilter>(this.getEmptyFilterParams());
-  filterParamChips = computed(() => {
-    const getTargets = (targetId: number) => {
-      if (this.filterParams().target === SAVING) {
-        return this.TRANSACTION_SUB_CATEGORIES.find(
-          (y) => y.id === targetId && y.category === SAVINGS_CATEGORY_ID,
-        )?.name;
-      } else if (this.filterParams().target === PAYMENT) {
-        return this.TRANSACTION_SUB_CATEGORIES.find(
-          (y) => y.id === targetId && y.category === PAYMENT_CATEGORY_ID,
-        )?.name;
-      } else {
-        return this.TRANSACTION_SUB_CATEGORIES.find((y) => y.id === targetId)
-          ?.name;
-      }
-    };
-    const categoryChips = this.filterParams().categories?.map((x) => ({
-      id: x,
-      type: 'category',
-      name:
-        this.filterParams().target === INCOME
-          ? this.INCOME_CATEGORIES.find((y) => y.id === x)?.category
-          : this.TRANSACTION_CATEGORIES.find((y) => y.id === x)?.category,
-    }));
-    const subCategoryChips = this.filterParams().subcategories?.map((x) => ({
-      id: x,
-      type: 'subcategory',
-      name: getTargets(x),
-    }));
-    const accountChips = this.filterParams().accounts?.map((x) => ({
-      id: x,
-      type: 'account',
-      name: this.ACCOUNTS.find((y) => y.id === x)?.account_name,
-    }));
-    return [...categoryChips!, ...subCategoryChips!, ...accountChips!];
-  });
-  displayedColumns: string[] = [];
+  filterParams = this.getEmptyFilterParams();
+  filterParamChips: FilterParamChip[] = [];
+  displayedColumns: string[] = [
+    'select',
+    'Date',
+    'Account',
+    'Destination',
+    'Category',
+    'SubCategory',
+    'Amount',
+    'Notes',
+    'Actions',
+  ];
 
   ngOnInit(): void {
     this.dataService.yearSwitch$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
-        this.filterParams.update((x) => {
-          return {
-            year: value,
-            target: x.target,
-            categories: x.categories,
-            subcategories: x.subcategories,
-            accounts: x.accounts,
-          };
-        });
+        this.filterParams.year = value;
+        this.createFilterChips();
       });
+
+    this.dataService.valueVisibility$.subscribe((value) => {
+      this.showValues = value;
+    });
   }
 
   ngOnChanges() {
-    if (this.transactionType === INCOME) {
-      this.displayedColumns = [
-        'select',
-        'Date',
-        'Account',
-        'Destination',
-        'Category',
-        'Amount',
-        'Notes',
-        'Actions',
-      ];
-    } else {
-      this.displayedColumns = [
-        'select',
-        'Date',
-        'Account',
-        'Destination',
-        'Category',
-        'SubCategory',
-        'Amount',
-        'Notes',
-        'Actions',
-      ];
-    }
-
     this.allTransactions =
       this.transactions.length > 0 ? this.transactions : [];
     this.totalAnnualAmount.set(0);
@@ -223,6 +167,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         (x) => x + this.allTransactions[index].total,
       );
     });
+    this.createFilterChips();
     this.applyFiltersToTables();
   }
 
@@ -413,7 +358,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       this.allTransactions[tableIndex].transactions,
     );
     dataSource.filterPredicate = this.createFilterPredicate();
-    dataSource.filter = JSON.stringify(this.filterParams()).trim();
+    dataSource.filter = JSON.stringify(this.filterParams).trim();
     if (tableIndex < this.allDataSource.length) {
       this.allDataSource[tableIndex] = dataSource;
     } else {
@@ -472,7 +417,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private applyFiltersToTables() {
-    const filters = this.filterParams();
+    const filters = this.filterParams;
     this.totalAnnualAmount.set(0);
     this.allDataSource.forEach((y) => {
       y.filter = JSON.stringify(filters).trim();
@@ -565,20 +510,19 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       height: '500px',
       position: { top: `${rect.bottom + 10}px`, right: `20px` },
       hasBackdrop: true,
-      data: { filterParams: this.filterParams() },
+      data: { filterParams: this.filterParams },
     });
 
     dialog.afterClosed().subscribe((result) => {
       if (result) {
-        this.filterParams.update(() => {
-          return {
-            year: result.filters.year,
-            target: result.filters.target,
-            categories: result.filters.categories,
-            subcategories: result.filters.subcategories,
-            accounts: result.filters.accounts,
-          };
-        });
+        this.filterParams = {
+          year: result.filters.year,
+          target: result.filters.target,
+          categories: result.filters.categories,
+          subcategories: result.filters.subcategories,
+          accounts: result.filters.accounts,
+        };
+        this.createFilterChips();
         this.applyFiltersToTables();
         this.loadingService.loadingOff();
       }
@@ -596,28 +540,48 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   showValueAction() {
     this.showValues = !this.showValues;
+    this.dataService.setValueVisibility(this.showValues);
   }
 
   removeChip(chip: any) {
-    this.filterParams.update((x) => {
-      return {
-        year: x.year,
-        target: x.target,
-        categories:
-          chip.type === 'category'
-            ? x.categories?.filter((y) => y !== chip.id)
-            : x.categories,
-        subcategories:
-          chip.type === 'subcategory'
-            ? x.subcategories?.filter((y) => y !== chip.id)
-            : x.subcategories,
-        accounts:
-          chip.type === 'account'
-            ? x.accounts?.filter((y) => y !== chip.id)
-            : x.accounts,
-      };
-    });
+    if (chip.type === 'category') {
+      this.filterParams.categories = this.filterParams.categories?.filter(
+        (y) => y !== chip.id,
+      );
+    } else if (chip.type === 'subcategory') {
+      this.filterParams.subcategories = this.filterParams.subcategories?.filter(
+        (y) => y !== chip.id,
+      );
+    } else if (chip.type === 'account') {
+      this.filterParams.accounts = this.filterParams.accounts?.filter(
+        (y) => y !== chip.id,
+      );
+    }
+    this.createFilterChips();
     this.applyFiltersToTables();
+  }
+
+  createFilterChips() {
+    const categoryChips = this.filterParams.categories?.map((x) => ({
+      id: x,
+      type: 'category',
+      name: this.TRANSACTION_CATEGORIES.find((y) => y.id === x)?.category,
+    }));
+    const subCategoryChips = this.filterParams.subcategories?.map((x) => ({
+      id: x,
+      type: 'subcategory',
+      name: this.TRANSACTION_SUB_CATEGORIES.find((y) => y.id === x)?.name,
+    }));
+    const accountChips = this.filterParams.accounts?.map((x) => ({
+      id: x,
+      type: 'account',
+      name: this.ACCOUNTS.find((y) => y.id === x)?.account_name,
+    }));
+    this.filterParamChips = [
+      ...categoryChips!,
+      ...subCategoryChips!,
+      ...accountChips!,
+    ];
   }
 
   onSortData(sort: Sort, tableIndex: number) {
@@ -650,7 +614,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
     const dataSource = new MatTableDataSource<TransactionExpand>(data);
     dataSource.filterPredicate = this.createFilterPredicate();
-    dataSource.filter = JSON.stringify(this.filterParams()).trim();
+    dataSource.filter = JSON.stringify(this.filterParams).trim();
     this.allDataSource[tableIndex] = dataSource;
   }
 
@@ -662,4 +626,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
+
+  protected readonly INCOME = INCOME;
 }

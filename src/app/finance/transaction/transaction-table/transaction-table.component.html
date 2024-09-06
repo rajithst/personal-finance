@@ -52,7 +52,7 @@
       >Total: ¥{{ showValues ? (totalAnnualAmount() | number: "1.2-2") : '--' }}</mat-chip
     >
     <mat-chip-set aria-label="Fruit selection">
-      @for (chip of filterParamChips(); track chip) {
+      @for (chip of filterParamChips; track chip) {
         <mat-chip-row (removed)="removeChip(chip)" class="filter-chip">
           {{ chip.name }}
           <button matChipRemove>

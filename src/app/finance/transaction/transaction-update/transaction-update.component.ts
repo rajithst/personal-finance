@@ -39,17 +39,16 @@ export interface TransactionUpdateDialogData {
   styleUrl: './transaction-update.component.css',
 })
 export class TransactionUpdateDialog implements OnInit {
-  EXPENSE_SUB_CATEGORIES: TransactionSubCategory[] = [];
   TRANSACTION_TYPES: DropDownType[] = TRANSACTION_TYPES;
 
   apiService = inject(ApiService);
   dataService = inject(DataService);
 
   ACCOUNTS: Account[] = this.dataService.getClientSettings().accounts;
-  TRANSACTION_CATEGORIES: TransactionCategory[] =
-    this.dataService.getTransactionCategories();
+  EXPENSE_CATEGORIES: TransactionCategory[] =
+    this.dataService.getExpenseCategories();
   TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
-    this.dataService.getTransactionSubCategories();
+    this.dataService.getAllSubCategories();
   INCOME_CATEGORIES = this.dataService.getIncomeCategories();
   PAYMENT_CATEGORIES = this.dataService.getPaymentCategories();
   SAVINGS_CATEGORIES = this.dataService.getSavingsCategories();
@@ -72,32 +71,44 @@ export class TransactionUpdateDialog implements OnInit {
     ) {
       this.formData = this.data.formData!;
       this.transactionForm = this.getNewTransactionForm(this.formData);
+      const transactionType =
+        this.transactionForm.get('transaction_type')?.value;
+      const transactionCategory = this.transactionForm.get('category')?.value;
+      this.setTransactionCategories(transactionType!);
+      this.setTransactionSubCategories(transactionCategory);
     } else if (this.data.task == 'add') {
       this.transactionForm = this.getNewTransactionForm(null);
     }
 
-    const transactionType = this.transactionForm.get('transaction_type')?.value;
-    this.setTransactionCategoriesAndSubCategories(transactionType);
     this.transactionForm.get('category')?.valueChanges.subscribe((value) => {
       if (value) {
-        this.transactionSubCategories = this.TRANSACTION_SUB_CATEGORIES.filter(
-          (x) => x.category === value,
-        );
+        this.setTransactionSubCategories(value);
       }
     });
 
     this.transactionForm
       .get('transaction_type')
       ?.valueChanges.subscribe((value) => {
-        this.setTransactionCategoriesAndSubCategories(value);
+        this.transactionForm.get('subcategory')?.setValue(null);
+        this.transactionForm.get('category')?.setValue(null);
+        this.setTransactionCategories(value);
       });
   }
 
-  private setTransactionCategoriesAndSubCategories(transactionType: number) {
-    this.transactionForm.get('subcategory')?.setValue(null);
-    this.transactionForm.get('category')?.setValue(null);
+  private setTransactionSubCategories(category: number) {
+    this.transactionSubCategories = this.TRANSACTION_SUB_CATEGORIES.filter(
+      (x) => x.category === category,
+    );
+    if (this.transactionSubCategories.length === 1) {
+      this.transactionForm
+        .get('subcategory')
+        ?.setValue(this.transactionSubCategories.at(0)!.id);
+    }
+  }
+
+  private setTransactionCategories(transactionType: number) {
     if (transactionType === TRANSACTION_TYPE_EXPENSE_ID) {
-      this.transactionCategories = this.TRANSACTION_CATEGORIES;
+      this.transactionCategories = this.EXPENSE_CATEGORIES;
       this.transactionForm.get('is_payment')?.setValue(false);
       this.transactionForm.get('is_saving')?.setValue(false);
       this.transactionForm.get('is_expense')?.setValue(true);
@@ -117,12 +128,17 @@ export class TransactionUpdateDialog implements OnInit {
     } else if (transactionType === TRANSACTION_TYPE_PAYMENTS_ID) {
       this.transactionCategories = [
         ...this.PAYMENT_CATEGORIES,
-        ...this.TRANSACTION_CATEGORIES,
+        ...this.EXPENSE_CATEGORIES,
       ];
       this.transactionForm.get('is_expense')?.setValue(true);
       this.transactionForm.get('is_payment')?.setValue(true);
       this.transactionForm.get('is_saving')?.setValue(false);
       this.transactionForm.get('is_income')?.setValue(false);
+    }
+    if (this.transactionCategories.length === 1) {
+      this.transactionForm
+        .get('category')
+        ?.setValue(this.transactionCategories.at(0)!.id);
     }
   }
 

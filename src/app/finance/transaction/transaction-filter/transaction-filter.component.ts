@@ -43,9 +43,12 @@ export class TransactionFilterComponent implements OnInit {
   subCategoryTitle: string = 'Sub Categories';
 
   TRANSACTION_CATEGORIES: TransactionCategory[] =
-    this.dataService.getTransactionCategories();
+    this.dataService.getAllCategories()
   TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
-    this.dataService.getTransactionSubCategories();
+    this.dataService.getAllSubCategories();
+
+  EXPENSE_CATEGORIES:  TransactionCategory[] =
+    this.dataService.getExpenseCategories();
   INCOME_CATEGORIES: TransactionCategory[] =
     this.dataService.getIncomeCategories();
   SAVINGS_CATEGORIES: TransactionCategory[] =
@@ -76,7 +79,7 @@ export class TransactionFilterComponent implements OnInit {
     } else if (this.filterParams?.target === INCOME) {
       this.transactionCategories = this.INCOME_CATEGORIES;
     } else {
-      this.transactionCategories = this.TRANSACTION_CATEGORIES;
+      this.transactionCategories = this.EXPENSE_CATEGORIES;
     }
     const firstCategory = this.transactionCategories.at(0);
     this.transactionSubCategories = this.getTransactionSubCategories(
@@ -90,12 +93,12 @@ export class TransactionFilterComponent implements OnInit {
     const subCategoryGroup: any = {};
     const accountsGroup: any = {};
 
-    this.transactionCategories.forEach((category: TransactionCategory) => {
+    this.TRANSACTION_CATEGORIES.forEach((category: TransactionCategory) => {
       categoryGroup[`category_${category.id}`] = new FormControl(
         this.filterParams.categories?.includes(category.id),
       );
 
-      this.transactionSubCategories.forEach(
+      this.TRANSACTION_SUB_CATEGORIES.forEach(
         (subcategory: TransactionSubCategory) => {
           subCategoryGroup[`subcategory_${subcategory.id}`] = new FormControl(
             this.filterParams.subcategories?.includes(subcategory.id),
@@ -135,8 +138,8 @@ export class TransactionFilterComponent implements OnInit {
       this.transactionSubCategories = this.getTransactionSubCategories(
         this.selectedCategory,
       );
-    } else if (filterType == 'payment_method') {
-      this.categoryTitle = 'Payment Method';
+    } else if (filterType == 'accounts') {
+      this.categoryTitle = 'Accounts';
       this.subCategoryTitle = '';
     } else if (filterType == 'payee') {
       this.categoryTitle = 'Payee';
