@@ -295,7 +295,9 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
           duration: 3000,
         });
       } else if (result.action === ERROR_ACTION) {
-        this.snackBar.open('Failed to split!', 'Error', {});
+        this.snackBar.open('Failed to split!', 'Error', {
+          duration: 3000,
+        });
       }
     });
   }
@@ -343,7 +345,9 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     const dialog = this.dialog.open(TransactionImportComponent);
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
       if (result.action === SUCCESS_ACTION) {
-        this.snackBar.open('Imported Successfully!.');
+        this.snackBar.open('Imported Successfully!.', 'Success', {
+          duration: 3000,
+        });
         this.dataService.setRefresh(true);
       }
     });

@@ -3,7 +3,9 @@ export interface Account {
   id: number,
   account_name: string,
   account_type: string,
-  description: string | null
+  description: string | null,
+  last_import_date: string | null,
+  provider: string,
 }
 
 export interface TransactionCategory {
