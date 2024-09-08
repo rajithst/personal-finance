@@ -19,8 +19,10 @@ export class DataService {
     this.getEmptyClientSettings(),
   );
   private valueVisible$ = new BehaviorSubject<boolean>(false);
+  private refresher$ = new BehaviorSubject<boolean>(false);
 
   yearSwitch$ = this.year$.asObservable();
+  refresh$ = this.refresher$.asObservable();
   valueVisibility$ = this.valueVisible$.asObservable();
 
   setClientSettings(clientSettings: ClientSettings) {
@@ -33,6 +35,10 @@ export class DataService {
 
   setFilterYear(year: number) {
     this.year$.next(year);
+  }
+
+  setRefresh(value: boolean) {
+    this.refresher$.next(value);
   }
 
   getFilterYear() {

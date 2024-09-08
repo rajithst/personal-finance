@@ -55,7 +55,7 @@ import { TransactionImportComponent } from './transaction-import/transaction-imp
       useValue: {
         width: '850px',
         position: {
-          top: '10%',
+          top: '5%',
         },
       },
     },

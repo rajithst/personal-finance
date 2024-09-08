@@ -26,9 +26,21 @@
       <tr>
         <td>
           <mat-form-field appearance="outline" class="payee-input">
+            <mat-label>Transaction Type</mat-label>
+            <mat-select formControlName="category_type">
+              @for (exc of TRANSACTION_TYPES; track exc) {
+                <mat-option [value]="exc.value">
+                  {{ exc.viewValue }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline" class="payee-input">
             <mat-label>Category</mat-label>
             <mat-select formControlName="category">
-              @for (exc of this.TRANSACTION_CATEGORIES; track exc) {
+              @for (exc of this.transactionCategories; track exc) {
                 <mat-option [value]="exc.id">{{ exc.category }}</mat-option>
               }
             </mat-select>
@@ -38,13 +50,15 @@
           <mat-form-field appearance="outline" class="fill payee-input">
             <mat-label>Sub Category</mat-label>
             <mat-select formControlName="subcategory">
-              @for (exc of this.EXPENSE_SUB_CATEGORIES; track exc) {
+              @for (exc of this.transactionSubCategories; track exc) {
                 <mat-option [value]="exc.id">{{ exc.name }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
         </td>
-        <td>
+      </tr>
+      <tr>
+        <td colspan="3">
           <mat-form-field appearance="outline" class="payee-input">
             <mat-label>Payee Alias (English)</mat-label>
             <input
