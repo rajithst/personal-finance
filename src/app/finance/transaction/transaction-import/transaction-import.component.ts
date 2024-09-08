@@ -98,6 +98,10 @@ export class TransactionImportComponent {
     return this.myAccounts.find((x) => x.id === selectedAccount)
       ?.last_import_date;
   }
+
+  isValidToSubmit() {
+    return this.accountForm.invalid || this.files.length == 0;
+  }
   cancel() {
     this.dialogRef.close({
       refresh: false,

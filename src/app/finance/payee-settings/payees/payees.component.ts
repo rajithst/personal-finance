@@ -53,6 +53,13 @@ export class PayeesComponent implements OnInit, AfterViewInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     });
+    this.dataService.searchBar$.subscribe(value =>{
+      if(value) {
+        this.dataSource.filter = value.trim().toLowerCase();
+      } else {
+        this.dataSource.filter = '';
+      }
+    })
   }
 
   ngAfterViewInit() {
