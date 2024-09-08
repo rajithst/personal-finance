@@ -1,18 +1,9 @@
 <h2 mat-dialog-title>Import Transaction</h2>
 <mat-dialog-content>
-<!--  <input type="file" class="file-input" (change)="onChange($event)" #fileUpload />-->
-<!--  <section [ngSwitch]="status">-->
-<!--    <p *ngSwitchCase="'uploading'">⏳ Uploading...</p>-->
-<!--    <p *ngSwitchCase="'success'">✅ Done!</p>-->
-<!--    <p *ngSwitchCase="'fail'">❌ Error!</p>-->
-<!--    <p *ngSwitchDefault>😶 Waiting to upload...</p>-->
-<!--  </section>-->
-<!--  <button (click)="onUpload()">Upload the file</button>-->
-
   <mat-stepper orientation="vertical" [linear]="true" #stepper>
-    <mat-step [stepControl]="firstFormGroup">
+    <mat-step>
       <div class="step-content">
-        <form [formGroup]="firstFormGroup">
+        <form [formGroup]="accountForm">
           <ng-template matStepLabel>Select Account</ng-template>
           <mat-form-field appearance="outline" class="expense-input">
             <mat-label>Account</mat-label>
@@ -23,13 +14,14 @@
             </mat-select>
           </mat-form-field>
           <div class="step-actions">
-            <button mat-raised-button matStepperNext color="primary">Next</button>
+            <button mat-raised-button matStepperNext color="primary">
+              Next
+            </button>
           </div>
         </form>
       </div>
-
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
+    <mat-step>
       <div class="step-content">
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Attach Files</ng-template>
@@ -39,33 +31,76 @@
           </button>
           <ul>
             @for (exc of this.files; track exc) {
-              <li>{{exc.name}} <span (click)="deleteAttachment(exc.name)"><fa-icon [icon]="faTrash"></fa-icon></span></li>
+              <li>
+                {{ exc.name }}
+                <span (click)="deleteAttachment(exc.name)"
+                  ><fa-icon [icon]="faTrash"></fa-icon
+                ></span>
+              </li>
             }
-
           </ul>
-          <input type="file" class="file-input" (change)="onChange($event)" #fileUpload style="display:none;" multiple/>
+          <input
+            type="file"
+            class="file-input"
+            (change)="onChange($event)"
+            #fileUpload
+            style="display: none"
+            multiple
+          />
           <div class="step-actions">
             <button mat-raised-button matStepperPrevious>Back</button>
-            <button mat-raised-button matStepperNext color="primary">Next</button>
+            <button mat-raised-button matStepperNext color="primary">
+              Next
+            </button>
           </div>
         </form>
       </div>
-
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Advanced Settings</ng-template>
-      <p>Import Settings</p>
-      <div class="step-actions">
-        <button mat-raised-button matStepperPrevious>Back</button>
-        <button mat-raised-button matStepperNext>Next</button>
+      <div class="step-content">
+        <mat-form-field>
+          <mat-label>Date range</mat-label>
+          <mat-date-range-input [formGroup]="rangeForm" [rangePicker]="picker">
+            <input
+              matStartDate
+              formControlName="start"
+              placeholder="Start date"
+            />
+            <input matEndDate formControlName="end" placeholder="End date" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+        <section class="example-section" [formGroup]="otherInfoForm">
+          <p>
+            <mat-checkbox formControlName="drop_duplicates"
+              >Drop Duplicates</mat-checkbox
+            >
+          </p>
+          <p>
+            <mat-checkbox formControlName="from_last_import_date"
+            >Import from last date ({{getLastImportDate() | date: "MMMM d, y" }})</mat-checkbox
+            >
+          </p>
+        </section>
+        <div class="step-actions">
+          <button mat-raised-button matStepperPrevious>Back</button>
+          <button mat-raised-button matStepperNext color="primary">Next</button>
+        </div>
       </div>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Review And Import</ng-template>
-      <p>You are now done.</p>
+      <div class="step-content">
+        <p>Import with settings.</p>
+      </div>
       <div class="step-actions">
         <button mat-raised-button matStepperPrevious>Back</button>
-        <button mat-raised-button (click)="import()">Import</button>
+        <button mat-raised-button color="primary" (click)="import()">Import</button>
       </div>
     </mat-step>
   </mat-stepper>
