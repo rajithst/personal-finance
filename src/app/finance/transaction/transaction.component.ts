@@ -1,11 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  OnDestroy,
-  OnInit,
-  viewChild,
-} from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { LoadingService } from '../../shared/loading/loading.service';
 import {
   faSquareCaretLeft,
@@ -36,15 +29,8 @@ export class FinanceComponent {
 
   title = inject(Title);
 
-  searchInput = viewChild<ElementRef>('searchInput');
-
   today = new Date();
   currentYear = this.today.getFullYear();
-
-  applyFilter() {
-    //const filterValue = this.searchInput()?.nativeElement.value;
-    //this.dataService.setSearchQuery(filterValue.toLowerCase());
-  }
 
   changeFilterYear(direction: string) {
     this.loadingService.loadingOn();
@@ -81,7 +67,10 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
         if (value) {
-          this.extracted({ target: this.target, year: this.dataService.getFilterYear() });
+          this.extracted({
+            target: this.target,
+            year: this.dataService.getFilterYear(),
+          });
         }
       });
   }

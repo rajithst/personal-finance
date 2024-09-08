@@ -20,10 +20,12 @@ export class DataService {
   );
   private valueVisible$ = new BehaviorSubject<boolean>(false);
   private refresher$ = new BehaviorSubject<boolean>(false);
+  private search$ = new BehaviorSubject('');
 
   yearSwitch$ = this.year$.asObservable();
   refresh$ = this.refresher$.asObservable();
   valueVisibility$ = this.valueVisible$.asObservable();
+  searchBar$ = this.search$.asObservable();
 
   setClientSettings(clientSettings: ClientSettings) {
     this.settings$.next(clientSettings);
@@ -105,4 +107,7 @@ export class DataService {
   }
 
 
+  setSearchQuery(query: string) {
+    this.search$.next(query);
+  }
 }

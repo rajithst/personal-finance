@@ -150,6 +150,13 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     this.dataService.valueVisibility$.subscribe((value) => {
       this.showValues = value;
     });
+    this.dataService.searchBar$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(value =>{
+      if(value) {
+       //filter
+      }
+    })
   }
 
   ngOnChanges() {

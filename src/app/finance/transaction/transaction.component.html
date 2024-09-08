@@ -74,15 +74,7 @@
     <mat-grid-tile>
     </mat-grid-tile>
     <mat-grid-tile>
-      <div class="search-bar-wrapper">
-        <input
-          type="text"
-          class="search-bar"
-          placeholder="Search"
-          #searchInput
-          (keyup)="applyFilter()"
-        />
-      </div>
+      <app-searchbar></app-searchbar>
     </mat-grid-tile>
   </mat-grid-list>
   <router-outlet></router-outlet>
