@@ -1,7 +1,76 @@
 <h2 mat-dialog-title>Import Transaction</h2>
-<mat-dialog-content> </mat-dialog-content>
+<mat-dialog-content>
+<!--  <input type="file" class="file-input" (change)="onChange($event)" #fileUpload />-->
+<!--  <section [ngSwitch]="status">-->
+<!--    <p *ngSwitchCase="'uploading'">⏳ Uploading...</p>-->
+<!--    <p *ngSwitchCase="'success'">✅ Done!</p>-->
+<!--    <p *ngSwitchCase="'fail'">❌ Error!</p>-->
+<!--    <p *ngSwitchDefault>😶 Waiting to upload...</p>-->
+<!--  </section>-->
+<!--  <button (click)="onUpload()">Upload the file</button>-->
+
+  <mat-stepper orientation="vertical" [linear]="true" #stepper>
+    <mat-step [stepControl]="firstFormGroup">
+      <div class="step-content">
+        <form [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>Select Account</ng-template>
+          <mat-form-field appearance="outline" class="expense-input">
+            <mat-label>Account</mat-label>
+            <mat-select formControlName="account">
+              @for (exc of this.myAccounts; track exc) {
+                <mat-option [value]="exc.id">{{ exc.account_name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <div class="step-actions">
+            <button mat-raised-button matStepperNext color="primary">Next</button>
+          </div>
+        </form>
+      </div>
+
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <div class="step-content">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Attach Files</ng-template>
+          <button mat-button color="warn" (click)="fileUpload.click()">
+            <mat-icon>file_upload</mat-icon>
+            Upload
+          </button>
+          <ul>
+            @for (exc of this.files; track exc) {
+              <li>{{exc.name}} <span (click)="deleteAttachment(exc.name)"><fa-icon [icon]="faTrash"></fa-icon></span></li>
+            }
+
+          </ul>
+          <input type="file" class="file-input" (change)="onChange($event)" #fileUpload style="display:none;" multiple/>
+          <div class="step-actions">
+            <button mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext color="primary">Next</button>
+          </div>
+        </form>
+      </div>
+
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Advanced Settings</ng-template>
+      <p>Import Settings</p>
+      <div class="step-actions">
+        <button mat-raised-button matStepperPrevious>Back</button>
+        <button mat-raised-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Review And Import</ng-template>
+      <p>You are now done.</p>
+      <div class="step-actions">
+        <button mat-raised-button matStepperPrevious>Back</button>
+        <button mat-raised-button (click)="import()">Import</button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="submit()">Split</button>
 </mat-dialog-actions>

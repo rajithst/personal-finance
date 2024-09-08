@@ -10,6 +10,7 @@ export interface DestinationMap {
   destination_original: string;
   destination_eng: string;
   category: number;
+  category_type: number;
   category_text: string;
   subcategory: number;
   subcategory_text: string;

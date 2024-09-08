@@ -1,0 +1,11 @@
+.step-content {
+  padding: 10px;
+}
+
+.import-section {
+  display: flex;
+}
+
+.step-actions > button {
+  margin-right: 5px;
+}

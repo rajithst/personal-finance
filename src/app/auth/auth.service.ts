@@ -3,6 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { ApiService } from '../core/api.service';
 import { Router } from '@angular/router';
 import { User } from './model';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,8 @@ export class AuthService implements OnInit {
 
   apiService = inject(ApiService);
   router = inject(Router);
+  snackBar = inject(MatSnackBar);
+
   private USER_STORAGE_KEY: string = 'iva2zK2d7p';
 
   constructor() {
@@ -68,5 +71,15 @@ export class AuthService implements OnInit {
 
   getMyProfile() {
     return this.apiService.getMyProfile();
+  }
+
+  unAuthorizedLogout() {
+    const snackbar = this.snackBar.open('Session has expired.Logging out!', 'Error', {
+      duration: 3000
+    });
+
+    snackbar.afterDismissed().subscribe(() => {
+      this.logout()
+    })
   }
 }

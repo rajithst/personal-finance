@@ -188,4 +188,11 @@ export class ApiService {
   getMyProfile() {
     return this.http.get<UserProfile>(`${this.SRC_URL}/oauth/profile/me`);
   }
+
+  uploadTransactions(formData: FormData) {
+    return this.http.post(`${this.SRC_URL}/finance/import/transactions`, formData,{
+      reportProgress: true,
+      observe: 'events',
+    });
+  }
 }

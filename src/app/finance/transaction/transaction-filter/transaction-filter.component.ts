@@ -73,7 +73,7 @@ export class TransactionFilterComponent implements OnInit {
 
   modifyFilterOptions() {
     if (this.filterParams?.target === PAYMENT) {
-      this.transactionCategories = this.PAYMENT_CATEGORIES;
+      this.transactionCategories = [...this.PAYMENT_CATEGORIES, ...this.EXPENSE_CATEGORIES];
     } else if (this.filterParams?.target === SAVING) {
       this.transactionCategories = this.SAVINGS_CATEGORIES;
     } else if (this.filterParams?.target === INCOME) {

@@ -76,6 +76,14 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       .subscribe((value) => {
         this.extracted({ target: this.target, year: value });
       });
+
+    this.dataService.refresh$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((value) => {
+        if (value) {
+          this.extracted({ target: this.target, year: this.dataService.getFilterYear() });
+        }
+      });
   }
 
   extracted(filters: TransactionFilter) {

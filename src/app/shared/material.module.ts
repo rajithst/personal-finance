@@ -32,6 +32,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatGridListModule } from '@angular/material/grid-list';
 import {MatTreeModule} from '@angular/material/tree';
+import {MatStepperModule} from "@angular/material/stepper";
 
 @NgModule({
   imports: [
@@ -67,7 +68,8 @@ import {MatTreeModule} from '@angular/material/tree';
     MatChipsModule,
     MatPaginatorModule,
     MatGridListModule,
-    MatTreeModule
+    MatTreeModule,
+    MatStepperModule
   ],
   exports: [
     MatButtonModule,
@@ -101,7 +103,8 @@ import {MatTreeModule} from '@angular/material/tree';
     MatChipsModule,
     MatPaginatorModule,
     MatGridListModule,
-    MatTreeModule
+    MatTreeModule,
+    MatStepperModule
   ],
   declarations: [],
 })

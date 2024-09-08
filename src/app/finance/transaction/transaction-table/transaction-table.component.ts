@@ -57,7 +57,7 @@ import {
   TransactionSubCategory,
 } from '../../model/common';
 import { TransactionImportComponent } from '../transaction-import/transaction-import.component';
-import {INCOME} from "../../../data/shared.data";
+import { INCOME } from '../../../data/shared.data';
 
 interface TransactionActionResult {
   refresh: boolean;
@@ -341,6 +341,12 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   importTransaction() {
     const dialog = this.dialog.open(TransactionImportComponent);
+    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
+      if (result.action === SUCCESS_ACTION) {
+        this.snackBar.open('Imported Successfully!.');
+        this.dataService.setRefresh(true);
+      }
+    });
   }
 
   showAnalytics(tableIndex: number) {}
