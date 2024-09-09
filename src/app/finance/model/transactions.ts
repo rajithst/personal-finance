@@ -50,6 +50,7 @@ export interface TransactionMergeRequest extends Transaction {
 }
 
 export interface TransactionFilter {
+  query?: string;
   year: number;
   target: string;
   categories?: number[];

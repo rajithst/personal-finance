@@ -152,11 +152,10 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.dataService.searchBar$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(value =>{
-      if(value) {
-       //filter
-      }
-    })
+      .subscribe((value) => {
+        this.filterParams.query = value ? value.trim() : '';
+        this.applyFiltersToTables();
+      });
   }
 
   ngOnChanges() {
@@ -476,6 +475,20 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         filterObject.accounts?.length !== 0
           ? filterObject.accounts?.includes(data.account)
           : true;
+      const filterQuery = filterObject.query ? filterObject.query : '';
+      const q1 = data.destination
+        .toLowerCase()
+        .includes(filterQuery.toLowerCase());
+      const q2 = data.alias.toLowerCase().includes(filterQuery.toLowerCase());
+      const q3 = data.category_text
+        .toLowerCase()
+        .includes(filterQuery.toLowerCase());
+      const q4 = data.subcategory_text
+        .toLowerCase()
+        .includes(filterQuery.toLowerCase());
+      const q5 = data.account_name
+        .toLowerCase()
+        .includes(filterQuery.toLowerCase());
 
       return <boolean>(
         (data.year === filterObject.year &&
@@ -483,13 +496,15 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
             (c2 && subCategoryIncludes) ||
             (c3 && categoryIncludes) ||
             (c4 && (categoryIncludes || subCategoryIncludes))) &&
-          paymentMethodIncludes)
+          paymentMethodIncludes &&
+          (q1 || q2 || q3 || q4 || q5))
       );
     };
   }
 
   private getEmptyFilterParams(): TransactionFilter {
     return {
+      query: '',
       year: this.dataService.getFilterYear(),
       target: this.lastSegment() || '',
       categories: [],
