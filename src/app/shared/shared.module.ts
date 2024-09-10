@@ -8,6 +8,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { RouterModule } from '@angular/router';
 import { SearchbarComponent } from './searchbar/searchbar.component';
+
 @NgModule({
   declarations: [LoadingComponent, ChartboxComponent, BreadcrumbComponent, SearchbarComponent],
   imports: [
