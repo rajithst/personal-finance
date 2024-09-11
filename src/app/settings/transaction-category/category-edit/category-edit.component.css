@@ -1,0 +1,12 @@
+.expense-field-table {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.subcategory-edit-input {
+  width: 200px;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #aea9a9;
+}

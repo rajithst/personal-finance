@@ -43,16 +43,6 @@ table.transaction-table tbody td:last-child {
   font-style: italic;
 }
 
-/*.transaction-actions {*/
-/*  display: flex;*/
-/*  justify-content: space-around;*/
-/*}*/
-
-/*.edit-action, .merge-action {*/
-/*  cursor: pointer;*/
-/*  width: 15px;*/
-/*}*/
-
 .transaction-actions {
   cursor: pointer;
 }
@@ -60,25 +50,6 @@ table.transaction-table tbody td:last-child {
 .transaction-action-item {
   margin-left: 10px;
   font-size: 14px;
-}
-
-.merge-panel {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.filter-item {
-  padding: 1px;
-  margin: 0 5px;
-  border: 1px solid #999898;
-  border-radius: 10px;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
 }
 
 .highlight-merge-panel {

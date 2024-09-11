@@ -32,6 +32,7 @@ import {
 import { DashboardResponse } from '../finance/model/dashboard';
 import { ClientSettings } from '../finance/model/common';
 import { User, UserProfile } from '../auth/model';
+import {CategorySettingsRequest} from "../finance/model/category-settings";
 
 new HttpHeaders({
   'Content-Type': 'application/json',
@@ -194,5 +195,9 @@ export class ApiService {
       reportProgress: true,
       observe: 'events',
     });
+  }
+
+  updateCategory(payload: CategorySettingsRequest) {
+    return this.http.put(`${this.SRC_URL}/finance/category-settings`, payload)
   }
 }

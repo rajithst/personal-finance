@@ -1,0 +1,4 @@
+.transaction-item-panel .mat-expansion-panel-header-description {
+  justify-content: end;
+  align-items: center;
+}

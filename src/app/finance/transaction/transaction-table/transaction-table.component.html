@@ -1,5 +1,5 @@
 <div
-  class="merge-panel"
+  class="d-flex-align-c"
   *ngIf="selection.selected.length > 1"
   [ngClass]="{ 'highlight-merge-panel': selection.selected.length > 1 }"
 >
@@ -7,7 +7,7 @@
     <span>Selected {{ selection.selected.length }} Transactions!</span>
   </div>
   <div
-    class="filter-item"
+    class="coincraft-action-button"
     (click)="mergeTransactions()"
     matRipple
     matTooltip="Merge Transactions"
@@ -20,7 +20,7 @@
     ></fa-icon>
   </div>
   <div
-    class="filter-item"
+    class="coincraft-action-button"
     (click)="bulkEditTransactions()"
     matRipple
     matTooltip="Bulk Edit"
@@ -33,7 +33,7 @@
     ></fa-icon>
   </div>
   <div
-    class="filter-item"
+    class="coincraft-action-button"
     (click)="bulkDeleteTransactions()"
     matRipple
     matTooltip="Bulk Delete"
@@ -65,7 +65,7 @@
   <div class="edit-panel">
     <div
       (click)="showValueAction()"
-      class="filter-item"
+      class="coincraft-action-button"
       matRipple
       [matTooltip]="showValues ? 'Hide values' : 'Show Values'"
       matTooltipPosition="below"
@@ -78,7 +78,7 @@
     </div>
     <div
       (click)="panelAction()"
-      class="filter-item"
+      class="coincraft-action-button"
       matRipple
       [matTooltip]="allExpanded ? 'Minimize All' : 'Expand All'"
       matTooltipPosition="below"
@@ -89,7 +89,7 @@
         [style]="{ color: '#4a4949' }"
       ></fa-icon>
     </div>
-    <div #filterButton (click)="openFilters()" class="filter-item" matRipple>
+    <div #filterButton (click)="openFilters()" class="coincraft-action-button" matRipple>
       <fa-icon
         [icon]="faFilter"
         size="1x"
@@ -97,7 +97,7 @@
       ></fa-icon>
     </div>
     <div
-      class="filter-item"
+      class="coincraft-action-button"
       matRipple
       matTooltip="Upload Transactions"
       matTooltipPosition="below"
@@ -110,7 +110,7 @@
       ></fa-icon>
     </div>
     <div
-      class="filter-item"
+      class="coincraft-action-button"
       (click)="addTransaction()"
       matRipple
       matTooltip="Add Transactions"

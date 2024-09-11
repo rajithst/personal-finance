@@ -8,6 +8,10 @@ import { TransactionCategoryComponent } from './transaction-category/transaction
 import { CreditAccountComponent } from './credit-account/credit-account.component';
 import {MaterialModule} from "../shared/material.module";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import { CategoryEditComponent } from './transaction-category/category-edit/category-edit.component';
+import {ReactiveFormsModule} from "@angular/forms";
+import {MAT_DIALOG_DEFAULT_OPTIONS} from "@angular/material/dialog";
+import { SubCategoryEditComponent } from './transaction-category/sub-category-edit/sub-category-edit.component';
 
 
 @NgModule({
@@ -16,12 +20,26 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
     SettingsComponent,
     TransactionCategoryComponent,
     CreditAccountComponent,
+    CategoryEditComponent,
+    SubCategoryEditComponent,
   ],
   imports: [
     CommonModule,
     MaterialModule,
     SettingsRoutingModule,
     FaIconComponent,
+    ReactiveFormsModule,
+  ],
+  providers: [
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
+        width: '850px',
+        position: {
+          top: '5%',
+        },
+      },
+    },
   ],
 })
 export class SettingsModule {}

@@ -1,5 +1,5 @@
 export interface TransactionsResponse {
-  payload: MonthlyTransaction[]
+  payload: MonthlyTransaction[];
 }
 
 export interface MonthlyTransaction {
@@ -33,7 +33,7 @@ export interface Transaction {
 export interface TransactionExpand extends Transaction {
   category_text: string;
   subcategory_text: string;
-  account_name: string,
+  account_name: string;
   account_type: string;
   year: number;
   month: number;
@@ -65,22 +65,22 @@ export interface TransactionSplit {
 }
 
 export interface BulkDeleteRequest {
-  task: string,
-  delete_ids: number[] | null
+  task: string;
+  delete_ids: number[] | null;
 }
 
 export interface BulkDeleteResponse {
-  status: number,
-  data: TransactionExpand[] | null
+  status: number;
+  data: TransactionExpand[] | null;
 }
 
 export interface TransactionSplitRequest {
-  task: string,
+  task: string;
   main: TransactionExpand;
-  splits: TransactionSplit[]
+  splits: TransactionSplit[];
 }
 
 export interface TransactionSplitResponse {
-  status: number,
-  data: TransactionExpand[] | null
+  status: number;
+  data: TransactionExpand[] | null;
 }
