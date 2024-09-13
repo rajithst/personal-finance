@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class SettingsComponent {
 
+  menuItems = [
+    {'name': 'Category settings', link: 'category-settings'},
+    {'name': 'Accounts', link: 'accounts'},
+    {'name': 'Logs', link: 'user-log'}];
+
 }

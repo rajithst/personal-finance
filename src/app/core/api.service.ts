@@ -32,6 +32,7 @@ import {
 import { DashboardResponse } from '../finance/model/dashboard';
 import { ClientSettings } from '../finance/model/common';
 import { User, UserProfile } from '../auth/model';
+import {CategorySettingsRequest, CategorySettingsResponse} from '../finance/model/category-settings';
 
 new HttpHeaders({
   'Content-Type': 'application/json',
@@ -47,7 +48,7 @@ export class ApiService {
 
   getDashboard(): Observable<DashboardResponse> {
     return this.http.get<DashboardResponse>(
-      `${this.SRC_URL}/finance/dashboard`,
+      `${this.SRC_URL}/finance/dashboard/`,
     );
   }
 
@@ -61,23 +62,23 @@ export class ApiService {
       ? payload.subcategories.join(',')
       : '';
     return this.http.get<TransactionsResponse>(
-      `${this.SRC_URL}/finance/transaction?year=${year}&target=${target}&cat=${categories}&subcat=${subcategories}`,
+      `${this.SRC_URL}/finance/transaction/?year=${year}&target=${target}&cat=${categories}&subcat=${subcategories}`,
     );
   }
 
   getPayees(): Observable<PayeeResponse> {
-    return this.http.get<PayeeResponse>(`${this.SRC_URL}/finance/payee`);
+    return this.http.get<PayeeResponse>(`${this.SRC_URL}/finance/payee/`);
   }
 
   getPayeeDetail(payeeId: number | string): Observable<PayeeDetail> {
     return this.http.get<PayeeDetail>(
-      `${this.SRC_URL}/finance/payee/id/${payeeId}`,
+      `${this.SRC_URL}/finance/payee-detail/${payeeId}/`,
     );
   }
 
   getPayeeDetailByName(payeeName: string): Observable<PayeeDetail> {
     return this.http.get<PayeeDetail>(
-      `${this.SRC_URL}/finance/payee/name/${payeeName}`,
+      `${this.SRC_URL}/finance/payee-detail/${payeeName}/`,
     );
   }
 
@@ -108,14 +109,14 @@ export class ApiService {
     payload: TransactionSplitRequest,
   ): Observable<TransactionSplitResponse> {
     return this.http.put<TransactionSplitResponse>(
-      `${this.SRC_URL}/finance/bulk/transaction`,
+      `${this.SRC_URL}/finance/bulk/transaction/`,
       payload,
     );
   }
   updatePayeeRules(payload: DestinationMapRequest): Observable<DestinationMap> {
     if (payload.id) {
       return this.http.put<DestinationMap>(
-        `${this.SRC_URL}/finance/payee/${payload.id}/`,
+        `${this.SRC_URL}/finance/payee/`,
         payload,
       );
     } else {
@@ -128,7 +129,7 @@ export class ApiService {
 
   bulkDeleteTransactions(payload: BulkDeleteRequest) {
     return this.http.put<BulkDeleteResponse>(
-      `${this.SRC_URL}/finance/bulk/transaction`,
+      `${this.SRC_URL}/finance/bulk/transaction/`,
       payload,
     );
   }
@@ -190,9 +191,17 @@ export class ApiService {
   }
 
   uploadTransactions(formData: FormData) {
-    return this.http.post(`${this.SRC_URL}/finance/import/transactions`, formData,{
-      reportProgress: true,
-      observe: 'events',
-    });
+    return this.http.post(
+      `${this.SRC_URL}/finance/import/transactions`,
+      formData,
+      {
+        reportProgress: true,
+        observe: 'events',
+      },
+    );
+  }
+
+  updateCategory(payload: CategorySettingsRequest) {
+    return this.http.put<CategorySettingsResponse>(`${this.SRC_URL}/finance/category-settings`, payload);
   }
 }

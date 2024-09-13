@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserLogComponent } from './user-log/user-log.component';
 import { SettingsComponent } from './settings.component';
 import {TransactionCategoryComponent} from "./transaction-category/transaction-category.component";
+import {CreditAccountComponent} from "./credit-account/credit-account.component";
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
       {
         path: 'category-settings',
         component: TransactionCategoryComponent,
+      },
+      {
+        path: 'accounts',
+        component: CreditAccountComponent,
       },
       {
         path: 'user-log',

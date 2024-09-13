@@ -1,0 +1,101 @@
+<h2 mat-dialog-title>
+  {{ data.settings ? data.settings.category.category : "Add Category" }}
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="categoryForm">
+    <table class="expense-field-table">
+      <tr>
+        <td>
+          <mat-form-field class="fill expense-input" appearance="outline">
+            <mat-label>Category Name</mat-label>
+            <input
+              matInput
+              placeholder="Category Name"
+              formControlName="category"
+            />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline" class="expense-input">
+            <mat-label>Description</mat-label>
+            <input
+              matInput
+              placeholder="Description"
+              formControlName="description"
+            />
+          </mat-form-field>
+        </td>
+        <td>
+          <div
+            class="coincraft-action-button"
+            (click)="deleteCategory()"
+            matRipple
+            matTooltip="Delete Category"
+            matTooltipPosition="below"
+          >
+            <fa-icon
+              [icon]="faTrash"
+              size="lg"
+              [style]="{ color: '#af5252' }"
+            ></fa-icon>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </form>
+  <mat-divider></mat-divider>
+  <div class="d-flex-align-sb">
+    <div class="sub-category-title">
+      <h3>Sub-Category settings</h3>
+    </div>
+    <div>
+      <button mat-raised-button color="primary" (click)="onAddSubCategory()">Add Sub Category</button>
+    </div>
+  </div>
+  <form [formGroup]="subCategoryForm">
+  <table>
+      <ng-container formArrayName="subcategories">
+        @for (data of subcategories; track data; let i = $index) {
+          <tr [formGroupName]="i">
+            <td colspan="2">
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input
+                  type="text"
+                  placeholder="Sub category Name"
+                  matInput
+                  formControlName="name"
+                />
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field appearance="outline">
+                <mat-label>Description</mat-label>
+                <input
+                  type="text"
+                  placeholder="Description"
+                  matInput
+                  formControlName="description"
+                />
+              </mat-form-field>
+            </td>
+            <td>
+              <div class="coincraft-action-button" (click)="deleteSubCategory(i)">
+                <fa-icon
+                  [icon]="faTrash"
+                  size="xl"
+                  [style]="{ color: '#af5252' }"
+                ></fa-icon>
+              </div>
+            </td>
+          </tr>
+        }
+      </ng-container>
+  </table>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()">Save</button>
+</mat-dialog-actions>

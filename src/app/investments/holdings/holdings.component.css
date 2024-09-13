@@ -14,19 +14,6 @@
   padding: 10px;
 }
 
-.filter-item {
-  padding: 1px;
-  margin: 0 5px;
-  border: 1px solid #999898;
-  border-radius: 10px;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
 .filters-right {
   width: 100%;
   display: flex;

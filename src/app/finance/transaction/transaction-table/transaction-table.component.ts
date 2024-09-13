@@ -479,7 +479,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       const q1 = data.destination
         .toLowerCase()
         .includes(filterQuery.toLowerCase());
-      const q2 = data.alias.toLowerCase().includes(filterQuery.toLowerCase());
+      const q2 = data.alias?.toLowerCase().includes(filterQuery.toLowerCase());
       const q3 = data.category_text
         .toLowerCase()
         .includes(filterQuery.toLowerCase());
