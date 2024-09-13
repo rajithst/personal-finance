@@ -6,13 +6,14 @@ import { UserLogComponent } from './user-log/user-log.component';
 import { SettingsComponent } from './settings.component';
 import { TransactionCategoryComponent } from './transaction-category/transaction-category.component';
 import { CreditAccountComponent } from './credit-account/credit-account.component';
-import {MaterialModule} from "../shared/material.module";
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import { CategoryEditComponent } from './transaction-category/category-edit/category-edit.component';
-import {ReactiveFormsModule} from "@angular/forms";
-import {MAT_DIALOG_DEFAULT_OPTIONS} from "@angular/material/dialog";
-import { SubCategoryEditComponent } from './transaction-category/sub-category-edit/sub-category-edit.component';
-
+import { MaterialModule } from '../shared/material.module';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import {
+  ActionConfirmComponent,
+  CategoryEditComponent
+} from './transaction-category/category-edit/category-edit.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import { SubCategoryEditComponent } from './transaction-category/sub-category-ed
     TransactionCategoryComponent,
     CreditAccountComponent,
     CategoryEditComponent,
-    SubCategoryEditComponent,
+    ActionConfirmComponent
   ],
   imports: [
     CommonModule,

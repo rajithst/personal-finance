@@ -44,9 +44,26 @@ export class TransactionCategoryComponent implements OnInit {
     });
     dialog.afterClosed().subscribe((result: any) => {
       if (result.action === SUCCESS_ACTION) {
-        this.snackBar.open('Updated!.', 'Success', {
-          duration: 3000,
-        });
+        const targetId = this.categorySettings.findIndex(
+          (x) => x.category.id === settings.category.id,
+        );
+        if (targetId !== -1) {
+          if (!result.data.category && result.data.subcategories.length === 0) {
+            this.categorySettings.splice(targetId, 1);
+          } else {
+            this.categorySettings[targetId] = {
+              category: result.data.category,
+              subCategories: result.data.subcategories,
+            };
+          }
+          const clientSettings = this.dataService.getClientSettings();
+          clientSettings.transaction_categories = this.categorySettings.map(x => x.category);
+          clientSettings.transaction_sub_categories = this.categorySettings.map(x => x.subCategories).flat()
+          this.dataService.setClientSettings(clientSettings);
+          this.snackBar.open('Updated!.', 'Success', {
+            duration: 3000,
+          });
+        }
       }
     });
   }

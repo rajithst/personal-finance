@@ -17,7 +17,7 @@ export interface TransactionCategory {
 
 export interface CategorySettings {
   category: TransactionCategory;
-  subCategories: TransactionSubCategory[] | null;
+  subCategories: TransactionSubCategory[];
 }
 
 export interface TransactionSubCategory {

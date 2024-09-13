@@ -67,6 +67,7 @@ export class DataService {
     return this.getClientSettings().transaction_categories;
   }
 
+
   getAllSubCategories() {
     return this.getClientSettings().transaction_sub_categories;
   }
