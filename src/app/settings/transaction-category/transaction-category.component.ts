@@ -73,6 +73,7 @@ export class TransactionCategoryComponent implements OnInit {
           category: result.data.category,
           subCategories: result.data.subcategories,
         });
+        this.refreshClientSettings();
         this.snackBar.open('Added!.', 'Success', {
           duration: 3000,
         });
