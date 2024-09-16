@@ -1,4 +1,4 @@
-import { CreditAccount } from './common';
+import { CreditAccount } from './account';
 
 export interface MyProfile {
   id: number;

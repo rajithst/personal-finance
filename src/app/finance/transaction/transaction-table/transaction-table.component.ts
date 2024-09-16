@@ -52,13 +52,13 @@ import { faChartColumn } from '@fortawesome/free-solid-svg-icons/faChartColumn';
 import { TransactionSplitComponent } from '../transaction-split/transaction-split.component';
 import { TransactionBulkEditComponent } from '../transaction-bulk-edit/transaction-bulk-edit.component';
 import {
-  CreditAccount,
   TransactionCategory,
   TransactionSubCategory,
 } from '../../../model/common';
 import { TransactionImportComponent } from '../transaction-import/transaction-import.component';
 import { INCOME } from '../../../data/shared.data';
 import { ApiService } from '../../../core/api.service';
+import {CreditAccount} from "../../../model/account";
 
 interface TransactionActionResult {
   refresh: boolean;

@@ -2,201 +2,27 @@ import { Component } from '@angular/core';
 import {
   faChartLine,
   faChartSimple,
-  faGear,
   faMoneyBillTransfer,
   faPieChart,
   faShop,
 } from '@fortawesome/free-solid-svg-icons';
+import {MenuItem} from "../model/common";
 
 @Component({
   selector: 'app-side-nav',
   template: ` <mat-nav-list>
-    <a
-      mat-list-item
-      [routerLinkActive]="'active-link'"
-      [routerLink]="['/', 'dashboard']"
-    >
-      <div class="link-items">
-        <div class="link-icon">
-          <fa-icon
-            [icon]="faChartSimple"
-            size="lg"
-            [style]="{ color: '#3699ff' }"
-          ></fa-icon>
-        </div>
-        <div class="link-text"><span>Dashboard</span></div>
-      </div>
-    </a>
-    <a
-      mat-list-item
-      [routerLinkActive]="'active-link'"
-      [routerLink]="['/', 'finance']"
-    >
-      <div class="link-items">
-        <div class="link-icon">
-          <fa-icon
-            [icon]="faMoneyBillTransfer"
-            size="lg"
-            [style]="{ color: '#3699ff' }"
-          ></fa-icon>
-        </div>
-        <div class="link-text"><span>Transactions</span></div>
-      </div>
-    </a>
-    <a
-      mat-list-item
-      [routerLinkActive]="'active-link'"
-      [routerLink]="['/', 'payee-settings']"
-    >
-      <div class="link-items">
-        <div class="link-icon">
-          <fa-icon
-            [icon]="faShop"
-            size="lg"
-            [style]="{ color: '#3699ff' }"
-          ></fa-icon>
-        </div>
-        <div class="link-text"><span>Payee Settings</span></div>
-      </div>
-    </a>
-    <a
-      mat-list-item
-      [routerLinkActive]="'active-link'"
-      [routerLink]="['/', 'reports']"
-    >
-      <div class="link-items">
-        <div class="link-icon">
-          <fa-icon
-            [icon]="faPieChart"
-            size="lg"
-            [style]="{ color: '#3699ff' }"
-          ></fa-icon>
-        </div>
-        <div class="link-text"><span>Reports</span></div>
-      </div>
-    </a>
-    <a
-      mat-list-item
-      [routerLinkActive]="'active-link'"
-      [routerLink]="['/', 'investments']"
-    >
-      <div class="link-items">
-        <div class="link-icon">
-          <fa-icon
-            [icon]="faChartLine"
-            size="lg"
-            [style]="{ color: '#3699ff' }"
-          ></fa-icon>
-        </div>
-        <div class="link-text"><span>Investments</span></div>
-      </div>
-    </a>
+    <app-nav-item [menuItems]="menuItems"></app-nav-item>
   </mat-nav-list>`,
   styleUrl: './side-nav.component.css',
 })
 export class SideNavComponent {
-  protected readonly faChartSimple = faChartSimple;
-  protected readonly faMoneyBillTransfer = faMoneyBillTransfer;
-  protected readonly faShop = faShop;
-  protected readonly faChartLine = faChartLine;
-  protected readonly faPieChart = faPieChart;
-  protected readonly faGear = faGear;
+
+  menuItems: MenuItem[] = [
+    {label: 'Dashboard', link:'/dashboard', icon: faChartSimple},
+    {label: 'Transactions', link:'/finance', icon: faMoneyBillTransfer},
+    {label: 'Payee Settings', link:'/payee-settings', icon: faShop},
+    {label: 'Reports', link:'/reports', icon: faPieChart},
+    {label: 'Investments', link:'/investments', icon: faChartLine}
+  ]
 }
 
-@Component({
-  selector: 'app-side-nav-closed',
-  template: ` <mat-nav-list>
-      <a
-        mat-list-item
-        [routerLinkActive]="'active-link'"
-        [routerLink]="['/', 'dashboard']"
-        matTooltip="Dashboard"
-        matTooltipPosition="right"
-      >
-        <div class="link-items">
-          <div class="link-icon">
-            <fa-icon
-              [icon]="faChartSimple"
-              size="lg"
-              [style]="{ color: '#3699ff' }"
-            ></fa-icon>
-          </div>
-        </div>
-      </a>
-      <a
-        mat-list-item
-        [routerLinkActive]="'active-link'"
-        [routerLink]="['/', 'finance']"
-        matTooltip="Transactions"
-        matTooltipPosition="right"
-      >
-        <div class="link-items">
-          <div class="link-icon">
-            <fa-icon
-              [icon]="faMoneyBillTransfer"
-              size="lg"
-              [style]="{ color: '#3699ff' }"
-            ></fa-icon>
-          </div>
-        </div>
-      </a>
-      <a
-        mat-list-item
-        [routerLinkActive]="'active-link'"
-        [routerLink]="['/', 'payee-settings']"
-        matTooltip="Payee Settings"
-        matTooltipPosition="right"
-      >
-        <div class="link-items">
-          <div class="link-icon">
-            <fa-icon
-              [icon]="faShop"
-              size="lg"
-              [style]="{ color: '#3699ff' }"
-            ></fa-icon>
-          </div>
-        </div>
-      </a>
-      <a
-        mat-list-item
-        [routerLinkActive]="'active-link'"
-        [routerLink]="['/', 'reports']"
-        matTooltip="Reports"
-        matTooltipPosition="right"
-      >
-        <div class="link-items">
-          <div class="link-icon">
-            <fa-icon
-              [icon]="faPieChart"
-              size="lg"
-              [style]="{ color: '#3699ff' }"
-            ></fa-icon>
-          </div>
-        </div>
-      </a>
-      <a
-        mat-list-item
-        [routerLinkActive]="'active-link'"
-        [routerLink]="['/', 'investments']"
-        matTooltip="Investments"
-        matTooltipPosition="right"
-      >
-        <div class="link-items">
-          <div class="link-icon">
-            <fa-icon
-              [icon]="faChartLine"
-              size="lg"
-              [style]="{ color: '#3699ff' }"
-            ></fa-icon>
-          </div>
-        </div> </a></mat-nav-list
-    >\`,`,
-  styleUrl: './side-nav.component.css',
-})
-export class SideNavClosedComponent {
-  protected readonly faChartSimple = faChartSimple;
-  protected readonly faMoneyBillTransfer = faMoneyBillTransfer;
-  protected readonly faShop = faShop;
-  protected readonly faChartLine = faChartLine;
-  protected readonly faPieChart = faPieChart;
-}

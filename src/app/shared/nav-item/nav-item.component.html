@@ -1,0 +1,18 @@
+@for (item of menuItems; track item) {
+<a
+  mat-list-item
+  [routerLinkActive]="'active-link'"
+  routerLink="{{item.link}}"
+>
+  <div class="link-items">
+    <div class="link-icon">
+      <fa-icon
+        [icon]="item.icon"
+        size="lg"
+        [style]="{ color: '#3699ff' }"
+      ></fa-icon>
+    </div>
+    <div class="link-text"><span>{{item.label}}</span></div>
+  </div>
+</a>
+}

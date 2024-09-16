@@ -13,7 +13,6 @@ import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.co
 import { SharedModule } from './shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  SideNavClosedComponent,
   SideNavComponent,
 } from './side-nav/side-nav.component';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -28,7 +27,6 @@ import { authInterceptor } from './auth/auth.interceptor';
     AppComponent,
     PageNotFoundComponent,
     SideNavComponent,
-    SideNavClosedComponent,
   ],
   bootstrap: [AppComponent],
   imports: [

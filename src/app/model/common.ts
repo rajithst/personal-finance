@@ -1,11 +1,5 @@
-export interface CreditAccount {
-  id: number;
-  account_name: string;
-  account_type: string;
-  description: string | null;
-  last_import_date: string | null;
-  provider: string;
-}
+import {CreditAccount} from "./account";
+
 
 export interface TransactionCategory {
   id: number;
@@ -32,4 +26,5 @@ export interface ClientSettings {
 export interface MenuItem {
   link: string;
   label: string;
+  icon?: any;
 }

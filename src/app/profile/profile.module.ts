@@ -7,6 +7,7 @@ import { MaterialModule } from '../shared/material.module';
 import { ProfileComponent } from './profile.component';
 import { SecurityComponent } from './security/security.component';
 import { BillingComponent } from './billing/billing.component';
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -15,6 +16,6 @@ import { BillingComponent } from './billing/billing.component';
     SecurityComponent,
     BillingComponent,
   ],
-  imports: [CommonModule, ProfileRoutingModule, MaterialModule],
+  imports: [CommonModule, ProfileRoutingModule, MaterialModule, SharedModule],
 })
 export class ProfileModule {}

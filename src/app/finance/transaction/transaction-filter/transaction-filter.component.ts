@@ -12,10 +12,10 @@ import { TransactionFilter } from '../../../model/transactions';
 import { LoadingService } from '../../../shared/loading/loading.service';
 import { DataService } from '../../../service/data.service';
 import {
-  CreditAccount,
   TransactionCategory,
   TransactionSubCategory,
 } from '../../../model/common';
+import { CreditAccount } from '../../../model/account';
 
 interface TransactionFilterData {
   filterParams: TransactionFilter;

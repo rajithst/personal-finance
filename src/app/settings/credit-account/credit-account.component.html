@@ -1,9 +1,16 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Account settings</mat-card-title>
+    <div class="d-flex-align-sb card-title">
+      <div class="title">
+        <mat-card-title>Account settings</mat-card-title>
+      </div>
+      <div class="actions">
+        <button mat-raised-button color="primary" (click)="addAccount()">Add New Account</button>
+      </div>
+    </div>
   </mat-card-header>
   <mat-card-content>
-    <table [dataSource]="accounts" mat-table>
+    <table [dataSource]="dataSource" mat-table>
       <ng-container matColumnDef="account_name">
         <th *matHeaderCellDef mat-header-cell> Account Name</th>
         <td *matCellDef="let element" mat-cell> {{ element.account_name }}</td>
@@ -15,6 +22,19 @@
       <ng-container matColumnDef="description">
         <th *matHeaderCellDef mat-header-cell> Description</th>
         <td *matCellDef="let element" mat-cell> {{ element.description }}</td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let element" mat-cell>
+          <div class="panel-actions">
+            <fa-icon
+              (click)="editAccount(element)"
+              [icon]="faPencil"
+              size="sm"
+              [style]="{ color: '#3699ff' }"
+            ></fa-icon>
+          </div>
+        </td>
       </ng-container>
       <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
       <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>

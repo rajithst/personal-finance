@@ -22,10 +22,10 @@ import { ApiService } from '../../../core/api.service';
 import { DropDownType } from '../../../data/shared.data';
 import { DataService } from '../../../service/data.service';
 import {
-  CreditAccount,
   TransactionCategory,
   TransactionSubCategory,
 } from '../../../model/common';
+import { CreditAccount } from '../../../model/account';
 
 export interface TransactionUpdateDialogData {
   formData: TransactionExpand;
