@@ -5,7 +5,7 @@
   <form [formGroup]="categoryForm">
     <table class="expense-field-table">
       <tr>
-        <td>
+        <td *ngIf="data.task==='add'">
           <mat-form-field appearance="outline" class="fill coincraft-input">
             <mat-label>Transaction Type</mat-label>
             <mat-select formControlName="category_type">
@@ -110,5 +110,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-dialog-close mat-raised-button>Cancel</button>
-  <button (click)="submit()" color="primary" mat-raised-button>Save</button>
+  <button (click)="submit()" color="primary" mat-raised-button [disabled]="categoryForm.invalid || subCategoryForm.invalid">Save</button>
 </mat-dialog-actions>

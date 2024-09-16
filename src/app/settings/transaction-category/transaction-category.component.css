@@ -2,3 +2,10 @@
   justify-content: end;
   align-items: center;
 }
+.card-title {
+  width: 100%;
+}
+
+mat-card-content {
+  margin-top: 10px;
+}

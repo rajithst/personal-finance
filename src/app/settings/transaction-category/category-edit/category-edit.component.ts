@@ -79,9 +79,17 @@ export class CategoryEditComponent implements OnInit {
   }
 
   submit() {
+
+    const allSubcategoryForms = this.subcategories;
+    const touchedFormValues: TransactionSubCategory[] = [];
+    allSubcategoryForms.forEach(x => {
+      if (x.touched) {
+        touchedFormValues.push(x.value)
+      }
+    })
     const categorySettingsPayload: CategorySettingsRequest = {
       category: this.categoryForm.value,
-      subcategories: this.subCategoryForm.get('subcategories')?.value,
+      subcategories: touchedFormValues,
       deleted_sub_categories: this.deletedSubCategories,
       delete_category: this.isCategoryDeleted,
     };
@@ -166,9 +174,7 @@ export class CategoryEditComponent implements OnInit {
         Validators.required,
       ]),
       category: new FormControl<number | null>(
-        settings.category === 0 ? null : settings.category,
-        [Validators.required],
-      ),
+        settings.category === 0 ? null : settings.category),
       description: new FormControl<string | null>(settings.description),
     });
   }
