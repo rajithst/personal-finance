@@ -1,13 +1,21 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Category settings</mat-card-title>
+    <div class="d-flex-align-sb card-title">
+      <div class="title">
+        <mat-card-title>Category settings</mat-card-title>
+      </div>
+      <div class="actions">
+        <button mat-raised-button color="primary" (click)="addCategory()">Add New Category</button>
+      </div>
+    </div>
+
   </mat-card-header>
   <mat-card-content>
-    <mat-accordion multi="true" class="transaction-item-panel">
+    <mat-accordion class="transaction-item-panel" multi="true">
       @for (data of categorySettings; track data; let i = $index) {
         <mat-expansion-panel class="transaction-panel">
           <mat-expansion-panel-header>
-            <mat-panel-title>{{ data.category.category}}</mat-panel-title>
+            <mat-panel-title>{{ data.category.category }}</mat-panel-title>
 
             <mat-panel-description>
               <div class="panel-actions" (click)="$event.stopPropagation()">
@@ -22,12 +30,12 @@
           </mat-expansion-panel-header>
           <table mat-table [dataSource]="data.subCategories!">
             <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef> Sub Category </th>
-              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+              <th mat-header-cell *matHeaderCellDef> Sub Category</th>
+              <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
             </ng-container>
             <ng-container matColumnDef="description">
-              <th mat-header-cell *matHeaderCellDef> Description </th>
-              <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+              <th mat-header-cell *matHeaderCellDef> Description</th>
+              <td mat-cell *matCellDef="let element"> {{ element.description }}</td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

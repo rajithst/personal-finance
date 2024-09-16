@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {Stock} from "../model/stock";
-import {ActivatedRoute} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { Stock } from '../model/stock';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-stock',
@@ -9,9 +9,10 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class StockComponent implements OnInit {
   stock?: Stock;
+
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.stock = this.route.snapshot.data['symbol']
+    this.stock = this.route.snapshot.data['symbol'];
   }
 }

@@ -1,7 +1,7 @@
 interface DashboardTransaction {
-  year: number,
-  month: number,
-  amount: number,
+  year: number;
+  month: number;
+  amount: number;
 }
 
 interface MonthlyPayment {

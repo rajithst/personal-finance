@@ -1,5 +1,3 @@
-
-
 export interface InvestmentResponse {
   holdings: any[];
   dividends: any;
@@ -73,4 +71,3 @@ export interface Holding {
   company_name: string;
   image: string;
 }
-

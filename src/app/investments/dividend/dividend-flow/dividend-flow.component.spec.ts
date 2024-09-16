@@ -8,10 +8,9 @@ describe('DividendFlowComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DividendFlowComponent]
-    })
-    .compileComponents();
-    
+      declarations: [DividendFlowComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(DividendFlowComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,41 +1,10 @@
-<div class="toolbar">
-  <ul class="menu">
-    <li
-      class="menu-item"
-      routerLink="{{EXPENSE}}"
-      routerLinkActive="active-menu-item"
-    >
-      <span>Transactions</span>
-    </li>
-    <li
-      class="menu-item"
-      routerLink="{{INCOME}}"
-      routerLinkActive="active-menu-item"
-    >
-      <span>Income</span>
-    </li>
-    <li
-      class="menu-item"
-      routerLink="{{PAYMENT}}"
-      routerLinkActive="active-menu-item"
-    >
-      <span>Payments</span>
-    </li>
-    <li
-      class="menu-item"
-      routerLink="{{SAVING}}"
-      routerLinkActive="active-menu-item"
-    >
-      <span>Savings</span>
-    </li>
-  </ul>
-</div>
+<app-toolbar-menu [menuItems]="menuItems"></app-toolbar-menu>
 <div class="data-card-content">
   <mat-grid-list
-    cols="3"
-    rowHeight="50px"
     [gutterSize]="'5px'"
     class="filter-toolbar"
+    cols="3"
+    rowHeight="50px"
   >
     <mat-grid-tile>
       <div class="toolbar-header">
@@ -44,28 +13,28 @@
       <div class="range-filter">
         <div class="range-filter-actions">
           <div
+            (click)="changeFilterYear('prev')"
             class="range-action"
             matRipple
-            (click)="changeFilterYear('prev')"
           >
             <fa-icon
               [icon]="faSquareCaretLeft"
-              size="1x"
               [style]="{ color: '#4a4949' }"
+              size="1x"
             ></fa-icon>
           </div>
           <div class="range-filter-title">
             <h3 class="range-title">{{ currentYear }}</h3>
           </div>
           <div
+            (click)="changeFilterYear('next')"
             class="range-action"
             matRipple
-            (click)="changeFilterYear('next')"
           >
             <fa-icon
               [icon]="faSquareCaretRight"
-              size="1x"
               [style]="{ color: '#4a4949' }"
+              size="1x"
             ></fa-icon>
           </div>
         </div>
@@ -74,7 +43,9 @@
     <mat-grid-tile>
     </mat-grid-tile>
     <mat-grid-tile>
-      <app-searchbar></app-searchbar>
+      <div class="searchbar-wrapper">
+        <app-searchbar></app-searchbar>
+      </div>
     </mat-grid-tile>
   </mat-grid-list>
   <router-outlet></router-outlet>

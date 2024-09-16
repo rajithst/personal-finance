@@ -9,12 +9,12 @@ import {
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { DestinationMap } from '../../model/payee';
+import { DestinationMap } from '../../../model/payee';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { DataService } from '../../service/data.service';
+import { DataService } from '../../../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PayeeEditComponent } from '../payee-edit/payee-edit.component';
 import { ReplaySubject, takeUntil } from 'rxjs';
@@ -28,13 +28,6 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatTable) table: MatTable<DestinationMap>;
   @ViewChild(MatSort) sort: MatSort;
-
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
-  private activatedRoute = inject(ActivatedRoute);
-  private dataService = inject(DataService);
-  protected readonly destroyed$ = new ReplaySubject<void>(1);
-  protected readonly faPencil = faPencil;
   dataSource: MatTableDataSource<DestinationMap>;
   selection = new SelectionModel<DestinationMap>(true, []);
   displayedColumns: string[] = [
@@ -45,16 +38,14 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
     'SubCategory',
     'Actions',
   ];
+  protected readonly destroyed$ = new ReplaySubject<void>(1);
+  protected readonly faPencil = faPencil;
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private dataService = inject(DataService);
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ payeeData }) => {
-      this.dataService.setPayees(payeeData.payees);
-      this.dataSource = new MatTableDataSource<DestinationMap>(
-        payeeData.payees,
-      );
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    });
+    this.preparePayeeTable();
     this.dataService.searchBar$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
@@ -63,6 +54,14 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  preparePayeeTable() {
+    this.dataSource = new MatTableDataSource<DestinationMap>(
+      this.dataService.getPayees(),
+    );
+    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
 

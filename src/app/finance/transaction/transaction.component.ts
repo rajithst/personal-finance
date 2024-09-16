@@ -4,12 +4,16 @@ import {
   faSquareCaretLeft,
   faSquareCaretRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { DataService } from '../service/data.service';
-import {map, Observable, ReplaySubject, take, takeUntil} from 'rxjs';
-import { MonthlyTransaction, TransactionFilter } from '../model/transactions';
+import { DataService } from '../../service/data.service';
+import { map, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
+import {
+  MonthlyTransaction,
+  TransactionFilter,
+} from '../../model/transactions';
 import { Title } from '@angular/platform-browser';
 import { EXPENSE, INCOME, PAYMENT, SAVING } from '../../data/shared.data';
 import { ApiService } from '../../core/api.service';
+import { MenuItem } from '../../model/common';
 
 @Component({
   selector: 'app-transaction',
@@ -17,20 +21,19 @@ import { ApiService } from '../../core/api.service';
   styleUrl: './transaction.component.css',
 })
 export class FinanceComponent {
-  protected readonly faSquareCaretRight = faSquareCaretRight;
-  protected readonly faSquareCaretLeft = faSquareCaretLeft;
-  protected readonly INCOME = INCOME;
-  protected readonly PAYMENT = PAYMENT;
-  protected readonly SAVING = SAVING;
-  protected readonly EXPENSE = EXPENSE;
-
-  protected loadingService = inject(LoadingService);
-  private dataService = inject(DataService);
-
   title = inject(Title);
-
   today = new Date();
   currentYear = this.today.getFullYear();
+  menuItems: MenuItem[] = [
+    { label: 'Transaction', link: EXPENSE },
+    { label: 'Income', link: INCOME },
+    { label: 'Payment', link: PAYMENT },
+    { label: 'Saving', link: SAVING },
+  ];
+  protected readonly faSquareCaretRight = faSquareCaretRight;
+  protected readonly faSquareCaretLeft = faSquareCaretLeft;
+  protected loadingService = inject(LoadingService);
+  private dataService = inject(DataService);
 
   changeFilterYear(direction: string) {
     this.loadingService.loadingOn();
@@ -49,12 +52,12 @@ export class FinanceComponent {
   styles: '',
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
-  protected apiService = inject(ApiService);
-  protected loadingService = inject(LoadingService);
-  private dataService = inject(DataService);
-  protected readonly destroyed$ = new ReplaySubject<void>(1);
   target: string = EXPENSE;
   data$: Observable<MonthlyTransaction[]>;
+  protected apiService = inject(ApiService);
+  protected loadingService = inject(LoadingService);
+  protected readonly destroyed$ = new ReplaySubject<void>(1);
+  private dataService = inject(DataService);
 
   ngOnInit(): void {
     this.dataService.yearSwitch$
@@ -76,7 +79,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   }
 
   extracted(filters: TransactionFilter) {
-    console.log('calling extracted')
     const transactions$ = this.apiService.getTransactions(filters);
     this.data$ = transactions$
       .pipe(takeUntil(this.destroyed$))

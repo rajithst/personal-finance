@@ -11,7 +11,7 @@
       <li>
         Amount: ¥{{ transactionAmount() | number: "1.2-2" }}
         <span *ngIf="splitTotal() > 0"
-          >(New Amount: ¥{{ remainAmount() | number: "1.2-2" }})</span
+        >(New Amount: ¥{{ remainAmount() | number: "1.2-2" }})</span
         >
       </li>
       <li>Split Total: ¥{{ splitTotal() | number: "1.2-2" }}</li>
@@ -22,7 +22,7 @@
         <h3>Add Splits</h3>
       </div>
       <div class="split-actions">
-        <button mat-raised-button color="primary" (click)="onAddSplit()">
+        <button (click)="onAddSplit()" color="primary" mat-raised-button>
           Add Split
         </button>
       </div>
@@ -46,8 +46,9 @@
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                   @for (option of filteredPayees[i] | async; track option) {
                     <mat-option [value]="option.destination">{{
-                      option.destination
-                    }}</mat-option>
+                        option.destination
+                      }}
+                    </mat-option>
                   }
                 </mat-autocomplete>
               </mat-form-field>
@@ -58,7 +59,7 @@
                 <mat-select formControlName="category">
                   @for (exc of this.TRANSACTION_CATEGORIES; track exc) {
                     <mat-option [value]="exc.id"
-                      >{{ exc.category }}
+                    >{{ exc.category }}
                     </mat-option>
                   }
                 </mat-select>
@@ -67,7 +68,7 @@
             <td>
               <mat-form-field appearance="outline" class="split-input">
                 <mat-label>Amount</mat-label>
-                <input matInput placeholder="Amount" formControlName="amount" />
+                <input matInput placeholder="Amount" formControlName="amount"/>
                 <span matTextPrefix>¥&nbsp;</span>
               </mat-form-field>
             </td>
@@ -88,12 +89,12 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
+  <button (click)="cancel()" mat-dialog-close mat-raised-button>Cancel</button>
   <button
-    mat-raised-button
-    color="primary"
     (click)="submit()"
     [disabled]="splitForm.invalid || splits.length == 0"
+    color="primary"
+    mat-raised-button
   >
     Split
   </button>

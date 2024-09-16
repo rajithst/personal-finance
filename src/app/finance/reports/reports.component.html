@@ -1,28 +1,4 @@
-<div class="toolbar">
-  <ul class="menu">
-    <li
-      class="menu-item"
-      routerLink="analytics"
-      routerLinkActive="active-menu-item"
-    >
-      <span>Expense</span>
-    </li>
-    <li
-      class="menu-item"
-      routerLink="analytics"
-      routerLinkActive="active-menu-item"
-    >
-      <span>Income</span>
-    </li>
-    <li
-      class="menu-item"
-      routerLink="analytics"
-      routerLinkActive="active-menu-item"
-    >
-      <span>Net Income</span>
-    </li>
-  </ul>
-</div>
+<app-toolbar-menu [menuItems]="menuItems"></app-toolbar-menu>
 <div class="data-card-content">
   <router-outlet></router-outlet>
 </div>

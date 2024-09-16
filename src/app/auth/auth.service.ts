@@ -2,20 +2,18 @@ import { effect, inject, Injectable, OnInit, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiService } from '../core/api.service';
 import { Router } from '@angular/router';
-import { User } from './model';
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { UserToken } from './model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService implements OnInit {
-  #userSignal = signal<User | null>(null);
-  user = this.#userSignal.asReadonly();
-
   apiService = inject(ApiService);
   router = inject(Router);
   snackBar = inject(MatSnackBar);
-
+  #userSignal = signal<UserToken | null>(null);
+  user = this.#userSignal.asReadonly();
   private USER_STORAGE_KEY: string = 'iva2zK2d7p';
 
   constructor() {
@@ -32,7 +30,7 @@ export class AuthService implements OnInit {
     this.#userSignal.set(user);
   }
 
-  loadFromLocalStorage(): User | null {
+  loadFromLocalStorage(): UserToken | null {
     const userJson = localStorage.getItem(this.USER_STORAGE_KEY);
     if (userJson) {
       return JSON.parse(userJson);
@@ -40,7 +38,7 @@ export class AuthService implements OnInit {
     return null;
   }
 
-  async login(username: string, password: string): Promise<User> {
+  async login(username: string, password: string): Promise<UserToken> {
     const loginPayload = { username: username, password: password };
     const login$ = this.apiService.login(loginPayload);
     const user = await firstValueFrom(login$);
@@ -74,12 +72,16 @@ export class AuthService implements OnInit {
   }
 
   unAuthorizedLogout() {
-    const snackbar = this.snackBar.open('Session has expired.Logging out!', 'Error', {
-      duration: 3000
-    });
+    const snackbar = this.snackBar.open(
+      'Session has expired.Logging out!',
+      'Error',
+      {
+        duration: 3000,
+      },
+    );
 
     snackbar.afterDismissed().subscribe(() => {
-      this.logout()
-    })
+      this.logout();
+    });
   }
 }

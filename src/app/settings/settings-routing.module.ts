@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserLogComponent } from './user-log/user-log.component';
 import { SettingsComponent } from './settings.component';
-import {TransactionCategoryComponent} from "./transaction-category/transaction-category.component";
-import {CreditAccountComponent} from "./credit-account/credit-account.component";
+import { TransactionCategoryComponent } from './transaction-category/transaction-category.component';
+import { CreditAccountComponent } from './credit-account/credit-account.component';
 
 const routes: Routes = [
   {

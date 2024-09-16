@@ -1,6 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { UserProfile } from '../../auth/model';
+import { MyProfile } from '../../model/profile';
+import { DataService } from '../../service/data.service';
+
+interface ProfileItem {
+  label: string;
+  value: any;
+}
 
 @Component({
   selector: 'app-account',
@@ -8,26 +13,17 @@ import { UserProfile } from '../../auth/model';
   styleUrl: './account.component.css',
 })
 export class AccountComponent implements OnInit {
-  activatedRoute = inject(ActivatedRoute);
-  myAccount: UserProfile;
-  profileSections = [
-    { key: 'info', label: 'Basic Info', selected: true },
-    { key: 'account', label: 'Account', selected: false },
-    { key: 'privacy', label: 'Privacy', selected: false },
-    { key: 'subscription', label: 'Subscription', selected: false },
-  ];
-  selectedSection = 'info';
+  dataService = inject(DataService);
+  myAccount: MyProfile | null;
+  displayedColumns = ['label', 'value'];
+  dataSource: ProfileItem[] = [];
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ myAccount }) => {
-      this.myAccount = myAccount;
-    });
-  }
-
-  onSelected(item: { label: string; key: string }) {
-    this.profileSections.forEach((section) => {
-      section.selected = section.key === item.key;
-    });
-    this.selectedSection = item.key;
+    this.myAccount = this.dataService.getMyProfile();
+    this.dataSource = [
+      { label: 'First Name', value: this.myAccount?.first_name },
+      { label: 'Last Name', value: this.myAccount?.last_name },
+      { label: 'Email', value: this.myAccount?.email },
+    ];
   }
 }

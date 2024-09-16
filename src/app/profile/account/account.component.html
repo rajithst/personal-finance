@@ -3,6 +3,16 @@
     <mat-card-title>Profile</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-
+    <table [dataSource]="dataSource" mat-table>
+      <ng-container matColumnDef="label">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let element" mat-cell> {{ element.label }}</td>
+      </ng-container>
+      <ng-container matColumnDef="value">
+        <th *matHeaderCellDef mat-header-cell> Description</th>
+        <td *matCellDef="let element" mat-cell> {{ element.value }}</td>
+      </ng-container>
+      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    </table>
   </mat-card-content>
 </mat-card>

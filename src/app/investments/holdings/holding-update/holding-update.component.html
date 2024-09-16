@@ -7,16 +7,16 @@
       <table class="expense-field-table">
         <tr>
           <td colspan="3">
-            <mat-form-field class="fill trade-input" appearance="outline">
+            <mat-form-field appearance="outline" class="fill trade-input">
               <mat-label>Company</mat-label>
               <mat-select formControlName="company">
                 <mat-select-trigger>
                   <div class="selected-company">
                     <div class="selected-company-image">
-                      <img src="{{companyImage()}}" alt="" class="ticker-image"/>
+                      <img alt="" class="ticker-image" src="{{companyImage()}}"/>
                     </div>
                     <div class="selected-company-name">
-                      <span>{{companyName()}}</span>
+                      <span>{{ companyName() }}</span>
                     </div>
                   </div>
                 </mat-select-trigger>
@@ -25,8 +25,8 @@
                     <div class="holding-item-contents-1">
                       <div class="company-image"><img src="{{cmp.image}}" alt="" class="ticker-image"></div>
                       <div class="company-ticker">
-                        <div class="company-name">{{cmp.company_name}}</div>
-                        <div class="company-symbol">{{cmp.symbol}}</div>
+                        <div class="company-name">{{ cmp.company_name }}</div>
+                        <div class="company-symbol">{{ cmp.symbol }}</div>
                       </div>
                     </div>
                   </mat-option>
@@ -37,24 +37,24 @@
         </tr>
         <tr>
           <td>
-            <mat-form-field class="fill trade-input" appearance="outline">
-              <mat-label>Share Price <span *ngIf="company()">({{currency()}})</span></mat-label>
-              <input matInput placeholder="Share price" formControlName="purchase_price" />
+            <mat-form-field appearance="outline" class="fill trade-input">
+              <mat-label>Share Price <span *ngIf="company()">({{ currency() }})</span></mat-label>
+              <input formControlName="purchase_price" matInput placeholder="Share price"/>
             </mat-form-field>
           </td>
           <td>
-            <mat-form-field class="fill trade-input" appearance="outline">
+            <mat-form-field appearance="outline" class="fill trade-input">
               <mat-label>Shares</mat-label>
-              <input matInput placeholder="Shares" formControlName="quantity" />
+              <input formControlName="quantity" matInput placeholder="Shares"/>
             </mat-form-field>
           </td>
           <td>
-            <mat-form-field class="fill trade-input" appearance="outline">
+            <mat-form-field appearance="outline" class="fill trade-input">
               <mat-label>Date</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="purchase_date" />
+              <input [matDatepicker]="picker" formControlName="purchase_date" matInput/>
               <mat-datepicker-toggle
-                matIconSuffix
                 [for]="picker"
+                matIconSuffix
               ></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -62,7 +62,7 @@
         </tr>
         <tr>
           <td>
-            <mat-form-field class="fill trade-input" appearance="outline">
+            <mat-form-field appearance="outline" class="fill trade-input">
               <mat-label>Settlement Currency</mat-label>
               <mat-select formControlName="settlement_currency">
                 <mat-option [value]="'円'">JPY</mat-option>
@@ -71,18 +71,18 @@
             </mat-form-field>
           </td>
           <td>
-            <mat-form-field class="fill trade-input" appearance="outline">
-              <mat-label>Exchange Rate </mat-label>
-              <input matInput placeholder="Exchange Rate" formControlName="exchange_rate" />
+            <mat-form-field appearance="outline" class="fill trade-input">
+              <mat-label>Exchange Rate</mat-label>
+              <input formControlName="exchange_rate" matInput placeholder="Exchange Rate"/>
             </mat-form-field>
           </td>
           <td>
-            <mat-form-field class="fill trade-input" appearance="outline">
+            <mat-form-field appearance="outline" class="fill trade-input">
               <mat-label>Notes</mat-label>
               <input
+                formControlName="notes"
                 matInput
                 placeholder="Notes"
-                formControlName="notes"
               />
             </mat-form-field>
           </td>
@@ -93,6 +93,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="expense-form-footer">
-  <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="submit()">Save</button>
+  <button (click)="cancel()" mat-dialog-close mat-raised-button>Cancel</button>
+  <button (click)="submit()" color="primary" mat-raised-button>Save</button>
 </mat-dialog-actions>

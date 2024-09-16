@@ -1,4 +1,7 @@
-html, body { height: 100%; }
+html,
+body {
+  height: 100%;
+}
 body {
   margin: 0;
 }
@@ -17,35 +20,11 @@ mat-option {
   font-size: 14px !important;
 }
 
-.toolbar {
-  background-color: #f2f1f1;
-  color: #333131;
-  font-weight: 500;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
+.searchbar-wrapper {
+  width: 100%;
 }
 
-.menu {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.menu-item {
-  display: inline-block;
-  margin-right: 20px;
-  position: relative;
-  cursor: pointer;
-}
-
-
-.active-menu-item > span {
-  color: #3699ff;
-}
-
-.expense-input {
+.coincraft-input {
   width: 100%;
   font-size: 14px;
 }

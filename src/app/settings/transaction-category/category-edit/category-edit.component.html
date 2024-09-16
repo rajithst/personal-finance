@@ -6,37 +6,50 @@
     <table class="expense-field-table">
       <tr>
         <td>
-          <mat-form-field class="fill expense-input" appearance="outline">
+          <mat-form-field appearance="outline" class="fill coincraft-input">
+            <mat-label>Transaction Type</mat-label>
+            <mat-select formControlName="category_type">
+              @for (exc of TRANSACTION_TYPES; track exc) {
+                <mat-option [value]="exc.value">
+                  {{ exc.viewValue }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline" class="fill coincraft-input">
             <mat-label>Category Name</mat-label>
             <input
+              formControlName="category"
               matInput
               placeholder="Category Name"
-              formControlName="category"
             />
           </mat-form-field>
         </td>
         <td>
-          <mat-form-field appearance="outline" class="expense-input">
+          <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Description</mat-label>
             <input
+              formControlName="description"
               matInput
               placeholder="Description"
-              formControlName="description"
             />
           </mat-form-field>
         </td>
         <td>
           <div
-            class="coincraft-action-button"
+            *ngIf="data.task === 'edit'"
             (click)="deleteCategory()"
+            class="coincraft-action-button"
             matRipple
             matTooltip="Delete Category"
             matTooltipPosition="below"
           >
             <fa-icon
               [icon]="faTrash"
-              size="lg"
               [style]="{ color: '#af5252' }"
+              size="lg"
             ></fa-icon>
           </div>
         </td>
@@ -49,11 +62,11 @@
       <h3>Sub-Category settings</h3>
     </div>
     <div>
-      <button mat-raised-button color="primary" (click)="onAddSubCategory()">Add Sub Category</button>
+      <button (click)="onAddSubCategory()" color="primary" mat-raised-button>Add Sub Category</button>
     </div>
   </div>
   <form [formGroup]="subCategoryForm">
-  <table>
+    <table>
       <ng-container formArrayName="subcategories">
         @for (data of subcategories; track data; let i = $index) {
           <tr [formGroupName]="i">
@@ -91,11 +104,11 @@
           </tr>
         }
       </ng-container>
-  </table>
+    </table>
   </form>
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button color="primary" (click)="submit()">Save</button>
+  <button mat-dialog-close mat-raised-button>Cancel</button>
+  <button (click)="submit()" color="primary" mat-raised-button>Save</button>
 </mat-dialog-actions>

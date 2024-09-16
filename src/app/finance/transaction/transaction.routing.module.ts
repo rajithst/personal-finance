@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {
   ExpensesComponent,
-  FinanceComponent, IncomesComponent,
+  FinanceComponent,
+  IncomesComponent,
   PaymentsComponent,
-  SavingsComponent
+  SavingsComponent,
 } from './transaction.component';
-import {EXPENSE, INCOME, PAYMENT, SAVING} from "../../data/shared.data";
+import { EXPENSE, INCOME, PAYMENT, SAVING } from '../../data/shared.data';
 
 const routes: Routes = [
   {
@@ -21,22 +22,22 @@ const routes: Routes = [
       {
         path: EXPENSE,
         component: ExpensesComponent,
-        title: 'Expense Activity'
+        title: 'Expense Activity',
       },
       {
         path: INCOME,
         component: IncomesComponent,
-        title: 'Income Activity'
+        title: 'Income Activity',
       },
       {
         path: SAVING,
         component: SavingsComponent,
-        title: 'Savings Activity'
+        title: 'Savings Activity',
       },
       {
         path: PAYMENT,
         component: PaymentsComponent,
-        title: 'Payments Activity'
+        title: 'Payments Activity',
       },
     ],
   },

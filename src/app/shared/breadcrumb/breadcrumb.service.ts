@@ -1,22 +1,32 @@
 import { Injectable } from '@angular/core';
-import {Router, NavigationEnd, ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BreadcrumbService {
-  breadcrumbs: Array<{ label: string, url: string }> = [];
+  breadcrumbs: Array<{ label: string; url: string }> = [];
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      this.createBreadcrumbs(this.activatedRoute.root);
-    });
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+  ) {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.createBreadcrumbs(this.activatedRoute.root);
+      });
   }
 
-  private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: Array<{ label: string, url: string }> = []): void {
+  private createBreadcrumbs(
+    route: ActivatedRoute,
+    url: string = '',
+    breadcrumbs: Array<{
+      label: string;
+      url: string;
+    }> = [],
+  ): void {
     const children: ActivatedRoute[] = route.children;
 
     if (children.length === 0) {
@@ -24,7 +34,7 @@ export class BreadcrumbService {
       return;
     }
 
-    children.forEach(child => {
+    children.forEach((child) => {
       const routeURL = child.snapshot.routeConfig?.path ?? '';
       const breadcrumbLabel = child.snapshot.data['breadcrumb'];
       const appendUrlSuffix = child.snapshot.data['appendUrlSuffixToLabel'];

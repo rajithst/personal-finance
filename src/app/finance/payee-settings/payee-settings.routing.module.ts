@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PayeeSettingsComponent } from './payee-settings.component';
 import { PayeesComponent } from './payees/payees.component';
-import { payeeDetailResolver, payeeResolver } from '../service/resolvers';
+import { payeeDetailResolver } from '../../service/resolvers';
 import { RecurringComponent } from './recurring/recurring.component';
 import { PayeeDetailComponent } from './payee-detail/payee-detail.component';
 
@@ -20,9 +20,6 @@ const routes: Routes = [
         path: 'payees',
         component: PayeesComponent,
         title: 'Payees',
-        resolve: {
-          payeeData: payeeResolver,
-        },
       },
       {
         path: 'recurring-payments',

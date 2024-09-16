@@ -1,4 +1,4 @@
-import {TransactionExpand} from "./transactions";
+import { TransactionExpand } from './transactions';
 
 export interface PayeeResponse {
   payees: DestinationMap[];
@@ -16,12 +16,12 @@ export interface DestinationMap {
   subcategory_text: string;
   keywords: string;
 }
+
 export interface DestinationMapRequest extends DestinationMap {
-  merge_ids: number[]
+  merge_ids: number[];
 }
 
-
 export interface PayeeDetail {
-  payee: DestinationMap,
-  transactions: TransactionExpand[]
+  payee: DestinationMap;
+  transactions: TransactionExpand[];
 }

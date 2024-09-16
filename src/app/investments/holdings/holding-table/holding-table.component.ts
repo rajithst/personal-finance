@@ -1,5 +1,6 @@
 import {
-  Component, inject,
+  Component,
+  inject,
   Input,
   OnChanges,
   SimpleChanges,
@@ -9,17 +10,21 @@ import { MatSort } from '@angular/material/sort';
 
 import {
   faCaretDown,
-  faCaretUp, faEllipsis,
+  faCaretUp,
+  faEllipsis,
   faJpy,
-  faLineChart, faList,
-  faMoneyBill, faPlus, faTrash,
+  faLineChart,
+  faList,
+  faMoneyBill,
+  faPlus,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { MatTableDataSource } from '@angular/material/table';
-import {MatDialog} from "@angular/material/dialog";
-import {HoldingDetailsComponent} from "../holding-details/holding-details.component";
-import {SessionService} from "../../service/session.service";
-import {Holding, StockDailyPrice} from "../../model/investment";
-import {ApiService} from "../../../core/api.service";
+import { MatDialog } from '@angular/material/dialog';
+import { HoldingDetailsComponent } from '../holding-details/holding-details.component';
+import { SessionService } from '../../service/session.service';
+import { Holding, StockDailyPrice } from '../../model/investment';
+import { ApiService } from '../../../core/api.service';
 
 @Component({
   selector: 'app-holding-table',
@@ -29,23 +34,6 @@ import {ApiService} from "../../../core/api.service";
 export class HoldingTableComponent implements OnChanges {
   @Input() holdings: Holding[] = [];
   @ViewChild(MatSort) sort: MatSort;
-
-  protected readonly faCaretDown = faCaretDown;
-  protected readonly faCaretUp = faCaretUp;
-  protected readonly faLineChart = faLineChart;
-  protected readonly faMoneyBill = faMoneyBill;
-  protected readonly faEllipsis = faEllipsis;
-  protected readonly faJpy = faJpy;
-  protected readonly faPlus = faPlus;
-  protected readonly faTrash = faTrash;
-  protected readonly Math = Math;
-  protected readonly faList = faList;
-
-  private dialog = inject(MatDialog);
-  private apiService = inject(ApiService);
-  private sessionService = inject(SessionService)
-  private sessionData = this.sessionService.getData();
-
   totalShares: number = 0;
   totalInvestment: number = 0;
   totalCurrentPrice: number = 0;
@@ -61,9 +49,23 @@ export class HoldingTableComponent implements OnChanges {
     'CurrentValue',
     'TotalProfit',
     'ShareInProtofolio',
-    'Actions'
+    'Actions',
   ];
   dataSource = new MatTableDataSource<Holding>();
+  protected readonly faCaretDown = faCaretDown;
+  protected readonly faCaretUp = faCaretUp;
+  protected readonly faLineChart = faLineChart;
+  protected readonly faMoneyBill = faMoneyBill;
+  protected readonly faEllipsis = faEllipsis;
+  protected readonly faJpy = faJpy;
+  protected readonly faPlus = faPlus;
+  protected readonly faTrash = faTrash;
+  protected readonly Math = Math;
+  protected readonly faList = faList;
+  private dialog = inject(MatDialog);
+  private apiService = inject(ApiService);
+  private sessionService = inject(SessionService);
+  private sessionData = this.sessionService.getData();
 
   ngOnChanges(changes: SimpleChanges): void {
     this.currency =
@@ -93,21 +95,18 @@ export class HoldingTableComponent implements OnChanges {
     return `${prefix} ${this.currency}${formattedValue.toFixed(2)}`;
   }
 
-
-
   openStockDetail(symbol: string) {
-
     let stockPriceHistory: StockDailyPrice[] = [];
-    this.apiService.getStockPriceHistory(symbol).subscribe(value => {
+    this.apiService.getStockPriceHistory(symbol).subscribe((value) => {
       stockPriceHistory = value.prices;
-      this.openModal(symbol, stockPriceHistory)
-    })
+      this.openModal(symbol, stockPriceHistory);
+    });
   }
 
   openModal(symbol: string, stockPriceHistory: StockDailyPrice[]) {
-    const holdingData = this.holdings.find(h => h.company === symbol);
+    const holdingData = this.holdings.find((h) => h.company === symbol);
     const transactions = this.sessionData.transactions;
-    const purchaseHistory = transactions.filter(x => x.company === symbol)
+    const purchaseHistory = transactions.filter((x) => x.company === symbol);
     const dialog = this.dialog.open(HoldingDetailsComponent, {
       width: '950px',
       position: {

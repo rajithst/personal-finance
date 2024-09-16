@@ -1,7 +1,7 @@
 import { Component, inject, Inject, OnInit } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DestinationMap } from '../../model/payee';
+import { DestinationMap } from '../../../model/payee';
 import {
   TRANSACTION_TYPE_EXPENSE_ID,
   TRANSACTION_TYPE_INCOME_ID,
@@ -14,15 +14,16 @@ import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 import { ApiService } from '../../../core/api.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { DataService } from '../../service/data.service';
+import { DataService } from '../../../service/data.service';
 import {
   TransactionCategory,
   TransactionSubCategory,
-} from '../../model/common';
+} from '../../../model/common';
 
 interface PayeeEditDialogData {
   payee: DestinationMap;
 }
+
 @Component({
   selector: 'app-payee-edit',
   templateUrl: './payee-edit.component.html',
@@ -31,19 +32,21 @@ interface PayeeEditDialogData {
 export class PayeeEditComponent implements OnInit {
   readonly addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  transactionCategories: TransactionCategory[] = [];
+  transactionSubCategories: TransactionSubCategory[] = [];
+  payeeForm: FormGroup;
+  keywords: string[] = [];
+  displayedColumns: string[] = ['select', 'Payee', 'Category', 'SubCategory'];
+  dataSource: MatTableDataSource<DestinationMap>;
+  selection = new SelectionModel<DestinationMap>(true, []);
   protected readonly TRANSACTION_TYPES = TRANSACTION_TYPES;
-
+  protected EXPENSE_SUB_CATEGORIES: TransactionSubCategory[] = [];
   private apiService = inject(ApiService);
   private dataService = inject(DataService);
   protected TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getAllCategories();
   protected TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
     this.dataService.getAllSubCategories();
-  protected EXPENSE_SUB_CATEGORIES: TransactionSubCategory[] = [];
-
-  transactionCategories: TransactionCategory[] = [];
-  transactionSubCategories: TransactionSubCategory[] = [];
-
   private EXPENSE_CATEGORIES: TransactionCategory[] =
     this.dataService.getExpenseCategories();
   private INCOME_CATEGORIES: TransactionCategory[] =
@@ -53,12 +56,6 @@ export class PayeeEditComponent implements OnInit {
   private PAYMENT_CATEGORIES: TransactionCategory[] =
     this.dataService.getPaymentCategories();
 
-  payeeForm: FormGroup;
-  keywords: string[] = [];
-  displayedColumns: string[] = ['select', 'Payee', 'Category', 'SubCategory'];
-  dataSource: MatTableDataSource<DestinationMap>;
-  selection = new SelectionModel<DestinationMap>(true, []);
-
   constructor(
     public dialogRef: MatDialogRef<PayeeEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PayeeEditDialogData,
@@ -66,25 +63,29 @@ export class PayeeEditComponent implements OnInit {
 
   ngOnInit(): void {
     const payeeData = this.data.payee;
-    const payeeCategory = payeeData.category;
-    const transactionType = this.TRANSACTION_CATEGORIES.find(
-      (x) => x.id === payeeCategory,
-    );
+    const transactionType = payeeData.category_type;
+
     this.payeeForm = new FormGroup({
-      id: new FormControl(payeeData.id),
-      category_type: new FormControl(payeeData.category_type),
-      category: new FormControl(payeeData.category),
-      subcategory: new FormControl(payeeData.subcategory),
-      category_text: new FormControl(payeeData.category_text),
-      subcategory_text: new FormControl(payeeData.subcategory_text),
-      destination: new FormControl(payeeData.destination),
-      destination_original: new FormControl(payeeData.destination_original),
-      destination_eng: new FormControl(payeeData.destination_eng),
+      id: new FormControl<number | null>(payeeData.id),
+      category_type: new FormControl<number | null>(payeeData.category_type),
+      category: new FormControl<number | null>(payeeData.category),
+      subcategory: new FormControl<number | null>(payeeData.subcategory),
+      category_text: new FormControl<string | null>(payeeData.category_text),
+      subcategory_text: new FormControl<string | null>(
+        payeeData.subcategory_text,
+      ),
+      destination: new FormControl<string | null>(payeeData.destination),
+      destination_original: new FormControl<string | null>(
+        payeeData.destination_original,
+      ),
+      destination_eng: new FormControl<string | null>(
+        payeeData.destination_eng,
+      ),
     });
     if (this.data.payee.keywords) {
       this.keywords = this.data.payee.keywords.split(',');
     }
-    this.setTransactionCategories(transactionType!.category_type);
+    this.setTransactionCategories(transactionType);
     this.setTransactionSubCategories(payeeData.category);
 
     this.payeeForm.get('category')?.valueChanges.subscribe((value) => {
@@ -101,10 +102,9 @@ export class PayeeEditComponent implements OnInit {
   }
 
   updateRelatedPayees() {
-    const relatedPayees = this.dataService
-      .getPayees()
+    const relatedPayees = this.dataService.getPayees();
 
-      const similarPayees = relatedPayees.filter(
+    const similarPayees = relatedPayees.filter(
       (x) =>
         x.id !== this.data.payee.id &&
         x.destination_original &&

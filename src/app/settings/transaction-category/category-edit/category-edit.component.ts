@@ -6,17 +6,22 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {
-  CategorySettings,
-  TransactionSubCategory,
-} from '../../../finance/model/common';
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { TransactionSubCategory } from '../../../model/common';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../../../core/api.service';
-import { CategorySettingsRequest } from '../../../finance/model/category-settings';
+import {
+  CategorySettings,
+  CategorySettingsRequest,
+} from '../../../model/category-settings';
 import {
   ERROR_ACTION,
   SUCCESS_ACTION,
+  TRANSACTION_TYPES,
 } from '../../../data/client.data';
 
 interface CategoryEditDialogData {
@@ -30,28 +35,30 @@ interface CategoryEditDialogData {
   styleUrl: './category-edit.component.css',
 })
 export class CategoryEditComponent implements OnInit {
-  protected readonly faTrash = faTrash;
-
-  apiService = inject(ApiService);
-  private formBuilder = inject(FormBuilder);
-  private dialog = inject(MatDialog);
-
-  get subcategories(): FormControl[] {
-    return (this.subCategoryForm.get('subcategories') as FormArray)
-      .controls as FormControl[];
-  }
-  constructor(
-    public dialogRef: MatDialogRef<CategoryEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: CategoryEditDialogData,
-  ) {}
-
   displayedColumns: string[] = ['name', 'description', 'actions'];
   categoryForm: FormGroup;
   subCategoryForm: FormGroup;
   subCategories: TransactionSubCategory[] =
     this.data.settings?.subCategories || [];
   deletedSubCategories: TransactionSubCategory[] = [];
-  isCategoryDeleted = false
+  isCategoryDeleted = false;
+
+  protected readonly faTrash = faTrash;
+  protected readonly TRANSACTION_TYPES = TRANSACTION_TYPES;
+
+  private formBuilder = inject(FormBuilder);
+  private dialog = inject(MatDialog);
+  private apiService = inject(ApiService);
+
+  constructor(
+    public dialogRef: MatDialogRef<CategoryEditComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: CategoryEditDialogData,
+  ) {}
+
+  get subcategories(): FormControl[] {
+    return (this.subCategoryForm.get('subcategories') as FormArray)
+      .controls as FormControl[];
+  }
 
   ngOnInit() {
     if (this.data.task === 'edit') {
@@ -63,7 +70,7 @@ export class CategoryEditComponent implements OnInit {
       this.subCategoryForm = this.formBuilder.group({
         subcategories: this.formBuilder.array(allSubCategoryForms),
       });
-    } else {
+    } else if (this.data.task === 'add') {
       this.categoryForm = this.getCategorySettingsForm(null);
       this.subCategoryForm = this.formBuilder.group({
         subcategories: this.formBuilder.array([]),
@@ -76,7 +83,7 @@ export class CategoryEditComponent implements OnInit {
       category: this.categoryForm.value,
       subcategories: this.subCategoryForm.get('subcategories')?.value,
       deleted_sub_categories: this.deletedSubCategories,
-      delete_category: this.isCategoryDeleted
+      delete_category: this.isCategoryDeleted,
     };
     this.apiService
       .updateCategory(categorySettingsPayload)
@@ -112,24 +119,44 @@ export class CategoryEditComponent implements OnInit {
   deleteSubCategory(formIndex: number) {
     const controls = <FormArray>this.subCategoryForm.controls['subcategories'];
     const subCategoryId = controls.at(formIndex).get('id')?.value;
-    const deletedItem = this.subCategories.find(x => x.id === subCategoryId);
+    const deletedItem = this.subCategories.find((x) => x.id === subCategoryId);
     if (deletedItem) {
-      this.deletedSubCategories.push(deletedItem)
+      this.deletedSubCategories.push(deletedItem);
     }
     controls.removeAt(formIndex);
   }
 
-  private getCategorySettingsForm(settings: CategorySettings | null) {
-    return new FormGroup({
-      id: new FormControl(settings ? settings.category.id : null),
-      category: new FormControl(settings ? settings.category.category : '', [
-        Validators.required,
-      ]),
-      description: new FormControl(
-        settings ? settings.category.description : '',
-      ),
+  deleteCategory() {
+    const confirm = this.dialog.open(ActionConfirmComponent);
+    confirm.afterClosed().subscribe((result: any) => {
+      if (result) {
+        this.isCategoryDeleted = true;
+        this.submit();
+      }
     });
   }
+
+  private getCategorySettingsForm(settings: CategorySettings | null) {
+    return new FormGroup({
+      id: new FormControl<number | null>(
+        settings ? settings.category.id : null,
+      ),
+      category: new FormControl<string>(
+        settings ? settings.category.category : '',
+        [Validators.required],
+      ),
+      category_type: new FormControl<number | null>(
+        settings ? settings.category.category_type : null,
+        [Validators.required],
+      ),
+      description: new FormControl<string | null>(
+        settings ? settings.category.description : '',
+      ),
+      can_delete: new FormControl<boolean>(true),
+      can_rename: new FormControl<boolean>(true),
+    });
+  }
+
   private getNewFormArray(settings: TransactionSubCategory) {
     return new FormGroup({
       id: new FormControl<number | null>(
@@ -145,18 +172,7 @@ export class CategoryEditComponent implements OnInit {
       description: new FormControl<string | null>(settings.description),
     });
   }
-
-  deleteCategory() {
-    const confirm = this.dialog.open(ActionConfirmComponent)
-    confirm.afterClosed().subscribe((result: any) => {
-      if(result) {
-        this.isCategoryDeleted = true;
-        this.submit()
-      }
-    })
-  }
 }
-
 
 @Component({
   selector: 'app-action-confirm',
@@ -165,6 +181,7 @@ export class CategoryEditComponent implements OnInit {
 })
 export class ActionConfirmComponent {
   constructor(public dialogRef: MatDialogRef<ActionConfirmComponent>) {}
+
   cancel() {
     this.dialogRef.close(false);
   }

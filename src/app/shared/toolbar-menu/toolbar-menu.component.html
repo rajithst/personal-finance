@@ -1,0 +1,13 @@
+<div class="toolbar">
+  <ul class="menu">
+    @for (exec of menuItems; track exec.link) {
+      <li
+        class="menu-item"
+        routerLink="{{exec.link}}"
+        routerLinkActive="active-menu-item"
+      >
+        <span>{{ exec.label }}</span>
+      </li>
+    }
+  </ul>
+</div>

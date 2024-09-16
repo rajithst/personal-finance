@@ -4,14 +4,14 @@ import { Observable } from 'rxjs';
 import {
   BulkDeleteRequest,
   BulkDeleteResponse,
-  TransactionsResponse,
   Transaction,
   TransactionExpand,
   TransactionFilter,
   TransactionMergeRequest,
   TransactionSplitRequest,
   TransactionSplitResponse,
-} from '../finance/model/transactions';
+  TransactionsResponse,
+} from '../model/transactions';
 import {
   CompanyResponse,
   InvestmentResponse,
@@ -27,12 +27,16 @@ import {
   DestinationMapRequest,
   PayeeDetail,
   PayeeResponse,
-} from '../finance/model/payee';
+} from '../model/payee';
 
-import { DashboardResponse } from '../finance/model/dashboard';
-import { ClientSettings } from '../finance/model/common';
-import { User, UserProfile } from '../auth/model';
-import {CategorySettingsRequest, CategorySettingsResponse} from '../finance/model/category-settings';
+import { DashboardResponse } from '../model/dashboard';
+import { ClientSettings } from '../model/common';
+import {
+  CategorySettingsRequest,
+  CategorySettingsResponse,
+} from '../model/category-settings';
+import { MyProfile } from '../model/profile';
+import { UserToken } from '../auth/model';
 
 new HttpHeaders({
   'Content-Type': 'application/json',
@@ -45,6 +49,16 @@ export class ApiService {
   private SRC_URL = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
+
+  login(loginPayload: {
+    username: string;
+    password: string;
+  }): Observable<UserToken> {
+    return this.http.post<UserToken>(
+      `${this.SRC_URL}/auth/jwt/create`,
+      loginPayload,
+    );
+  }
 
   getDashboard(): Observable<DashboardResponse> {
     return this.http.get<DashboardResponse>(
@@ -113,6 +127,7 @@ export class ApiService {
       payload,
     );
   }
+
   updatePayeeRules(payload: DestinationMapRequest): Observable<DestinationMap> {
     if (payload.id) {
       return this.http.put<DestinationMap>(
@@ -133,6 +148,41 @@ export class ApiService {
       payload,
     );
   }
+
+  uploadTransactions(formData: FormData) {
+    return this.http.post(
+      `${this.SRC_URL}/finance/import/transactions/`,
+      formData,
+      {
+        reportProgress: true,
+        observe: 'events',
+      },
+    );
+  }
+
+  getMyProfile() {
+    return this.http.get<MyProfile>(`${this.SRC_URL}/oauth/profile/me/`);
+  }
+
+  updateCategory(payload: CategorySettingsRequest) {
+    if (payload.category.id) {
+      return this.http.put<CategorySettingsResponse>(
+        `${this.SRC_URL}/finance/category-settings/`,
+        payload,
+      );
+    } else {
+      return this.http.post<CategorySettingsResponse>(
+        `${this.SRC_URL}/finance/category-settings/`,
+        payload,
+      );
+    }
+  }
+
+  initSettings(): Observable<ClientSettings> {
+    return this.http.get<ClientSettings>(`${this.SRC_URL}/finance/settings/`);
+  }
+
+  /* Investment Module APIs*/
 
   getInvestments(): Observable<InvestmentResponse> {
     return this.http.get<InvestmentResponse>(
@@ -173,35 +223,5 @@ export class ApiService {
     return this.http.get<CompanyResponse>(
       `${this.SRC_URL}/investments/company`,
     );
-  }
-
-  initSettings(): Observable<ClientSettings> {
-    return this.http.get<ClientSettings>(`${this.SRC_URL}/finance/settings`);
-  }
-
-  login(loginPayload: { username: string; password: string }) {
-    return this.http.post<User>(
-      `${this.SRC_URL}/auth/jwt/create`,
-      loginPayload,
-    );
-  }
-
-  getMyProfile() {
-    return this.http.get<UserProfile>(`${this.SRC_URL}/oauth/profile/me`);
-  }
-
-  uploadTransactions(formData: FormData) {
-    return this.http.post(
-      `${this.SRC_URL}/finance/import/transactions`,
-      formData,
-      {
-        reportProgress: true,
-        observe: 'events',
-      },
-    );
-  }
-
-  updateCategory(payload: CategorySettingsRequest) {
-    return this.http.put<CategorySettingsResponse>(`${this.SRC_URL}/finance/category-settings`, payload);
   }
 }

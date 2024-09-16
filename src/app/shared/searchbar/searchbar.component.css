@@ -1,12 +1,13 @@
 .search-bar {
   margin: 0 5px;
-  width: 100%;
+  width: 90%;
   height: 30px;
   padding: 0 20px;
   font-size: 1rem;
   border: 1px solid #d0cfce;
   border-radius: 5px;
   outline: none;
+
   &:focus {
     border: 1px solid #9f9c9c;
     transition: 0.35s ease;

@@ -1,4 +1,4 @@
-export interface Account {
+export interface CreditAccount {
   id: number;
   account_name: string;
   account_type: string;
@@ -15,11 +15,6 @@ export interface TransactionCategory {
   description: string;
 }
 
-export interface CategorySettings {
-  category: TransactionCategory;
-  subCategories: TransactionSubCategory[];
-}
-
 export interface TransactionSubCategory {
   id: number;
   name: string;
@@ -29,7 +24,12 @@ export interface TransactionSubCategory {
 }
 
 export interface ClientSettings {
-  accounts: Account[];
+  accounts: CreditAccount[];
   transaction_categories: TransactionCategory[];
   transaction_sub_categories: TransactionSubCategory[];
+}
+
+export interface MenuItem {
+  link: string;
+  label: string;
 }

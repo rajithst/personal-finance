@@ -8,10 +8,9 @@ describe('TradeHistoryTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TradeHistoryTableComponent]
-    })
-    .compileComponents();
-    
+      declarations: [TradeHistoryTableComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TradeHistoryTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

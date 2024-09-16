@@ -1,46 +1,48 @@
 <mat-card class="trade-history-table-card">
   <mat-card-content>
-    <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 portfolio-table">
+    <table [dataSource]="dataSource" class="mat-elevation-z8 portfolio-table" mat-table matSort>
       <ng-container matColumnDef="Stock">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Stock </th>
-        <td mat-cell *matCellDef="let element">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header> Stock</th>
+        <td *matCellDef="let element" mat-cell>
           <div class="holding-item-contents-1">
-            <div class="company-image"><img src="{{element.image}}" alt="" class="ticker-image"></div>
+            <div class="company-image"><img alt="" class="ticker-image" src="{{element.image}}"></div>
             <div class="company-ticker">
-              <div class="company-name">{{element.company_name}}</div>
-              <div class="company-symbol">{{element.company}}</div>
+              <div class="company-name">{{ element.company_name }}</div>
+              <div class="company-symbol">{{ element.company }}</div>
             </div>
           </div>
         </td>
       </ng-container>
       <ng-container matColumnDef="Date">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Date </th>
-        <td mat-cell *matCellDef="let element"> {{element.purchase_date}} </td>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header> Date</th>
+        <td *matCellDef="let element" mat-cell> {{ element.purchase_date }}</td>
       </ng-container>
       <ng-container matColumnDef="Shares">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Shares </th>
-        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header> Shares</th>
+        <td *matCellDef="let element" mat-cell> {{ element.quantity }}</td>
       </ng-container>
       <ng-container matColumnDef="Industry">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Industry </th>
-        <td mat-cell *matCellDef="let element"> {{element.industry}} </td>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header> Industry</th>
+        <td *matCellDef="let element" mat-cell> {{ element.industry }}</td>
       </ng-container>
       <ng-container matColumnDef="Sector">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Sector </th>
-        <td mat-cell *matCellDef="let element"> {{element.sector}} </td>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header> Sector</th>
+        <td *matCellDef="let element" mat-cell> {{ element.sector }}</td>
       </ng-container>
       <ng-container matColumnDef="Price">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Price </th>
-        <td mat-cell *matCellDef="let element"> {{element.stock_currency}}{{element.purchase_price * element.quantity | number: "1.2-2"}} </td>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header> Price</th>
+        <td *matCellDef="let element"
+            mat-cell> {{ element.stock_currency }}{{ element.purchase_price * element.quantity | number: "1.2-2" }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="CurrentShareValue">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Current share value </th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header> Current share value</th>
         <!--          <td mat-cell *matCellDef="let element"> {{element.stock_currency}}{{element.current_price | number: "1.2-2"}} </td>-->
-        <td mat-cell *matCellDef="let element"> </td>
+        <td *matCellDef="let element" mat-cell></td>
       </ng-container>
       <ng-container matColumnDef="TotalProfit">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Total Profit </th>
-        <td mat-cell *matCellDef="let element">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header> Total Profit</th>
+        <td *matCellDef="let element" mat-cell>
           <!--            <div class="profit-loss"-->
           <!--                 [ngClass]="{'profit': element.profit_loss >= 0, 'loss': element.profit_loss < 0}">-->
           <!--              <span>{{ formatValue(element.profit_loss) }} </span>-->
@@ -52,34 +54,34 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="Actions">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> </th>
-        <td mat-cell *matCellDef="let element">
-          <span class="trade-history-action" [matMenuTriggerFor]="menu">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+        <td *matCellDef="let element" mat-cell>
+          <span [matMenuTriggerFor]="menu" class="trade-history-action">
               <fa-icon
                 [icon]="faEllipsis"
-                size="lg"
                 [style]="{ color: '#3699ff' }"
+                size="lg"
               ></fa-icon>
           </span>
           <mat-menu #menu="matMenu">
             <button mat-menu-item>
-              <fa-icon [icon]="faPlus" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
+              <fa-icon [icon]="faPlus" [style]="{ color: '#3699ff' }" size="sm"></fa-icon>
               <span class="trade-history-action-item">Add Transaction</span>
             </button>
             <button mat-menu-item>
-              <fa-icon [icon]="faEdit" size="sm" [style]="{ color: '#3699ff' }"></fa-icon>
+              <fa-icon [icon]="faEdit" [style]="{ color: '#3699ff' }" size="sm"></fa-icon>
               <span class="trade-history-action-item">Edit Transaction</span>
             </button>
             <button mat-menu-item>
-              <fa-icon [icon]="faTrash" size="sm" [style]="{ color: 'red' }"></fa-icon>
+              <fa-icon [icon]="faTrash" [style]="{ color: 'red' }" size="sm"></fa-icon>
               <span class="trade-history-action-item">Delete</span>
             </button>
           </mat-menu>
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
     </table>
   </mat-card-content>
 </mat-card>

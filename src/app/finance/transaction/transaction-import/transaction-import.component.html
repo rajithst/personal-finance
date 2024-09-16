@@ -1,11 +1,11 @@
 <h2 mat-dialog-title>Import Transaction</h2>
 <mat-dialog-content>
-  <mat-stepper orientation="vertical" [linear]="true" #stepper>
+  <mat-stepper #stepper [linear]="true" orientation="vertical">
     <mat-step>
       <div class="step-content">
         <form [formGroup]="accountForm">
           <ng-template matStepLabel>Select Account</ng-template>
-          <mat-form-field appearance="outline" class="expense-input">
+          <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Account</mat-label>
             <mat-select formControlName="account">
               @for (exc of this.myAccounts; track exc) {
@@ -14,7 +14,7 @@
             </mat-select>
           </mat-form-field>
           <div class="step-actions">
-            <button mat-raised-button matStepperNext color="primary">
+            <button color="primary" mat-raised-button matStepperNext>
               Next
             </button>
           </div>
@@ -25,7 +25,7 @@
       <div class="step-content">
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Attach Files</ng-template>
-          <button mat-button color="warn" (click)="fileUpload.click()">
+          <button (click)="fileUpload.click()" color="warn" mat-button>
             <mat-icon>file_upload</mat-icon>
             Upload
           </button>
@@ -40,16 +40,16 @@
             }
           </ul>
           <input
-            type="file"
-            class="file-input"
-            (change)="onChange($event)"
             #fileUpload
-            style="display: none"
+            (change)="onChange($event)"
+            class="file-input"
             multiple
+            style="display: none"
+            type="file"
           />
           <div class="step-actions">
             <button mat-raised-button matStepperPrevious>Back</button>
-            <button mat-raised-button matStepperNext color="primary">
+            <button color="primary" mat-raised-button matStepperNext>
               Next
             </button>
           </div>
@@ -59,37 +59,39 @@
     <mat-step>
       <ng-template matStepLabel>Advanced Settings</ng-template>
       <div class="step-content">
-        <mat-form-field>
+        <mat-form-field class="coincraft-input">
           <mat-label>Date range</mat-label>
           <mat-date-range-input [formGroup]="rangeForm" [rangePicker]="picker">
             <input
-              matStartDate
               formControlName="start"
+              matStartDate
               placeholder="Start date"
             />
-            <input matEndDate formControlName="end" placeholder="End date" />
+            <input formControlName="end" matEndDate placeholder="End date" />
           </mat-date-range-input>
           <mat-datepicker-toggle
-            matIconSuffix
             [for]="picker"
+            matIconSuffix
           ></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
-        <section class="example-section" [formGroup]="otherInfoForm">
+        <section [formGroup]="otherInfoForm" class="example-section">
           <p>
             <mat-checkbox formControlName="drop_duplicates"
-              >Drop Duplicates</mat-checkbox
-            >
+              >Drop Duplicates
+            </mat-checkbox>
           </p>
           <p>
             <mat-checkbox formControlName="from_last_import_date"
-            >Import from last date ({{getLastImportDate() | date: "MMMM d, y" }})</mat-checkbox
-            >
+              >Import from last date ({{
+                getLastImportDate() | date: "MMMM d, y"
+              }})
+            </mat-checkbox>
           </p>
         </section>
         <div class="step-actions">
           <button mat-raised-button matStepperPrevious>Back</button>
-          <button mat-raised-button matStepperNext color="primary">Next</button>
+          <button color="primary" mat-raised-button matStepperNext>Next</button>
         </div>
       </div>
     </mat-step>
@@ -100,12 +102,19 @@
       </div>
       <div class="step-actions">
         <button mat-raised-button matStepperPrevious>Back</button>
-        <button mat-raised-button color="primary" (click)="import()" [disabled]="isValidToSubmit()">Import</button>
+        <button
+          (click)="import()"
+          [disabled]="isValidToSubmit()"
+          color="primary"
+          mat-raised-button
+        >
+          Import
+        </button>
       </div>
     </mat-step>
   </mat-stepper>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
+  <button (click)="cancel()" mat-dialog-close mat-raised-button>Cancel</button>
 </mat-dialog-actions>
