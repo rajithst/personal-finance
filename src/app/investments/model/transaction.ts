@@ -1,5 +1,4 @@
-
-import {Holding} from "./investment";
+import { Holding } from './investment';
 
 export interface StockPurchase {
   id: number | null;
@@ -9,7 +8,7 @@ export interface StockPurchase {
   purchase_price: number;
   settlement_currency: string | null;
   exchange_rate: number | null;
-  stock_currency: string,
+  stock_currency: string;
   notes: string | null;
 }
 

@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountComponent } from './account/account.component';
-import { profileResolver } from '../auth/profile.resolver';
-import {ProfileComponent} from "./profile.component";
-import {SecurityComponent} from "./security/security.component";
-import {BillingComponent} from "./billing/billing.component";
+import { ProfileComponent } from './profile.component';
+import { SecurityComponent } from './security/security.component';
+import { BillingComponent } from './billing/billing.component';
 
 const routes: Routes = [
   {
@@ -19,9 +18,6 @@ const routes: Routes = [
       {
         path: 'me',
         component: AccountComponent,
-        resolve: {
-          myAccount: profileResolver,
-        },
       },
       {
         path: 'security',

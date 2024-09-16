@@ -8,10 +8,9 @@ describe('CreditAccountComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CreditAccountComponent]
-    })
-    .compileComponents();
-    
+      declarations: [CreditAccountComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(CreditAccountComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

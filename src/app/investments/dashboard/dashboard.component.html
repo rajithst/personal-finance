@@ -1,15 +1,15 @@
 <div class="dashboard-summary-container">
-  <mat-grid-list cols="4" rowHeight="80px" [gutterSize]="'5px'">
+  <mat-grid-list [gutterSize]="'5px'" cols="4" rowHeight="80px">
     <mat-grid-tile>
       <mat-card class="summary-item total-value">
         <mat-card-content>
           <div class="summary-item-title">
             <div class="summary-item-title-icon">
-              <fa-icon [icon]="faMoneyBill" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+              <fa-icon [icon]="faMoneyBill" [style]="{'color': '#3699ff'}" size="lg"></fa-icon>
               <span>Total Value</span>
             </div>
             <div class="summary-item-title-value">
-              <span>{{currency}}{{totalCurrentPrice() | number: "1.2-2"}}</span>
+              <span>{{ currency }}{{ totalCurrentPrice() | number: "1.2-2" }}</span>
             </div>
           </div>
         </mat-card-content>
@@ -20,11 +20,11 @@
         <mat-card-content>
           <div class="summary-item-title">
             <div class="summary-item-title-icon">
-              <fa-icon [icon]="faMoneyBill" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+              <fa-icon [icon]="faMoneyBill" [style]="{'color': '#3699ff'}" size="lg"></fa-icon>
               <span>Invested Value</span>
             </div>
             <div class="summary-item-title-value">
-              <span>{{currency}}{{totalInvestment() | number: "1.2-2"}}</span>
+              <span>{{ currency }}{{ totalInvestment() | number: "1.2-2" }}</span>
             </div>
           </div>
         </mat-card-content>
@@ -35,14 +35,16 @@
         <mat-card-content>
           <div class="summary-item-title">
             <div class="summary-item-title-icon">
-              <fa-icon [icon]="faLineChart" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+              <fa-icon [icon]="faLineChart" [style]="{'color': '#3699ff'}" size="lg"></fa-icon>
               <span>Total Profit</span>
             </div>
-            <div class="summary-item-title-value" [ngClass]="{'profit': totalProfit() >=  0, 'loss': totalProfit() < 0}">
-              <span>{{totalProfit() >= 0 ? '' : '-'}} {{currency}}{{Math.abs(totalProfit()) | number: "1.2-2"}}</span>
+            <div [ngClass]="{'profit': totalProfit() >=  0, 'loss': totalProfit() < 0}"
+                 class="summary-item-title-value">
+              <span>{{ totalProfit() >= 0 ? '' : '-' }} {{ currency }}{{ Math.abs(totalProfit()) | number: "1.2-2" }}</span>
               <span class="percentage-change">
-          {{totalProfitPercentage() | number: "1.2-2"}} %
-          <fa-icon [icon]="totalProfit() > 0 ? faCaretUp : faCaretDown" class="{{totalProfit() > 0 ? 'profit' : 'loss'}}"></fa-icon>
+          {{ totalProfitPercentage() | number: "1.2-2" }} %
+          <fa-icon [icon]="totalProfit() > 0 ? faCaretUp : faCaretDown"
+                   class="{{totalProfit() > 0 ? 'profit' : 'loss'}}"></fa-icon>
         </span>
             </div>
           </div>
@@ -54,7 +56,7 @@
         <mat-card-content>
           <div class="summary-item-title">
             <div class="summary-item-title-icon">
-              <fa-icon [icon]="faJpy" size="lg" [style]="{'color': '#3699ff'}"></fa-icon>
+              <fa-icon [icon]="faJpy" [style]="{'color': '#3699ff'}" size="lg"></fa-icon>
               <span>Total Profit (Y)</span>
             </div>
             <div class="summary-item-title-value">
@@ -68,64 +70,64 @@
 </div>
 
 <div class="dashboard-container">
-  <mat-grid-list cols="3" rowHeight="350px" [gutterSize]="'5px'">
+  <mat-grid-list [gutterSize]="'5px'" cols="3" rowHeight="350px">
     <mat-grid-tile>
       <div class="chart-item">
         <app-chartbox
+          (rendered)="childRendered()"
           [chartData]="monthlyAccInvestedSum"
           [chartOptions]="monthlyAccInvestedSumOptions"
           [chartType]="monthlyAccInvestedSumChartType"
-          (rendered)="childRendered()"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="chart-item">
         <app-chartbox
+          (rendered)="childRendered()"
           [chartData]="monthlyDividend"
           [chartOptions]="monthlyDividendOptions"
           [chartType]="monthlyDividendChartType"
-          (rendered)="childRendered()"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="chart-item">
         <app-chartbox
+          (rendered)="childRendered()"
           [chartData]="monthlyInvestedSum"
           [chartOptions]="monthlyInvestedSumOptions"
           [chartType]="monthlyInvestedSumChartType"
-          (rendered)="childRendered()"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="chart-item">
         <app-chartbox
+          (rendered)="childRendered()"
           [chartData]="sectorWiseUsStockSum"
           [chartOptions]="sectorWiseUsStockSumOptions"
           [chartType]="sectorWiseUsStockSumChartType"
-          (rendered)="childRendered()"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="chart-item">
         <app-chartbox
+          (rendered)="childRendered()"
           [chartData]="securityWiseUsStockSum"
           [chartOptions]="securityWiseUsStockSumOptions"
           [chartType]="securityWiseUsStockSumChartType"
-          (rendered)="childRendered()"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
     <mat-grid-tile>
       <div class="chart-item">
         <app-chartbox
+          (rendered)="childRendered()"
           [chartData]="sectorWiseUsStockSum"
           [chartOptions]="sectorWiseUsStockInvestmentOptions"
           [chartType]="sectorWiseUsStockInvestmentChartType"
-          (rendered)="childRendered()"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
@@ -133,10 +135,10 @@
       <div class="chart-item">
         <div class="monthly-total-expenses">
           <app-chartbox
+            (rendered)="childRendered()"
             [chartData]="sectorWiseDomesticStockSum"
             [chartOptions]="sectorWiseDomesticStockSumOptions"
             [chartType]="sectorWiseDomesticStockSumChartType"
-            (rendered)="childRendered()"
           ></app-chartbox>
         </div>
       </div>
@@ -145,10 +147,10 @@
       <div class="chart-item">
         <div class="monthly-total-expenses">
           <app-chartbox
+            (rendered)="childRendered()"
             [chartData]="securityWiseDomesticStockSum"
             [chartOptions]="securityWiseDomesticStockSumOptions"
             [chartType]="securityWiseDomesticStockSumChartType"
-            (rendered)="childRendered()"
           ></app-chartbox>
         </div>
       </div>
@@ -156,10 +158,10 @@
     <mat-grid-tile>
       <div class="chart-item">
         <app-chartbox
+          (rendered)="childRendered()"
           [chartData]="sectorWiseDomesticStockSum"
           [chartOptions]="sectorWiseDomesticStockInvestmentOption"
           [chartType]="sectorWiseDomesticStockInvestmentChartType"
-          (rendered)="childRendered()"
         ></app-chartbox>
       </div>
     </mat-grid-tile>

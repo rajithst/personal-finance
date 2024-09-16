@@ -13,7 +13,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDividerModule } from '@angular/material/divider';
@@ -24,15 +24,13 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatChip, MatChipSet } from '@angular/material/chips';
-import {MatBadgeModule} from '@angular/material/badge';
-import {MatRippleModule} from '@angular/material/core';
-import {MatTooltipModule} from "@angular/material/tooltip";
-import {MatChipsModule} from '@angular/material/chips';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatChip, MatChipSet, MatChipsModule } from '@angular/material/chips';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatGridListModule } from '@angular/material/grid-list';
-import {MatTreeModule} from '@angular/material/tree';
-import {MatStepperModule} from "@angular/material/stepper";
+import { MatTreeModule } from '@angular/material/tree';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
   imports: [
@@ -61,7 +59,8 @@ import {MatStepperModule} from "@angular/material/stepper";
     MatProgressSpinnerModule,
     MatSnackBarModule,
     DragDropModule,
-    MatChip, MatChipSet,
+    MatChip,
+    MatChipSet,
     MatBadgeModule,
     MatRippleModule,
     MatTooltipModule,
@@ -69,7 +68,7 @@ import {MatStepperModule} from "@angular/material/stepper";
     MatPaginatorModule,
     MatGridListModule,
     MatTreeModule,
-    MatStepperModule
+    MatStepperModule,
   ],
   exports: [
     MatButtonModule,
@@ -96,7 +95,8 @@ import {MatStepperModule} from "@angular/material/stepper";
     MatProgressSpinnerModule,
     MatSnackBarModule,
     DragDropModule,
-    MatChip, MatChipSet,
+    MatChip,
+    MatChipSet,
     MatBadgeModule,
     MatRippleModule,
     MatTooltipModule,
@@ -104,7 +104,7 @@ import {MatStepperModule} from "@angular/material/stepper";
     MatPaginatorModule,
     MatGridListModule,
     MatTreeModule,
-    MatStepperModule
+    MatStepperModule,
   ],
   declarations: [],
 })

@@ -1,8 +1,13 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
-import {faGear, faList, faPerson, faSignOut, faUserCircle} from '@fortawesome/free-solid-svg-icons';
+import {
+  faGear,
+  faList,
+  faSignOut,
+  faUserCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from './core/api.service';
-import { DataService } from './finance/service/data.service';
+import { DataService } from './service/data.service';
 import { AuthService } from './auth/auth.service';
 
 @Component({
@@ -13,13 +18,9 @@ import { AuthService } from './auth/auth.service';
 export class AppComponent implements OnInit {
   @ViewChild(MatSidenavContainer) sidenavContainer!: MatSidenavContainer;
   @ViewChild('snav') sideNav!: MatSidenav;
-  protected readonly faList = faList;
-  protected readonly faPerson = faPerson;
-
   authService = inject(AuthService);
   apiService = inject(ApiService);
   dataService = inject(DataService);
-
   sideNavDefaultOpened = true;
   showFullMenu = true;
   isExpanded = true;
@@ -27,6 +28,10 @@ export class AppComponent implements OnInit {
   openedWidth = 200;
   sideNavMode: 'side' | 'over' = 'side';
   hasBackdrop: boolean = false;
+  protected readonly faList = faList;
+  protected readonly faSignOut = faSignOut;
+  protected readonly faUserCircle = faUserCircle;
+  protected readonly faGear = faGear;
 
   onToolbarMenuToggle() {
     this.showFullMenu = !this.isExpanded;
@@ -39,19 +44,15 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private loadInitSettings(): void {
-    this.apiService.initSettings().subscribe((value) => {
-      this.dataService.setClientSettings(value);
-    });
-  }
-
   logout() {
     this.authService.logout().then((r) => {
       console.log(r);
     });
   }
 
-  protected readonly faSignOut = faSignOut;
-  protected readonly faUserCircle = faUserCircle;
-  protected readonly faGear = faGear;
+  private loadInitSettings(): void {
+    this.apiService.initSettings().subscribe((value) => {
+      this.dataService.setClientSettings(value);
+    });
+  }
 }

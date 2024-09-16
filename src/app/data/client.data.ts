@@ -5,10 +5,10 @@ export const TRANSACTION_TYPE_INCOME_ID = 2;
 export const TRANSACTION_TYPE_SAVINGS_ID = 3;
 export const TRANSACTION_TYPE_PAYMENTS_ID = 4;
 
-export const ACCOUNT_PROVIDER_RAKUTEN = 'Rakuten'
-export const ACCOUNT_PROVIDER_EPOS = 'Epos'
-export const ACCOUNT_PROVIDER_DOCOMO = 'Docomo'
-export const ACCOUNT_PROVIDER_MIZUHO = 'Mizuho'
+export const ACCOUNT_PROVIDER_RAKUTEN = 'Rakuten';
+export const ACCOUNT_PROVIDER_EPOS = 'Epos';
+export const ACCOUNT_PROVIDER_DOCOMO = 'Docomo';
+export const ACCOUNT_PROVIDER_MIZUHO = 'Mizuho';
 
 export const SAVINGS_CATEGORY_ID = 6;
 export const PAYMENT_CATEGORY_ID = 14;
@@ -30,7 +30,6 @@ export const TRANSACTION_TYPES: DropDownType[] = [
   { value: TRANSACTION_TYPE_PAYMENTS_ID, viewValue: 'Payment', checked: false },
 ];
 
-
 export const MONTHS: DropDownType[] = [
   { value: 1, viewValue: 'January', checked: false },
   { value: 2, viewValue: 'February', checked: false },
@@ -45,4 +44,3 @@ export const MONTHS: DropDownType[] = [
   { value: 11, viewValue: 'November', checked: false },
   { value: 12, viewValue: 'December', checked: false },
 ];
-

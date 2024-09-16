@@ -1,55 +1,56 @@
 <div
-  class="d-flex-align-c"
   *ngIf="selection.selected.length > 1"
   [ngClass]="{ 'highlight-merge-panel': selection.selected.length > 1 }"
+  class="d-flex-align-c"
 >
   <div class="merge-description">
     <span>Selected {{ selection.selected.length }} Transactions!</span>
   </div>
   <div
-    class="coincraft-action-button"
     (click)="mergeTransactions()"
+    class="coincraft-action-button"
     matRipple
     matTooltip="Merge Transactions"
     matTooltipPosition="below"
   >
     <fa-icon
       [icon]="faCodeMerge"
-      size="1x"
       [style]="{ color: '#4a4949' }"
+      size="1x"
     ></fa-icon>
   </div>
   <div
-    class="coincraft-action-button"
     (click)="bulkEditTransactions()"
+    class="coincraft-action-button"
     matRipple
     matTooltip="Bulk Edit"
     matTooltipPosition="below"
   >
     <fa-icon
       [icon]="faPencil"
-      size="1x"
       [style]="{ color: '#4a4949' }"
+      size="1x"
     ></fa-icon>
   </div>
   <div
-    class="coincraft-action-button"
     (click)="bulkDeleteTransactions()"
+    class="coincraft-action-button"
     matRipple
     matTooltip="Bulk Delete"
     matTooltipPosition="below"
   >
     <fa-icon
       [icon]="faTrash"
-      size="1x"
       [style]="{ color: '#af5252' }"
+      size="1x"
     ></fa-icon>
   </div>
 </div>
-<div class="filters-right" *ngIf="selection.selected.length <= 1">
+<div *ngIf="selection.selected.length <= 1" class="filters-right">
   <div class="info-panel">
     <mat-chip class="annual-total-chip"
-      >Total: ¥{{ showValues ? (totalAnnualAmount() | number: "1.2-2") : '--' }}</mat-chip
+    >Total: ¥{{ showValues ? (totalAnnualAmount() | number: "1.2-2") : '--' }}
+    </mat-chip
     >
     <mat-chip-set aria-label="Fruit selection">
       @for (chip of filterParamChips; track chip) {
@@ -65,72 +66,72 @@
   <div class="edit-panel">
     <div
       (click)="showValueAction()"
+      [matTooltip]="showValues ? 'Hide values' : 'Show Values'"
       class="coincraft-action-button"
       matRipple
-      [matTooltip]="showValues ? 'Hide values' : 'Show Values'"
       matTooltipPosition="below"
     >
       <fa-icon
         [icon]="showValues ? faEye : faEyeSlash"
-        size="1x"
         [style]="{ color: '#4a4949' }"
+        size="1x"
       ></fa-icon>
     </div>
     <div
       (click)="panelAction()"
+      [matTooltip]="allExpanded ? 'Minimize All' : 'Expand All'"
       class="coincraft-action-button"
       matRipple
-      [matTooltip]="allExpanded ? 'Minimize All' : 'Expand All'"
       matTooltipPosition="below"
     >
       <fa-icon
         [icon]="allExpanded ? faMinimize : faExpand"
-        size="1x"
         [style]="{ color: '#4a4949' }"
+        size="1x"
       ></fa-icon>
     </div>
     <div #filterButton (click)="openFilters()" class="coincraft-action-button" matRipple>
       <fa-icon
         [icon]="faFilter"
-        size="1x"
         [style]="{ color: '#4a4949' }"
+        size="1x"
       ></fa-icon>
     </div>
     <div
+      (click)="importTransaction()"
       class="coincraft-action-button"
       matRipple
       matTooltip="Upload Transactions"
       matTooltipPosition="below"
-      (click)="importTransaction()"
     >
       <fa-icon
         [icon]="faUpload"
-        size="1x"
         [style]="{ color: '#4a4949' }"
+        size="1x"
       ></fa-icon>
     </div>
     <div
-      class="coincraft-action-button"
       (click)="addTransaction()"
+      class="coincraft-action-button"
       matRipple
       matTooltip="Add Transactions"
       matTooltipPosition="below"
     >
       <fa-icon
         [icon]="faCirclePlus"
-        size="1x"
         [style]="{ color: '#4a4949' }"
+        size="1x"
       ></fa-icon>
     </div>
   </div>
 </div>
 <div class="transaction-panel-container">
-  <mat-accordion multi="true" class="transaction-item-panel">
+  <mat-accordion class="transaction-item-panel" multi="true">
     @for (data of allTransactions; track data; let i = $index) {
       <mat-expansion-panel class="transaction-panel">
         <mat-expansion-panel-header>
           <mat-panel-title
-            >{{ data.year }} - {{ data.month_text }} :
+          >{{ data.year }} - {{ data.month_text }} :
             <span>¥{{
                 showValues ? (data.total | number: "1.2-2") : '--'
               }}</span></mat-panel-title
@@ -270,7 +271,7 @@
                     [style]="{ color: '#3699ff' }"
                   ></fa-icon>
                   <span class="transaction-action-item"
-                    >View Payee Details</span
+                  >View Payee Details</span
                   >
                 </button>
                 <button
@@ -284,7 +285,7 @@
                     [style]="{ color: '#3699ff' }"
                   ></fa-icon>
                   <span class="transaction-action-item"
-                    >Show Merge history</span
+                  >Show Merge history</span
                   >
                 </button>
                 <button mat-menu-item (click)="deleteTransaction(element)">

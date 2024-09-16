@@ -2,117 +2,120 @@
   Filters
 </h2>
 <mat-dialog-content>
-    <div class="filter-section">
-      <div class="main-category-section">
-        <mat-selection-list
-          [multiple]="false"
-          hideSingleSelectionIndicator
-          class="option-list"
+  <div class="filter-section">
+    <div class="main-category-section">
+      <mat-selection-list
+        [multiple]="false"
+        class="option-list"
+        hideSingleSelectionIndicator
+      >
+        <mat-list-option (click)="clickOnMainFilter('categories')">
+          <fa-icon
+            [icon]="faLayerGroup"
+            [style]="{ color: '#4a4949' }"
+            size="1x"
+          ></fa-icon>
+          Categories
+        </mat-list-option
         >
-          <mat-list-option (click)="clickOnMainFilter('categories')">
-            <fa-icon
-              [icon]="faLayerGroup"
-              size="1x"
-              [style]="{ color: '#4a4949' }"
-            ></fa-icon>
-            Categories</mat-list-option
-          >
-          <mat-list-option (click)="clickOnMainFilter('accounts')">
-            <fa-icon
-              [icon]="faCreditCard"
-              size="1x"
-              [style]="{ color: '#4a4949' }"
-            ></fa-icon>
-            Accounts</mat-list-option
-          >
-          <mat-list-option (click)="clickOnMainFilter('payee')">
-            <fa-icon
-              [icon]="faShop"
-              size="1x"
-              [style]="{ color: '#4a4949' }"
-            ></fa-icon>
-            Payee</mat-list-option
-          >
-        </mat-selection-list>
-      </div>
-
-      <div class="category-result-section">
-        <div class="category-title">{{categoryTitle}}</div>
-        <form [formGroup]="mainCategoryForm">
-          <mat-list
-            role="list"
-            *ngIf="clickedType === 'categories'"
-            class="option-list"
-          >
-            @for (exec of transactionCategories; track exec.id) {
-              <mat-list-item
-                matRipple
-                (click)="clickOnOption('categories', exec)"
-              >
-                <div class="list-item-actions">
-                  <div class="checkbox">
-                    <mat-checkbox
-                      [formControlName]="'category_' + exec.id"
-                      class="example-margin"
-                    ></mat-checkbox>
-                  </div>
-                  <div class="item-text">{{ exec.category }}</div>
-                </div>
-              </mat-list-item>
-            }
-          </mat-list>
-        </form>
-        <form [formGroup]="accountForm">
-          <mat-list
-            role="list"
-            *ngIf="clickedType === 'accounts'"
-            class="option-list"
-          >
-            @for (exec of accounts; track exec.id) {
-              <mat-list-item matRipple>
-                <div class="list-item-actions">
-                  <div class="checkbox">
-                    <mat-checkbox
-                      [formControlName]="'account_' + exec.id"
-                      class="example-margin"
-                    ></mat-checkbox>
-                  </div>
-                  <div class="item-text">{{ exec.account_name }}</div>
-                </div>
-              </mat-list-item>
-            }
-          </mat-list>
-        </form>
-      </div>
-      <div class="subcategory-section">
-        <div class="subcategory-title">{{subCategoryTitle}}</div>
-        <form [formGroup]="subCategoryForm">
-          <mat-list
-            role="list"
-            *ngIf="clickedType === 'categories'"
-            class="option-list"
-          >
-            @for (exec of transactionSubCategories; track exec.id) {
-              <mat-list-item matRipple>
-                <div class="list-item-actions">
-                  <div class="checkbox">
-                    <mat-checkbox
-                      [formControlName]="'subcategory_' + exec.id"
-                      class="example-margin"
-                    ></mat-checkbox>
-                  </div>
-                  <div class="item-text">{{ exec.name }}</div>
-                </div>
-              </mat-list-item>
-            }
-          </mat-list>
-        </form>
-      </div>
+        <mat-list-option (click)="clickOnMainFilter('accounts')">
+          <fa-icon
+            [icon]="faCreditCard"
+            [style]="{ color: '#4a4949' }"
+            size="1x"
+          ></fa-icon>
+          Accounts
+        </mat-list-option
+        >
+        <mat-list-option (click)="clickOnMainFilter('payee')">
+          <fa-icon
+            [icon]="faShop"
+            [style]="{ color: '#4a4949' }"
+            size="1x"
+          ></fa-icon>
+          Payee
+        </mat-list-option
+        >
+      </mat-selection-list>
     </div>
+
+    <div class="category-result-section">
+      <div class="category-title">{{ categoryTitle }}</div>
+      <form [formGroup]="mainCategoryForm">
+        <mat-list
+          *ngIf="clickedType === 'categories'"
+          class="option-list"
+          role="list"
+        >
+          @for (exec of transactionCategories; track exec.id) {
+            <mat-list-item
+              matRipple
+              (click)="clickOnOption('categories', exec)"
+            >
+              <div class="list-item-actions">
+                <div class="checkbox">
+                  <mat-checkbox
+                    [formControlName]="'category_' + exec.id"
+                    class="example-margin"
+                  ></mat-checkbox>
+                </div>
+                <div class="item-text">{{ exec.category }}</div>
+              </div>
+            </mat-list-item>
+          }
+        </mat-list>
+      </form>
+      <form [formGroup]="accountForm">
+        <mat-list
+          *ngIf="clickedType === 'accounts'"
+          class="option-list"
+          role="list"
+        >
+          @for (exec of accounts; track exec.id) {
+            <mat-list-item matRipple>
+              <div class="list-item-actions">
+                <div class="checkbox">
+                  <mat-checkbox
+                    [formControlName]="'account_' + exec.id"
+                    class="example-margin"
+                  ></mat-checkbox>
+                </div>
+                <div class="item-text">{{ exec.account_name }}</div>
+              </div>
+            </mat-list-item>
+          }
+        </mat-list>
+      </form>
+    </div>
+    <div class="subcategory-section">
+      <div class="subcategory-title">{{ subCategoryTitle }}</div>
+      <form [formGroup]="subCategoryForm">
+        <mat-list
+          *ngIf="clickedType === 'categories'"
+          class="option-list"
+          role="list"
+        >
+          @for (exec of transactionSubCategories; track exec.id) {
+            <mat-list-item matRipple>
+              <div class="list-item-actions">
+                <div class="checkbox">
+                  <mat-checkbox
+                    [formControlName]="'subcategory_' + exec.id"
+                    class="example-margin"
+                  ></mat-checkbox>
+                </div>
+                <div class="item-text">{{ exec.name }}</div>
+              </div>
+            </mat-list-item>
+          }
+        </mat-list>
+      </form>
+    </div>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button (click)="clear()">Reset Filters</button>
-  <button mat-raised-button color="primary" (click)="submit()">Filter</button>
+  <button mat-dialog-close mat-raised-button>Cancel</button>
+  <button (click)="clear()" mat-raised-button>Reset Filters</button>
+  <button (click)="submit()" color="primary" mat-raised-button>Filter</button>
 </mat-dialog-actions>

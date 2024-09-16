@@ -8,7 +8,7 @@
     <table class="expense-field-table">
       <tr>
         <td>
-          <mat-form-field class="fill expense-input" appearance="outline">
+          <mat-form-field appearance="outline" class="fill coincraft-input">
             <mat-label>Account</mat-label>
             <mat-select formControlName="account">
               @for (pm of this.ACCOUNTS; track pm) {
@@ -18,7 +18,7 @@
           </mat-form-field>
         </td>
         <td>
-          <mat-form-field appearance="outline" class="expense-input">
+          <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Transaction Type</mat-label>
             <mat-select formControlName="transaction_type">
               @for (exc of TRANSACTION_TYPES; track exc) {
@@ -30,12 +30,12 @@
           </mat-form-field>
         </td>
         <td>
-          <mat-form-field appearance="outline" class="expense-input">
+          <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="date" />
+            <input [matDatepicker]="picker" formControlName="date" matInput/>
             <mat-datepicker-toggle
-              matIconSuffix
               [for]="picker"
+              matIconSuffix
             ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -43,22 +43,22 @@
       </tr>
       <tr>
         <td colspan="2">
-          <mat-form-field appearance="outline" class="expense-input">
+          <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Payee</mat-label>
-            <input matInput placeholder="Payee" formControlName="destination" />
+            <input formControlName="destination" matInput placeholder="Payee"/>
           </mat-form-field>
         </td>
         <td>
-          <mat-form-field appearance="outline" class="expense-input">
+          <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Amount</mat-label>
-            <input matInput placeholder="Amount" formControlName="amount" />
+            <input formControlName="amount" matInput placeholder="Amount"/>
             <span matTextPrefix>¥&nbsp;</span>
           </mat-form-field>
         </td>
       </tr>
       <tr>
         <td>
-          <mat-form-field appearance="outline" class="expense-input">
+          <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Category</mat-label>
             <mat-select formControlName="category">
               @for (exc of this.transactionCategories; track exc) {
@@ -68,7 +68,7 @@
           </mat-form-field>
         </td>
         <td>
-          <mat-form-field appearance="outline" class="fill expense-input">
+          <mat-form-field appearance="outline" class="fill coincraft-input">
             <mat-label>Sub Category</mat-label>
             <mat-select formControlName="subcategory">
               @for (exc of this.transactionSubCategories; track exc) {
@@ -78,9 +78,9 @@
           </mat-form-field>
         </td>
         <td>
-          <mat-form-field appearance="outline" class="expense-input">
+          <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Payee Alias (English)</mat-label>
-            <input matInput placeholder="Destination" formControlName="alias" />
+            <input formControlName="alias" matInput placeholder="Destination"/>
           </mat-form-field>
         </td>
       </tr>
@@ -94,8 +94,9 @@
         <ul class="rules-list">
           <li>
             <mat-checkbox color="primary" formControlName="update_similar"
-              >Update all transactions for payee
-              {{ transactionForm.get("destination")?.value }}</mat-checkbox
+            >Update all transactions for payee
+              {{ transactionForm.get("destination")?.value }}
+            </mat-checkbox
             >
           </li>
         </ul>
@@ -104,12 +105,12 @@
         <div class="area-title">
           <span>Additional Info</span>
         </div>
-        <mat-form-field appearance="outline" class="expense-input">
+        <mat-form-field appearance="outline" class="coincraft-input">
           <mat-label>Notes</mat-label>
           <textarea
+            formControlName="notes"
             matInput
             placeholder="Notes"
-            formControlName="notes"
           ></textarea>
         </mat-form-field>
       </div>
@@ -118,6 +119,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="expense-form-footer">
-  <button mat-raised-button mat-dialog-close (click)="cancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="submit()" [disabled]="transactionForm.invalid">Save</button>
+  <button (click)="cancel()" mat-dialog-close mat-raised-button>Cancel</button>
+  <button (click)="submit()" [disabled]="transactionForm.invalid" color="primary" mat-raised-button>Save</button>
 </mat-dialog-actions>

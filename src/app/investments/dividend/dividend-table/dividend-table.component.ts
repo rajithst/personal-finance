@@ -1,23 +1,28 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
   faCaretDown,
   faCaretUp,
   faCircleCheck,
   faJpy,
   faLineChart,
-  faMoneyBill
-} from "@fortawesome/free-solid-svg-icons";
+  faMoneyBill,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-dividend-table',
   templateUrl: './dividend-table.component.html',
-  styleUrl: './dividend-table.component.css'
+  styleUrl: './dividend-table.component.css',
 })
 export class DividendTableComponent {
+  @Input() dividends: any[] = [];
 
-  @Input() dividends: any[] = []
-
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
+  displayedColumns: string[] = [
+    'position',
+    'name',
+    'weight',
+    'symbol',
+    'action',
+  ];
   protected readonly faCaretUp = faCaretUp;
   protected readonly faMoneyBill = faMoneyBill;
   protected readonly faLineChart = faLineChart;
@@ -26,7 +31,5 @@ export class DividendTableComponent {
   protected readonly Math = Math;
   protected readonly faCircleCheck = faCircleCheck;
 
-  dividendPaymentFlow(element: any) {
-
-  }
+  dividendPaymentFlow(element: any) {}
 }

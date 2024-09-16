@@ -1,38 +1,21 @@
-<script src="../transaction/transaction-update/transaction-update.component.ts"></script>
-<div class="toolbar">
-  <ul class="menu">
-    <li
-      class="menu-item"
-      routerLink="payees"
-      routerLinkActive="active-menu-item"
-    >
-      <span>Payees</span>
-    </li>
-    <li
-      class="menu-item"
-      routerLink="recurring-payments"
-      routerLinkActive="active-menu-item"
-    >
-      <span>Recurring Payments</span>
-    </li>
-  </ul>
-</div>
+<app-toolbar-menu [menuItems]="menuItems"></app-toolbar-menu>
 <div class="data-card-content">
   <mat-grid-list
-    cols="3"
-    rowHeight="50px"
     [gutterSize]="'5px'"
     class="filter-toolbar"
+    cols="3"
+    rowHeight="50px"
   >
     <mat-grid-tile>
       <div class="toolbar-header">
         <h2>{{ title.getTitle() }}</h2>
       </div>
     </mat-grid-tile>
+    <mat-grid-tile></mat-grid-tile>
     <mat-grid-tile>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <app-searchbar></app-searchbar>
+      <div class="searchbar-wrapper">
+        <app-searchbar></app-searchbar>
+      </div>
     </mat-grid-tile>
   </mat-grid-list>
   <router-outlet></router-outlet>

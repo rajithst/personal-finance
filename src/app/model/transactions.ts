@@ -9,14 +9,15 @@ export interface MonthlyTransaction {
   total: number;
   transactions: TransactionExpand[];
 }
+
 export interface Transaction {
   id: number | null;
   amount: number | null;
   date: string;
   destination: string;
   alias: string;
-  category: number;
-  subcategory: number;
+  category: number | null;
+  subcategory: number | null;
   notes: string;
   is_saving: boolean;
   is_payment: boolean;
@@ -31,8 +32,8 @@ export interface Transaction {
 }
 
 export interface TransactionExpand extends Transaction {
-  category_text: string;
-  subcategory_text: string;
+  category_text?: string;
+  subcategory_text?: string;
   account_name: string;
   account_type: string;
   year: number;

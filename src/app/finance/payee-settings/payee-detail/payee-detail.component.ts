@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { DestinationMap } from '../../model/payee';
+import { DestinationMap } from '../../../model/payee';
 import { ActivatedRoute } from '@angular/router';
-import { TransactionExpand } from '../../model/transactions';
+import { TransactionExpand } from '../../../model/transactions';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { PayeeEditComponent } from '../payee-edit/payee-edit.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,17 +14,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './payee-detail.component.css',
 })
 export class PayeeDetailComponent implements OnInit {
-  protected readonly faPencil = faPencil;
-  private activatedRoute = inject(ActivatedRoute);
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
-
   payeeInfo: DestinationMap;
   payeeTransactions: TransactionExpand[];
   totalPayment = signal(0);
   lastMonthPayment = signal(0);
   dataSource: MatTableDataSource<TransactionExpand>;
   displayedColumns: string[] = ['Date', 'Account', 'Amount', 'Notes'];
+  protected readonly faPencil = faPencil;
+  private activatedRoute = inject(ActivatedRoute);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ payee }) => {

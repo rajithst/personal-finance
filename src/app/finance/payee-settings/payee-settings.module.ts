@@ -13,7 +13,13 @@ import { RecurringComponent } from './recurring/recurring.component';
 import { PayeeDetailComponent } from './payee-detail/payee-detail.component';
 
 @NgModule({
-  declarations: [PayeeSettingsComponent, PayeeEditComponent, PayeesComponent, RecurringComponent, PayeeDetailComponent],
+  declarations: [
+    PayeeSettingsComponent,
+    PayeeEditComponent,
+    PayeesComponent,
+    RecurringComponent,
+    PayeeDetailComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,

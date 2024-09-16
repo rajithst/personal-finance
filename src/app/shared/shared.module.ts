@@ -8,16 +8,28 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { RouterModule } from '@angular/router';
 import { SearchbarComponent } from './searchbar/searchbar.component';
+import { ToolbarMenuComponent } from './toolbar-menu/toolbar-menu.component';
 
 @NgModule({
-  declarations: [LoadingComponent, ChartboxComponent, BreadcrumbComponent, SearchbarComponent],
+  declarations: [
+    LoadingComponent,
+    ChartboxComponent,
+    BreadcrumbComponent,
+    SearchbarComponent,
+    ToolbarMenuComponent,
+  ],
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
     MaterialModule,
     FaIconComponent,
-    RouterModule
+    RouterModule,
   ],
-  exports: [LoadingComponent, ChartboxComponent, SearchbarComponent],
+  exports: [
+    LoadingComponent,
+    ChartboxComponent,
+    SearchbarComponent,
+    ToolbarMenuComponent,
+  ],
 })
 export class SharedModule {}

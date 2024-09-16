@@ -8,10 +8,9 @@ describe('HoldingTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HoldingTableComponent]
-    })
-    .compileComponents();
-    
+      declarations: [HoldingTableComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(HoldingTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

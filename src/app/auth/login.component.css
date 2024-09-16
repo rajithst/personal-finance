@@ -5,9 +5,11 @@ mat-card {
   max-width: 400px;
   padding: 15px;
 }
+
 mat-card-title {
   text-align: center;
 }
+
 .form-field {
   width: 100%;
 }

@@ -1,17 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  MONTHS
-} from '../../data/client.data';
+import { MONTHS } from '../../data/client.data';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingService } from '../../shared/loading/loading.service';
 import {
-  faPiggyBank,
-  faSackDollar,
   faCreditCard,
   faFileInvoiceDollar,
+  faPiggyBank,
+  faSackDollar,
 } from '@fortawesome/free-solid-svg-icons';
-import {DashboardResponse} from "../model/dashboard";
-import {DataService} from "../service/data.service";
+import { DashboardResponse } from '../../model/dashboard';
+import { DataService } from '../../service/data.service';
 
 @Component({
   selector: 'app-transaction-dashboard',
@@ -19,17 +17,6 @@ import {DataService} from "../service/data.service";
   styleUrl: './dashboard.component.css',
 })
 export class TransactionDashboardComponent implements OnInit {
-  protected readonly faSackDollar = faSackDollar;
-  protected readonly faPiggyBank = faPiggyBank;
-  protected readonly faCreditCard = faCreditCard;
-  protected readonly faFileInvoiceDollar = faFileInvoiceDollar;
-
-  private loadingService = inject(LoadingService);
-  private activatedRoute = inject(ActivatedRoute);
-  private dataService = inject(DataService);
-  PAYMENT_METHODS = this.dataService.getClientSettings().accounts
-  TRANSACTION_CATEGORIES = this.dataService.getClientSettings().transaction_categories
-
   today = new Date();
   currentYear = this.today.getFullYear();
   currentMonthNumber = this.today.getMonth() - 1;
@@ -37,15 +24,44 @@ export class TransactionDashboardComponent implements OnInit {
   currentMonthName: string = MONTHS.find(
     (x) => x.value == this.currentMonthNumber,
   )!.viewValue;
-
   childComponentsRendered = 0;
   totalChildComponents = 7;
   totalIncome = 0;
   totalExpenses = 0;
   totalPayments = 0;
   totalSavings = 0;
-
   dashboardData: DashboardResponse;
+  monthlyExpenses: [[string, any, any]] = [['Month', 'Expense', 'Payment']];
+  monthlyExpensesOptions: any;
+  monthlyExpensesChartType: string = 'bar';
+  yearSummary: [[string, any]] = [['Category', 'Total']];
+  monthlyIncome: [[string, any, any]] = [['Month', 'Income', 'Savings']];
+  monthlyIncomeOptions: any;
+  monthlyIncomeChartType: string = 'bar';
+  monthlySavings: [[string, any]] = [['Month', 'Amount']];
+  monthlySavingsOptions: any;
+  monthlySavingsChartType: string = 'bar';
+  categoryWiseSum: [[string, any]] = [['Category', 'Total']];
+  categoryWiseSumOptions: any;
+  categoryWiseSumChartType: string = 'pie';
+  paymentMethodWiseSum: [[string, any]] = [['Payment Method', 'Total']];
+  paymentMethodWiseSumOptions: any;
+  paymentMethodWiseSumChartType: string = 'pie';
+  monthlyPayments: [[string, any]] = [['Month', 'Amount']];
+  monthlyPaymentsOptions: any;
+  monthlyPaymentsChartType: string = 'pie';
+  categoryWiseSumValueOptions: any;
+  categoryWiseSumValueChartType: string = 'bar';
+  protected readonly faSackDollar = faSackDollar;
+  protected readonly faPiggyBank = faPiggyBank;
+  protected readonly faCreditCard = faCreditCard;
+  protected readonly faFileInvoiceDollar = faFileInvoiceDollar;
+  private loadingService = inject(LoadingService);
+  private activatedRoute = inject(ActivatedRoute);
+  private dataService = inject(DataService);
+  PAYMENT_METHODS = this.dataService.getClientSettings().accounts;
+  TRANSACTION_CATEGORIES =
+    this.dataService.getClientSettings().transaction_categories;
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ finance }) => {
@@ -54,35 +70,6 @@ export class TransactionDashboardComponent implements OnInit {
     this.prepareAnalytics();
     this.prepareData();
   }
-
-  monthlyExpenses: [[string, any, any]] = [['Month', 'Expense', 'Payment']];
-  monthlyExpensesOptions: any;
-  monthlyExpensesChartType: string = 'bar';
-
-  yearSummary: [[string, any]] = [['Category', 'Total']];
-
-  monthlyIncome: [[string, any, any]] = [['Month', 'Income', 'Savings']];
-  monthlyIncomeOptions: any;
-  monthlyIncomeChartType: string = 'bar';
-
-  monthlySavings: [[string, any]] = [['Month', 'Amount']];
-  monthlySavingsOptions: any;
-  monthlySavingsChartType: string = 'bar';
-
-  categoryWiseSum: [[string, any]] = [['Category', 'Total']];
-  categoryWiseSumOptions: any;
-  categoryWiseSumChartType: string = 'pie';
-
-  paymentMethodWiseSum: [[string, any]] = [['Payment Method', 'Total']];
-  paymentMethodWiseSumOptions: any;
-  paymentMethodWiseSumChartType: string = 'pie';
-
-  monthlyPayments: [[string, any]] = [['Month', 'Amount']];
-  monthlyPaymentsOptions: any;
-  monthlyPaymentsChartType: string = 'pie';
-
-  categoryWiseSumValueOptions: any;
-  categoryWiseSumValueChartType: string = 'bar';
 
   prepareAnalytics() {
     this.totalIncome = this.dashboardData.income
@@ -111,6 +98,11 @@ export class TransactionDashboardComponent implements OnInit {
     }
   }
 
+  prepareYearSummaryCard() {
+    this.yearSummary.push(['Savings', this.totalSavings]);
+    this.yearSummary.push(['Payments', this.totalPayments]);
+  }
+
   private prepareData() {
     this.prepareYearSummaryCard();
     this.prepareMonthlyExpenseVsPaymentCard();
@@ -121,10 +113,6 @@ export class TransactionDashboardComponent implements OnInit {
     this.prepareMonthlyPaymentsCard();
   }
 
-  prepareYearSummaryCard() {
-    this.yearSummary.push(['Savings', this.totalSavings]);
-    this.yearSummary.push(['Payments', this.totalPayments]);
-  }
   private prepareMonthlyExpenseVsPaymentCard() {
     MONTHS.forEach((months) => {
       const ex1 = this.dashboardData.expense.find(

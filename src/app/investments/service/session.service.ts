@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
   CompanyInfo,
-  Holding, InvestmentResponse,
+  Holding,
+  InvestmentResponse,
   StockPurchaseHistory,
 } from '../model/investment';
 
@@ -20,6 +21,7 @@ export class SessionData {
 @Injectable()
 export class SessionService {
   private session: SessionData = new SessionData();
+
   getData() {
     return this.session;
   }
@@ -31,7 +33,9 @@ export class SessionService {
   }
 
   replaceHoldings(holding: Holding) {
-    const idx = this.session.holdings.findIndex(x => x.company === holding.company);
+    const idx = this.session.holdings.findIndex(
+      (x) => x.company === holding.company,
+    );
     if (idx !== -1) {
       this.session.holdings[idx] = holding;
     }
@@ -42,7 +46,9 @@ export class SessionService {
   }
 
   deleteHolding(holding: Holding) {
-    const idx = this.session.holdings.findIndex(x => x.company === holding.company);
+    const idx = this.session.holdings.findIndex(
+      (x) => x.company === holding.company,
+    );
     if (idx !== -1) {
       this.session.holdings.splice(idx, 1);
     }

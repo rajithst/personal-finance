@@ -38,7 +38,7 @@ import { TransactionImportComponent } from './transaction-import/transaction-imp
     PaymentsComponent,
     TransactionSplitComponent,
     TransactionBulkEditComponent,
-    TransactionImportComponent
+    TransactionImportComponent,
   ],
   imports: [
     CommonModule,

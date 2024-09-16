@@ -1,6 +1,7 @@
 .partner-info-summary {
   display: flex;
 }
+
 .info-card {
   display: flex;
   border-radius: 10px;
@@ -41,7 +42,5 @@ mat-card-content {
 
 .card-title {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
 }
 

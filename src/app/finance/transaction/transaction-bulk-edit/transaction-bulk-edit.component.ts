@@ -1,6 +1,9 @@
 import { Component, inject, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { BulkDeleteRequest, TransactionExpand } from '../../model/transactions';
+import {
+  BulkDeleteRequest,
+  TransactionExpand,
+} from '../../../model/transactions';
 import { ApiService } from '../../../core/api.service';
 import {
   CANCEL_ACTION,
@@ -20,6 +23,7 @@ export interface TransactionBulkEditData {
 })
 export class TransactionBulkEditComponent {
   private apiService = inject(ApiService);
+
   constructor(
     public dialogRef: MatDialogRef<TransactionBulkEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: TransactionBulkEditData,
@@ -44,7 +48,11 @@ export class TransactionBulkEditComponent {
         });
       });
     } else {
-      this.dialogRef.close({ refresh: false, data: null, action: CANCEL_ACTION });
+      this.dialogRef.close({
+        refresh: false,
+        data: null,
+        action: CANCEL_ACTION,
+      });
     }
   }
 }

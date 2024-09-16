@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ApiService } from '../../../core/api.service';
 import { FormControl, FormGroup } from '@angular/forms';
-import { DataService } from '../../service/data.service';
+import { DataService } from '../../../service/data.service';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { throwError } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -16,11 +16,8 @@ import moment from 'moment';
 export class TransactionImportComponent {
   apiService = inject(ApiService);
   dataService = inject(DataService);
-  protected readonly faTrash = faTrash;
-
   status: 'initial' | 'uploading' | 'success' | 'fail' = 'initial';
   files: Array<File> = [];
-
   myAccounts = this.dataService.getAccounts();
   accountForm = new FormGroup({
     account: new FormControl<number | null>(null),
@@ -32,11 +29,12 @@ export class TransactionImportComponent {
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
-
   otherInfoForm = new FormGroup({
     drop_duplicates: new FormControl(true),
     from_last_import_date: new FormControl(false),
   });
+  protected readonly faTrash = faTrash;
+
   constructor(public dialogRef: MatDialogRef<TransactionImportComponent>) {}
 
   onChange(event: any) {
@@ -102,6 +100,7 @@ export class TransactionImportComponent {
   isValidToSubmit() {
     return this.accountForm.invalid || this.files.length == 0;
   }
+
   cancel() {
     this.dialogRef.close({
       refresh: false,

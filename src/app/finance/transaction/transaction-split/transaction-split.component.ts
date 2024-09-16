@@ -12,12 +12,12 @@ import {
   TransactionExpand,
   TransactionSplit,
   TransactionSplitRequest,
-} from '../../model/transactions';
+} from '../../../model/transactions';
 import {
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
-  FormArray,
   Validators,
 } from '@angular/forms';
 import {
@@ -29,9 +29,9 @@ import {
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../../../core/api.service';
 import { map, Observable, startWith } from 'rxjs';
-import { DestinationMap } from '../../model/payee';
-import { DataService } from '../../service/data.service';
-import { TransactionCategory } from '../../model/common';
+import { DestinationMap } from '../../../model/payee';
+import { DataService } from '../../../service/data.service';
+import { TransactionCategory } from '../../../model/common';
 
 export interface TransactionSplitData {
   formData: TransactionExpand;
@@ -43,14 +43,6 @@ export interface TransactionSplitData {
   styleUrl: './transaction-split.component.css',
 })
 export class TransactionSplitComponent implements OnInit, OnDestroy {
-  protected readonly faTrash = faTrash;
-
-  private formBuilder = inject(FormBuilder);
-  private apiService = inject(ApiService);
-  private dataService = inject(DataService);
-
-  TRANSACTION_CATEGORIES: TransactionCategory[] =
-    this.dataService.getClientSettings().transaction_categories;
   splitForm: FormGroup;
   filteredPayees: Observable<DestinationMap[]>[] = [];
   payees: DestinationMap[];
@@ -61,16 +53,22 @@ export class TransactionSplitComponent implements OnInit, OnDestroy {
   remainAmount = computed(() => {
     return this.transactionAmount() - this.splitTotal();
   });
-
-  get splits(): FormControl[] {
-    return (this.splitForm.get('splits') as FormArray)
-      .controls as FormControl[];
-  }
+  protected readonly faTrash = faTrash;
+  private formBuilder = inject(FormBuilder);
+  private apiService = inject(ApiService);
+  private dataService = inject(DataService);
+  TRANSACTION_CATEGORIES: TransactionCategory[] =
+    this.dataService.getClientSettings().transaction_categories;
 
   constructor(
     public dialogRef: MatDialogRef<TransactionSplitComponent>,
     @Inject(MAT_DIALOG_DATA) public data: TransactionSplitData,
   ) {}
+
+  get splits(): FormControl[] {
+    return (this.splitForm.get('splits') as FormArray)
+      .controls as FormControl[];
+  }
 
   ngOnInit(): void {
     this.apiService.getPayees().subscribe((result) => {
@@ -99,6 +97,37 @@ export class TransactionSplitComponent implements OnInit, OnDestroy {
     const controls = <FormArray>this.splitForm.controls['splits'];
     controls.removeAt(formIndex);
     this.filteredPayees.splice(formIndex, 1);
+  }
+
+  cancel() {
+    this.dialogRef.close({ refresh: false, data: null, action: CANCEL_ACTION });
+  }
+
+  submit() {
+    const splitItems: TransactionSplit[] = this.splitForm.get('splits')?.value;
+    if (splitItems) {
+      const splitPayload: TransactionSplitRequest = {
+        task: 'split',
+        main: this.transaction,
+        splits: splitItems,
+      };
+      this.apiService.splitTransaction(splitPayload).subscribe((result) => {
+        if (result.status === 200 && result.data) {
+          const responseData = result.data;
+          this.dialogRef.close({
+            refresh: true,
+            data: responseData,
+            action: SUCCESS_ACTION,
+          });
+        } else {
+          this.dialogRef.close({
+            refresh: false,
+            data: null,
+            alert: ERROR_ACTION,
+          });
+        }
+      });
+    }
   }
 
   private getNewFormArray() {
@@ -150,37 +179,6 @@ export class TransactionSplitComponent implements OnInit, OnDestroy {
         option.destination !== null &&
         option.destination.toLowerCase().includes(filterValue),
     );
-  }
-
-  cancel() {
-    this.dialogRef.close({ refresh: false, data: null, action: CANCEL_ACTION });
-  }
-
-  submit() {
-    const splitItems: TransactionSplit[] = this.splitForm.get('splits')?.value;
-    if (splitItems) {
-      const splitPayload: TransactionSplitRequest = {
-        task: 'split',
-        main: this.transaction,
-        splits: splitItems,
-      };
-      this.apiService.splitTransaction(splitPayload).subscribe((result) => {
-        if (result.status === 200 && result.data) {
-          const responseData = result.data;
-          this.dialogRef.close({
-            refresh: true,
-            data: responseData,
-            action: SUCCESS_ACTION,
-          });
-        } else {
-          this.dialogRef.close({
-            refresh: false,
-            data: null,
-            alert: ERROR_ACTION,
-          });
-        }
-      });
-    }
   }
 
   ngOnDestroy(): void {}

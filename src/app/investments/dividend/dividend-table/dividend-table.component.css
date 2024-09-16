@@ -12,6 +12,7 @@
   height: 80vh;
   overflow-x: auto;
 }
+
 .dividend-card {
   margin-bottom: 1%;
 }
@@ -22,6 +23,7 @@
   width: 200px;
   justify-content: space-between;
 }
+
 .dividend-title-header > .dividend-amount {
   font-size: 15px;
   color: green;
@@ -30,6 +32,7 @@
   width: 50px;
   text-align: center;
 }
+
 .dividend-card-content {
   margin-top: 1%;
 }
@@ -48,6 +51,7 @@ table.dividend-table td:first-child {
   width: 30px;
   height: 25px;
 }
+
 .company-ticker {
   height: 30px;
   display: flex;
@@ -60,6 +64,7 @@ table.dividend-table td:first-child {
 .holding-item-contents-1 {
   display: flex;
 }
+
 .dividend-status {
   font-size: 11px;
   font-weight: 500;
@@ -86,6 +91,7 @@ table.dividend-table td:first-child {
 .summary-item-title-icon > span {
   margin-left: 10px;
 }
+
 .summary-item-title {
   display: flex;
   flex-direction: column;

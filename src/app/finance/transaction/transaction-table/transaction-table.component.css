@@ -78,6 +78,7 @@ table.transaction-table tbody td:last-child {
   max-height: 75vh;
   overflow: auto;
 }
+
 .filters-right > .edit-panel {
   display: flex;
 }

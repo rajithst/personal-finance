@@ -1,10 +1,10 @@
 <div class="content">
-  <mat-toolbar color="primary" class="fix-nav">
+  <mat-toolbar class="fix-nav" color="primary">
     <button
-      *ngIf="authService.isLoggedIn()"
-      type="button"
-      mat-icon-button
       (click)="onToolbarMenuToggle()"
+      *ngIf="authService.isLoggedIn()"
+      mat-icon-button
+      type="button"
     >
       <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
     </button>
@@ -12,10 +12,10 @@
     <span class="example-spacer"></span>
     <button
       *ngIf="authService.isLoggedIn()"
-      mat-icon-button
-      class="example-icon"
-      aria-label="Example icon-button with share icon"
       [matMenuTriggerFor]="menu"
+      aria-label="Example icon-button with share icon"
+      class="example-icon"
+      mat-icon-button
     >
       <mat-icon>person</mat-icon>
     </button>
@@ -23,39 +23,39 @@
       <button mat-menu-item routerLink="profile">
         <fa-icon
           [icon]="faUserCircle"
-          size="sm"
           [style]="{ color: '#3699ff' }"
+          size="sm"
         ></fa-icon>
         <span class="profile-menu-item">Profile</span>
       </button>
       <button mat-menu-item routerLink="settings">
         <fa-icon
           [icon]="faGear"
-          size="sm"
           [style]="{ color: '#3699ff' }"
+          size="sm"
         ></fa-icon>
         <span class="profile-menu-item">Settings</span>
       </button>
       <button mat-menu-item routerLink="settings/user-log">
         <fa-icon
           [icon]="faList"
-          size="sm"
           [style]="{ color: '#3699ff' }"
+          size="sm"
         ></fa-icon>
         <span class="profile-menu-item">Activity Log</span>
       </button>
-      <button mat-menu-item (click)="logout()">
+      <button (click)="logout()" mat-menu-item>
         <fa-icon
           [icon]="faSignOut"
-          size="sm"
           [style]="{ color: '#3699ff' }"
+          size="sm"
         ></fa-icon>
         <span class="profile-menu-item">Log Out</span>
       </button>
     </mat-menu>
   </mat-toolbar>
 
-  <mat-sidenav-container class="sidenav-container" [hasBackdrop]="hasBackdrop">
+  <mat-sidenav-container [hasBackdrop]="hasBackdrop" class="sidenav-container">
     @if (authService.isLoggedIn()) {
       <mat-sidenav
         #snav
@@ -74,8 +74,8 @@
       </mat-sidenav>
     }
     <mat-sidenav-content
-      id="sidenav-content"
       [ngStyle]="{ 'margin-left.px': isExpanded ? openedWidth : closedWidth }"
+      id="sidenav-content"
     >
       <loading></loading>
       <main class="main-container">

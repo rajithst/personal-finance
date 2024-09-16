@@ -14,7 +14,7 @@ import {
   MonthlyTransaction,
   TransactionExpand,
   TransactionFilter,
-} from '../../model/transactions';
+} from '../../../model/transactions';
 import {
   TransactionDeleteDialog,
   TransactionUpdateDialog,
@@ -39,7 +39,7 @@ import {
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { MatTableDataSource } from '@angular/material/table';
-import { DataService } from '../../service/data.service';
+import { DataService } from '../../../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatAccordion } from '@angular/material/expansion';
 import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
@@ -52,12 +52,13 @@ import { faChartColumn } from '@fortawesome/free-solid-svg-icons/faChartColumn';
 import { TransactionSplitComponent } from '../transaction-split/transaction-split.component';
 import { TransactionBulkEditComponent } from '../transaction-bulk-edit/transaction-bulk-edit.component';
 import {
-  Account,
+  CreditAccount,
   TransactionCategory,
   TransactionSubCategory,
-} from '../../model/common';
+} from '../../../model/common';
 import { TransactionImportComponent } from '../transaction-import/transaction-import.component';
 import { INCOME } from '../../../data/shared.data';
+import { ApiService } from '../../../core/api.service';
 
 interface TransactionActionResult {
   refresh: boolean;
@@ -70,6 +71,7 @@ interface FilterParamChip {
   type: string;
   name: string | undefined;
 }
+
 @Component({
   selector: 'app-transaction-table',
   templateUrl: './transaction-table.component.html',
@@ -81,6 +83,39 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   accordion = viewChild.required(MatAccordion);
   filterButton = viewChild<ElementRef>('filterButton');
 
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private loadingService = inject(LoadingService);
+  private dataService = inject(DataService);
+  private router = inject(Router);
+  private apiService = inject(ApiService);
+
+  totalAnnualAmount = signal<number>(0);
+  segments = signal(this.router.url.split('/'));
+  lastSegment = computed(() => {
+    const segmentLength = this.segments().length;
+    return this.segments().at(segmentLength - 1);
+  });
+
+  showValues = false;
+  selection = new SelectionModel<TransactionExpand>(true, []);
+  allDataSource: MatTableDataSource<TransactionExpand>[] = [];
+  allTransactions: MonthlyTransaction[] = [];
+  bulkSelectedTableIndex: number = -1;
+  allExpanded = false;
+  filterParams = this.getEmptyFilterParams();
+  filterParamChips: FilterParamChip[] = [];
+  displayedColumns: string[] = [
+    'select',
+    'Date',
+    'Account',
+    'Destination',
+    'Category',
+    'SubCategory',
+    'Amount',
+    'Notes',
+    'Actions',
+  ];
   protected readonly faTrash = faTrash;
   protected readonly faEdit = faEdit;
   protected readonly faList = faList;
@@ -98,46 +133,13 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   protected readonly faEye = faEye;
   protected readonly faEyeSlash = faEyeSlash;
   protected readonly destroyed$ = new ReplaySubject<void>(1);
+  protected readonly INCOME = INCOME;
 
-  private router = inject(Router);
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
-  private loadingService = inject(LoadingService);
-  private dataService = inject(DataService);
-
-  ACCOUNTS: Account[] = this.dataService.getAccounts();
+  CREDIT_ACCOUNTS: CreditAccount[] = this.dataService.getAccounts();
   TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
     this.dataService.getAllSubCategories();
   TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getAllCategories();
-
-  showValues = false;
-
-  totalAnnualAmount = signal<number>(0);
-  segments = signal(this.router.url.split('/'));
-  lastSegment = computed(() => {
-    const segmentLength = this.segments().length;
-    return this.segments().at(segmentLength - 1);
-  });
-  selection = new SelectionModel<TransactionExpand>(true, []);
-  allDataSource: MatTableDataSource<TransactionExpand>[] = [];
-  allTransactions: MonthlyTransaction[] = [];
-  bulkSelectedTableIndex: number = -1;
-  allExpanded = false;
-
-  filterParams = this.getEmptyFilterParams();
-  filterParamChips: FilterParamChip[] = [];
-  displayedColumns: string[] = [
-    'select',
-    'Date',
-    'Account',
-    'Destination',
-    'Category',
-    'SubCategory',
-    'Amount',
-    'Notes',
-    'Actions',
-  ];
 
   ngOnInit(): void {
     this.dataService.yearSwitch$
@@ -147,15 +149,18 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.createFilterChips();
       });
 
-    this.dataService.valueVisibility$.subscribe((value) => {
-      this.showValues = value;
-    });
+    this.dataService.valueVisibility$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((value) => {
+        this.showValues = value;
+      });
     this.dataService.searchBar$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
         this.filterParams.query = value ? value.trim() : '';
         this.applyFiltersToTables();
       });
+    //this.reConfirmInitSettings();
   }
 
   ngOnChanges() {
@@ -175,6 +180,18 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.createFilterChips();
     this.applyFiltersToTables();
+  }
+
+  reConfirmInitSettings() {
+    if (
+      this.TRANSACTION_CATEGORIES.length === 0 ||
+      this.TRANSACTION_SUB_CATEGORIES.length === 0 ||
+      this.CREDIT_ACCOUNTS.length === 0
+    ) {
+      this.apiService.initSettings().subscribe((value) => {
+        this.dataService.setClientSettings(value);
+      });
+    }
   }
 
   editTransaction(item: TransactionExpand) {
@@ -361,158 +378,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   showAnalytics(tableIndex: number) {}
 
-  private removeFromTransactions(tableIndex: number, deleteIds: number[]) {
-    if (tableIndex !== -1) {
-      this.allTransactions[tableIndex].transactions = this.allTransactions[
-        tableIndex
-      ].transactions.filter((x) => !deleteIds.includes(x.id!));
-    }
-  }
-
-  private refreshUpdatedDataSourceTable(tableIndex: number) {
-    const dataSource = new MatTableDataSource<TransactionExpand>(
-      this.allTransactions[tableIndex].transactions,
-    );
-    dataSource.filterPredicate = this.createFilterPredicate();
-    dataSource.filter = JSON.stringify(this.filterParams).trim();
-    if (tableIndex < this.allDataSource.length) {
-      this.allDataSource[tableIndex] = dataSource;
-    } else {
-      this.allDataSource.push(dataSource);
-    }
-    this.allTransactions[tableIndex].total = dataSource.filteredData.reduce(
-      (total, item) => total + (item.amount === null ? 0 : item.amount),
-      0,
-    );
-    this.totalAnnualAmount.set(0);
-    this.allTransactions.forEach((table) => {
-      this.totalAnnualAmount.update((x) => x + table.total);
-    });
-  }
-
-  private updateInAllTransactions(
-    tableIndex: number,
-    newTransaction: TransactionExpand,
-  ) {
-    let childIndex = -1;
-    if (tableIndex !== -1) {
-      const transactions = this.allTransactions[tableIndex].transactions;
-      childIndex = transactions.findIndex((x) => x.id === newTransaction.id);
-      if (childIndex !== -1) {
-        if (newTransaction.is_deleted) {
-          this.allTransactions[tableIndex].transactions = this.allTransactions[
-            tableIndex
-          ].transactions.filter((x) => x.id !== newTransaction.id);
-        } else {
-          this.allTransactions[tableIndex].transactions[childIndex] =
-            newTransaction;
-        }
-      } else {
-        this.allTransactions[tableIndex].transactions.push(newTransaction);
-      }
-    }
-  }
-
-  private insertNewTransactionToDataSource(newTransaction: TransactionExpand) {
-    const transactionItem: MonthlyTransaction = {
-      year: newTransaction.year,
-      month: newTransaction.month,
-      month_text: newTransaction.month_text,
-      total: newTransaction.amount || 0,
-      transactions: [newTransaction],
-    };
-    this.allTransactions.push(transactionItem);
-  }
-
-  private getTableIndexFromTransaction(newTransaction: TransactionExpand) {
-    const year = newTransaction.year;
-    const month = newTransaction.month;
-    return this.allTransactions.findIndex(
-      (x) => x.year === year && x.month === month,
-    );
-  }
-
-  private applyFiltersToTables() {
-    const filters = this.filterParams;
-    this.totalAnnualAmount.set(0);
-    this.allDataSource.forEach((y) => {
-      y.filter = JSON.stringify(filters).trim();
-    });
-    let tableIndex = 0;
-    this.allTransactions.forEach((x: MonthlyTransaction) => {
-      x.total = this.allDataSource[tableIndex].filteredData.reduce(
-        (a, b) => a + b.amount!,
-        0,
-      );
-      this.totalAnnualAmount.update((y) => y + x.total);
-      tableIndex += 1;
-    });
-  }
-
-  private createFilterPredicate(): (
-    data: TransactionExpand,
-    filter: string,
-  ) => boolean {
-    return (data: TransactionExpand, filter: string): boolean => {
-      const filterObject: TransactionFilter = JSON.parse(filter);
-      const c1 =
-        filterObject.categories?.length === 0 &&
-        filterObject.subcategories?.length === 0;
-      const c2 =
-        filterObject.categories?.length === 0 &&
-        filterObject.subcategories?.length !== 0;
-      const c3 =
-        filterObject.categories?.length !== 0 &&
-        filterObject.subcategories?.length === 0;
-      const c4 =
-        filterObject.categories?.length !== 0 &&
-        filterObject.subcategories?.length !== 0;
-      const categoryIncludes = filterObject.categories?.includes(data.category);
-      const subCategoryIncludes = filterObject.subcategories?.includes(
-        data.subcategory,
-      );
-      const paymentMethodIncludes =
-        filterObject.accounts?.length !== 0
-          ? filterObject.accounts?.includes(data.account)
-          : true;
-      const filterQuery = filterObject.query ? filterObject.query : '';
-      const q1 = data.destination
-        .toLowerCase()
-        .includes(filterQuery.toLowerCase());
-      const q2 = data.alias?.toLowerCase().includes(filterQuery.toLowerCase());
-      const q3 = data.category_text
-        .toLowerCase()
-        .includes(filterQuery.toLowerCase());
-      const q4 = data.subcategory_text
-        .toLowerCase()
-        .includes(filterQuery.toLowerCase());
-      const q5 = data.account_name
-        .toLowerCase()
-        .includes(filterQuery.toLowerCase());
-
-      return <boolean>(
-        (data.year === filterObject.year &&
-          (c1 ||
-            (c2 && subCategoryIncludes) ||
-            (c3 && categoryIncludes) ||
-            (c4 && (categoryIncludes || subCategoryIncludes))) &&
-          paymentMethodIncludes &&
-          (q1 || q2 || q3 || q4 || q5))
-      );
-    };
-  }
-
-  private getEmptyFilterParams(): TransactionFilter {
-    return {
-      query: '',
-      year: this.dataService.getFilterYear(),
-      target: this.lastSegment() || '',
-      categories: [],
-      subcategories: [],
-      accounts: [],
-    };
-  }
-
   isAllSelected(tableIndex: number) {
     const numSelected = this.selection.selected.length;
     const numRows = this.allDataSource[tableIndex].data.length;
@@ -607,7 +472,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     const accountChips = this.filterParams.accounts?.map((x) => ({
       id: x,
       type: 'account',
-      name: this.ACCOUNTS.find((y) => y.id === x)?.account_name,
+      name: this.CREDIT_ACCOUNTS.find((y) => y.id === x)?.account_name,
     }));
     this.filterParamChips = [
       ...categoryChips!,
@@ -622,20 +487,23 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       data = data.sort((a: TransactionExpand, b: TransactionExpand) => {
         const isAsc = sort.direction === 'asc';
         switch (sort.active) {
-          case 'PaymentMethod':
+          case 'Account':
             return this.compare(a.account_name, b.account_name, isAsc);
           case 'Date':
             return this.compare(a.date, b.date, isAsc);
           case 'Destination':
             return this.compare(a.destination, b.destination, isAsc);
           case 'Category':
-            return this.compare(+a.category_text, +b.category_text, isAsc);
+            const catAText = a.category_text != null ? a.category_text : '';
+            const catBText = b.category_text != null ? b.category_text : '';
+            return this.compare(+catAText, +catBText, isAsc);
           case 'SubCategory':
-            return this.compare(
-              +a.subcategory_text,
-              +b.subcategory_text,
-              isAsc,
-            );
+            const subCatAText =
+              a.subcategory_text != null ? a.subcategory_text : '';
+            const subCatBText =
+              b.subcategory_text != null ? b.subcategory_text : '';
+            return this.compare(+subCatAText, +subCatBText, isAsc);
+
           case 'Amount':
             return this.compare(+a.amount!, +b.amount!, isAsc);
           default:
@@ -650,14 +518,170 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     this.allDataSource[tableIndex] = dataSource;
   }
 
-  private compare(a: number | string, b: number | string, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
-
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
 
-  protected readonly INCOME = INCOME;
+  private removeFromTransactions(tableIndex: number, deleteIds: number[]) {
+    if (tableIndex !== -1) {
+      this.allTransactions[tableIndex].transactions = this.allTransactions[
+        tableIndex
+      ].transactions.filter((x) => !deleteIds.includes(x.id!));
+    }
+  }
+
+  private refreshUpdatedDataSourceTable(tableIndex: number) {
+    const dataSource = new MatTableDataSource<TransactionExpand>(
+      this.allTransactions[tableIndex].transactions,
+    );
+    dataSource.filterPredicate = this.createFilterPredicate();
+    dataSource.filter = JSON.stringify(this.filterParams).trim();
+    if (tableIndex < this.allDataSource.length) {
+      this.allDataSource[tableIndex] = dataSource;
+    } else {
+      this.allDataSource.push(dataSource);
+    }
+    this.allTransactions[tableIndex].total = dataSource.filteredData.reduce(
+      (total, item) => total + (item.amount === null ? 0 : item.amount),
+      0,
+    );
+    this.totalAnnualAmount.set(0);
+    this.allTransactions.forEach((table) => {
+      this.totalAnnualAmount.update((x) => x + table.total);
+    });
+  }
+
+  private updateInAllTransactions(
+    tableIndex: number,
+    newTransaction: TransactionExpand,
+  ) {
+    let childIndex = -1;
+    if (tableIndex !== -1) {
+      const transactions = this.allTransactions[tableIndex].transactions;
+      childIndex = transactions.findIndex((x) => x.id === newTransaction.id);
+      if (childIndex !== -1) {
+        if (newTransaction.is_deleted) {
+          this.allTransactions[tableIndex].transactions = this.allTransactions[
+            tableIndex
+          ].transactions.filter((x) => x.id !== newTransaction.id);
+        } else {
+          this.allTransactions[tableIndex].transactions[childIndex] =
+            newTransaction;
+        }
+      } else {
+        this.allTransactions[tableIndex].transactions.push(newTransaction);
+      }
+    }
+  }
+
+  private insertNewTransactionToDataSource(newTransaction: TransactionExpand) {
+    const transactionItem: MonthlyTransaction = {
+      year: newTransaction.year,
+      month: newTransaction.month,
+      month_text: newTransaction.month_text,
+      total: newTransaction.amount || 0,
+      transactions: [newTransaction],
+    };
+    this.allTransactions.push(transactionItem);
+  }
+
+  private getTableIndexFromTransaction(newTransaction: TransactionExpand) {
+    const year = newTransaction.year;
+    const month = newTransaction.month;
+    return this.allTransactions.findIndex(
+      (x) => x.year === year && x.month === month,
+    );
+  }
+
+  private applyFiltersToTables() {
+    const filters = this.filterParams;
+    this.totalAnnualAmount.set(0);
+    this.allDataSource.forEach((y) => {
+      y.filter = JSON.stringify(filters).trim();
+    });
+    let tableIndex = 0;
+    this.allTransactions.forEach((x: MonthlyTransaction) => {
+      x.total = this.allDataSource[tableIndex].filteredData.reduce(
+        (a, b) => a + b.amount!,
+        0,
+      );
+      this.totalAnnualAmount.update((y) => y + x.total);
+      tableIndex += 1;
+    });
+  }
+
+  private createFilterPredicate(): (
+    data: TransactionExpand,
+    filter: string,
+  ) => boolean {
+    return (data: TransactionExpand, filter: string): boolean => {
+      const filterObject: TransactionFilter = JSON.parse(filter);
+      let categoryIncludes = false;
+      let subCategoryIncludes = false;
+      const c1 =
+        filterObject.categories?.length === 0 &&
+        filterObject.subcategories?.length === 0;
+      const c2 =
+        filterObject.categories?.length === 0 &&
+        filterObject.subcategories?.length !== 0;
+      const c3 =
+        filterObject.categories?.length !== 0 &&
+        filterObject.subcategories?.length === 0;
+      const c4 =
+        filterObject.categories?.length !== 0 &&
+        filterObject.subcategories?.length !== 0;
+      if (data.category != null && filterObject.categories != null) {
+        categoryIncludes = filterObject.categories.includes(data.category);
+      }
+      if (data.subcategory != null && filterObject.subcategories != null) {
+        subCategoryIncludes = filterObject.subcategories.includes(
+          data.subcategory,
+        );
+      }
+      const accountIncludes =
+        filterObject.accounts?.length !== 0
+          ? filterObject.accounts?.includes(data.account)
+          : true;
+      const filterQuery = filterObject.query ? filterObject.query : '';
+      const q1 = data.destination
+        .toLowerCase()
+        .includes(filterQuery.toLowerCase());
+      const q2 = data.alias?.toLowerCase().includes(filterQuery.toLowerCase());
+      const q3 = data.category_text
+        ?.toLowerCase()
+        .includes(filterQuery.toLowerCase());
+      const q4 = data.subcategory_text
+        ?.toLowerCase()
+        .includes(filterQuery.toLowerCase());
+      const q5 = data.account_name
+        .toLowerCase()
+        .includes(filterQuery.toLowerCase());
+
+      return <boolean>(
+        (data.year === filterObject.year &&
+          (c1 ||
+            (c2 && subCategoryIncludes) ||
+            (c3 && categoryIncludes) ||
+            (c4 && (categoryIncludes || subCategoryIncludes))) &&
+          accountIncludes &&
+          (q1 || q2 || q3 || q4 || q5))
+      );
+    };
+  }
+
+  private getEmptyFilterParams(): TransactionFilter {
+    return {
+      query: '',
+      year: this.dataService.getFilterYear(),
+      target: this.lastSegment() || '',
+      categories: [],
+      subcategories: [],
+      accounts: [],
+    };
+  }
+
+  private compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
 }

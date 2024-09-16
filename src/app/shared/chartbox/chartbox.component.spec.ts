@@ -8,10 +8,9 @@ describe('ChartboxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ChartboxComponent]
-    })
-    .compileComponents();
-    
+      declarations: [ChartboxComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ChartboxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

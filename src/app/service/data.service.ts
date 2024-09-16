@@ -7,25 +7,27 @@ import {
   TRANSACTION_TYPE_INCOME_ID,
   TRANSACTION_TYPE_PAYMENTS_ID,
   TRANSACTION_TYPE_SAVINGS_ID,
-} from '../../data/client.data';
+} from '../data/client.data';
+import { MyProfile } from '../model/profile';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
   private year$ = new BehaviorSubject<number>(new Date().getFullYear());
+  yearSwitch$ = this.year$.asObservable();
   private payees$ = new BehaviorSubject<DestinationMap[]>([]);
   private settings$ = new BehaviorSubject<ClientSettings>(
     this.getEmptyClientSettings(),
   );
   private valueVisible$ = new BehaviorSubject<boolean>(false);
-  private refresher$ = new BehaviorSubject<boolean>(false);
-  private search$ = new BehaviorSubject('');
-
-  yearSwitch$ = this.year$.asObservable();
-  refresh$ = this.refresher$.asObservable();
   valueVisibility$ = this.valueVisible$.asObservable();
+  private refresher$ = new BehaviorSubject<boolean>(false);
+  refresh$ = this.refresher$.asObservable();
+  private search$ = new BehaviorSubject('');
   searchBar$ = this.search$.asObservable();
+  private profile$ = new BehaviorSubject<MyProfile | null>(null);
+  myProfile$ = this.profile$.asObservable();
 
   setClientSettings(clientSettings: ClientSettings) {
     this.settings$.next(clientSettings);
@@ -51,10 +53,6 @@ export class DataService {
     this.valueVisible$.next(value);
   }
 
-  getValueVisibility() {
-    return this.valueVisibility$;
-  }
-
   setPayees(payees: DestinationMap[]) {
     this.payees$.next(payees);
   }
@@ -66,7 +64,6 @@ export class DataService {
   getAllCategories() {
     return this.getClientSettings().transaction_categories;
   }
-
 
   getAllSubCategories() {
     return this.getClientSettings().transaction_sub_categories;
@@ -99,16 +96,24 @@ export class DataService {
       (x) => x.category_type === TRANSACTION_TYPE_PAYMENTS_ID,
     );
   }
+
+  setSearchQuery(query: string) {
+    this.search$.next(query);
+  }
+
+  setMyProfile(myProfile: MyProfile) {
+    this.profile$.next(myProfile);
+  }
+
+  getMyProfile() {
+    return this.profile$.value;
+  }
+
   private getEmptyClientSettings(): ClientSettings {
     return {
       accounts: [],
       transaction_categories: [],
       transaction_sub_categories: [],
     };
-  }
-
-
-  setSearchQuery(query: string) {
-    this.search$.next(query);
   }
 }

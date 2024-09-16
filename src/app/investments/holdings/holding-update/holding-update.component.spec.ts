@@ -8,10 +8,9 @@ describe('HoldingUpdateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HoldingUpdateComponent]
-    })
-    .compileComponents();
-    
+      declarations: [HoldingUpdateComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(HoldingUpdateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

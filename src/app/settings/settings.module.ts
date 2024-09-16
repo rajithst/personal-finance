@@ -10,7 +10,7 @@ import { MaterialModule } from '../shared/material.module';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   ActionConfirmComponent,
-  CategoryEditComponent
+  CategoryEditComponent,
 } from './transaction-category/category-edit/category-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
@@ -22,7 +22,7 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
     TransactionCategoryComponent,
     CreditAccountComponent,
     CategoryEditComponent,
-    ActionConfirmComponent
+    ActionConfirmComponent,
   ],
   imports: [
     CommonModule,

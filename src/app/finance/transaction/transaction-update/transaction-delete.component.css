@@ -5,9 +5,6 @@ td {
 .expense-field-table {
   width: 100%;
 }
-.expense-input {
-  width: 100%;
-}
 
 .expense-form-footer {
   padding: 20px;
@@ -17,12 +14,14 @@ table {
   width: 100%;
   border-collapse: collapse;
 }
+
 th,
 td {
   padding: 8px;
   border: 1px solid #dddddd;
   text-align: left;
 }
+
 th {
   background-color: #f2f2f2;
 }

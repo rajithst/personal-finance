@@ -1,13 +1,16 @@
 nav {
   padding: 10px;
 }
+
 a {
   text-decoration: none;
   color: #007bff;
 }
+
 a:hover {
   text-decoration: underline;
 }
+
 span {
   margin: 0 5px;
 }
