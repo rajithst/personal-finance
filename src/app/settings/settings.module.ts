@@ -14,6 +14,8 @@ import {
 } from './transaction-category/category-edit/category-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { AccountEditComponent } from './credit-account/account-edit/account-edit.component';
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
     CreditAccountComponent,
     CategoryEditComponent,
     ActionConfirmComponent,
+    AccountEditComponent,
   ],
   imports: [
     CommonModule,
@@ -30,6 +33,7 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
     SettingsRoutingModule,
     FaIconComponent,
     ReactiveFormsModule,
+    SharedModule,
   ],
   providers: [
     {

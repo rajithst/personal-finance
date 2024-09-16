@@ -1,6 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../service/data.service';
+import { MenuItem } from '../model/common';
+import {
+  faCreditCard,
+  faUser,
+  faWarning,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-profile',
@@ -11,10 +17,10 @@ export class ProfileComponent implements OnInit {
   activatedRoute = inject(ActivatedRoute);
   dataService = inject(DataService);
 
-  menuItems = [
-    { name: 'Basic Info', link: 'me' },
-    { name: 'Account Security', link: 'security' },
-    { name: 'Billing', link: 'billing' },
+  menuItems: MenuItem[] = [
+    { label: 'Basic Info', link: 'me', icon: faUser },
+    { label: 'Account Security', link: 'security', icon: faWarning },
+    { label: 'Billing', link: 'billing', icon: faCreditCard },
   ];
 
   ngOnInit() {

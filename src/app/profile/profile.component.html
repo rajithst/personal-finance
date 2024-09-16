@@ -1,13 +1,7 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #sidenav mode="side" opened>
     <mat-nav-list>
-      <a
-        *ngFor="let item of menuItems"
-        mat-list-item
-        routerLink="{{item.link}}"
-      >
-        {{ item.name }}
-      </a>
+      <app-nav-item [menuItems]="menuItems"></app-nav-item>
     </mat-nav-list>
   </mat-sidenav>
 

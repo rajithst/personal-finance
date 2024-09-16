@@ -55,22 +55,19 @@
     </mat-menu>
   </mat-toolbar>
 
-  <mat-sidenav-container [hasBackdrop]="hasBackdrop" class="sidenav-container">
+  <mat-sidenav-container class="sidenav-container">
     @if (authService.isLoggedIn()) {
       <mat-sidenav
-        #snav
         position="start"
-        disableClose="true"
+        disableClose="false"
         role="navigation"
         class="sidenav mat-elevation-z10"
         [mode]="sideNavMode"
         [opened]="sideNavDefaultOpened"
+        [@inOutAnimation]="isExpanded ? 'open' : 'closed'"
         [ngStyle]="{ 'width.px': isExpanded ? openedWidth : closedWidth }"
       >
-        <app-side-nav *ngIf="showFullMenu; else elseBlock"></app-side-nav>
-        <ng-template #elseBlock>
-          <app-side-nav-closed></app-side-nav-closed>
-        </ng-template>
+        <app-side-nav></app-side-nav>
       </mat-sidenav>
     }
     <mat-sidenav-content

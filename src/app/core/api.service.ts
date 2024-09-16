@@ -37,6 +37,7 @@ import {
 } from '../model/category-settings';
 import { MyProfile } from '../model/profile';
 import { UserToken } from '../auth/model';
+import { CreditAccount, CreditAccountRequest } from '../model/account';
 
 new HttpHeaders({
   'Content-Type': 'application/json',
@@ -223,5 +224,21 @@ export class ApiService {
     return this.http.get<CompanyResponse>(
       `${this.SRC_URL}/investments/company`,
     );
+  }
+
+  updateCreditAccount(
+    payload: CreditAccountRequest,
+  ): Observable<CreditAccount> {
+    if (payload.id) {
+      return this.http.put<CreditAccount>(
+        `${this.SRC_URL}/finance/credit-account/`,
+        payload,
+      );
+    } else {
+      return this.http.post<CreditAccount>(
+        `${this.SRC_URL}/finance/credit-account/`,
+        payload,
+      );
+    }
   }
 }

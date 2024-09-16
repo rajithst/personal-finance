@@ -9,6 +9,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { RouterModule } from '@angular/router';
 import { SearchbarComponent } from './searchbar/searchbar.component';
 import { ToolbarMenuComponent } from './toolbar-menu/toolbar-menu.component';
+import { NavItemComponent } from './nav-item/nav-item.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { ToolbarMenuComponent } from './toolbar-menu/toolbar-menu.component';
     BreadcrumbComponent,
     SearchbarComponent,
     ToolbarMenuComponent,
+    NavItemComponent,
   ],
   imports: [
     CommonModule,
@@ -30,6 +32,7 @@ import { ToolbarMenuComponent } from './toolbar-menu/toolbar-menu.component';
     ChartboxComponent,
     SearchbarComponent,
     ToolbarMenuComponent,
+    NavItemComponent,
   ],
 })
 export class SharedModule {}
