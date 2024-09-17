@@ -37,6 +37,7 @@ import {
   faScissors,
   faTrash,
   faUpload,
+  faChartColumn
 } from '@fortawesome/free-solid-svg-icons';
 import { MatTableDataSource } from '@angular/material/table';
 import { DataService } from '../../../service/data.service';
@@ -48,7 +49,6 @@ import { Sort } from '@angular/material/sort';
 import { ERROR_ACTION, SUCCESS_ACTION } from '../../../data/client.data';
 import { Router } from '@angular/router';
 import { ReplaySubject, takeUntil } from 'rxjs';
-import { faChartColumn } from '@fortawesome/free-solid-svg-icons/faChartColumn';
 import { TransactionSplitComponent } from '../transaction-split/transaction-split.component';
 import { TransactionBulkEditComponent } from '../transaction-bulk-edit/transaction-bulk-edit.component';
 import {
