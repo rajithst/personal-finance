@@ -16,9 +16,13 @@ import moment from 'moment';
 export class TransactionImportComponent {
   apiService = inject(ApiService);
   dataService = inject(DataService);
+
+  protected readonly faTrash = faTrash;
+
   status: 'initial' | 'uploading' | 'success' | 'fail' = 'initial';
   files: Array<File> = [];
   myAccounts = this.dataService.getAccounts();
+
   accountForm = new FormGroup({
     account: new FormControl<number | null>(null),
   });
@@ -30,10 +34,9 @@ export class TransactionImportComponent {
     end: new FormControl<Date | null>(null),
   });
   otherInfoForm = new FormGroup({
-    drop_duplicates: new FormControl(true),
-    from_last_import_date: new FormControl(false),
+    drop_duplicates: new FormControl<boolean>(true),
+    from_last_import_date: new FormControl<boolean>(false),
   });
-  protected readonly faTrash = faTrash;
 
   constructor(public dialogRef: MatDialogRef<TransactionImportComponent>) {}
 
@@ -98,7 +101,7 @@ export class TransactionImportComponent {
   }
 
   isValidToSubmit() {
-    return this.accountForm.invalid || this.files.length == 0;
+    return !this.accountForm.invalid && this.files.length > 0;
   }
 
   cancel() {
