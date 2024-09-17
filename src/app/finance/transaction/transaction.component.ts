@@ -5,7 +5,7 @@ import {
   faSquareCaretRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { DataService } from '../../service/data.service';
-import { map, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
+import { map, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import {
   MonthlyTransaction,
   TransactionFilter,
@@ -61,7 +61,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.dataService.yearSwitch$
-      .pipe(takeUntil(this.destroyed$), take(1))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
         this.extracted({ target: this.target, year: value });
       });
