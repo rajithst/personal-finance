@@ -27,7 +27,6 @@
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Payee</th>
       <td *matCellDef="let element" mat-cell>
         <a routerLink="../{{element.id}}/{{element.destination}}">{{ element.destination }}</a>
-
       </td>
     </ng-container>
     <ng-container matColumnDef="Alias">

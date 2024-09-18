@@ -11,6 +11,7 @@ export interface DestinationMap {
   destination_eng: string;
   category: number;
   category_type: number;
+  category_type_text: string;
   category_text: string;
   subcategory: number;
   subcategory_text: string;

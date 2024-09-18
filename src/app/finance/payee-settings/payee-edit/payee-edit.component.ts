@@ -203,16 +203,21 @@ export class PayeeEditComponent implements OnInit {
       ];
     }
     if (this.transactionCategories.length === 1) {
+      const categoryId = this.transactionCategories.at(0)!.id;
       this.payeeForm
         .get('category')
-        ?.setValue(this.transactionCategories.at(0)!.id);
+        ?.patchValue(categoryId, { emitEvent: true, onlySelf: true });
+      this.setTransactionSubCategories(categoryId);
     }
   }
 
   private setTransactionSubCategories(category: number) {
-    this.transactionSubCategories = this.TRANSACTION_SUB_CATEGORIES.filter(
-      (x) => x.category === category,
-    );
+    if (category !== null) {
+      this.transactionSubCategories = this.TRANSACTION_SUB_CATEGORIES.filter(
+        (x) => x.category === category,
+      );
+    }
+
     if (this.transactionSubCategories.length === 1) {
       this.payeeForm
         .get('subcategory')

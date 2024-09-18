@@ -3,8 +3,7 @@
     <mat-card-header>
       <div class="d-flex-align-sb card-title">
         <div class="title">
-          <mat-card-title> {{ payeeInfo.destination_original }}</mat-card-title>
-          <mat-card-subtitle>{{ payeeInfo.destination }}</mat-card-subtitle>
+          <mat-card-title> {{ payeeInfo.destination}}</mat-card-title>
         </div>
         <div class="actions">
           <div (click)="editPayee()" class="coincraft-action-button">
@@ -60,14 +59,14 @@
         <div class="info-card">
           <ul>
             <li>
+              <span class="field-label">Category Type: </span>
+              <span class="field-value">{{payeeInfo.category_type_text}}</span>
+            </li>
+            <li>
               <span class="field-label">Total Payment:</span>
               <span class="field-value"></span>¥{{
                 totalPayment() | number: "1.2-2"
               }}
-            </li>
-            <li>
-              <span class="field-label">Last Month Payment: </span>
-              <span class="field-value"></span>
             </li>
             <li>
               <span class="field-label">Last Month Payment: </span>
