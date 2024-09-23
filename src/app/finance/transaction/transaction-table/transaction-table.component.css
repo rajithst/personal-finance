@@ -95,3 +95,13 @@ table.transaction-table tbody td:last-child {
 .filter-chip {
   background-color: #b1d8b7 !important;
 }
+
+.category-text {
+  font-weight: bold;
+}
+
+.subcategory-text {
+  font-size: 12px;
+}
+
+

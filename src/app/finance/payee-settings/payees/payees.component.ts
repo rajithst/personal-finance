@@ -17,6 +17,11 @@ import { DataService } from '../../../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PayeeEditComponent } from '../payee-edit/payee-edit.component';
 import { ReplaySubject, takeUntil } from 'rxjs';
+import {
+  TRANSACTION_TYPE_EXPENSE_ID, TRANSACTION_TYPE_INCOME_ID,
+  TRANSACTION_TYPE_PAYMENTS_ID,
+  TRANSACTION_TYPE_SAVINGS_ID
+} from "../../../data/client.data";
 
 @Component({
   selector: 'app-payees',
@@ -34,11 +39,15 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
     'Payee',
     'Alias',
     'Category',
-    'SubCategory',
+    'CategoryType',
     'Actions',
   ];
   protected readonly destroyed$ = new ReplaySubject<void>(1);
   protected readonly faPencil = faPencil;
+  protected readonly TRANSACTION_TYPE_SAVINGS_ID = TRANSACTION_TYPE_SAVINGS_ID;
+  protected readonly TRANSACTION_TYPE_PAYMENTS_ID = TRANSACTION_TYPE_PAYMENTS_ID;
+  protected readonly TRANSACTION_TYPE_EXPENSE_ID = TRANSACTION_TYPE_EXPENSE_ID;
+  protected readonly TRANSACTION_TYPE_INCOME_ID = TRANSACTION_TYPE_INCOME_ID;
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   private dataService = inject(DataService);

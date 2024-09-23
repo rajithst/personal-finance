@@ -170,12 +170,9 @@ export class TransactionUpdateDialog implements OnInit {
     }
     return new FormGroup({
       id: new FormControl<number | null>(data ? data.id : null),
-      category: new FormControl<number | null>(data ? data.category : null, [
-        Validators.required,
-      ]),
+      category: new FormControl<number | null>(data ? data.category : null),
       subcategory: new FormControl<number | null>(
-        data ? data.subcategory : null,
-        [Validators.required],
+        data ? data.subcategory : null
       ),
       account: new FormControl<number | null>(data ? data.account : null, [
         Validators.required,

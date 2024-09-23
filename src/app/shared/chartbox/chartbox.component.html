@@ -1,12 +1,32 @@
 <mat-card class="chart-card">
   <mat-card-header class="chart-card-header">
-    <mat-card-title class="chart-card-title">{{ chartTitle }}</mat-card-title>
+    <div class="d-flex-align-sb card-title">
+      <div class="title">
+        <mat-card-title>{{ chartTitle }}</mat-card-title>
+      </div>
+      <div class="actions">
+        <ng-container *ngIf="chartSwitches">
+          <span class="chart-actions" [matMenuTriggerFor]="menu">
+            <fa-icon
+              [icon]="faEllipsisV"
+              size="lg"
+              [style]="{ color: '#3699ff' }"
+            ></fa-icon>
+            <mat-menu #menu="matMenu">
+              @for (data of chartSwitches; track data) {
+                <button mat-menu-item (click)="switchOption(data)">
+                  {{ data.viewValue }}
+                </button>
+              }
+            </mat-menu>
+          </span>
+        </ng-container>
+      </div>
+    </div>
   </mat-card-header>
   <mat-card-content class="chart-card-content">
     <div id="plot"></div>
     <div id="plot2"></div>
     <div #chartArea></div>
-    <!--    <div *ngIf="chartData.length <=2" style="height: 300px; width: 300px">Data not available</div>-->
-
   </mat-card-content>
 </mat-card>

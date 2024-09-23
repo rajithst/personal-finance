@@ -21,8 +21,8 @@ export class SideNavComponent {
     {label: 'Dashboard', link:'/dashboard', icon: faChartSimple},
     {label: 'Transactions', link:'/finance', icon: faMoneyBillTransfer},
     {label: 'Payee Settings', link:'/payee-settings', icon: faShop},
-    {label: 'Reports', link:'/reports', icon: faPieChart},
-    {label: 'Investments', link:'/investments', icon: faChartLine}
+    // {label: 'Reports', link:'/reports', icon: faPieChart},
+    // {label: 'Investments', link:'/investments', icon: faChartLine}
   ]
 }
 

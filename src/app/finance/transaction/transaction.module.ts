@@ -23,6 +23,7 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { TransactionSplitComponent } from './transaction-split/transaction-split.component';
 import { TransactionBulkEditComponent } from './transaction-bulk-edit/transaction-bulk-edit.component';
 import { TransactionImportComponent } from './transaction-import/transaction-import.component';
+import { TransactionViewMoreDialog } from './transaction-table/view-more/view-more.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { TransactionImportComponent } from './transaction-import/transaction-imp
     TransactionSplitComponent,
     TransactionBulkEditComponent,
     TransactionImportComponent,
+    TransactionViewMoreDialog,
   ],
   imports: [
     CommonModule,

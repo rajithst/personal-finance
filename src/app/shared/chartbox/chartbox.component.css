@@ -7,6 +7,14 @@
   align-items: center;
 }
 
-.chart-card-title {
+.card-title {
+  width: 100%;
+}
+
+mat-card-title {
   font-size: 14px;
+}
+
+.chart-actions {
+  cursor: pointer;
 }

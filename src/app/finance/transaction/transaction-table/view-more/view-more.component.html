@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Uploads & Notes</h2>
+<mat-dialog-content>
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab label="Uploads">Uploads</mat-tab>
+    <mat-tab label="Notes">
+      <mat-card>
+        <mat-card-content>
+          <p>{{data.transaction.notes}}</p>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="expense-form-footer">
+  <button mat-dialog-close mat-raised-button>Close</button>
+</mat-dialog-actions>

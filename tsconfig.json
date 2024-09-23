@@ -25,6 +25,9 @@
       "dom"
     ]
   },
+  "exclude": [
+    "src/app/mock-data"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,

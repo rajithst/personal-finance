@@ -47,5 +47,4 @@ export class LoadingComponent implements OnInit {
     }
   }
 }
-
-export const SkipLoading = new HttpContextToken(() => false);
+new HttpContextToken(() => false);

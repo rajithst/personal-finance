@@ -1,7 +1,7 @@
 <div class="dashboard-summary-container">
   <mat-grid-list [gutterSize]="'5px'" cols="4" rowHeight="80px">
     <mat-grid-tile>
-      <mat-card class="summary-item total-value">
+      <mat-card class="summary-item">
         <mat-card-content>
           <div class="summary-item-title">
             <div class="summary-item-title-icon">
@@ -13,14 +13,14 @@
               <span>Total Income</span>
             </div>
             <div class="summary-item-title-value">
-              <span class="profit">¥{{ totalIncome | number: "1.2-2" }}</span>
+              <span class="income-value profit">¥{{ totalIncome | number: "1.2-2" }}</span>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>
     <mat-grid-tile>
-      <mat-card class="summary-item total-investment">
+      <mat-card class="summary-item">
         <mat-card-content>
           <div class="summary-item-title">
             <div class="summary-item-title-icon">
@@ -32,14 +32,14 @@
               <span>Total Expenses</span>
             </div>
             <div class="summary-item-title-value">
-              <span class="loss">¥{{ totalExpenses | number: "1.2-2" }}</span>
+              <span class="expense-value loss">¥{{ totalExpenses | number: "1.2-2" }}</span>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>
     <mat-grid-tile>
-      <mat-card class="summary-item total-profit">
+      <mat-card class="summary-item">
         <mat-card-content>
           <div class="summary-item-title">
             <div class="summary-item-title-icon">
@@ -51,14 +51,14 @@
               <span>Total Payments</span>
             </div>
             <div class="summary-item-title-value">
-              <span class="loss">¥{{ totalPayments | number: "1.2-2" }}</span>
+              <span class="payment-value loss">¥{{ totalPayments | number: "1.2-2" }}</span>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>
     <mat-grid-tile>
-      <mat-card class="summary-item forex">
+      <mat-card class="summary-item">
         <mat-card-content>
           <div class="summary-item-title">
             <div class="summary-item-title-icon">
@@ -70,7 +70,7 @@
               <span>Total Savings</span>
             </div>
             <div class="summary-item-title-value">
-              <span class="profit">¥{{ totalSavings | number: "1.2-2" }}</span>
+              <span class="savings-value profit">¥{{ totalSavings | number: "1.2-2" }}</span>
             </div>
           </div>
         </mat-card-content>
@@ -83,70 +83,56 @@
     <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
-          (rendered)="childRendered()"
-          [chartData]="monthlyExpenses"
-          [chartOptions]="monthlyExpensesOptions"
-          [chartType]="monthlyExpensesChartType"
+          (onOptionChange)="switchOption($event)"
+          [chartData]="monthlyExpenseVsPaymentSum$ | async"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
     <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
-          (rendered)="childRendered()"
-          [chartData]="monthlyIncome"
-          [chartOptions]="monthlyIncomeOptions"
-          [chartType]="monthlyIncomeChartType"
+          (onOptionChange)="switchOption($event)"
+          [chartData]="monthlyIncomeVsSavingsSum$ | async"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
     <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
-          (rendered)="childRendered()"
-          [chartData]="monthlySavings"
-          [chartOptions]="monthlySavingsOptions"
-          [chartType]="monthlySavingsChartType"
+          (onOptionChange)="switchOption($event)"
+          [chartData]="monthlySavings$ | async"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
     <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
-          (rendered)="childRendered()"
-          [chartData]="categoryWiseSum"
-          [chartOptions]="categoryWiseSumValueOptions"
-          [chartType]="categoryWiseSumValueChartType"
+          (onOptionChange)="switchOption($event)"
+          [chartData]="categoryWiseExpenseSum$ | async"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
     <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
-          (rendered)="childRendered()"
-          [chartData]="categoryWiseSum"
-          [chartOptions]="categoryWiseSumOptions"
-          [chartType]="categoryWiseSumChartType"
+          (onOptionChange)="switchOption($event)"
+          [chartData]="categoryWiseExpenseValueSum$ | async"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
     <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
-          (rendered)="childRendered()"
-          [chartData]="monthlyPayments"
-          [chartOptions]="monthlyPaymentsOptions"
-          [chartType]="monthlyPaymentsChartType"
+          (onOptionChange)="switchOption($event)"
+          [chartData]="accountWiseExpenseSum$ | async"
         ></app-chartbox>
       </div>
     </mat-grid-tile>
     <mat-grid-tile colspan="2">
       <div class="chart-item">
         <app-chartbox
-          (rendered)="childRendered()"
-          [chartData]="paymentMethodWiseSum"
-          [chartOptions]="paymentMethodWiseSumOptions"
-          [chartType]="paymentMethodWiseSumChartType"
+          (onOptionChange)="switchOption($event)"
+          [chartData]="destinationWisePaymentSum$ | async"
         ></app-chartbox>
       </div>
     </mat-grid-tile>

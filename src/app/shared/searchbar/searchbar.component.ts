@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, viewChild } from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, viewChild} from '@angular/core';
 import { DataService } from '../../service/data.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { DataService } from '../../service/data.service';
   templateUrl: './searchbar.component.html',
   styleUrl: './searchbar.component.css',
 })
-export class SearchbarComponent {
+export class SearchbarComponent implements OnDestroy {
   searchInput = viewChild<ElementRef>('searchInput');
 
   dataService = inject(DataService);
@@ -14,5 +14,8 @@ export class SearchbarComponent {
   applyFilter() {
     const filterValue = this.searchInput()?.nativeElement.value;
     this.dataService.setSearchQuery(filterValue.toLowerCase());
+  }
+  ngOnDestroy() {
+    this.dataService.setSearchQuery('');
   }
 }

@@ -37,7 +37,9 @@ import {
   faScissors,
   faTrash,
   faUpload,
-  faChartColumn
+  faChartColumn,
+  faMessage,
+  faInfo,
 } from '@fortawesome/free-solid-svg-icons';
 import { MatTableDataSource } from '@angular/material/table';
 import { DataService } from '../../../service/data.service';
@@ -56,9 +58,10 @@ import {
   TransactionSubCategory,
 } from '../../../model/common';
 import { TransactionImportComponent } from '../transaction-import/transaction-import.component';
-import { INCOME } from '../../../data/shared.data';
+import { EXPENSE, INCOME } from '../../../data/shared.data';
 import { ApiService } from '../../../core/api.service';
-import {CreditAccount} from "../../../model/account";
+import { CreditAccount } from '../../../model/account';
+import { TransactionViewMoreDialog } from './view-more/view-more.component';
 
 interface TransactionActionResult {
   refresh: boolean;
@@ -111,9 +114,8 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     'Account',
     'Destination',
     'Category',
-    'SubCategory',
     'Amount',
-    'Notes',
+    'TransactionType',
     'Actions',
   ];
   protected readonly faTrash = faTrash;
@@ -132,6 +134,8 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   protected readonly faLink = faLink;
   protected readonly faEye = faEye;
   protected readonly faEyeSlash = faEyeSlash;
+  protected readonly faMessage = faMessage;
+  protected readonly faInfo = faInfo;
   protected readonly destroyed$ = new ReplaySubject<void>(1);
   protected readonly INCOME = INCOME;
 
@@ -142,6 +146,12 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     this.dataService.getAllCategories();
 
   ngOnInit(): void {
+    if (this.lastSegment() !== EXPENSE) {
+      const idx = this.displayedColumns.indexOf('TransactionType');
+      if (idx !== -1) {
+        this.displayedColumns.splice(idx, 1);
+      }
+    }
     this.dataService.yearSwitch$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
@@ -683,5 +693,11 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   private compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  viewMoreInfo(element: TransactionExpand) {
+    const dialog = this.dialog.open(TransactionViewMoreDialog, {
+      data: { transaction: element },
+    });
   }
 }
