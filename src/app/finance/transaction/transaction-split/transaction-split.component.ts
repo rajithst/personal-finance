@@ -3,7 +3,6 @@ import {
   computed,
   inject,
   Inject,
-  OnDestroy,
   OnInit,
   signal,
 } from '@angular/core';
@@ -42,21 +41,21 @@ export interface TransactionSplitData {
   templateUrl: './transaction-split.component.html',
   styleUrl: './transaction-split.component.css',
 })
-export class TransactionSplitComponent implements OnInit, OnDestroy {
+export class TransactionSplitComponent implements OnInit {
   splitForm: FormGroup;
   filteredPayees: Observable<DestinationMap[]>[] = [];
   payees: DestinationMap[];
   transaction = this.data.formData;
   disableCategorySelect = true;
-  transactionAmount = signal<number>(this.transaction.amount || 0);
+  transactionAmount = signal<number>(this.transaction.amount ?? 0);
   splitTotal = signal<number>(0);
   remainAmount = computed(() => {
     return this.transactionAmount() - this.splitTotal();
   });
   protected readonly faTrash = faTrash;
-  private formBuilder = inject(FormBuilder);
-  private apiService = inject(ApiService);
-  private dataService = inject(DataService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly apiService = inject(ApiService);
+  private readonly dataService = inject(DataService);
   TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getClientSettings().transaction_categories;
 
@@ -180,6 +179,4 @@ export class TransactionSplitComponent implements OnInit, OnDestroy {
         option.destination.toLowerCase().includes(filterValue),
     );
   }
-
-  ngOnDestroy(): void {}
 }

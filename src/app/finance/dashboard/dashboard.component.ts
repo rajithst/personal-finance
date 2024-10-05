@@ -52,8 +52,8 @@ export class TransactionDashboardComponent implements OnInit {
   protected readonly faPiggyBank = faPiggyBank;
   protected readonly faCreditCard = faCreditCard;
   protected readonly faFileInvoiceDollar = faFileInvoiceDollar;
-  private activatedRoute = inject(ActivatedRoute);
-  private dataService = inject(DataService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly dataService = inject(DataService);
   CREDIT_ACCOUNTS = this.dataService.getClientSettings().accounts;
   TRANSACTION_CATEGORIES =
     this.dataService.getClientSettings().transaction_categories;

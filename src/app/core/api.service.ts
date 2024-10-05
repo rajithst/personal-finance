@@ -1,5 +1,5 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   BulkDeleteRequest,
@@ -14,6 +14,7 @@ import {
 } from '../model/transactions';
 import {
   CompanyResponse,
+  InvestmentDashboard,
   InvestmentResponse,
   StockDailyPriceResponse,
 } from '../investments/model/investment';
@@ -39,17 +40,12 @@ import { MyProfile } from '../model/profile';
 import { UserToken } from '../auth/model';
 import { CreditAccount, CreditAccountRequest } from '../model/account';
 
-new HttpHeaders({
-  'Content-Type': 'application/json',
-});
-
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private SRC_URL = environment.apiUrl;
-
-  constructor(private http: HttpClient) {}
+  private readonly SRC_URL = environment.apiUrl;
+  private readonly http = inject(HttpClient);
 
   login(loginPayload: {
     username: string;
@@ -183,8 +179,29 @@ export class ApiService {
     return this.http.get<ClientSettings>(`${this.SRC_URL}/finance/settings/`);
   }
 
+  updateCreditAccount(
+    payload: CreditAccountRequest,
+  ): Observable<CreditAccount> {
+    if (payload.id) {
+      return this.http.put<CreditAccount>(
+        `${this.SRC_URL}/finance/credit-account/`,
+        payload,
+      );
+    } else {
+      return this.http.post<CreditAccount>(
+        `${this.SRC_URL}/finance/credit-account/`,
+        payload,
+      );
+    }
+  }
+
   /* Investment Module APIs*/
 
+  getInvestmentDashboard(): Observable<InvestmentDashboard> {
+    return this.http.get<InvestmentDashboard>(
+      `${this.SRC_URL}/investment/dashboard`,
+    );
+  }
   getInvestments(): Observable<InvestmentResponse> {
     return this.http.get<InvestmentResponse>(
       `${this.SRC_URL}/investments/list`,
@@ -224,21 +241,5 @@ export class ApiService {
     return this.http.get<CompanyResponse>(
       `${this.SRC_URL}/investments/company`,
     );
-  }
-
-  updateCreditAccount(
-    payload: CreditAccountRequest,
-  ): Observable<CreditAccount> {
-    if (payload.id) {
-      return this.http.put<CreditAccount>(
-        `${this.SRC_URL}/finance/credit-account/`,
-        payload,
-      );
-    } else {
-      return this.http.post<CreditAccount>(
-        `${this.SRC_URL}/finance/credit-account/`,
-        payload,
-      );
-    }
   }
 }

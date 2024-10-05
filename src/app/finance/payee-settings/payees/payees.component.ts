@@ -45,12 +45,13 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly destroyed$ = new ReplaySubject<void>(1);
   protected readonly faPencil = faPencil;
   protected readonly TRANSACTION_TYPE_SAVINGS_ID = TRANSACTION_TYPE_SAVINGS_ID;
-  protected readonly TRANSACTION_TYPE_PAYMENTS_ID = TRANSACTION_TYPE_PAYMENTS_ID;
+  protected readonly TRANSACTION_TYPE_PAYMENTS_ID =
+    TRANSACTION_TYPE_PAYMENTS_ID;
   protected readonly TRANSACTION_TYPE_EXPENSE_ID = TRANSACTION_TYPE_EXPENSE_ID;
   protected readonly TRANSACTION_TYPE_INCOME_ID = TRANSACTION_TYPE_INCOME_ID;
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
-  private dataService = inject(DataService);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly dataService = inject(DataService);
 
   ngOnInit(): void {
     this.preparePayeeTable();

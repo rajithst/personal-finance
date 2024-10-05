@@ -41,19 +41,19 @@ export class PayeeEditComponent implements OnInit {
   selection = new SelectionModel<DestinationMap>(true, []);
   protected readonly TRANSACTION_TYPES = TRANSACTION_TYPES;
   protected EXPENSE_SUB_CATEGORIES: TransactionSubCategory[] = [];
-  private apiService = inject(ApiService);
-  private dataService = inject(DataService);
+  private readonly apiService = inject(ApiService);
+  private readonly dataService = inject(DataService);
   protected TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getAllCategories();
   protected TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
     this.dataService.getAllSubCategories();
-  private EXPENSE_CATEGORIES: TransactionCategory[] =
+  private readonly EXPENSE_CATEGORIES: TransactionCategory[] =
     this.dataService.getExpenseCategories();
-  private INCOME_CATEGORIES: TransactionCategory[] =
+  private readonly INCOME_CATEGORIES: TransactionCategory[] =
     this.dataService.getIncomeCategories();
-  private SAVINGS_CATEGORIES: TransactionCategory[] =
+  private readonly SAVINGS_CATEGORIES: TransactionCategory[] =
     this.dataService.getSavingsCategories();
-  private PAYMENT_CATEGORIES: TransactionCategory[] =
+  private readonly PAYMENT_CATEGORIES: TransactionCategory[] =
     this.dataService.getPaymentCategories();
 
   constructor(
@@ -120,13 +120,13 @@ export class PayeeEditComponent implements OnInit {
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
     if (this.keywords.includes(value)) {
-      event.chipInput!.clear();
+      event.chipInput.clear();
       return;
     }
     if (value) {
       this.keywords.push(value);
     }
-    event.chipInput!.clear();
+    event.chipInput.clear();
     this.updateRelatedPayees();
   }
 

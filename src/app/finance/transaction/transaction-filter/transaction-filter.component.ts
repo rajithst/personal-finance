@@ -38,11 +38,12 @@ export class TransactionFilterComponent implements OnInit {
   protected readonly faLayerGroup = faLayerGroup;
   protected readonly faShop = faShop;
   protected readonly faCreditCard = faCreditCard;
-  private formBuilder = inject(FormBuilder);
-  private dialogRef = inject(MatDialogRef<TransactionFilterComponent>);
-  private loadingService = inject(LoadingService);
-  private data: TransactionFilterData = inject(MAT_DIALOG_DATA);
-  private dataService = inject(DataService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly dialogRef = inject(MatDialogRef<TransactionFilterComponent>);
+  private readonly loadingService = inject(LoadingService);
+  private readonly data: TransactionFilterData = inject(MAT_DIALOG_DATA);
+  private readonly dataService = inject(DataService);
+
   TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getAllCategories();
   transactionCategories: TransactionCategory[] = this.TRANSACTION_CATEGORIES;

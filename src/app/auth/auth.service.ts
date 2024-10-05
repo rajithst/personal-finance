@@ -12,9 +12,9 @@ export class AuthService implements OnInit {
   apiService = inject(ApiService);
   router = inject(Router);
   snackBar = inject(MatSnackBar);
-  #userSignal = signal<UserToken | null>(null);
+  readonly #userSignal = signal<UserToken | null>(null);
   user = this.#userSignal.asReadonly();
-  private USER_STORAGE_KEY: string = 'iva2zK2d7p';
+  private readonly USER_STORAGE_KEY: string = 'iva2zK2d7p';
 
   constructor() {
     effect(() => {

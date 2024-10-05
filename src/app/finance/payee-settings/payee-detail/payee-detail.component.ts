@@ -21,9 +21,9 @@ export class PayeeDetailComponent implements OnInit {
   dataSource: MatTableDataSource<TransactionExpand>;
   displayedColumns: string[] = ['Date', 'Account', 'Amount', 'Notes'];
   protected readonly faPencil = faPencil;
-  private activatedRoute = inject(ActivatedRoute);
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ payee }) => {
@@ -31,7 +31,7 @@ export class PayeeDetailComponent implements OnInit {
       this.payeeTransactions = payee.transactions;
       this.totalPayment.set(
         this.payeeTransactions.reduce(
-          (total, item) => total + (item.amount === null ? 0 : item.amount),
+          (total, item) => total + (item.amount ?? 0),
           0,
         ),
       );

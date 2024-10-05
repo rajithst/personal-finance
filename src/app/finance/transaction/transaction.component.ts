@@ -33,7 +33,7 @@ export class FinanceComponent {
   protected readonly faSquareCaretRight = faSquareCaretRight;
   protected readonly faSquareCaretLeft = faSquareCaretLeft;
   protected loadingService = inject(LoadingService);
-  private dataService = inject(DataService);
+  private readonly dataService = inject(DataService);
 
   changeFilterYear(direction: string) {
     this.loadingService.loadingOn();
@@ -57,7 +57,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   protected apiService = inject(ApiService);
   protected loadingService = inject(LoadingService);
   protected readonly destroyed$ = new ReplaySubject<void>(1);
-  private dataService = inject(DataService);
+  private readonly dataService = inject(DataService);
 
   ngOnInit(): void {
     this.dataService.yearSwitch$

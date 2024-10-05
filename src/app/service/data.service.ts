@@ -14,19 +14,21 @@ import { MyProfile } from '../model/profile';
   providedIn: 'root',
 })
 export class DataService {
-  private year$ = new BehaviorSubject<number>(new Date().getFullYear());
+  private readonly year$ = new BehaviorSubject<number>(
+    new Date().getFullYear(),
+  );
   yearSwitch$ = this.year$.asObservable();
-  private payees$ = new BehaviorSubject<DestinationMap[]>([]);
-  private settings$ = new BehaviorSubject<ClientSettings>(
+  private readonly payees$ = new BehaviorSubject<DestinationMap[]>([]);
+  private readonly settings$ = new BehaviorSubject<ClientSettings>(
     this.getEmptyClientSettings(),
   );
-  private valueVisible$ = new BehaviorSubject<boolean>(false);
+  private readonly valueVisible$ = new BehaviorSubject<boolean>(false);
   valueVisibility$ = this.valueVisible$.asObservable();
-  private refresher$ = new BehaviorSubject<boolean>(false);
+  private readonly refresher$ = new BehaviorSubject<boolean>(false);
   refresh$ = this.refresher$.asObservable();
-  private search$ = new BehaviorSubject('');
+  private readonly search$ = new BehaviorSubject('');
   searchBar$ = this.search$.asObservable();
-  private profile$ = new BehaviorSubject<MyProfile | null>(null);
+  private readonly profile$ = new BehaviorSubject<MyProfile | null>(null);
   myProfile$ = this.profile$.asObservable();
 
   setClientSettings(clientSettings: ClientSettings) {

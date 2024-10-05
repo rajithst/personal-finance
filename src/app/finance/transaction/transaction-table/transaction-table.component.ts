@@ -86,12 +86,12 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   accordion = viewChild.required(MatAccordion);
   filterButton = viewChild<ElementRef>('filterButton');
 
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
-  private loadingService = inject(LoadingService);
-  private dataService = inject(DataService);
-  private router = inject(Router);
-  private apiService = inject(ApiService);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly loadingService = inject(LoadingService);
+  private readonly dataService = inject(DataService);
+  private readonly router = inject(Router);
+  private readonly apiService = inject(ApiService);
 
   totalAnnualAmount = signal<number>(0);
   segments = signal(this.router.url.split('/'));
@@ -275,7 +275,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     const formData = JSON.parse(JSON.stringify(this.selection.selected[0]));
     if (!formData) return;
     formData.amount = this.selection.selected.reduce(
-      (total, item) => total + (item.amount === null ? 0 : item.amount),
+      (total, item) => total + (item.amount ?? 0),
       0,
     );
     formData.is_merge = true;
@@ -385,8 +385,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
   }
-
-  showAnalytics(tableIndex: number) {}
 
   isAllSelected(tableIndex: number) {
     const numSelected = this.selection.selected.length;
@@ -504,15 +502,9 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
           case 'Destination':
             return this.compare(a.destination, b.destination, isAsc);
           case 'Category':
-            const catAText = a.category_text != null ? a.category_text : '';
-            const catBText = b.category_text != null ? b.category_text : '';
-            return this.compare(+catAText, +catBText, isAsc);
+            return this.compare(+(a.category_text ?? ''), +(b.category_text ?? ''), isAsc);
           case 'SubCategory':
-            const subCatAText =
-              a.subcategory_text != null ? a.subcategory_text : '';
-            const subCatBText =
-              b.subcategory_text != null ? b.subcategory_text : '';
-            return this.compare(+subCatAText, +subCatBText, isAsc);
+            return this.compare(+(a.subcategory_text ?? ''), +(b.subcategory_text ?? ''), isAsc);
 
           case 'Amount':
             return this.compare(+a.amount!, +b.amount!, isAsc);
@@ -553,7 +545,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       this.allDataSource.push(dataSource);
     }
     this.allTransactions[tableIndex].total = dataSource.filteredData.reduce(
-      (total, item) => total + (item.amount === null ? 0 : item.amount),
+      (total, item) => total + (item.amount ?? 0),
       0,
     );
     this.totalAnnualAmount.set(0);
@@ -590,7 +582,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       year: newTransaction.year,
       month: newTransaction.month,
       month_text: newTransaction.month_text,
-      total: newTransaction.amount || 0,
+      total: newTransaction.amount ?? 0,
       transactions: [newTransaction],
     };
     this.allTransactions.push(transactionItem);
@@ -684,7 +676,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     return {
       query: '',
       year: this.dataService.getFilterYear(),
-      target: this.lastSegment() || '',
+      target: this.lastSegment() ?? '',
       categories: [],
       subcategories: [],
       accounts: [],
