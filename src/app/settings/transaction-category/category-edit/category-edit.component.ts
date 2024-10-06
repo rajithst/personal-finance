@@ -46,9 +46,9 @@ export class CategoryEditComponent implements OnInit {
   protected readonly faTrash = faTrash;
   protected readonly TRANSACTION_TYPES = TRANSACTION_TYPES;
 
-  private formBuilder = inject(FormBuilder);
-  private dialog = inject(MatDialog);
-  private apiService = inject(ApiService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly dialog = inject(MatDialog);
+  private readonly apiService = inject(ApiService);
 
   constructor(
     public dialogRef: MatDialogRef<CategoryEditComponent>,
@@ -62,7 +62,7 @@ export class CategoryEditComponent implements OnInit {
 
   ngOnInit() {
     if (this.data.task === 'edit') {
-      this.categoryForm = this.getCategorySettingsForm(this.data.settings!);
+      this.categoryForm = this.getCategorySettingsForm(this.data.settings);
       const allSubCategoryForms: FormGroup[] = [];
       this.subCategories.forEach((subCategory) => {
         allSubCategoryForms.push(this.getNewFormArray(subCategory));
@@ -79,14 +79,13 @@ export class CategoryEditComponent implements OnInit {
   }
 
   submit() {
-
     const allSubcategoryForms = this.subcategories;
     const touchedFormValues: TransactionSubCategory[] = [];
-    allSubcategoryForms.forEach(x => {
+    allSubcategoryForms.forEach((x) => {
       if (x.touched) {
-        touchedFormValues.push(x.value)
+        touchedFormValues.push(x.value);
       }
-    })
+    });
     const categorySettingsPayload: CategorySettingsRequest = {
       category: this.categoryForm.value,
       subcategories: touchedFormValues,
@@ -174,7 +173,8 @@ export class CategoryEditComponent implements OnInit {
         Validators.required,
       ]),
       category: new FormControl<number | null>(
-        settings.category === 0 ? null : settings.category),
+        settings.category === 0 ? null : settings.category,
+      ),
       description: new FormControl<string | null>(settings.description),
     });
   }

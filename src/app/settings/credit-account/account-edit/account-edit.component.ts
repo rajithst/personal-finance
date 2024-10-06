@@ -23,7 +23,7 @@ interface AccountEditDialogData {
   styleUrl: './account-edit.component.css',
 })
 export class AccountEditComponent implements OnInit {
-  private apiService = inject(ApiService);
+  private readonly apiService = inject(ApiService);
 
   creditAccountForm: FormGroup;
   ACCOUNT_TYPES = [
@@ -59,14 +59,18 @@ export class AccountEditComponent implements OnInit {
       description: new FormControl<string | null>(
         account ? account.description : '',
       ),
-      last_import_date:  new FormControl<string | null>(account ? account.last_import_date : null),
-      provider: new FormControl<string>(account ? account.provider : '', [Validators.required]),
+      last_import_date: new FormControl<string | null>(
+        account ? account.last_import_date : null,
+      ),
+      provider: new FormControl<string>(account ? account.provider : '', [
+        Validators.required,
+      ]),
     });
   }
 
   submit() {
     const payload: CreditAccountRequest = this.creditAccountForm.value;
-    this.apiService.updateCreditAccount(payload).subscribe(result => {
+    this.apiService.updateCreditAccount(payload).subscribe((result) => {
       if (result) {
         this.dialogRef.close({
           refresh: true,
@@ -80,6 +84,6 @@ export class AccountEditComponent implements OnInit {
           action: ERROR_ACTION,
         });
       }
-    })
+    });
   }
 }

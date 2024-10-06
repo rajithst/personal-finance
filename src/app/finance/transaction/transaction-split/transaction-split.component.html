@@ -28,6 +28,7 @@
       </div>
     </div>
     <table>
+      <th></th>
       <ng-container formArrayName="splits">
         @for (data of splits; track data; let i = $index) {
           <tr [formGroupName]="i">

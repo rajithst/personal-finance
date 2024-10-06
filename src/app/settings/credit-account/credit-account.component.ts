@@ -14,9 +14,9 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrl: './credit-account.component.css',
 })
 export class CreditAccountComponent {
-  private dataService = inject(DataService);
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
+  private readonly dataService = inject(DataService);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
   accounts = this.dataService.getAccounts();
   dataSource = new MatTableDataSource<CreditAccount>(this.accounts);
 

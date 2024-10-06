@@ -20,12 +20,12 @@ export class TransactionCategoryComponent implements OnInit {
   categorySettings: CategorySettings[] = [];
   displayedColumns: string[] = ['name', 'description'];
   protected readonly faPencil = faPencil;
-  private dataService = inject(DataService);
+  private readonly dataService = inject(DataService);
   allCategories: TransactionCategory[] = this.dataService.getAllCategories();
   allSubCategories: TransactionSubCategory[] =
     this.dataService.getAllSubCategories();
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
 
   ngOnInit() {
     this.allCategories.forEach((category) => {
