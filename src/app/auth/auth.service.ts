@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, OnInit, signal } from '@angular/core';
+import { inject, Injectable, OnInit } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiService } from '../core/api.service';
 import { Router } from '@angular/router';
@@ -48,8 +48,7 @@ export class AuthService implements OnInit {
 
   get currentUser() {
     const token = this.getToken();
-    if (!token)
-      return null;
+    if (!token) return null;
     const tokenClaims: any = new JwtHelperService().decodeToken(token);
     this.loggedInUser = {
       first_name: tokenClaims.first_name,
