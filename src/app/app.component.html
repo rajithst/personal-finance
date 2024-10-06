@@ -2,7 +2,7 @@
   <mat-toolbar class="fix-nav" color="primary">
     <button
       (click)="onToolbarMenuToggle()"
-      *ngIf="authService.isLoggedIn()"
+      *ngIf="authService.isLoggedIn"
       mat-icon-button
       type="button"
     >
@@ -11,7 +11,7 @@
     <div class="nav-brand">CoinCraft</div>
     <span class="example-spacer"></span>
     <button
-      *ngIf="authService.isLoggedIn()"
+      *ngIf="authService.isLoggedIn"
       [matMenuTriggerFor]="menu"
       aria-label="Example icon-button with share icon"
       class="example-icon"
@@ -26,7 +26,7 @@
           [style]="{ color: '#3699ff' }"
           size="sm"
         ></fa-icon>
-        <span class="profile-menu-item">Profile</span>
+        <span class="profile-menu-item">{{authService.currentUser?.first_name}} {{authService.currentUser?.last_name}}</span>
       </button>
       <button mat-menu-item routerLink="settings">
         <fa-icon
@@ -44,7 +44,7 @@
         ></fa-icon>
         <span class="profile-menu-item">Activity Log</span>
       </button>
-      <button (click)="logout()" mat-menu-item>
+      <button (click)="authService.logout()" mat-menu-item>
         <fa-icon
           [icon]="faSignOut"
           [style]="{ color: '#3699ff' }"
@@ -56,7 +56,7 @@
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container">
-    @if (authService.isLoggedIn()) {
+    @if (authService.isLoggedIn) {
       <mat-sidenav
         position="start"
         disableClose="false"

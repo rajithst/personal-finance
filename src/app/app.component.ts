@@ -6,8 +6,6 @@ import {
   faSignOut,
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import { ApiService } from './core/api.service';
-import { DataService } from './service/data.service';
 import { AuthService } from './auth/auth.service';
 import {
   animate,
@@ -42,11 +40,9 @@ import {
     ]),
   ],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   @ViewChild(MatSidenavContainer) sidenavContainer!: MatSidenavContainer;
   authService = inject(AuthService);
-  apiService = inject(ApiService);
-  dataService = inject(DataService);
 
   sideNavDefaultOpened = true;
   showFullMenu = true;
@@ -62,23 +58,5 @@ export class AppComponent implements OnInit {
   onToolbarMenuToggle() {
     this.showFullMenu = !this.isExpanded;
     this.isExpanded = !this.isExpanded;
-  }
-
-  ngOnInit(): void {
-    if (this.authService.isLoggedIn()) {
-      this.loadInitSettings();
-    }
-  }
-
-  logout() {
-    this.authService.logout().then((r) => {
-      console.log(r);
-    });
-  }
-
-  private loadInitSettings(): void {
-    this.apiService.initSettings().subscribe((value) => {
-      this.dataService.setClientSettings(value);
-    });
   }
 }

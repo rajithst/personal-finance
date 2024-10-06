@@ -28,6 +28,7 @@ const routes: Routes = [
       ),
     resolve: {
       finance: dashboardResolver,
+      settings: settingsResolver,
     },
   },
   {

@@ -16,24 +16,26 @@ export class LoginComponent implements OnInit {
     username: ['', [Validators.required]],
     password: ['', Validators.required],
   });
+  invalidLogin = false;
 
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
+    if (this.authService.isLoggedIn) {
       this.router.navigate(['dashboard']);
     }
   }
 
   async submit() {
     try {
+      this.invalidLogin = false;
       const { username, password } = this.loginForm.value;
       if (!username || !password) {
         console.log('email and password is required');
         return;
       }
       await this.authService.login(username, password);
-      await this.router.navigate(['/']);
+      this.router.navigate(['/']);
     } catch (error) {
-      console.log(error);
+      this.invalidLogin = true;
     }
   }
 }

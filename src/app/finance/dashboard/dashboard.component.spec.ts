@@ -12,7 +12,7 @@ import { of } from 'rxjs';
 import { DataService } from '../../service/data.service';
 import { dashboardData } from '../../mock-data/dashboard';
 
-fdescribe('TransactionDashboardComponent', () => {
+describe('TransactionDashboardComponent', () => {
   let component: TransactionDashboardComponent;
   let fixture: ComponentFixture<TransactionDashboardComponent>;
   let mockActivatedRoute: any;

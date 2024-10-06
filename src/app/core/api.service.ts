@@ -37,7 +37,7 @@ import {
   CategorySettingsResponse,
 } from '../model/category-settings';
 import { MyProfile } from '../model/profile';
-import { UserToken } from '../auth/model';
+import { JwtTokenResponse } from '../auth/model';
 import { CreditAccount, CreditAccountRequest } from '../model/account';
 
 @Injectable({
@@ -50,8 +50,8 @@ export class ApiService {
   login(loginPayload: {
     username: string;
     password: string;
-  }): Observable<UserToken> {
-    return this.http.post<UserToken>(
+  }): Observable<JwtTokenResponse> {
+    return this.http.post<JwtTokenResponse>(
       `${this.SRC_URL}/auth/jwt/create`,
       loginPayload,
     );

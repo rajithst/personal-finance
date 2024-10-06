@@ -59,11 +59,13 @@ export class TransactionDashboardComponent implements OnInit {
     this.dataService.getClientSettings().transaction_categories;
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ finance }) => {
+    this.activatedRoute.data.subscribe(({ finance, settings }) => {
+      this.dataService.setClientSettings(settings);
       this.dashboardData = finance;
+      this.prepareAnalytics();
+      this.prepareData();
     });
-    this.prepareAnalytics();
-    this.prepareData();
+
   }
 
   switchOption(data: ChartOptionSwitchEmit | null) {

@@ -2,9 +2,10 @@
   <mat-card-title>Login</mat-card-title>
   <form (ngSubmit)="submit()" [formGroup]="loginForm">
     <mat-card-content>
+      <p *ngIf="invalidLogin" class="invalid-login">Invalid Login credentials!</p>
       <mat-form-field appearance="outline" class="form-field">
         <mat-icon matSuffix>account_circle</mat-icon>
-        <mat-label>User name</mat-label>
+        <mat-label>Username</mat-label>
         <input formControlName="username" matInput placeholder="User name"/>
       </mat-form-field>
       <mat-form-field appearance="outline" class="form-field">
