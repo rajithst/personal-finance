@@ -6,15 +6,7 @@ import {
 import { inject } from '@angular/core';
 import { ApiService } from '../core/api.service';
 import { Observable, of } from 'rxjs';
-import { DashboardResponse } from '../model/dashboard';
-import { MyProfile } from '../model/profile';
-
-export const dashboardResolver: ResolveFn<any> = (
-  route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot,
-): Observable<DashboardResponse> => {
-  return inject(ApiService).getDashboard();
-};
+import { MyProfile } from '../finance/model/profile';
 
 export const payeeResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,

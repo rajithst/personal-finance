@@ -1,14 +1,14 @@
 import { Component, inject, Inject, OnInit } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DestinationMap } from '../../../model/payee';
+import { DestinationMap } from '../../model/payee';
 import {
   TRANSACTION_TYPE_EXPENSE_ID,
   TRANSACTION_TYPE_INCOME_ID,
   TRANSACTION_TYPE_PAYMENTS_ID,
   TRANSACTION_TYPE_SAVINGS_ID,
   TRANSACTION_TYPES,
-} from '../../../data/client.data';
+} from '../../../shared/data/client.data';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 import { ApiService } from '../../../core/api.service';
@@ -18,7 +18,7 @@ import { DataService } from '../../../service/data.service';
 import {
   TransactionCategory,
   TransactionSubCategory,
-} from '../../../model/common';
+} from '../../model/common';
 
 interface PayeeEditDialogData {
   payee: DestinationMap;

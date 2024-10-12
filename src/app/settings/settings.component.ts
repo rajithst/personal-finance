@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../service/data.service';
 import { faGear, faList, faUser } from '@fortawesome/free-solid-svg-icons';
-import { MenuItem } from '../model/common';
+import { MenuItem } from '../finance/model/common';
 
 @Component({
   selector: 'app-settings',

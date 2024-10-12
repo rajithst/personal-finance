@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { DestinationMap } from '../model/payee';
-import { ClientSettings } from '../model/common';
+import { DestinationMap } from '../finance/model/payee';
+import { ClientSettings } from '../finance/model/common';
 import {
   TRANSACTION_TYPE_EXPENSE_ID,
   TRANSACTION_TYPE_INCOME_ID,
   TRANSACTION_TYPE_PAYMENTS_ID,
   TRANSACTION_TYPE_SAVINGS_ID,
-} from '../data/client.data';
-import { MyProfile } from '../model/profile';
+} from '../shared/data/client.data';
+import { MyProfile } from '../finance/model/profile';
 
 @Injectable({
   providedIn: 'root',

@@ -3,13 +3,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   BulkDeleteRequest,
   TransactionExpand,
-} from '../../../model/transactions';
+} from '../../model/transactions';
 import { ApiService } from '../../../core/api.service';
 import {
   CANCEL_ACTION,
   ERROR_ACTION,
   SUCCESS_ACTION,
-} from '../../../data/client.data';
+} from '../../../shared/data/client.data';
 
 export interface TransactionBulkEditData {
   formData: TransactionExpand[];

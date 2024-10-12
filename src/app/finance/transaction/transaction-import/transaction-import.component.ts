@@ -5,7 +5,7 @@ import { DataService } from '../../../service/data.service';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { throwError } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
-import { CANCEL_ACTION, SUCCESS_ACTION } from '../../../data/client.data';
+import { CANCEL_ACTION, SUCCESS_ACTION } from '../../../shared/data/client.data';
 import moment from 'moment';
 
 @Component({

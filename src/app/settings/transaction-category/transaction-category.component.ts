@@ -3,13 +3,13 @@ import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import {
   TransactionCategory,
   TransactionSubCategory,
-} from '../../model/common';
+} from '../../finance/model/common';
 import { DataService } from '../../service/data.service';
-import { SUCCESS_ACTION } from '../../data/client.data';
+import { SUCCESS_ACTION } from '../../shared/data/client.data';
 import { CategoryEditComponent } from './category-edit/category-edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CategorySettings } from '../../model/category-settings';
+import { CategorySettings } from '../../finance/model/category-settings';
 
 @Component({
   selector: 'app-transaction-category',

@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { isUserAuthenticated } from './auth/auth.guard';
 import {
-  dashboardResolver,
   payeeResolver,
   profileResolver,
   settingsResolver,
@@ -26,10 +25,6 @@ const routes: Routes = [
       import('./finance/dashboard/dashboard.module').then(
         (m) => m.DashboardModule,
       ),
-    resolve: {
-      finance: dashboardResolver,
-      settings: settingsResolver,
-    },
   },
   {
     path: 'finance',

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MenuItem } from '../../model/common';
+import { MenuItem } from '../model/common';
 
 @Component({
   selector: 'app-reports',

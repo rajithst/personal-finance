@@ -1,4 +1,4 @@
-import { DropDownType } from '../data/shared.data';
+import { DropDownType } from '../../shared/data/shared.data';
 
 interface DashboardTransaction {
   year: number;

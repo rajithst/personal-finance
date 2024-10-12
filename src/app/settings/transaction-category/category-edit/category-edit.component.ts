@@ -11,18 +11,18 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { TransactionSubCategory } from '../../../model/common';
+import { TransactionSubCategory } from '../../../finance/model/common';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../../../core/api.service';
 import {
   CategorySettings,
   CategorySettingsRequest,
-} from '../../../model/category-settings';
+} from '../../../finance/model/category-settings';
 import {
   ERROR_ACTION,
   SUCCESS_ACTION,
   TRANSACTION_TYPES,
-} from '../../../data/client.data';
+} from '../../../shared/data/client.data';
 
 interface CategoryEditDialogData {
   settings: CategorySettings | null;
