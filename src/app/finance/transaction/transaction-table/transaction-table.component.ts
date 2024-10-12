@@ -14,7 +14,7 @@ import {
   MonthlyTransaction,
   TransactionExpand,
   TransactionFilter,
-} from '../../../model/transactions';
+} from '../../model/transactions';
 import {
   TransactionDeleteDialog,
   TransactionUpdateDialog,
@@ -48,7 +48,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
 import { LoadingService } from '../../../shared/loading/loading.service';
 import { Sort } from '@angular/material/sort';
-import { ERROR_ACTION, SUCCESS_ACTION } from '../../../data/client.data';
+import { ERROR_ACTION, SUCCESS_ACTION } from '../../../shared/data/client.data';
 import { Router } from '@angular/router';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { TransactionSplitComponent } from '../transaction-split/transaction-split.component';
@@ -56,11 +56,11 @@ import { TransactionBulkEditComponent } from '../transaction-bulk-edit/transacti
 import {
   TransactionCategory,
   TransactionSubCategory,
-} from '../../../model/common';
+} from '../../model/common';
 import { TransactionImportComponent } from '../transaction-import/transaction-import.component';
-import { EXPENSE, INCOME } from '../../../data/shared.data';
+import { EXPENSE, INCOME } from '../../../shared/data/shared.data';
 import { ApiService } from '../../../core/api.service';
-import { CreditAccount } from '../../../model/account';
+import { CreditAccount } from '../../model/account';
 import { TransactionViewMoreDialog } from './view-more/view-more.component';
 
 interface TransactionActionResult {

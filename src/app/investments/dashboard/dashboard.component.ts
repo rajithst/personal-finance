@@ -1,7 +1,7 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import { SessionService } from '../service/session.service';
-import { MONTHS } from '../../data/client.data';
-import { SECTOR } from '../../data/investments.data';
+import { MONTHS } from '../../shared/data/client.data';
+import { SECTOR } from '../../shared/data/investments.data';
 
 import {
   faCaretDown,

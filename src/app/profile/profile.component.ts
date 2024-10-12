@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../service/data.service';
-import { MenuItem } from '../model/common';
+import { MenuItem } from '../finance/model/common';
 import {
   faCreditCard,
   faUser,

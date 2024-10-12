@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { MyProfile } from '../../model/profile';
+import { MyProfile } from '../../finance/model/profile';
 import { DataService } from '../../service/data.service';
 
 interface ProfileItem {

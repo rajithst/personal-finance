@@ -9,11 +9,11 @@ import { map, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import {
   MonthlyTransaction,
   TransactionFilter,
-} from '../../model/transactions';
+} from '../model/transactions';
 import { Title } from '@angular/platform-browser';
-import { EXPENSE, INCOME, PAYMENT, SAVING } from '../../data/shared.data';
+import { EXPENSE, INCOME, PAYMENT, SAVING } from '../../shared/data/shared.data';
 import { ApiService } from '../../core/api.service';
-import { MenuItem } from '../../model/common';
+import { MenuItem } from '../model/common';
 
 @Component({
   selector: 'app-transaction',

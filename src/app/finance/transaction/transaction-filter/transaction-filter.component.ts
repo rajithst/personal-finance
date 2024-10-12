@@ -4,18 +4,18 @@ import {
   faLayerGroup,
   faShop,
 } from '@fortawesome/free-solid-svg-icons';
-import { NA_CATEGORY_ID, NA_SUB_CATEGORY_ID } from '../../../data/client.data';
+import { NA_CATEGORY_ID, NA_SUB_CATEGORY_ID } from '../../../shared/data/client.data';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { INCOME, PAYMENT, SAVING } from '../../../data/shared.data';
-import { TransactionFilter } from '../../../model/transactions';
+import { INCOME, PAYMENT, SAVING } from '../../../shared/data/shared.data';
+import { TransactionFilter } from '../../model/transactions';
 import { LoadingService } from '../../../shared/loading/loading.service';
 import { DataService } from '../../../service/data.service';
 import {
   TransactionCategory,
   TransactionSubCategory,
-} from '../../../model/common';
-import { CreditAccount } from '../../../model/account';
+} from '../../model/common';
+import { CreditAccount } from '../../model/account';
 
 interface TransactionFilterData {
   filterParams: TransactionFilter;

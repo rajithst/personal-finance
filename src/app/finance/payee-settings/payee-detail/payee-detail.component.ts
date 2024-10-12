@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { DestinationMap } from '../../../model/payee';
+import { DestinationMap } from '../../model/payee';
 import { ActivatedRoute } from '@angular/router';
-import { TransactionExpand } from '../../../model/transactions';
+import { TransactionExpand } from '../../model/transactions';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { PayeeEditComponent } from '../payee-edit/payee-edit.component';
 import { MatDialog } from '@angular/material/dialog';

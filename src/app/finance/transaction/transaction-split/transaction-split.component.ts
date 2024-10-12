@@ -11,7 +11,7 @@ import {
   TransactionExpand,
   TransactionSplit,
   TransactionSplitRequest,
-} from '../../../model/transactions';
+} from '../../model/transactions';
 import {
   FormArray,
   FormBuilder,
@@ -24,13 +24,13 @@ import {
   ERROR_ACTION,
   NA_CATEGORY_ID,
   SUCCESS_ACTION,
-} from '../../../data/client.data';
+} from '../../../shared/data/client.data';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../../../core/api.service';
 import { map, Observable, startWith } from 'rxjs';
-import { DestinationMap } from '../../../model/payee';
+import { DestinationMap } from '../../model/payee';
 import { DataService } from '../../../service/data.service';
-import { TransactionCategory } from '../../../model/common';
+import { TransactionCategory } from '../../model/common';
 
 export interface TransactionSplitData {
   formData: TransactionExpand;

@@ -11,21 +11,21 @@ import {
   TRANSACTION_TYPE_PAYMENTS_ID,
   TRANSACTION_TYPE_SAVINGS_ID,
   TRANSACTION_TYPES,
-} from '../../../data/client.data';
+} from '../../../shared/data/client.data';
 import {
   TransactionExpand,
   TransactionMergeRequest,
   TransactionRequest,
-} from '../../../model/transactions';
+} from '../../model/transactions';
 import moment from 'moment/moment';
 import { ApiService } from '../../../core/api.service';
-import { DropDownType } from '../../../data/shared.data';
+import { DropDownType } from '../../../shared/data/shared.data';
 import { DataService } from '../../../service/data.service';
 import {
   TransactionCategory,
   TransactionSubCategory,
-} from '../../../model/common';
-import { CreditAccount } from '../../../model/account';
+} from '../../model/common';
+import { CreditAccount } from '../../model/account';
 
 export interface TransactionUpdateDialogData {
   formData: TransactionExpand;

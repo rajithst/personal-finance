@@ -8,8 +8,8 @@ import {
   ACCOUNT_PROVIDER_RAKUTEN,
   CREDIT_ACCOUNT_TYPE_BANK_ACCOUNT,
   CREDIT_ACCOUNT_TYPE_CREDIT_CARD, ERROR_ACTION, SUCCESS_ACTION,
-} from '../../../data/client.data';
-import {CreditAccount, CreditAccountRequest} from "../../../model/account";
+} from '../../../shared/data/client.data';
+import {CreditAccount, CreditAccountRequest} from "../../../finance/model/account";
 import {ApiService} from "../../../core/api.service";
 
 interface AccountEditDialogData {

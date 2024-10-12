@@ -8,8 +8,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import { DropDownType } from '../../data/shared.data';
-import {ChartData, ChartOptionSwitchEmit} from "../../model/dashboard";
+import { DropDownType } from '../data/shared.data';
+import {ChartData, ChartOptionSwitchEmit} from "../../finance/model/dashboard";
 
 declare var google: any;
 

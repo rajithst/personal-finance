@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { DataService } from '../../service/data.service';
 import { ActivatedRoute } from '@angular/router';
-import { MenuItem } from '../../model/common';
+import { MenuItem } from '../model/common';
 
 @Component({
   selector: 'app-payee-settings',

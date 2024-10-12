@@ -1,6 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { MONTHS } from '../../data/client.data';
-import { ActivatedRoute } from '@angular/router';
+import { Component, inject, OnDestroy } from '@angular/core';
+import { MONTHS } from '../../shared/data/client.data';
 import {
   faCreditCard,
   faFileInvoiceDollar,
@@ -16,20 +15,29 @@ import {
   HORIZONTAL_BAR_CHART_CONFIG,
   KeyValueArray,
   PIE_CHART_CONFIG,
-} from '../../model/dashboard';
+} from '../model/dashboard';
 import { DataService } from '../../service/data.service';
-import { DropDownType } from '../../data/shared.data';
-import { Observable, of } from 'rxjs';
+import {DropDownType} from '../../shared/data/shared.data';
+import {
+  forkJoin,
+  Observable,
+  of,
+  ReplaySubject,
+  takeUntil,
+} from 'rxjs';
+import { ApiService } from '../../core/api.service';
+import {CreditAccount} from "../model/account";
+import {TransactionCategory} from "../model/common";
 
 @Component({
   selector: 'app-transaction-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class TransactionDashboardComponent implements OnInit {
+export class TransactionDashboardComponent implements OnDestroy {
   today = new Date();
   currentYear = this.today.getFullYear();
-  currentMonthNumber = this.today.getMonth() - 3;
+  currentMonthNumber = this.today.getMonth() - 1;
   currentDataKey = `${this.currentYear}-${String(this.currentMonthNumber).padStart(2, '0')}-01`;
   currentMonthName: string = MONTHS.find(
     (x) => x.value == this.currentMonthNumber,
@@ -39,6 +47,7 @@ export class TransactionDashboardComponent implements OnInit {
   totalPayments = 0;
   totalSavings = 0;
   dashboardData: DashboardResponse;
+  loading = true;
 
   categoryWiseExpenseSum$: Observable<ChartData>;
   categoryWiseExpenseValueSum$: Observable<ChartData>;
@@ -52,20 +61,27 @@ export class TransactionDashboardComponent implements OnInit {
   protected readonly faPiggyBank = faPiggyBank;
   protected readonly faCreditCard = faCreditCard;
   protected readonly faFileInvoiceDollar = faFileInvoiceDollar;
-  private readonly activatedRoute = inject(ActivatedRoute);
   private readonly dataService = inject(DataService);
-  CREDIT_ACCOUNTS = this.dataService.getClientSettings().accounts;
-  TRANSACTION_CATEGORIES =
-    this.dataService.getClientSettings().transaction_categories;
+  private readonly apiService = inject(ApiService);
+  protected readonly destroyed$ = new ReplaySubject<void>(1);
 
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ finance, settings }) => {
-      this.dataService.setClientSettings(settings);
-      this.dashboardData = finance;
-      this.prepareAnalytics();
-      this.prepareData();
-    });
+  CREDIT_ACCOUNTS: CreditAccount[] = [];
+  TRANSACTION_CATEGORIES: TransactionCategory[] = [];
 
+  constructor() {
+    const settings$ = this.apiService.initSettings();
+    const dashboard$ = this.apiService.getDashboard();
+
+    forkJoin({ settings: settings$, dashboard: dashboard$ })
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(({ settings, dashboard }) => {
+        this.dataService.setClientSettings(settings);
+        this.CREDIT_ACCOUNTS = this.dataService.getAccounts();
+        this.TRANSACTION_CATEGORIES = this.dataService.getAllCategories();
+        this.dashboardData = dashboard;
+        this.prepareAnalytics();
+        this.renderCharts();
+      });
   }
 
   switchOption(data: ChartOptionSwitchEmit | null) {
@@ -101,7 +117,7 @@ export class TransactionDashboardComponent implements OnInit {
     this.totalExpenses = expenses - this.totalSavings;
   }
 
-  private prepareData() {
+  private renderCharts() {
     const defaultTarget: DropDownType = MONTHS.find(
       (x) => x.value === this.currentMonthNumber,
     )!;
@@ -171,7 +187,7 @@ export class TransactionDashboardComponent implements OnInit {
     let data: KeyValueArray = [['Category', 'Total']];
     if (targetKey in transactions) {
       const categoryData = transactions[targetKey];
-      this.TRANSACTION_CATEGORIES.forEach((x) => {
+      this.TRANSACTION_CATEGORIES.filter(x => x.category !== 'Income').forEach((x) => {
         const categorySum = categoryData.find((y) => y.category_id === x.id);
         data.push([x.category, categorySum ? categorySum.amount : 0]);
       });
@@ -268,5 +284,9 @@ export class TransactionDashboardComponent implements OnInit {
       chartSwitches: MONTHS,
     };
     this.destinationWisePaymentSum$ = of(mapData);
+  }
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

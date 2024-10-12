@@ -11,7 +11,7 @@ import {
   TransactionSplitRequest,
   TransactionSplitResponse,
   TransactionsResponse,
-} from '../model/transactions';
+} from '../finance/model/transactions';
 import {
   CompanyResponse,
   InvestmentDashboard,
@@ -28,17 +28,17 @@ import {
   DestinationMapRequest,
   PayeeDetail,
   PayeeResponse,
-} from '../model/payee';
+} from '../finance/model/payee';
 
-import { DashboardResponse } from '../model/dashboard';
-import { ClientSettings } from '../model/common';
+import { DashboardResponse } from '../finance/model/dashboard';
+import { ClientSettings } from '../finance/model/common';
 import {
   CategorySettingsRequest,
   CategorySettingsResponse,
-} from '../model/category-settings';
-import { MyProfile } from '../model/profile';
+} from '../finance/model/category-settings';
+import { MyProfile } from '../finance/model/profile';
 import { JwtTokenResponse } from '../auth/model';
-import { CreditAccount, CreditAccountRequest } from '../model/account';
+import { CreditAccount, CreditAccountRequest } from '../finance/model/account';
 
 @Injectable({
   providedIn: 'root',

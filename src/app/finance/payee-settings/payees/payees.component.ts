@@ -9,7 +9,7 @@ import {
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { DestinationMap } from '../../../model/payee';
+import { DestinationMap } from '../../model/payee';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -21,7 +21,7 @@ import {
   TRANSACTION_TYPE_EXPENSE_ID, TRANSACTION_TYPE_INCOME_ID,
   TRANSACTION_TYPE_PAYMENTS_ID,
   TRANSACTION_TYPE_SAVINGS_ID
-} from "../../../data/client.data";
+} from "../../../shared/data/client.data";
 
 @Component({
   selector: 'app-payees',
