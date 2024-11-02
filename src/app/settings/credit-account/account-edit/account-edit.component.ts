@@ -12,6 +12,7 @@ import {
   MatDialogContent,
   MatDialogActions,
   MatDialogClose,
+  MAT_DIALOG_DEFAULT_OPTIONS,
 } from '@angular/material/dialog';
 import {
   ACCOUNT_PROVIDER_DOCOMO_CARD,

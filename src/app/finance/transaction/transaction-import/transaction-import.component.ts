@@ -28,7 +28,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
-import { MatOption } from '@angular/material/core';
+import {MatOption, provideNativeDateAdapter} from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import {
   MatFormField,
@@ -77,6 +77,7 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
     MatDialogClose,
     DatePipe,
   ],
+  providers:[provideNativeDateAdapter()]
 })
 export class TransactionImportComponent {
   private readonly apiService = inject(ApiService);

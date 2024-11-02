@@ -120,9 +120,8 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
   editPayee(payee: DestinationMap) {
     const dialog = this.dialog.open(PayeeEditComponent, {
       width: '850px',
-      height: '600px',
       position: {
-        top: '100px',
+        top: '5%',
       },
       data: { payee },
     });
@@ -133,7 +132,7 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
           payee: DestinationMap | null;
           mergeIds: number[] | null;
         }) => {
-          if (result.payee) {
+          if (result && result.payee) {
             const updatedPayee = result.payee;
             const id = this.dataSource.data.findIndex(
               (x) => x.id === updatedPayee.id,

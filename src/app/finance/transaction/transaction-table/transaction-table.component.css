@@ -104,4 +104,9 @@ table.transaction-table tbody td:last-child {
   font-size: 12px;
 }
 
+.no-records-message {
+  text-align: center;
+  font-weight: 800;
+  font-size: 14px;
+}
 

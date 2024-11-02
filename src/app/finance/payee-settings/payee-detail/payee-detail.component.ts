@@ -86,7 +86,7 @@ export class PayeeDetailComponent implements OnInit {
           payee: DestinationMap | null;
           mergeIds: number[] | null;
         }) => {
-          if (result.payee) {
+          if (result && result.payee) {
             this.payeeInfo = result.payee;
             this.snackBar.open('Updated!', 'Success', {
               duration: 3000,

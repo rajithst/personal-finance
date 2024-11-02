@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { DataService } from '../../service/data.service';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { SUCCESS_ACTION } from '../../shared/data/client.data';
-import { MatDialog } from '@angular/material/dialog';
+import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialog} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AccountEditComponent } from './account-edit/account-edit.component';
 import { CreditAccount } from '../../finance/model/account';
@@ -47,10 +47,14 @@ export class CreditAccountComponent {
 
   editAccount(element: CreditAccount) {
     const dialog = this.dialog.open(AccountEditComponent, {
+      width: '850px',
+      position: {
+        top: '5%',
+      },
       data: { account: element, task: 'edit' },
     });
     dialog.afterClosed().subscribe((result: any) => {
-      if (result.action === SUCCESS_ACTION) {
+      if (result && result.action === SUCCESS_ACTION) {
         const targetId = this.accounts.findIndex((x) => x.id === element.id);
         if (targetId !== -1) {
           this.accounts[targetId] = result.data;
@@ -66,10 +70,14 @@ export class CreditAccountComponent {
 
   addAccount() {
     const dialog = this.dialog.open(AccountEditComponent, {
+      width: '850px',
+      position: {
+        top: '5%',
+      },
       data: { account: null, task: 'add' },
     });
     dialog.afterClosed().subscribe((result: any) => {
-      if (result.action === SUCCESS_ACTION) {
+      if (result && result.action === SUCCESS_ACTION) {
         this.accounts.push(result.data);
         this.dataSource.data = this.accounts;
         this.refreshClientSettings();
