@@ -8,8 +8,8 @@ describe('ExpenseDialog', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TransactionUpdateDialog],
-    }).compileComponents();
+    imports: [TransactionUpdateDialog],
+}).compileComponents();
 
     fixture = TestBed.createComponent(TransactionUpdateDialog);
     component = fixture.componentInstance;

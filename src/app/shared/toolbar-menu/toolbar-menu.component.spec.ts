@@ -8,8 +8,8 @@ describe('ToolbarMenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ToolbarMenuComponent],
-    }).compileComponents();
+    imports: [ToolbarMenuComponent],
+}).compileComponents();
 
     fixture = TestBed.createComponent(ToolbarMenuComponent);
     component = fixture.componentInstance;

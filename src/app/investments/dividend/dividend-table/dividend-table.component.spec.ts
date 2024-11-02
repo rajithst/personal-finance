@@ -8,8 +8,8 @@ describe('DividendTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DividendTableComponent],
-    }).compileComponents();
+    imports: [DividendTableComponent],
+}).compileComponents();
 
     fixture = TestBed.createComponent(DividendTableComponent);
     component = fixture.componentInstance;

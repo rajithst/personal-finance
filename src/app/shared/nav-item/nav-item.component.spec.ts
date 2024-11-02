@@ -11,9 +11,8 @@ describe('NavItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NavItemComponent],
-      imports: [RouterModule.forRoot([]), NoopAnimationsModule, FaIconComponent],
-    }).compileComponents();
+    imports: [RouterModule.forRoot([]), NoopAnimationsModule, FaIconComponent, NavItemComponent],
+}).compileComponents();
 
     fixture = TestBed.createComponent(NavItemComponent);
     component = fixture.componentInstance;

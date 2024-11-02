@@ -1,6 +1,6 @@
 import { Component, inject, Inject, OnInit } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { DestinationMap } from '../../model/payee';
 import {
   TRANSACTION_TYPE_EXPENSE_ID,
@@ -9,25 +9,69 @@ import {
   TRANSACTION_TYPE_SAVINGS_ID,
   TRANSACTION_TYPES,
 } from '../../../shared/data/client.data';
-import { FormControl, FormGroup } from '@angular/forms';
-import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput } from '@angular/material/chips';
 import { ApiService } from '../../../core/api.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatNoDataRow, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DataService } from '../../../service/data.service';
 import {
   TransactionCategory,
   TransactionSubCategory,
 } from '../../model/common';
+import { MatButton } from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { NgIf } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatDivider } from '@angular/material/divider';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 interface PayeeEditDialogData {
   payee: DestinationMap;
 }
 
 @Component({
-  selector: 'app-payee-edit',
-  templateUrl: './payee-edit.component.html',
-  styleUrl: './payee-edit.component.css',
+    selector: 'app-payee-edit',
+    templateUrl: './payee-edit.component.html',
+    styleUrl: './payee-edit.component.css',
+    standalone: true,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatSelect,
+        MatOption,
+        MatDivider,
+        MatChipGrid,
+        MatChipRow,
+        MatChipRemove,
+        MatIcon,
+        MatChipInput,
+        NgIf,
+        MatTable,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCheckbox,
+        MatCellDef,
+        MatCell,
+        MatNoDataRow,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class PayeeEditComponent implements OnInit {
   readonly addOnBlur = true;

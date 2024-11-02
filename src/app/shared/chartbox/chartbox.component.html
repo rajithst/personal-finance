@@ -14,7 +14,7 @@
             ></fa-icon>
             <mat-menu #menu="matMenu">
               @for (data of chartSwitches; track data) {
-                <button mat-menu-item (click)="switchOption(data)">
+                <button mat-menu-item (click)="switchOption(data)" class="chart-switch-button">
                   {{ data.viewValue }}
                 </button>
               }

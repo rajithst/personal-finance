@@ -6,19 +6,13 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {
   TransactionExpand,
   TransactionSplit,
   TransactionSplitRequest,
 } from '../../model/transactions';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import {
   CANCEL_ACTION,
   ERROR_ACTION,
@@ -31,15 +25,49 @@ import { map, Observable, startWith } from 'rxjs';
 import { DestinationMap } from '../../model/payee';
 import { DataService } from '../../../service/data.service';
 import { TransactionCategory } from '../../model/common';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel, MatPrefix } from '@angular/material/form-field';
+import { MatButton } from '@angular/material/button';
+import { MatDivider } from '@angular/material/divider';
+import { NgIf, AsyncPipe, DecimalPipe, DatePipe } from '@angular/common';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 export interface TransactionSplitData {
   formData: TransactionExpand;
 }
 
 @Component({
-  selector: 'app-transaction-split',
-  templateUrl: './transaction-split.component.html',
-  styleUrl: './transaction-split.component.css',
+    selector: 'app-transaction-split',
+    templateUrl: './transaction-split.component.html',
+    styleUrl: './transaction-split.component.css',
+    standalone: true,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        ReactiveFormsModule,
+        NgIf,
+        MatDivider,
+        MatButton,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatAutocompleteTrigger,
+        MatAutocomplete,
+        MatOption,
+        MatSelect,
+        MatPrefix,
+        FaIconComponent,
+        MatDialogActions,
+        MatDialogClose,
+        AsyncPipe,
+        DecimalPipe,
+        DatePipe,
+    ],
 })
 export class TransactionSplitComponent implements OnInit {
   splitForm: FormGroup;

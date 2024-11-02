@@ -2,9 +2,10 @@ import {Component, ElementRef, inject, OnDestroy, viewChild} from '@angular/core
 import { DataService } from '../../service/data.service';
 
 @Component({
-  selector: 'app-searchbar',
-  templateUrl: './searchbar.component.html',
-  styleUrl: './searchbar.component.css',
+    selector: 'app-searchbar',
+    templateUrl: './searchbar.component.html',
+    styleUrl: './searchbar.component.css',
+    standalone: true,
 })
 export class SearchbarComponent implements OnDestroy {
   searchInput = viewChild<ElementRef>('searchInput');

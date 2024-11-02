@@ -8,8 +8,8 @@ describe('PayeeRulesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PayeeSettingsComponent],
-    }).compileComponents();
+    imports: [PayeeSettingsComponent],
+}).compileComponents();
 
     fixture = TestBed.createComponent(PayeeSettingsComponent);
     component = fixture.componentInstance;

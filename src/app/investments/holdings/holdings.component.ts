@@ -5,11 +5,28 @@ import { faCirclePlus, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { HoldingUpdateComponent } from './holding-update/holding-update.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HoldingTableComponent } from './holding-table/holding-table.component';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatRipple } from '@angular/material/core';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 
 @Component({
-  selector: 'app-holdings',
-  templateUrl: './holdings.component.html',
-  styleUrl: './holdings.component.css',
+    selector: 'app-holdings',
+    templateUrl: './holdings.component.html',
+    styleUrl: './holdings.component.css',
+    standalone: true,
+    imports: [
+        MatGridList,
+        MatGridTile,
+        MatRipple,
+        MatTooltip,
+        FaIconComponent,
+        MatTabGroup,
+        MatTab,
+        HoldingTableComponent,
+    ],
 })
 export class HoldingsComponent implements OnInit {
   holdings: Holding[] = [];

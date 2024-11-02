@@ -1,17 +1,57 @@
 import { Component, inject } from '@angular/core';
 import { ApiService } from '../../../core/api.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DataService } from '../../../service/data.service';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { throwError } from 'rxjs';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { CANCEL_ACTION, SUCCESS_ACTION } from '../../../shared/data/client.data';
 import moment from 'moment';
+import { DatePipe } from '@angular/common';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatDateRangeInput, MatStartDate, MatEndDate, MatDatepickerToggle, MatDateRangePicker } from '@angular/material/datepicker';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatStepper, MatStep, MatStepLabel, MatStepperNext, MatStepperPrevious } from '@angular/material/stepper';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 @Component({
-  selector: 'app-transaction-import',
-  templateUrl: './transaction-import.component.html',
-  styleUrl: './transaction-import.component.css',
+    selector: 'app-transaction-import',
+    templateUrl: './transaction-import.component.html',
+    styleUrl: './transaction-import.component.css',
+    standalone: true,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        MatStepper,
+        MatStep,
+        ReactiveFormsModule,
+        MatStepLabel,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatButton,
+        MatStepperNext,
+        MatIcon,
+        FaIconComponent,
+        MatStepperPrevious,
+        MatDateRangeInput,
+        MatStartDate,
+        MatEndDate,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDateRangePicker,
+        MatCheckbox,
+        MatDialogActions,
+        MatDialogClose,
+        DatePipe,
+    ],
 })
 export class TransactionImportComponent {
   apiService = inject(ApiService);

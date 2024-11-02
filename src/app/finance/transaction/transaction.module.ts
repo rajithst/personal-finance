@@ -16,8 +16,8 @@ import {
 import { TransactionTableComponent } from './transaction-table/transaction-table.component';
 import { TransactionFilterComponent } from './transaction-filter/transaction-filter.component';
 import { TransactionRoutingModule } from './transaction.routing.module';
-import { SharedModule } from '../../shared/shared.module';
-import { MaterialModule } from '../../shared/material.module';
+
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { TransactionSplitComponent } from './transaction-split/transaction-split.component';
@@ -26,7 +26,12 @@ import { TransactionImportComponent } from './transaction-import/transaction-imp
 import { TransactionViewMoreDialog } from './transaction-table/view-more/view-more.component';
 
 @NgModule({
-  declarations: [
+    imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FontAwesomeModule,
+    TransactionRoutingModule,
     FinanceComponent,
     TransactionDetailComponent,
     TransactionUpdateDialog,
@@ -41,26 +46,17 @@ import { TransactionViewMoreDialog } from './transaction-table/view-more/view-mo
     TransactionBulkEditComponent,
     TransactionImportComponent,
     TransactionViewMoreDialog,
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule,
-    MaterialModule,
-    FontAwesomeModule,
-    TransactionRoutingModule,
-  ],
-  providers: [
-    {
-      provide: MAT_DIALOG_DEFAULT_OPTIONS,
-      useValue: {
-        width: '850px',
-        position: {
-          top: '5%',
+],
+    providers: [
+        {
+            provide: MAT_DIALOG_DEFAULT_OPTIONS,
+            useValue: {
+                width: '850px',
+                position: {
+                    top: '5%',
+                },
+            },
         },
-      },
-    },
-  ],
+    ],
 })
 export class TransactionModule {}

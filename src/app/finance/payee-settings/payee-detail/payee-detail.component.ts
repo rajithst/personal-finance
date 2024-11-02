@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { DestinationMap } from '../../model/payee';
 import { ActivatedRoute } from '@angular/router';
 import { TransactionExpand } from '../../model/transactions';
@@ -7,11 +7,40 @@ import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { PayeeEditComponent } from '../payee-edit/payee-edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { MatDivider } from '@angular/material/divider';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { NgIf, DecimalPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-payee-detail',
-  templateUrl: './payee-detail.component.html',
-  styleUrl: './payee-detail.component.css',
+    selector: 'app-payee-detail',
+    templateUrl: './payee-detail.component.html',
+    styleUrl: './payee-detail.component.css',
+    standalone: true,
+    imports: [
+        NgIf,
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        FaIconComponent,
+        MatCardContent,
+        MatDivider,
+        MatTable,
+        MatSort,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatSortHeader,
+        MatCellDef,
+        MatCell,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        DecimalPipe,
+        DatePipe,
+    ],
 })
 export class PayeeDetailComponent implements OnInit {
   payeeInfo: DestinationMap;

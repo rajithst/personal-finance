@@ -1,5 +1,8 @@
 import { Component, inject, ViewChild } from '@angular/core';
-import { MatSidenavContainer } from '@angular/material/sidenav';
+import {
+  MatSidenavContainer,
+  MatSidenavModule,
+} from '@angular/material/sidenav';
 import {
   faGear,
   faList,
@@ -14,6 +17,15 @@ import {
   trigger,
   state,
 } from '@angular/animations';
+import { SideNavComponent } from './side-nav/side-nav.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { NgIf, NgStyle } from '@angular/common';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import {LoadingComponent} from "./shared/loading/loading.component";
 
 @Component({
   selector: 'app-root',
@@ -38,6 +50,23 @@ import {
       transition('* => closed', [animate('0.2s')]),
       transition('* => open', [animate('0.2s')]),
     ]),
+  ],
+  standalone: true,
+  imports: [
+    NgIf,
+    MatIconButton,
+    MatIcon,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    RouterLink,
+    FaIconComponent,
+    MatToolbarModule,
+    LoadingComponent,
+    MatSidenavModule,
+    NgStyle,
+    SideNavComponent,
+    RouterOutlet,
   ],
 })
 export class AppComponent {

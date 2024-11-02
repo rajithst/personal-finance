@@ -6,7 +6,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 
 import {
   faCaretDown,
@@ -19,17 +19,44 @@ import {
   faPlus,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { HoldingDetailsComponent } from '../holding-details/holding-details.component';
 import { SessionService } from '../../service/session.service';
 import { Holding, StockDailyPrice } from '../../model/investment';
 import { ApiService } from '../../../core/api.service';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { NgClass, DecimalPipe } from '@angular/common';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatCard, MatCardContent } from '@angular/material/card';
 
 @Component({
-  selector: 'app-holding-table',
-  templateUrl: './holding-table.component.html',
-  styleUrl: './holding-table.component.css',
+    selector: 'app-holding-table',
+    templateUrl: './holding-table.component.html',
+    styleUrl: './holding-table.component.css',
+    standalone: true,
+    imports: [
+        MatCard,
+        MatCardContent,
+        FaIconComponent,
+        NgClass,
+        MatTable,
+        MatSort,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatSortHeader,
+        MatCellDef,
+        MatCell,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        DecimalPipe,
+    ],
 })
 export class HoldingTableComponent implements OnChanges {
   @Input() holdings: Holding[] = [];

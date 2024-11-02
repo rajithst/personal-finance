@@ -6,7 +6,7 @@ import { UserLogComponent } from './user-log/user-log.component';
 import { SettingsComponent } from './settings.component';
 import { TransactionCategoryComponent } from './transaction-category/transaction-category.component';
 import { CreditAccountComponent } from './credit-account/credit-account.component';
-import { MaterialModule } from '../shared/material.module';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   ActionConfirmComponent,
@@ -15,10 +15,14 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { AccountEditComponent } from './credit-account/account-edit/account-edit.component';
-import {SharedModule} from "../shared/shared.module";
+
 
 @NgModule({
-  declarations: [
+    imports: [
+    CommonModule,
+    SettingsRoutingModule,
+    FaIconComponent,
+    ReactiveFormsModule,
     UserLogComponent,
     SettingsComponent,
     TransactionCategoryComponent,
@@ -26,25 +30,17 @@ import {SharedModule} from "../shared/shared.module";
     CategoryEditComponent,
     ActionConfirmComponent,
     AccountEditComponent,
-  ],
-  imports: [
-    CommonModule,
-    MaterialModule,
-    SettingsRoutingModule,
-    FaIconComponent,
-    ReactiveFormsModule,
-    SharedModule,
-  ],
-  providers: [
-    {
-      provide: MAT_DIALOG_DEFAULT_OPTIONS,
-      useValue: {
-        width: '850px',
-        position: {
-          top: '5%',
+],
+    providers: [
+        {
+            provide: MAT_DIALOG_DEFAULT_OPTIONS,
+            useValue: {
+                width: '850px',
+                position: {
+                    top: '5%',
+                },
+            },
         },
-      },
-    },
-  ],
+    ],
 })
 export class SettingsModule {}
