@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { UserLogComponent } from './user-log/user-log.component';
 import { SettingsComponent } from './settings.component';
 import { TransactionCategoryComponent } from './transaction-category/transaction-category.component';
 import { CreditAccountComponent } from './credit-account/credit-account.component';
 
-const routes: Routes = [
+export const SETTINGS_ROUTES: Routes = [
   {
     path: '',
     component: SettingsComponent,
@@ -30,9 +29,3 @@ const routes: Routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class SettingsRoutingModule {}

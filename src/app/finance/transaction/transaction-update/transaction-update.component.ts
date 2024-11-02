@@ -1,6 +1,20 @@
-import { Component, inject, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { Component, inject, OnInit } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  FormsModule,
+} from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose,
+  MAT_DIALOG_DEFAULT_OPTIONS,
+} from '@angular/material/dialog';
 
 import {
   CANCEL_ACTION,
@@ -29,11 +43,20 @@ import { CreditAccount } from '../../model/account';
 import { MatButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDivider } from '@angular/material/divider';
-import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
 import { MatInput } from '@angular/material/input';
-import { MatOption } from '@angular/material/core';
+import { MatOption, provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
-import { MatFormField, MatLabel, MatSuffix, MatPrefix } from '@angular/material/form-field';
+import {
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+  MatPrefix,
+} from '@angular/material/form-field';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { NgIf, DecimalPipe } from '@angular/common';
 
@@ -44,39 +67,52 @@ export interface TransactionUpdateDialogData {
 }
 
 @Component({
-    selector: 'app-transaction-update',
-    templateUrl: './transaction-update.component.html',
-    styleUrl: './transaction-update.component.css',
-    standalone: true,
-    imports: [
-        MatDialogTitle,
-        NgIf,
-        CdkScrollable,
-        MatDialogContent,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatOption,
-        MatInput,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatSuffix,
-        MatDatepicker,
-        MatPrefix,
-        MatDivider,
-        MatCheckbox,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-    ],
+  selector: 'app-transaction-update',
+  templateUrl: './transaction-update.component.html',
+  styleUrl: './transaction-update.component.css',
+  standalone: true,
+  imports: [
+    MatDialogTitle,
+    NgIf,
+    CdkScrollable,
+    MatDialogContent,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatPrefix,
+    MatDivider,
+    MatCheckbox,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
+  providers: [
+    provideNativeDateAdapter(),
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
+        width: '900px',
+        position: {
+          top: '5%',
+        },
+      },
+    },
+  ],
 })
 export class TransactionUpdateDialog implements OnInit {
+  private readonly apiService = inject(ApiService);
+  private readonly dataService = inject(DataService);
+  private readonly dialogRef = inject(MatDialogRef<TransactionUpdateDialog>);
+  data = inject<TransactionUpdateDialogData>(MAT_DIALOG_DATA)
+
   TRANSACTION_TYPES: DropDownType[] = TRANSACTION_TYPES;
-
-  apiService = inject(ApiService);
-  dataService = inject(DataService);
-
   ACCOUNTS: CreditAccount[] = this.dataService.getClientSettings().accounts;
   EXPENSE_CATEGORIES: TransactionCategory[] =
     this.dataService.getExpenseCategories();
@@ -89,11 +125,6 @@ export class TransactionUpdateDialog implements OnInit {
   transactionSubCategories: TransactionSubCategory[] = [];
   transactionForm: FormGroup;
   formData: TransactionExpand;
-
-  constructor(
-    public dialogRef: MatDialogRef<TransactionUpdateDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: TransactionUpdateDialogData,
-  ) {}
 
   ngOnInit(): void {
     if (
@@ -205,7 +236,7 @@ export class TransactionUpdateDialog implements OnInit {
       id: new FormControl<number | null>(data ? data.id : null),
       category: new FormControl<number | null>(data ? data.category : null),
       subcategory: new FormControl<number | null>(
-        data ? data.subcategory : null
+        data ? data.subcategory : null,
       ),
       account: new FormControl<number | null>(data ? data.account : null, [
         Validators.required,
@@ -290,23 +321,23 @@ export class TransactionUpdateDialog implements OnInit {
 }
 
 @Component({
-    selector: 'app-transaction-delete',
-    templateUrl: './transaction-delete.component.html',
-    styleUrl: './transaction-delete.component.css',
-    standalone: true,
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        MatFormField,
-        MatInput,
-        ReactiveFormsModule,
-        FormsModule,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-        DecimalPipe,
-    ],
+  selector: 'app-transaction-delete',
+  templateUrl: './transaction-delete.component.html',
+  styleUrl: './transaction-delete.component.css',
+  standalone: true,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatFormField,
+    MatInput,
+    ReactiveFormsModule,
+    FormsModule,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+    DecimalPipe,
+  ],
 })
 export class TransactionDeleteDialog extends TransactionUpdateDialog {
   deleteReason: string = '';

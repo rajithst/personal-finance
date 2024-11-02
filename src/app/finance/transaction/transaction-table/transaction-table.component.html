@@ -130,223 +130,243 @@
   </div>
 </div>
 <div class="transaction-panel-container">
-  <mat-accordion class="transaction-item-panel" multi="true">
-    @for (data of allTransactions; track data; let i = $index) {
-      <mat-expansion-panel class="transaction-panel">
-        <mat-expansion-panel-header>
-          <mat-panel-title
-            >{{ data.year }} - {{ data.month_text }} :
-            <span
-              >¥{{ showValues ? (data.total | number: "1.2-2") : "--" }}</span
-            ></mat-panel-title
-          >
-
-          <mat-panel-description>
-            <div class="panel-actions" (click)="$event.stopPropagation()">
-              <fa-icon
-                [icon]="faChartColumn"
-                size="sm"
-                [style]="{ color: '#3699ff' }"
-              ></fa-icon>
-            </div>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <table
-          mat-table
-          matSort
-          [dataSource]="allDataSource[i]"
-          class="mat-elevation-z8 dividend-table"
-          (matSortChange)="onSortData($event, i)"
-        >
-          <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef>
-              <mat-checkbox
-                (change)="$event ? toggleAllRows(i) : null"
-                [checked]="selection.hasValue() && isAllSelected(i)"
-                [indeterminate]="
-                  selection.hasValue() &&
-                  !isAllSelected(i) &&
-                  bulkSelectedTableIndex == i
-                "
-                [disabled]="
-                  bulkSelectedTableIndex != i && bulkSelectedTableIndex != -1
-                "
-              >
-              </mat-checkbox>
-            </th>
-            <td mat-cell *matCellDef="let row">
-              <mat-checkbox
-                (click)="$event.stopPropagation()"
-                (change)="$event ? toggleRow(row, i) : null"
-                [checked]="selection.isSelected(row)"
-                [disabled]="
-                  bulkSelectedTableIndex != i && bulkSelectedTableIndex != -1
-                "
-              >
-              </mat-checkbox>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="Date">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
-            <td mat-cell *matCellDef="let element">
-              {{ element.date | date: "MMMM d" }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="Destination">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef>Payee</th>
-            <td mat-cell *matCellDef="let element">
-              <div class="destination-chip">
-                {{ element.alias ? element.alias : element.destination }}
-              </div>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="Category">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef>Category</th>
-            <td mat-cell *matCellDef="let element">
-              <div class="d-flex-col-align-c">
-                <div class="category-text">
-                  {{ element.category_text ? element.category_text : 'Uncategorized' }}
-                </div>
-                <div *ngIf="element.subcategory_text" class="subcategory-text">
-                  {{ element.subcategory_text }}
-                </div>
-              </div>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="TransactionType">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef>
-              Transaction Type
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <ng-container [ngSwitch]="true">
-                <mat-chip *ngSwitchCase="element.is_saving" class="savings-chip"
-                  >Savings</mat-chip
-                >
-                <mat-chip
-                  *ngSwitchCase="element.is_expense && element.is_payment"
-                  class="payment-chip"
-                  >Payment</mat-chip
-                >
-                <mat-chip
-                  *ngSwitchCase="
-                    element.is_expense &&
-                    !element.is_payment &&
-                    !element.is_saving
-                  "
-                  class="expense-chip"
-                  >Expense</mat-chip
-                >
-              </ng-container>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="Account">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef>Account</th>
-            <td mat-cell *matCellDef="let element">
-              {{ element.account_name }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="Amount">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef>Amount</th>
-            <td mat-cell *matCellDef="let element">
-              ¥{{ showValues ? (element.amount | number: "1.2-2") : "--" }}
+  @if (noData) {
+    <mat-card>
+      <mat-card-content>
+        <p class="no-records-message">No Records! Try changing filters.</p>
+      </mat-card-content>
+    </mat-card>
+  }
+  @if (!noData) {
+    <mat-accordion class="transaction-item-panel" multi="true">
+      @for (data of allTransactions; track data; let i = $index) {
+        <mat-expansion-panel class="transaction-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title
+              >{{ data.year }} - {{ data.month_text }} :
               <span
-                *ngIf="element.notes"
-                #tooltip="matTooltip"
-                [matTooltip]="element.notes"
-                matTooltipPosition="right"
-                matTooltipClass="multiline-tooltip"
-              >
-                <fa-icon
-                  [icon]="faMessage"
-                  [style]="{ color: '#3699ff' }"
-                ></fa-icon>
-              </span>
-            </td>
-          </ng-container>
+                >¥{{ showValues ? (data.total | number: "1.2-2") : "--" }}</span
+              ></mat-panel-title
+            >
 
-          <ng-container matColumnDef="Actions">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
-              <span class="transaction-actions" [matMenuTriggerFor]="menu">
+            <mat-panel-description>
+              <div class="panel-actions" (click)="$event.stopPropagation()">
                 <fa-icon
-                  [icon]="faEllipsisV"
-                  size="lg"
+                  [icon]="faChartColumn"
+                  size="sm"
                   [style]="{ color: '#3699ff' }"
                 ></fa-icon>
-              </span>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="viewMoreInfo(element)">
-                  <fa-icon
-                    [icon]="faInfo"
-                    [style]="{ color: '#3699ff' }"
-                  ></fa-icon>
-                  <span class="transaction-action-item">View More</span>
-                </button>
-                <button mat-menu-item (click)="editTransaction(element)">
-                  <fa-icon
-                    [icon]="faEdit"
-                    size="sm"
-                    [style]="{ color: '#3699ff' }"
-                  ></fa-icon>
-                  <span class="transaction-action-item">Edit</span>
-                </button>
-                <button
-                  mat-menu-item
-                  (click)="splitTransaction(element, i)"
-                  *ngIf="transactionType !== INCOME"
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <table
+            mat-table
+            matSort
+            [dataSource]="allDataSource[i]"
+            class="mat-elevation-z8 dividend-table"
+            (matSortChange)="onSortData($event, i)"
+          >
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox
+                  (change)="$event ? toggleAllRows(i) : null"
+                  [checked]="selection.hasValue() && isAllSelected(i)"
+                  [indeterminate]="
+                    selection.hasValue() &&
+                    !isAllSelected(i) &&
+                    bulkSelectedTableIndex == i
+                  "
+                  [disabled]="
+                    bulkSelectedTableIndex != i && bulkSelectedTableIndex != -1
+                  "
                 >
-                  <fa-icon
-                    [icon]="faScissors"
-                    size="sm"
-                    [style]="{ color: '#3699ff' }"
-                  ></fa-icon>
-                  <span class="transaction-action-item">Split</span>
-                </button>
-                <button
-                  mat-menu-item
-                  (click)="showPayeeDetail(element.destination)"
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox
+                  (click)="$event.stopPropagation()"
+                  (change)="$event ? toggleRow(row, i) : null"
+                  [checked]="selection.isSelected(row)"
+                  [disabled]="
+                    bulkSelectedTableIndex != i && bulkSelectedTableIndex != -1
+                  "
                 >
-                  <fa-icon
-                    [icon]="faLink"
-                    size="sm"
-                    [style]="{ color: '#3699ff' }"
-                  ></fa-icon>
-                  <span class="transaction-action-item"
-                    >View Payee Details</span
+                </mat-checkbox>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Date">
+              <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.date | date: "MMMM d" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Destination">
+              <th mat-header-cell mat-sort-header *matHeaderCellDef>Payee</th>
+              <td mat-cell *matCellDef="let element">
+                <div class="destination-chip">
+                  {{ element.alias ? element.alias : element.destination }}
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Category">
+              <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                Category
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="d-flex-col-align-c">
+                  <div class="category-text">
+                    {{
+                      element.category_text
+                        ? element.category_text
+                        : "Uncategorized"
+                    }}
+                  </div>
+                  <div
+                    *ngIf="element.subcategory_text"
+                    class="subcategory-text"
                   >
-                </button>
-                <button
-                  mat-menu-item
-                  [disabled]="!element.is_merge"
-                  *ngIf="transactionType !== INCOME"
+                    {{ element.subcategory_text }}
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="TransactionType">
+              <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                Transaction Type
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container [ngSwitch]="true">
+                  <mat-chip
+                    *ngSwitchCase="element.is_saving"
+                    class="savings-chip"
+                    >Savings</mat-chip
+                  >
+                  <mat-chip
+                    *ngSwitchCase="element.is_expense && element.is_payment"
+                    class="payment-chip"
+                    >Payment</mat-chip
+                  >
+                  <mat-chip
+                    *ngSwitchCase="
+                      element.is_expense &&
+                      !element.is_payment &&
+                      !element.is_saving
+                    "
+                    class="expense-chip"
+                    >Expense</mat-chip
+                  >
+                </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Account">
+              <th mat-header-cell mat-sort-header *matHeaderCellDef>Account</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.account_name }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Amount">
+              <th mat-header-cell mat-sort-header *matHeaderCellDef>Amount</th>
+              <td mat-cell *matCellDef="let element">
+                ¥{{ showValues ? (element.amount | number: "1.2-2") : "--" }}
+                <span
+                  *ngIf="element.notes"
+                  #tooltip="matTooltip"
+                  [matTooltip]="element.notes"
+                  matTooltipPosition="right"
+                  matTooltipClass="multiline-tooltip"
                 >
                   <fa-icon
-                    [icon]="faList"
-                    size="sm"
+                    [icon]="faMessage"
                     [style]="{ color: '#3699ff' }"
                   ></fa-icon>
-                  <span class="transaction-action-item"
-                    >Show Merge history</span
-                  >
-                </button>
-                <button mat-menu-item (click)="deleteTransaction(element)">
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element">
+                <span class="transaction-actions" [matMenuTriggerFor]="menu">
                   <fa-icon
-                    [icon]="faTrash"
-                    size="sm"
-                    [style]="{ color: 'red' }"
+                    [icon]="faEllipsisV"
+                    size="lg"
+                    [style]="{ color: '#3699ff' }"
                   ></fa-icon>
-                  <span class="transaction-action-item">Delete</span>
-                </button>
-              </mat-menu>
-            </td>
-          </ng-container>
-          <tr
-            mat-header-row
-            *matHeaderRowDef="displayedColumns; sticky: true"
-          ></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-      </mat-expansion-panel>
-    }
-  </mat-accordion>
+                </span>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="viewMoreInfo(element)">
+                    <fa-icon
+                      [icon]="faInfo"
+                      [style]="{ color: '#3699ff' }"
+                    ></fa-icon>
+                    <span class="transaction-action-item">View More</span>
+                  </button>
+                  <button mat-menu-item (click)="editTransaction(element)">
+                    <fa-icon
+                      [icon]="faEdit"
+                      size="sm"
+                      [style]="{ color: '#3699ff' }"
+                    ></fa-icon>
+                    <span class="transaction-action-item">Edit</span>
+                  </button>
+                  <button
+                    mat-menu-item
+                    (click)="splitTransaction(element, i)"
+                    *ngIf="transactionType !== INCOME"
+                  >
+                    <fa-icon
+                      [icon]="faScissors"
+                      size="sm"
+                      [style]="{ color: '#3699ff' }"
+                    ></fa-icon>
+                    <span class="transaction-action-item">Split</span>
+                  </button>
+                  <button
+                    mat-menu-item
+                    (click)="showPayeeDetail(element.destination)"
+                  >
+                    <fa-icon
+                      [icon]="faLink"
+                      size="sm"
+                      [style]="{ color: '#3699ff' }"
+                    ></fa-icon>
+                    <span class="transaction-action-item"
+                      >View Payee Details</span
+                    >
+                  </button>
+                  <button
+                    mat-menu-item
+                    [disabled]="!element.is_merge"
+                    *ngIf="transactionType !== INCOME"
+                  >
+                    <fa-icon
+                      [icon]="faList"
+                      size="sm"
+                      [style]="{ color: '#3699ff' }"
+                    ></fa-icon>
+                    <span class="transaction-action-item"
+                      >Show Merge history</span
+                    >
+                  </button>
+                  <button mat-menu-item (click)="deleteTransaction(element)">
+                    <fa-icon
+                      [icon]="faTrash"
+                      size="sm"
+                      [style]="{ color: 'red' }"
+                    ></fa-icon>
+                    <span class="transaction-action-item">Delete</span>
+                  </button>
+                </mat-menu>
+              </td>
+            </ng-container>
+            <tr
+              mat-header-row
+              *matHeaderRowDef="displayedColumns; sticky: true"
+            ></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  }
 </div>

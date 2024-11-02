@@ -41,10 +41,28 @@ import {
   faMessage,
   faInfo,
 } from '@fortawesome/free-solid-svg-icons';
-import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { DataService } from '../../../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle,
+  MatExpansionPanelDescription,
+} from '@angular/material/expansion';
 import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
 import { LoadingService } from '../../../shared/loading/loading.service';
 import { Sort, MatSort, MatSortHeader } from '@angular/material/sort';
@@ -65,11 +83,24 @@ import { TransactionViewMoreDialog } from './view-more/view-more.component';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
-import { MatChip, MatChipSet, MatChipRow, MatChipRemove } from '@angular/material/chips';
+import {
+  MatChip,
+  MatChipSet,
+  MatChipRow,
+  MatChipRemove,
+} from '@angular/material/chips';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatRipple } from '@angular/material/core';
-import { NgIf, NgClass, NgSwitch, NgSwitchCase, DecimalPipe, DatePipe } from '@angular/common';
+import {
+  NgIf,
+  NgClass,
+  NgSwitch,
+  NgSwitchCase,
+  DecimalPipe,
+  DatePipe,
+} from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 
 interface TransactionActionResult {
   refresh: boolean;
@@ -83,48 +114,52 @@ interface FilterParamChip {
   name: string | undefined;
 }
 
+const DIALOG_WIDTH = '850px';
+const DIALOG_TOP_POSITION = '5%';
+
 @Component({
-    selector: 'app-transaction-table',
-    templateUrl: './transaction-table.component.html',
-    styleUrl: './transaction-table.component.css',
-    standalone: true,
-    imports: [
-        NgIf,
-        NgClass,
-        MatRipple,
-        MatTooltip,
-        FaIconComponent,
-        MatChip,
-        MatChipSet,
-        MatChipRow,
-        MatChipRemove,
-        MatIcon,
-        MatAccordion,
-        MatExpansionPanel,
-        MatExpansionPanelHeader,
-        MatExpansionPanelTitle,
-        MatExpansionPanelDescription,
-        MatTable,
-        MatSort,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCheckbox,
-        MatCellDef,
-        MatCell,
-        MatSortHeader,
-        NgSwitch,
-        NgSwitchCase,
-        MatMenuTrigger,
-        MatMenu,
-        MatMenuItem,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        DecimalPipe,
-        DatePipe,
-    ],
+  selector: 'app-transaction-table',
+  templateUrl: './transaction-table.component.html',
+  styleUrl: './transaction-table.component.css',
+  standalone: true,
+  imports: [
+    NgIf,
+    NgClass,
+    MatRipple,
+    MatTooltip,
+    FaIconComponent,
+    MatChip,
+    MatChipSet,
+    MatChipRow,
+    MatChipRemove,
+    MatIcon,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatExpansionPanelDescription,
+    MatCardModule,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCheckbox,
+    MatCellDef,
+    MatCell,
+    MatSortHeader,
+    NgSwitch,
+    NgSwitchCase,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    DecimalPipe,
+    DatePipe,
+  ],
 })
 export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() transactions: MonthlyTransaction[];
@@ -146,6 +181,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     return this.segments().at(segmentLength - 1);
   });
 
+  noData = true;
   showValues = false;
   selection = new SelectionModel<TransactionExpand>(true, []);
   allDataSource: MatTableDataSource<TransactionExpand>[] = [];
@@ -220,6 +256,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
+    this.noData = this.transactions.length == 0;
     this.allTransactions =
       this.transactions.length > 0 ? this.transactions : [];
     this.totalAnnualAmount.set(0);
@@ -252,11 +289,15 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   editTransaction(item: TransactionExpand) {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
+      width: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
       data: { formData: item, task: 'edit' },
     });
 
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result.action === SUCCESS_ACTION) {
+      if (result && result.action === SUCCESS_ACTION) {
         const responseData = result.data as TransactionExpand;
         let targetTableIndex = this.getTableIndexFromTransaction(responseData);
         this.updateInAllTransactions(targetTableIndex, responseData);
@@ -264,7 +305,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
-      } else if (result.action === ERROR_ACTION) {
+      } else if (result && result.action === ERROR_ACTION) {
         this.snackBar.open('Failed to update!', 'Error', {
           duration: 3000,
         });
@@ -274,10 +315,14 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   deleteTransaction(item: TransactionExpand) {
     const dialog = this.dialog.open(TransactionDeleteDialog, {
+      width: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
       data: { formData: item, task: 'delete' },
     });
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result.action === SUCCESS_ACTION) {
+      if (result && result.action === SUCCESS_ACTION) {
         const responseData = result.data as TransactionExpand;
         let targetTableIndex = this.getTableIndexFromTransaction(responseData);
         this.removeFromTransactions(targetTableIndex, [responseData.id!]);
@@ -285,7 +330,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.snackBar.open('Deleted!', 'Success', {
           duration: 3000,
         });
-      } else if (result.action === ERROR_ACTION) {
+      } else if (result && result.action === ERROR_ACTION) {
         this.snackBar.open('Failed to delete!', 'Error', {});
       }
     });
@@ -293,10 +338,14 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   addTransaction() {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
+      width: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
       data: { formData: null, task: 'add' },
     });
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result.action === SUCCESS_ACTION) {
+      if (result && result.action === SUCCESS_ACTION) {
         const responseData = result.data as TransactionExpand;
         let targetTableIndex = this.getTableIndexFromTransaction(responseData);
         if (targetTableIndex === -1) {
@@ -309,7 +358,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.snackBar.open('Added Successfully!', 'Success', {
           duration: 3000,
         });
-      } else if (result.action === ERROR_ACTION) {
+      } else if (result && result.action === ERROR_ACTION) {
         this.snackBar.open('Failed to add!', 'Error', {
           duration: 3000,
         });
@@ -331,6 +380,10 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     if (!mergeIds) return;
 
     const dialog = this.dialog.open(TransactionUpdateDialog, {
+      width: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
       data: {
         formData: formData,
         task: 'merge',
@@ -358,12 +411,16 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   splitTransaction(item: TransactionExpand, tableIndex: number) {
     const dialog = this.dialog.open(TransactionSplitComponent, {
+      width: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
       data: {
         formData: item,
       },
     });
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result.action === SUCCESS_ACTION) {
+      if (result && result.action === SUCCESS_ACTION) {
         const responseData = result.data as TransactionExpand[];
         const targetTableIndex = this.getTableIndexFromTransaction(item);
         responseData.forEach((updatedTransaction) => {
@@ -373,7 +430,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
-      } else if (result.action === ERROR_ACTION) {
+      } else if (result && result.action === ERROR_ACTION) {
         this.snackBar.open('Failed to split!', 'Error', {
           duration: 3000,
         });
@@ -383,6 +440,10 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   bulkEditTransactions() {
     const dialog = this.dialog.open(TransactionBulkEditComponent, {
+      width: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
       data: {
         formData: this.selection.selected,
         task: 'edit',
@@ -393,6 +454,10 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   bulkDeleteTransactions() {
     const dialog = this.dialog.open(TransactionBulkEditComponent, {
+      width: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
       data: {
         formData: this.selection.selected,
         task: 'delete',
@@ -421,9 +486,14 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   importTransaction() {
-    const dialog = this.dialog.open(TransactionImportComponent);
+    const dialog = this.dialog.open(TransactionImportComponent, {
+      width: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
+    });
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result.action === SUCCESS_ACTION) {
+      if (result && result.action === SUCCESS_ACTION) {
         this.snackBar.open('Imported Successfully!.', 'Success', {
           duration: 3000,
         });
@@ -548,9 +618,17 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
           case 'Destination':
             return this.compare(a.destination, b.destination, isAsc);
           case 'Category':
-            return this.compare(+(a.category_text ?? ''), +(b.category_text ?? ''), isAsc);
+            return this.compare(
+              +(a.category_text ?? ''),
+              +(b.category_text ?? ''),
+              isAsc,
+            );
           case 'SubCategory':
-            return this.compare(+(a.subcategory_text ?? ''), +(b.subcategory_text ?? ''), isAsc);
+            return this.compare(
+              +(a.subcategory_text ?? ''),
+              +(b.subcategory_text ?? ''),
+              isAsc,
+            );
 
           case 'Amount':
             return this.compare(+a.amount!, +b.amount!, isAsc);
@@ -735,6 +813,10 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   viewMoreInfo(element: TransactionExpand) {
     const dialog = this.dialog.open(TransactionViewMoreDialog, {
+      width: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
       data: { transaction: element },
     });
   }

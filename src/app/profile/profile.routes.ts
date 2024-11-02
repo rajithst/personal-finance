@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AccountComponent } from './account/account.component';
 import { ProfileComponent } from './profile.component';
 import { SecurityComponent } from './security/security.component';
 import { BillingComponent } from './billing/billing.component';
 
-const routes: Routes = [
+export const PROFILE_ROUTES: Routes = [
   {
     path: '',
     component: ProfileComponent,
@@ -31,8 +30,3 @@ const routes: Routes = [
   },
 ];
 
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ProfileRoutingModule {}

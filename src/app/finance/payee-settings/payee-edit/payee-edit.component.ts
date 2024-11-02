@@ -1,6 +1,13 @@
-import { Component, inject, Inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose,
+} from '@angular/material/dialog';
 import { DestinationMap } from '../../model/payee';
 import {
   TRANSACTION_TYPE_EXPENSE_ID,
@@ -10,9 +17,29 @@ import {
   TRANSACTION_TYPES,
 } from '../../../shared/data/client.data';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput } from '@angular/material/chips';
+import {
+  MatChipEditedEvent,
+  MatChipInputEvent,
+  MatChipGrid,
+  MatChipRow,
+  MatChipRemove,
+  MatChipInput,
+} from '@angular/material/chips';
 import { ApiService } from '../../../core/api.service';
-import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatNoDataRow, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatNoDataRow,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DataService } from '../../../service/data.service';
 import {
@@ -35,45 +62,50 @@ interface PayeeEditDialogData {
 }
 
 @Component({
-    selector: 'app-payee-edit',
-    templateUrl: './payee-edit.component.html',
-    styleUrl: './payee-edit.component.css',
-    standalone: true,
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatSelect,
-        MatOption,
-        MatDivider,
-        MatChipGrid,
-        MatChipRow,
-        MatChipRemove,
-        MatIcon,
-        MatChipInput,
-        NgIf,
-        MatTable,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCheckbox,
-        MatCellDef,
-        MatCell,
-        MatNoDataRow,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-    ],
+  selector: 'app-payee-edit',
+  templateUrl: './payee-edit.component.html',
+  styleUrl: './payee-edit.component.css',
+  standalone: true,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatSelect,
+    MatOption,
+    MatDivider,
+    MatChipGrid,
+    MatChipRow,
+    MatChipRemove,
+    MatIcon,
+    MatChipInput,
+    NgIf,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCheckbox,
+    MatCellDef,
+    MatCell,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
 })
 export class PayeeEditComponent implements OnInit {
+  private readonly apiService = inject(ApiService);
+  private readonly dataService = inject(DataService);
+  private readonly dialogRef = inject(MatDialogRef<PayeeEditComponent>);
+  data = inject<PayeeEditDialogData>(MAT_DIALOG_DATA);
+
   readonly addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   transactionCategories: TransactionCategory[] = [];
@@ -85,8 +117,6 @@ export class PayeeEditComponent implements OnInit {
   selection = new SelectionModel<DestinationMap>(true, []);
   protected readonly TRANSACTION_TYPES = TRANSACTION_TYPES;
   protected EXPENSE_SUB_CATEGORIES: TransactionSubCategory[] = [];
-  private readonly apiService = inject(ApiService);
-  private readonly dataService = inject(DataService);
   protected TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getAllCategories();
   protected TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
@@ -99,11 +129,6 @@ export class PayeeEditComponent implements OnInit {
     this.dataService.getSavingsCategories();
   private readonly PAYMENT_CATEGORIES: TransactionCategory[] =
     this.dataService.getPaymentCategories();
-
-  constructor(
-    public dialogRef: MatDialogRef<PayeeEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PayeeEditDialogData,
-  ) {}
 
   ngOnInit(): void {
     const payeeData = this.data.payee;

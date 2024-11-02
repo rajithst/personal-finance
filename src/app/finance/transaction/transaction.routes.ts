@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import {
   ExpensesComponent,
   FinanceComponent,
@@ -7,9 +6,14 @@ import {
   PaymentsComponent,
   SavingsComponent,
 } from './transaction.component';
-import { EXPENSE, INCOME, PAYMENT, SAVING } from '../../shared/data/shared.data';
+import {
+  EXPENSE,
+  INCOME,
+  PAYMENT,
+  SAVING,
+} from '../../shared/data/shared.data';
 
-const routes: Routes = [
+export const TRANSACTION_ROUTES: Routes = [
   {
     path: '',
     component: FinanceComponent,
@@ -42,9 +46,3 @@ const routes: Routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class TransactionRoutingModule {}

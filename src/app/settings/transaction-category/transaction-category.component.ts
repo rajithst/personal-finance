@@ -10,40 +10,62 @@ import { CategoryEditComponent } from './category-edit/category-edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CategorySettings } from '../../finance/model/category-settings';
-import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle,
+  MatExpansionPanelDescription,
+} from '@angular/material/expansion';
 import { MatButton } from '@angular/material/button';
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardTitle,
+  MatCardContent,
+} from '@angular/material/card';
 
 @Component({
-    selector: 'app-transaction-category',
-    templateUrl: './transaction-category.component.html',
-    styleUrl: './transaction-category.component.css',
-    standalone: true,
-    imports: [
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatButton,
-        MatCardContent,
-        MatAccordion,
-        MatExpansionPanel,
-        MatExpansionPanelHeader,
-        MatExpansionPanelTitle,
-        MatExpansionPanelDescription,
-        FaIconComponent,
-        MatTable,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCellDef,
-        MatCell,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-    ],
+  selector: 'app-transaction-category',
+  templateUrl: './transaction-category.component.html',
+  styleUrl: './transaction-category.component.css',
+  standalone: true,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatButton,
+    MatCardContent,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatExpansionPanelDescription,
+    FaIconComponent,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+  ],
 })
 export class TransactionCategoryComponent implements OnInit {
   categorySettings: CategorySettings[] = [];
@@ -67,10 +89,14 @@ export class TransactionCategoryComponent implements OnInit {
 
   editCategory(settings: CategorySettings) {
     const dialog = this.dialog.open(CategoryEditComponent, {
+      width: '850px',
+      position: {
+        top: '5%',
+      },
       data: { settings, task: 'edit' },
     });
     dialog.afterClosed().subscribe((result: any) => {
-      if (result.action === SUCCESS_ACTION) {
+      if (result && result.action === SUCCESS_ACTION) {
         const targetId = this.categorySettings.findIndex(
           (x) => x.category.id === settings.category.id,
         );
@@ -94,10 +120,14 @@ export class TransactionCategoryComponent implements OnInit {
 
   addCategory() {
     const dialog = this.dialog.open(CategoryEditComponent, {
+      width: '850px',
+      position: {
+        top: '5%',
+      },
       data: { settings: null, task: 'add' },
     });
     dialog.afterClosed().subscribe((result: any) => {
-      if (result.action === SUCCESS_ACTION) {
+      if (result && result.action === SUCCESS_ACTION) {
         this.categorySettings.push({
           category: result.data.category,
           subCategories: result.data.subcategories,
