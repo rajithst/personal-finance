@@ -1,6 +1,21 @@
-import { Component, Inject, inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { Component, inject, OnInit } from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose,
+} from '@angular/material/dialog';
 import { TransactionSubCategory } from '../../../finance/model/common';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../../../core/api.service';
@@ -23,38 +38,43 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { NgIf } from '@angular/common';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-
 interface CategoryEditDialogData {
   settings: CategorySettings | null;
   task: string;
 }
 
 @Component({
-    selector: 'app-category-edit',
-    templateUrl: './category-edit.component.html',
-    styleUrl: './category-edit.component.css',
-    standalone: true,
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        ReactiveFormsModule,
-        NgIf,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatOption,
-        MatInput,
-        MatRipple,
-        MatTooltip,
-        FaIconComponent,
-        MatDivider,
-        MatButton,
-        MatDialogActions,
-        MatDialogClose,
-    ],
+  selector: 'app-category-edit',
+  templateUrl: './category-edit.component.html',
+  styleUrl: './category-edit.component.css',
+  standalone: true,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatInput,
+    MatRipple,
+    MatTooltip,
+    FaIconComponent,
+    MatDivider,
+    MatButton,
+    MatDialogActions,
+    MatDialogClose,
+  ],
 })
 export class CategoryEditComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly dialog = inject(MatDialog);
+  private readonly apiService = inject(ApiService);
+  private readonly dialogRef = inject(MatDialogRef<CategoryEditComponent>);
+  data = inject<CategoryEditDialogData>(MAT_DIALOG_DATA);
+
   displayedColumns: string[] = ['name', 'description', 'actions'];
   categoryForm: FormGroup;
   subCategoryForm: FormGroup;
@@ -65,15 +85,6 @@ export class CategoryEditComponent implements OnInit {
 
   protected readonly faTrash = faTrash;
   protected readonly TRANSACTION_TYPES = TRANSACTION_TYPES;
-
-  private readonly formBuilder = inject(FormBuilder);
-  private readonly dialog = inject(MatDialog);
-  private readonly apiService = inject(ApiService);
-
-  constructor(
-    public dialogRef: MatDialogRef<CategoryEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: CategoryEditDialogData,
-  ) {}
 
   get subcategories(): FormControl[] {
     return (this.subCategoryForm.get('subcategories') as FormArray)
@@ -201,18 +212,18 @@ export class CategoryEditComponent implements OnInit {
 }
 
 @Component({
-    selector: 'app-action-confirm',
-    templateUrl: './category-edit-action-confirm.component.html',
-    styleUrl: './category-edit.component.css',
-    standalone: true,
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-    ],
+  selector: 'app-action-confirm',
+  templateUrl: './category-edit-action-confirm.component.html',
+  styleUrl: './category-edit.component.css',
+  standalone: true,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
 })
 export class ActionConfirmComponent {
   constructor(public dialogRef: MatDialogRef<ActionConfirmComponent>) {}

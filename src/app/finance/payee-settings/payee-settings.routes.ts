@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { PayeeSettingsComponent } from './payee-settings.component';
 import { PayeesComponent } from './payees/payees.component';
 import { payeeDetailResolver } from '../../service/resolvers';
 import { RecurringComponent } from './recurring/recurring.component';
 import { PayeeDetailComponent } from './payee-detail/payee-detail.component';
 
-const routes: Routes = [
+export const PAYEE_SETTINGS_ROUTES: Routes = [
   {
     path: '',
     component: PayeeSettingsComponent,
@@ -47,9 +46,3 @@ const routes: Routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class PayeeSettingsRoutingModule {}

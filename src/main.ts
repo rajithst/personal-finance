@@ -6,7 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {APP_ROUTES} from './app/app-routes';
+import {APP_ROUTES} from './app/app.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { authInterceptor } from './app/auth/auth.interceptor';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';

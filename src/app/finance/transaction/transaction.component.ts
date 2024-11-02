@@ -6,12 +6,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { DataService } from '../../service/data.service';
 import { map, Observable, ReplaySubject, takeUntil } from 'rxjs';
-import {
-  MonthlyTransaction,
-  TransactionFilter,
-} from '../model/transactions';
+import { MonthlyTransaction, TransactionFilter } from '../model/transactions';
 import { Title } from '@angular/platform-browser';
-import { EXPENSE, INCOME, PAYMENT, SAVING } from '../../shared/data/shared.data';
+import {
+  EXPENSE,
+  INCOME,
+  PAYMENT,
+  SAVING,
+} from '../../shared/data/shared.data';
 import { ApiService } from '../../core/api.service';
 import { MenuItem } from '../model/common';
 import { AsyncPipe } from '@angular/common';
@@ -25,20 +27,20 @@ import { ToolbarMenuComponent } from '../../shared/toolbar-menu/toolbar-menu.com
 import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
-    selector: 'app-transaction',
-    templateUrl: './transaction.component.html',
-    styleUrl: './transaction.component.css',
-    standalone: true,
-    imports: [
-        LoadingComponent,
-        ToolbarMenuComponent,
-        MatGridList,
-        MatGridTile,
-        MatRipple,
-        FaIconComponent,
-        SearchbarComponent,
-        RouterOutlet,
-    ],
+  selector: 'app-transaction',
+  templateUrl: './transaction.component.html',
+  styleUrl: './transaction.component.css',
+  standalone: true,
+  imports: [
+    LoadingComponent,
+    ToolbarMenuComponent,
+    MatGridList,
+    MatGridTile,
+    MatRipple,
+    FaIconComponent,
+    SearchbarComponent,
+    RouterOutlet,
+  ],
 })
 export class FinanceComponent {
   title = inject(Title);
@@ -67,10 +69,10 @@ export class FinanceComponent {
 }
 
 @Component({
-    selector: 'app-transaction-detail',
-    template: '',
-    styles: '',
-    standalone: true,
+  selector: 'app-transaction-detail',
+  template: '',
+  styles: '',
+  standalone: true,
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
   target: string = EXPENSE;
@@ -114,44 +116,48 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-    selector: 'app-expenses',
-    template: '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
-    styles: '',
-    standalone: true,
-    imports: [TransactionTableComponent, AsyncPipe],
+  selector: 'app-expenses',
+  template:
+    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+  styles: '',
+  standalone: true,
+  imports: [TransactionTableComponent, AsyncPipe],
 })
 export class ExpensesComponent extends TransactionDetailComponent {
   override target: string = EXPENSE;
 }
 
 @Component({
-    selector: 'app-payments',
-    template: '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
-    styles: '',
-    standalone: true,
-    imports: [TransactionTableComponent, AsyncPipe],
+  selector: 'app-payments',
+  template:
+    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+  styles: '',
+  standalone: true,
+  imports: [TransactionTableComponent, AsyncPipe],
 })
 export class PaymentsComponent extends TransactionDetailComponent {
   override target: string = PAYMENT;
 }
 
 @Component({
-    selector: 'app-savings',
-    template: '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
-    styles: '',
-    standalone: true,
-    imports: [TransactionTableComponent, AsyncPipe],
+  selector: 'app-savings',
+  template:
+    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+  styles: '',
+  standalone: true,
+  imports: [TransactionTableComponent, AsyncPipe],
 })
 export class SavingsComponent extends TransactionDetailComponent {
   override target: string = SAVING;
 }
 
 @Component({
-    selector: 'app-income',
-    template: '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
-    styles: '',
-    standalone: true,
-    imports: [TransactionTableComponent, AsyncPipe],
+  selector: 'app-income',
+  template:
+    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+  styles: '',
+  standalone: true,
+  imports: [TransactionTableComponent, AsyncPipe],
 })
 export class IncomesComponent extends TransactionDetailComponent {
   override target: string = INCOME;

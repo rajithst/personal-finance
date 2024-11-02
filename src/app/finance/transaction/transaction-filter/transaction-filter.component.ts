@@ -4,9 +4,24 @@ import {
   faLayerGroup,
   faShop,
 } from '@fortawesome/free-solid-svg-icons';
-import { NA_CATEGORY_ID, NA_SUB_CATEGORY_ID } from '../../../shared/data/client.data';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  NA_CATEGORY_ID,
+  NA_SUB_CATEGORY_ID,
+} from '../../../shared/data/client.data';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose,
+} from '@angular/material/dialog';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { INCOME, PAYMENT, SAVING } from '../../../shared/data/shared.data';
 import { TransactionFilter } from '../../model/transactions';
 import { LoadingService } from '../../../shared/loading/loading.service';
@@ -21,7 +36,12 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { MatRipple } from '@angular/material/core';
 import { NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { MatSelectionList, MatListOption, MatList, MatListItem } from '@angular/material/list';
+import {
+  MatSelectionList,
+  MatListOption,
+  MatList,
+  MatListItem,
+} from '@angular/material/list';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 
 interface TransactionFilterData {
@@ -29,29 +49,39 @@ interface TransactionFilterData {
 }
 
 @Component({
-    selector: 'app-transaction-filter',
-    templateUrl: './transaction-filter.component.html',
-    styleUrl: './transaction-filter.component.css',
-    standalone: true,
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        MatSelectionList,
-        MatListOption,
-        FaIconComponent,
-        ReactiveFormsModule,
-        NgIf,
-        MatList,
-        MatListItem,
-        MatRipple,
-        MatCheckbox,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-    ],
+  selector: 'app-transaction-filter',
+  templateUrl: './transaction-filter.component.html',
+  styleUrl: './transaction-filter.component.css',
+  standalone: true,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatSelectionList,
+    MatListOption,
+    FaIconComponent,
+    ReactiveFormsModule,
+    NgIf,
+    MatList,
+    MatListItem,
+    MatRipple,
+    MatCheckbox,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
 })
 export class TransactionFilterComponent implements OnInit {
+
+  protected readonly faLayerGroup = faLayerGroup;
+  protected readonly faShop = faShop;
+  protected readonly faCreditCard = faCreditCard;
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly dialogRef = inject(MatDialogRef<TransactionFilterComponent>);
+  private readonly loadingService = inject(LoadingService);
+  private readonly data = inject<TransactionFilterData>(MAT_DIALOG_DATA);
+  private readonly dataService = inject(DataService);
+
   filterParams: TransactionFilter;
   clickedType: string = 'categories';
   categoryTitle = 'Categories';
@@ -60,14 +90,6 @@ export class TransactionFilterComponent implements OnInit {
   mainCategoryForm: FormGroup;
   subCategoryForm: FormGroup;
   accountForm: FormGroup;
-  protected readonly faLayerGroup = faLayerGroup;
-  protected readonly faShop = faShop;
-  protected readonly faCreditCard = faCreditCard;
-  private readonly formBuilder = inject(FormBuilder);
-  private readonly dialogRef = inject(MatDialogRef<TransactionFilterComponent>);
-  private readonly loadingService = inject(LoadingService);
-  private readonly data: TransactionFilterData = inject(MAT_DIALOG_DATA);
-  private readonly dataService = inject(DataService);
 
   TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getAllCategories();

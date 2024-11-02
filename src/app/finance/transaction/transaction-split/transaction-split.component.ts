@@ -1,18 +1,25 @@
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import {
-  Component,
-  computed,
-  inject,
-  Inject,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose,
+} from '@angular/material/dialog';
 import {
   TransactionExpand,
   TransactionSplit,
   TransactionSplitRequest,
 } from '../../model/transactions';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   CANCEL_ACTION,
   ERROR_ACTION,
@@ -28,9 +35,16 @@ import { TransactionCategory } from '../../model/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
-import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import {
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+} from '@angular/material/autocomplete';
 import { MatInput } from '@angular/material/input';
-import { MatFormField, MatLabel, MatPrefix } from '@angular/material/form-field';
+import {
+  MatFormField,
+  MatLabel,
+  MatPrefix,
+} from '@angular/material/form-field';
 import { MatButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
 import { NgIf, AsyncPipe, DecimalPipe, DatePipe } from '@angular/common';
@@ -41,35 +55,41 @@ export interface TransactionSplitData {
 }
 
 @Component({
-    selector: 'app-transaction-split',
-    templateUrl: './transaction-split.component.html',
-    styleUrl: './transaction-split.component.css',
-    standalone: true,
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        ReactiveFormsModule,
-        NgIf,
-        MatDivider,
-        MatButton,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatAutocompleteTrigger,
-        MatAutocomplete,
-        MatOption,
-        MatSelect,
-        MatPrefix,
-        FaIconComponent,
-        MatDialogActions,
-        MatDialogClose,
-        AsyncPipe,
-        DecimalPipe,
-        DatePipe,
-    ],
+  selector: 'app-transaction-split',
+  templateUrl: './transaction-split.component.html',
+  styleUrl: './transaction-split.component.css',
+  standalone: true,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    ReactiveFormsModule,
+    NgIf,
+    MatDivider,
+    MatButton,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    MatOption,
+    MatSelect,
+    MatPrefix,
+    FaIconComponent,
+    MatDialogActions,
+    MatDialogClose,
+    AsyncPipe,
+    DecimalPipe,
+    DatePipe,
+  ],
 })
 export class TransactionSplitComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly apiService = inject(ApiService);
+  private readonly dataService = inject(DataService);
+  private readonly dialogRef = inject(MatDialogRef<TransactionSplitComponent>);
+  data = inject<TransactionSplitData>(MAT_DIALOG_DATA);
+
   splitForm: FormGroup;
   filteredPayees: Observable<DestinationMap[]>[] = [];
   payees: DestinationMap[];
@@ -81,16 +101,8 @@ export class TransactionSplitComponent implements OnInit {
     return this.transactionAmount() - this.splitTotal();
   });
   protected readonly faTrash = faTrash;
-  private readonly formBuilder = inject(FormBuilder);
-  private readonly apiService = inject(ApiService);
-  private readonly dataService = inject(DataService);
   TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getClientSettings().transaction_categories;
-
-  constructor(
-    public dialogRef: MatDialogRef<TransactionSplitComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: TransactionSplitData,
-  ) {}
 
   get splits(): FormControl[] {
     return (this.splitForm.get('splits') as FormArray)
