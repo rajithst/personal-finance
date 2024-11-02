@@ -9,11 +9,14 @@ import {
   RouteConfigLoadStart,
   Router,
 } from '@angular/router';
+import { MatProgressBar } from '@angular/material/progress-bar';
 
 @Component({
-  selector: 'loading',
-  templateUrl: './loading.component.html',
-  styleUrl: './loading.component.css',
+    selector: 'loading',
+    templateUrl: './loading.component.html',
+    styleUrl: './loading.component.css',
+    standalone: true,
+    imports: [MatProgressBar],
 })
 export class LoadingComponent implements OnInit {
   @Input()

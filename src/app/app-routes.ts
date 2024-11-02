@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { isUserAuthenticated } from './auth/auth.guard';
 import {
@@ -8,7 +7,7 @@ import {
   settingsResolver,
 } from './service/resolvers';
 
-const routes: Routes = [
+export const APP_ROUTES: Routes = [
   {
     path: '',
     pathMatch: 'full',
@@ -83,8 +82,3 @@ const routes: Routes = [
   },
 ];
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}

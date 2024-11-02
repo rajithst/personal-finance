@@ -1,15 +1,21 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from "@angular/material/dialog";
 import {Transaction} from "../../../model/transactions";
+import { MatButton } from '@angular/material/button';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 export interface TransactionViewMoreDialogData {
   transaction: Transaction;
 }
 
 @Component({
-  selector: 'app-view-more',
-  templateUrl: './view-more.component.html',
-  styleUrl: './view-more.component.css'
+    selector: 'app-view-more',
+    templateUrl: './view-more.component.html',
+    styleUrl: './view-more.component.css',
+    standalone: true,
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatTabGroup, MatTab, MatCard, MatCardContent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class TransactionViewMoreDialog {
 

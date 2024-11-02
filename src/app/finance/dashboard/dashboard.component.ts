@@ -28,11 +28,27 @@ import {
 import { ApiService } from '../../core/api.service';
 import {CreditAccount} from "../model/account";
 import {TransactionCategory} from "../model/common";
+import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { ChartboxComponent } from '../../shared/chartbox/chartbox.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 
 @Component({
-  selector: 'app-transaction-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css',
+    selector: 'app-transaction-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrl: './dashboard.component.css',
+    standalone: true,
+    imports: [
+        MatGridList,
+        MatGridTile,
+        MatCard,
+        MatCardContent,
+        FaIconComponent,
+        ChartboxComponent,
+        AsyncPipe,
+        DecimalPipe,
+    ],
 })
 export class TransactionDashboardComponent implements OnDestroy {
   today = new Date();

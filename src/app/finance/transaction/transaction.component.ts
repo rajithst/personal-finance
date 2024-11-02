@@ -14,11 +14,31 @@ import { Title } from '@angular/platform-browser';
 import { EXPENSE, INCOME, PAYMENT, SAVING } from '../../shared/data/shared.data';
 import { ApiService } from '../../core/api.service';
 import { MenuItem } from '../model/common';
+import { AsyncPipe } from '@angular/common';
+import { TransactionTableComponent } from './transaction-table/transaction-table.component';
+import { RouterOutlet } from '@angular/router';
+import { SearchbarComponent } from '../../shared/searchbar/searchbar.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatRipple } from '@angular/material/core';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
+import { ToolbarMenuComponent } from '../../shared/toolbar-menu/toolbar-menu.component';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
-  selector: 'app-transaction',
-  templateUrl: './transaction.component.html',
-  styleUrl: './transaction.component.css',
+    selector: 'app-transaction',
+    templateUrl: './transaction.component.html',
+    styleUrl: './transaction.component.css',
+    standalone: true,
+    imports: [
+        LoadingComponent,
+        ToolbarMenuComponent,
+        MatGridList,
+        MatGridTile,
+        MatRipple,
+        FaIconComponent,
+        SearchbarComponent,
+        RouterOutlet,
+    ],
 })
 export class FinanceComponent {
   title = inject(Title);
@@ -47,9 +67,10 @@ export class FinanceComponent {
 }
 
 @Component({
-  selector: 'app-transaction-detail',
-  template: '',
-  styles: '',
+    selector: 'app-transaction-detail',
+    template: '',
+    styles: '',
+    standalone: true,
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
   target: string = EXPENSE;
@@ -93,40 +114,44 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-expenses',
-  template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
-  styles: '',
+    selector: 'app-expenses',
+    template: '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+    styles: '',
+    standalone: true,
+    imports: [TransactionTableComponent, AsyncPipe],
 })
 export class ExpensesComponent extends TransactionDetailComponent {
   override target: string = EXPENSE;
 }
 
 @Component({
-  selector: 'app-payments',
-  template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
-  styles: '',
+    selector: 'app-payments',
+    template: '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+    styles: '',
+    standalone: true,
+    imports: [TransactionTableComponent, AsyncPipe],
 })
 export class PaymentsComponent extends TransactionDetailComponent {
   override target: string = PAYMENT;
 }
 
 @Component({
-  selector: 'app-savings',
-  template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
-  styles: '',
+    selector: 'app-savings',
+    template: '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+    styles: '',
+    standalone: true,
+    imports: [TransactionTableComponent, AsyncPipe],
 })
 export class SavingsComponent extends TransactionDetailComponent {
   override target: string = SAVING;
 }
 
 @Component({
-  selector: 'app-income',
-  template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
-  styles: '',
+    selector: 'app-income',
+    template: '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+    styles: '',
+    standalone: true,
+    imports: [TransactionTableComponent, AsyncPipe],
 })
 export class IncomesComponent extends TransactionDetailComponent {
   override target: string = INCOME;

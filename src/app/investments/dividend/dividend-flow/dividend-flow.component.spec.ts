@@ -8,8 +8,8 @@ describe('DividendFlowComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DividendFlowComponent],
-    }).compileComponents();
+    imports: [DividendFlowComponent],
+}).compileComponents();
 
     fixture = TestBed.createComponent(DividendFlowComponent);
     component = fixture.componentInstance;

@@ -11,11 +11,25 @@ import {
   faMoneyBill,
 } from '@fortawesome/free-solid-svg-icons';
 import {Holding} from "../model/investment";
+import { NgClass, DecimalPipe } from '@angular/common';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css',
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrl: './dashboard.component.css',
+    standalone: true,
+    imports: [
+        MatGridList,
+        MatGridTile,
+        MatCard,
+        MatCardContent,
+        FaIconComponent,
+        NgClass,
+        DecimalPipe,
+    ],
 })
 export class DashboardComponent implements OnInit {
   protected readonly faCaretUp = faCaretUp;

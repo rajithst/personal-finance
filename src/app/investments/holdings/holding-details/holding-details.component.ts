@@ -1,11 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {
   Holding,
   StockDailyPrice,
   StockPurchaseHistory,
 } from '../../model/investment';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { MatButton } from '@angular/material/button';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { NgClass, DecimalPipe } from '@angular/common';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 interface HoldingDetailsData {
   symbol: string;
@@ -15,9 +21,36 @@ interface HoldingDetailsData {
 }
 
 @Component({
-  selector: 'app-holding-details',
-  templateUrl: './holding-details.component.html',
-  styleUrl: './holding-details.component.css',
+    selector: 'app-holding-details',
+    templateUrl: './holding-details.component.html',
+    styleUrl: './holding-details.component.css',
+    standalone: true,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        MatGridList,
+        MatGridTile,
+        MatCard,
+        MatCardContent,
+        NgClass,
+        MatTable,
+        MatSort,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatSortHeader,
+        MatCellDef,
+        MatCell,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+        DecimalPipe,
+    ],
 })
 export class HoldingDetailsComponent implements OnInit {
   displayedColumns: string[] = [

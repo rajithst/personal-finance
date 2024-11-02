@@ -10,13 +10,29 @@ import {
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { DropDownType } from '../data/shared.data';
 import {ChartData, ChartOptionSwitchEmit} from "../../finance/model/dashboard";
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { NgIf } from '@angular/common';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
 
 declare var google: any;
 
 @Component({
-  selector: 'app-chartbox',
-  templateUrl: './chartbox.component.html',
-  styleUrl: './chartbox.component.css',
+    selector: 'app-chartbox',
+    templateUrl: './chartbox.component.html',
+    styleUrl: './chartbox.component.css',
+    standalone: true,
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        NgIf,
+        MatMenuTrigger,
+        FaIconComponent,
+        MatMenu,
+        MatMenuItem,
+        MatCardContent,
+    ],
 })
 export class ChartboxComponent implements OnChanges {
   @Input() chartData: ChartData | null;

@@ -8,8 +8,8 @@ describe('TransactionImportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TransactionImportComponent],
-    }).compileComponents();
+    imports: [TransactionImportComponent],
+}).compileComponents();
 
     fixture = TestBed.createComponent(TransactionImportComponent);
     component = fixture.componentInstance;

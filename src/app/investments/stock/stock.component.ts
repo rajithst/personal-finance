@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Stock } from '../model/stock';
 import { ActivatedRoute } from '@angular/router';
+import { JsonPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-stock',
-  templateUrl: './stock.component.html',
-  styleUrl: './stock.component.css',
+    selector: 'app-stock',
+    templateUrl: './stock.component.html',
+    styleUrl: './stock.component.css',
+    standalone: true,
+    imports: [JsonPipe],
 })
 export class StockComponent implements OnInit {
   stock?: Stock;

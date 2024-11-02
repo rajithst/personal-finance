@@ -1,5 +1,5 @@
 import { Component, inject, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {
   BulkDeleteRequest,
   TransactionExpand,
@@ -10,6 +10,9 @@ import {
   ERROR_ACTION,
   SUCCESS_ACTION,
 } from '../../../shared/data/client.data';
+import { MatButton } from '@angular/material/button';
+import { NgIf } from '@angular/common';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 export interface TransactionBulkEditData {
   formData: TransactionExpand[];
@@ -17,9 +20,19 @@ export interface TransactionBulkEditData {
 }
 
 @Component({
-  selector: 'app-transaction-bulk-edit',
-  templateUrl: './transaction-bulk-edit.component.html',
-  styleUrl: './transaction-bulk-edit.component.css',
+    selector: 'app-transaction-bulk-edit',
+    templateUrl: './transaction-bulk-edit.component.html',
+    styleUrl: './transaction-bulk-edit.component.css',
+    standalone: true,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        NgIf,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class TransactionBulkEditComponent {
   private apiService = inject(ApiService);

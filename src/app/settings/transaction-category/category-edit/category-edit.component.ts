@@ -1,16 +1,6 @@
 import { Component, Inject, inject, OnInit } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { TransactionSubCategory } from '../../../finance/model/common';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../../../core/api.service';
@@ -23,6 +13,16 @@ import {
   SUCCESS_ACTION,
   TRANSACTION_TYPES,
 } from '../../../shared/data/client.data';
+import { MatButton } from '@angular/material/button';
+import { MatDivider } from '@angular/material/divider';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatInput } from '@angular/material/input';
+import { MatOption, MatRipple } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { NgIf } from '@angular/common';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 interface CategoryEditDialogData {
   settings: CategorySettings | null;
@@ -30,9 +30,29 @@ interface CategoryEditDialogData {
 }
 
 @Component({
-  selector: 'app-category-edit',
-  templateUrl: './category-edit.component.html',
-  styleUrl: './category-edit.component.css',
+    selector: 'app-category-edit',
+    templateUrl: './category-edit.component.html',
+    styleUrl: './category-edit.component.css',
+    standalone: true,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        ReactiveFormsModule,
+        NgIf,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatInput,
+        MatRipple,
+        MatTooltip,
+        FaIconComponent,
+        MatDivider,
+        MatButton,
+        MatDialogActions,
+        MatDialogClose,
+    ],
 })
 export class CategoryEditComponent implements OnInit {
   displayedColumns: string[] = ['name', 'description', 'actions'];
@@ -181,9 +201,18 @@ export class CategoryEditComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-action-confirm',
-  templateUrl: './category-edit-action-confirm.component.html',
-  styleUrl: './category-edit.component.css',
+    selector: 'app-action-confirm',
+    templateUrl: './category-edit-action-confirm.component.html',
+    styleUrl: './category-edit.component.css',
+    standalone: true,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class ActionConfirmComponent {
   constructor(public dialogRef: MatDialogRef<ActionConfirmComponent>) {}

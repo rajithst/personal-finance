@@ -1,11 +1,17 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { SessionService } from '../service/session.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.css',
+    standalone: true,
+    imports: [
+        RouterLink,
+        RouterLinkActive,
+        RouterOutlet,
+    ],
 })
 export class HomeComponent implements OnInit {
   private sessionService = inject(SessionService);

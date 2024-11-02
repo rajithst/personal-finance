@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTable, MatTableDataSource, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { DestinationMap } from '../../model/payee';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataService } from '../../../service/data.service';
@@ -22,11 +22,39 @@ import {
   TRANSACTION_TYPE_PAYMENTS_ID,
   TRANSACTION_TYPE_SAVINGS_ID
 } from "../../../shared/data/client.data";
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatChip } from '@angular/material/chips';
+import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'app-payees',
-  templateUrl: './payees.component.html',
-  styleUrl: './payees.component.css',
+    selector: 'app-payees',
+    templateUrl: './payees.component.html',
+    styleUrl: './payees.component.css',
+    standalone: true,
+    imports: [
+        MatTable,
+        MatSort,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCheckbox,
+        MatCellDef,
+        MatCell,
+        MatSortHeader,
+        RouterLink,
+        NgIf,
+        NgSwitch,
+        NgSwitchCase,
+        MatChip,
+        FaIconComponent,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        MatPaginator,
+    ],
 })
 export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;

@@ -41,13 +41,13 @@ import {
   faMessage,
   faInfo,
 } from '@fortawesome/free-solid-svg-icons';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { DataService } from '../../../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatAccordion } from '@angular/material/expansion';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
 import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
 import { LoadingService } from '../../../shared/loading/loading.service';
-import { Sort } from '@angular/material/sort';
+import { Sort, MatSort, MatSortHeader } from '@angular/material/sort';
 import { ERROR_ACTION, SUCCESS_ACTION } from '../../../shared/data/client.data';
 import { Router } from '@angular/router';
 import { ReplaySubject, takeUntil } from 'rxjs';
@@ -62,6 +62,14 @@ import { EXPENSE, INCOME } from '../../../shared/data/shared.data';
 import { ApiService } from '../../../core/api.service';
 import { CreditAccount } from '../../model/account';
 import { TransactionViewMoreDialog } from './view-more/view-more.component';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
+import { MatChip, MatChipSet, MatChipRow, MatChipRemove } from '@angular/material/chips';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatRipple } from '@angular/material/core';
+import { NgIf, NgClass, NgSwitch, NgSwitchCase, DecimalPipe, DatePipe } from '@angular/common';
 
 interface TransactionActionResult {
   refresh: boolean;
@@ -76,9 +84,47 @@ interface FilterParamChip {
 }
 
 @Component({
-  selector: 'app-transaction-table',
-  templateUrl: './transaction-table.component.html',
-  styleUrl: './transaction-table.component.css',
+    selector: 'app-transaction-table',
+    templateUrl: './transaction-table.component.html',
+    styleUrl: './transaction-table.component.css',
+    standalone: true,
+    imports: [
+        NgIf,
+        NgClass,
+        MatRipple,
+        MatTooltip,
+        FaIconComponent,
+        MatChip,
+        MatChipSet,
+        MatChipRow,
+        MatChipRemove,
+        MatIcon,
+        MatAccordion,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        MatExpansionPanelDescription,
+        MatTable,
+        MatSort,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCheckbox,
+        MatCellDef,
+        MatCell,
+        MatSortHeader,
+        NgSwitch,
+        NgSwitchCase,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        DecimalPipe,
+        DatePipe,
+    ],
 })
 export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() transactions: MonthlyTransaction[];

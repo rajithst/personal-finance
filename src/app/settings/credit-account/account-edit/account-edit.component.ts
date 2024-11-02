@@ -1,6 +1,6 @@
 import {Component, inject, Inject, OnInit} from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import {
   ACCOUNT_PROVIDER_DOCOMO_CARD,
   ACCOUNT_PROVIDER_EPOS_CARD,
@@ -11,6 +11,12 @@ import {
 } from '../../../shared/data/client.data';
 import {CreditAccount, CreditAccountRequest} from "../../../finance/model/account";
 import {ApiService} from "../../../core/api.service";
+import { MatButton } from '@angular/material/button';
+import { MatInput } from '@angular/material/input';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 interface AccountEditDialogData {
   account: CreditAccount | null;
@@ -18,9 +24,24 @@ interface AccountEditDialogData {
 }
 
 @Component({
-  selector: 'app-account-edit',
-  templateUrl: './account-edit.component.html',
-  styleUrl: './account-edit.component.css',
+    selector: 'app-account-edit',
+    templateUrl: './account-edit.component.html',
+    styleUrl: './account-edit.component.css',
+    standalone: true,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatInput,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class AccountEditComponent implements OnInit {
   private readonly apiService = inject(ApiService);
