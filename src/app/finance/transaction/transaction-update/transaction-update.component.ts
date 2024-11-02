@@ -73,7 +73,7 @@ export class TransactionUpdateDialog implements OnInit {
       const transactionType =
         this.transactionForm.get('transaction_type')?.value;
       const transactionCategory = this.transactionForm.get('category')?.value;
-      this.setTransactionCategories(transactionType!);
+      this.setTransactionCategories(transactionType);
       this.setTransactionSubCategories(transactionCategory);
     } else if (this.data.task == 'add') {
       this.transactionForm = this.getNewTransactionForm(null);
