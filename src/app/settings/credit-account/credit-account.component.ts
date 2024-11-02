@@ -2,38 +2,55 @@ import { Component, inject } from '@angular/core';
 import { DataService } from '../../service/data.service';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { SUCCESS_ACTION } from '../../shared/data/client.data';
-import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AccountEditComponent } from './account-edit/account-edit.component';
 import { CreditAccount } from '../../finance/model/account';
-import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatButton } from '@angular/material/button';
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardTitle,
+  MatCardContent,
+} from '@angular/material/card';
 
 @Component({
-    selector: 'app-credit-account',
-    templateUrl: './credit-account.component.html',
-    styleUrl: './credit-account.component.css',
-    standalone: true,
-    imports: [
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatButton,
-        MatCardContent,
-        MatTable,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCellDef,
-        MatCell,
-        FaIconComponent,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-    ],
+  selector: 'app-credit-account',
+  templateUrl: './credit-account.component.html',
+  styleUrl: './credit-account.component.css',
+  standalone: true,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatButton,
+    MatCardContent,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    FaIconComponent,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+  ],
 })
 export class CreditAccountComponent {
   private readonly dataService = inject(DataService);

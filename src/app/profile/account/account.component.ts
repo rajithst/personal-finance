@@ -17,7 +17,6 @@ import {
   MatCardTitle,
   MatCardContent,
 } from '@angular/material/card';
-import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 interface ProfileItem {
   label: string;
