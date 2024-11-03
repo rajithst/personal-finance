@@ -5,7 +5,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 
-fdescribe('ChartboxComponent', () => {
+describe('ChartboxComponent', () => {
   let component: ChartboxComponent;
   let fixture: ComponentFixture<ChartboxComponent>;
 
