@@ -243,7 +243,7 @@ export class PayeeEditComponent implements OnInit {
     this.apiService
       .updatePayeeRules(formValues)
       .subscribe((payee: DestinationMap) => {
-        if (payee && payee.id) {
+        if (payee?.id) {
           this.dialogRef.close({
             payee: payee,
             mergeIds: formValues['merge_ids'],

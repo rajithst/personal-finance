@@ -132,7 +132,7 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
           payee: DestinationMap | null;
           mergeIds: number[] | null;
         }) => {
-          if (result && result.payee) {
+          if (result?.payee) {
             const updatedPayee = result.payee;
             const id = this.dataSource.data.findIndex(
               (x) => x.id === updatedPayee.id,
