@@ -20,7 +20,7 @@ declare var google: any;
 @Component({
     selector: 'app-chartbox',
     templateUrl: './chartbox.component.html',
-    styleUrl: './chartbox.component.css',
+    styleUrl: './chartbox.component.scss',
     standalone: true,
     imports: [
         MatCard,

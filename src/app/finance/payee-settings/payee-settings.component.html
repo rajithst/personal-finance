@@ -1,5 +1,4 @@
 <loading></loading>
-<app-toolbar-menu [menuItems]="menuItems"></app-toolbar-menu>
 <div class="data-card-content">
   <mat-grid-list
     [gutterSize]="'5px'"
@@ -9,7 +8,7 @@
   >
     <mat-grid-tile>
       <div class="toolbar-header">
-        <h2>{{ title.getTitle() }}</h2>
+        <p>{{ title.getTitle() }}</p>
       </div>
     </mat-grid-tile>
     <mat-grid-tile></mat-grid-tile>
@@ -19,5 +18,15 @@
       </div>
     </mat-grid-tile>
   </mat-grid-list>
-  <router-outlet></router-outlet>
 </div>
+<nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
+  @for (link of tabs; track link) {
+    <a mat-tab-link
+       [routerLink]="link.route"
+       (click)="activeLink = link"
+       [active]="activeLink == link"> {{link.label}} </a>
+  }
+</nav>
+<mat-tab-nav-panel #tabPanel>
+  <router-outlet></router-outlet>
+</mat-tab-nav-panel>

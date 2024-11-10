@@ -1,83 +1,66 @@
-<div class="content">
-  <mat-toolbar class="fix-nav" color="primary">
-    <button
-      (click)="onToolbarMenuToggle()"
-      *ngIf="authService.isLoggedIn"
-      mat-icon-button
-      type="button"
-    >
-      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+<mat-toolbar class="mat-elevation-z8">
+  <button
+    (click)="collapsed.set(!collapsed())"
+    *ngIf="authService.isLoggedIn"
+    mat-icon-button
+    type="button"
+  >
+    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+  </button>
+  <div class="nav-brand">CoinCraft</div>
+  <span class="example-spacer"></span>
+  <button
+    *ngIf="authService.isLoggedIn"
+    [matMenuTriggerFor]="menu"
+    aria-label="Example icon-button with share icon"
+    class="example-icon"
+    mat-icon-button
+  >
+    <mat-icon>person</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item routerLink="profile">
+      <fa-icon
+        [icon]="faUserCircle"
+        [style]="{ color: '#3699ff' }"
+        size="sm"
+      ></fa-icon>
+      <span class="profile-menu-item">{{authService.currentUser?.first_name}} {{authService.currentUser?.last_name}}</span>
     </button>
-    <div class="nav-brand">CoinCraft</div>
-    <span class="example-spacer"></span>
-    <button
-      *ngIf="authService.isLoggedIn"
-      [matMenuTriggerFor]="menu"
-      aria-label="Example icon-button with share icon"
-      class="example-icon"
-      mat-icon-button
-    >
-      <mat-icon>person</mat-icon>
+    <button mat-menu-item routerLink="settings">
+      <fa-icon
+        [icon]="faGear"
+        [style]="{ color: '#3699ff' }"
+        size="sm"
+      ></fa-icon>
+      <span class="profile-menu-item">Settings</span>
     </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item routerLink="profile">
-        <fa-icon
-          [icon]="faUserCircle"
-          [style]="{ color: '#3699ff' }"
-          size="sm"
-        ></fa-icon>
-        <span class="profile-menu-item">{{authService.currentUser?.first_name}} {{authService.currentUser?.last_name}}</span>
-      </button>
-      <button mat-menu-item routerLink="settings">
-        <fa-icon
-          [icon]="faGear"
-          [style]="{ color: '#3699ff' }"
-          size="sm"
-        ></fa-icon>
-        <span class="profile-menu-item">Settings</span>
-      </button>
-      <button mat-menu-item routerLink="settings/user-log">
-        <fa-icon
-          [icon]="faList"
-          [style]="{ color: '#3699ff' }"
-          size="sm"
-        ></fa-icon>
-        <span class="profile-menu-item">Activity Log</span>
-      </button>
-      <button (click)="authService.logout()" mat-menu-item>
-        <fa-icon
-          [icon]="faSignOut"
-          [style]="{ color: '#3699ff' }"
-          size="sm"
-        ></fa-icon>
-        <span class="profile-menu-item">Log Out</span>
-      </button>
-    </mat-menu>
-  </mat-toolbar>
-
-  <mat-sidenav-container class="sidenav-container">
-    @if (authService.isLoggedIn) {
-      <mat-sidenav
-        position="start"
-        disableClose="false"
-        role="navigation"
-        class="sidenav mat-elevation-z10"
-        [mode]="sideNavMode"
-        [opened]="sideNavDefaultOpened"
-        [@inOutAnimation]="isExpanded ? 'open' : 'closed'"
-        [ngStyle]="{ 'width.px': isExpanded ? openedWidth : closedWidth }"
-      >
-        <app-side-nav></app-side-nav>
-      </mat-sidenav>
-    }
-    <mat-sidenav-content
-      [ngStyle]="{ 'margin-left.px': isExpanded ? openedWidth : closedWidth }"
-      id="sidenav-content"
-    >
-      <loading></loading>
-      <main class="main-container">
-        <router-outlet></router-outlet>
-      </main>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>
+    <button mat-menu-item routerLink="settings/user-log">
+      <fa-icon
+        [icon]="faList"
+        [style]="{ color: '#3699ff' }"
+        size="sm"
+      ></fa-icon>
+      <span class="profile-menu-item">Activity Log</span>
+    </button>
+    <button (click)="authService.logout()" mat-menu-item>
+      <fa-icon
+        [icon]="faSignOut"
+        [style]="{ color: '#3699ff' }"
+        size="sm"
+      ></fa-icon>
+      <span class="profile-menu-item">Log Out</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav opened mode="side" [style.width]="sidenavWith()">
+    <app-sidenav [collapsed]="collapsed()"></app-sidenav>
+  </mat-sidenav>
+  <mat-sidenav-content class="content" [style.margin-left]="sidenavWith()">
+    <loading></loading>
+    <main class="main-container">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

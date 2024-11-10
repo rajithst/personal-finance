@@ -46,7 +46,7 @@ interface CategoryEditDialogData {
 @Component({
   selector: 'app-category-edit',
   templateUrl: './category-edit.component.html',
-  styleUrl: './category-edit.component.css',
+  styleUrl: './category-edit.component.scss',
   standalone: true,
   imports: [
     MatDialogTitle,
@@ -214,7 +214,7 @@ export class CategoryEditComponent implements OnInit {
 @Component({
   selector: 'app-action-confirm',
   templateUrl: './category-edit-action-confirm.component.html',
-  styleUrl: './category-edit.component.css',
+  styleUrl: './category-edit.component.scss',
   standalone: true,
   imports: [
     MatDialogTitle,

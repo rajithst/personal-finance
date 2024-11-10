@@ -1,11 +1,13 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, computed, ElementRef, inject, signal, ViewChild} from '@angular/core';
 import {
   MatSidenavContainer,
   MatSidenavModule,
 } from '@angular/material/sidenav';
 import {
+  faChartLine,
+  faChartSimple,
   faGear,
-  faList,
+  faList, faMoneyBillTransfer, faPieChart, faShop,
   faSignOut,
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +19,6 @@ import {
   trigger,
   state,
 } from '@angular/animations';
-import { SideNavComponent } from './side-nav/side-nav.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
@@ -26,31 +27,13 @@ import { MatIconButton } from '@angular/material/button';
 import { NgIf, NgStyle } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {LoadingComponent} from "./shared/loading/loading.component";
+import {MatListModule} from "@angular/material/list";
+import {SidenavComponent} from "./components/sidenav/sidenav.component";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
-  animations: [
-    trigger('inOutAnimation', [
-      state(
-        'open',
-        style({
-          width: '200px',
-          opacity: 1,
-        }),
-      ),
-      state(
-        'closed',
-        style({
-          width: '60px',
-          opacity: 1,
-        }),
-      ),
-      transition('* => closed', [animate('0.2s')]),
-      transition('* => open', [animate('0.2s')]),
-    ]),
-  ],
+  styleUrl: './app.component.scss',
   standalone: true,
   imports: [
     NgIf,
@@ -64,28 +47,21 @@ import {LoadingComponent} from "./shared/loading/loading.component";
     MatToolbarModule,
     LoadingComponent,
     MatSidenavModule,
+    MatListModule,
     NgStyle,
-    SideNavComponent,
     RouterOutlet,
+    SidenavComponent,
   ],
 })
-export class AppComponent {
-  @ViewChild(MatSidenavContainer) sidenavContainer!: MatSidenavContainer;
+export class AppComponent implements AfterViewInit {
   authService = inject(AuthService);
-
-  sideNavDefaultOpened = true;
-  showFullMenu = true;
-  isExpanded = true;
-  closedWidth = 60;
-  openedWidth = 200;
-  sideNavMode: 'side' | 'over' = 'side';
   protected readonly faList = faList;
   protected readonly faSignOut = faSignOut;
   protected readonly faUserCircle = faUserCircle;
   protected readonly faGear = faGear;
 
-  onToolbarMenuToggle() {
-    this.showFullMenu = !this.isExpanded;
-    this.isExpanded = !this.isExpanded;
-  }
+  collapsed = signal(false);
+  sidenavWith = computed(() => this.collapsed() ? '60px': '200px')
+
+  ngAfterViewInit() {}
 }

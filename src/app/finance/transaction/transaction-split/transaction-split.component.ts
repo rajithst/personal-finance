@@ -57,7 +57,7 @@ export interface TransactionSplitData {
 @Component({
   selector: 'app-transaction-split',
   templateUrl: './transaction-split.component.html',
-  styleUrl: './transaction-split.component.css',
+  styleUrl: './transaction-split.component.scss',
   standalone: true,
   imports: [
     MatDialogTitle,

@@ -15,48 +15,48 @@ import {
   SAVING,
 } from '../../shared/data/shared.data';
 import { ApiService } from '../../core/api.service';
-import { MenuItem } from '../model/common';
 import { AsyncPipe } from '@angular/common';
 import { TransactionTableComponent } from './transaction-table/transaction-table.component';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { SearchbarComponent } from '../../shared/searchbar/searchbar.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatRipple } from '@angular/material/core';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import { ToolbarMenuComponent } from '../../shared/toolbar-menu/toolbar-menu.component';
 import { LoadingComponent } from '../../shared/loading/loading.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
-  styleUrl: './transaction.component.css',
+  styleUrl: './transaction.component.scss',
   standalone: true,
   imports: [
     LoadingComponent,
-    ToolbarMenuComponent,
     MatGridList,
     MatGridTile,
+    MatTabsModule,
     MatRipple,
     FaIconComponent,
     SearchbarComponent,
     RouterOutlet,
+    RouterLink,
   ],
 })
 export class FinanceComponent {
   title = inject(Title);
   today = new Date();
   currentYear = this.today.getFullYear();
-  menuItems: MenuItem[] = [
-    { label: 'Transaction', link: EXPENSE },
-    { label: 'Income', link: INCOME },
-    { label: 'Payment', link: PAYMENT },
-    { label: 'Saving', link: SAVING },
-  ];
   protected readonly faSquareCaretRight = faSquareCaretRight;
   protected readonly faSquareCaretLeft = faSquareCaretLeft;
   protected loadingService = inject(LoadingService);
   private readonly dataService = inject(DataService);
-
+  tabs = [
+    { label: 'All Transactions', route: 'expense' },
+    { label: 'Income', route: 'income' },
+    { label: 'Payments', route: 'payment' },
+    { label: 'Savings', route: 'saving' },
+  ];
+  activeLink = this.tabs[0];
   changeFilterYear(direction: string) {
     this.loadingService.loadingOn();
     if (direction === 'prev') {
@@ -81,7 +81,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   protected loadingService = inject(LoadingService);
   protected readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly dataService = inject(DataService);
-
   ngOnInit(): void {
     this.dataService.yearSwitch$
       .pipe(takeUntil(this.destroyed$))

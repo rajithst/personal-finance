@@ -51,7 +51,7 @@ interface TransactionFilterData {
 @Component({
   selector: 'app-transaction-filter',
   templateUrl: './transaction-filter.component.html',
-  styleUrl: './transaction-filter.component.css',
+  styleUrl: './transaction-filter.component.scss',
   standalone: true,
   imports: [
     MatDialogTitle,

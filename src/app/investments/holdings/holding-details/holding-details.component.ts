@@ -23,7 +23,7 @@ interface HoldingDetailsData {
 @Component({
     selector: 'app-holding-details',
     templateUrl: './holding-details.component.html',
-    styleUrl: './holding-details.component.css',
+    styleUrl: './holding-details.component.scss',
     standalone: true,
     imports: [
         MatDialogTitle,

@@ -9,7 +9,7 @@
               <span>Total Value</span>
             </div>
             <div class="summary-item-title-value">
-              <span>{{ currency }}{{ totalCurrentPrice() | number: "1.2-2" }}</span>
+<!--              <span>{{ currency }}{{ totalCurrentPrice() | number: "1.2-2" }}</span>-->
             </div>
           </div>
         </mat-card-content>
@@ -24,7 +24,7 @@
               <span>Invested Value</span>
             </div>
             <div class="summary-item-title-value">
-              <span>{{ currency }}{{ totalInvestment() | number: "1.2-2" }}</span>
+<!--              <span>{{ currency }}{{ totalInvestment() | number: "1.2-2" }}</span>-->
             </div>
           </div>
         </mat-card-content>
@@ -38,15 +38,15 @@
               <fa-icon [icon]="faLineChart" [style]="{'color': '#3699ff'}" size="lg"></fa-icon>
               <span>Total Profit</span>
             </div>
-            <div [ngClass]="{'profit': totalProfit() >=  0, 'loss': totalProfit() < 0}"
-                 class="summary-item-title-value">
-              <span>{{ totalProfit() >= 0 ? '' : '-' }} {{ currency }}{{ Math.abs(totalProfit()) | number: "1.2-2" }}</span>
-              <span class="percentage-change">
-          {{ totalProfitPercentage() | number: "1.2-2" }} %
-          <fa-icon [icon]="totalProfit() > 0 ? faCaretUp : faCaretDown"
-                   class="{{totalProfit() > 0 ? 'profit' : 'loss'}}"></fa-icon>
-        </span>
-            </div>
+<!--            <div [ngClass]="{'profit': totalProfit() >=  0, 'loss': totalProfit() < 0}"-->
+<!--                 class="summary-item-title-value">-->
+<!--              <span>{{ totalProfit() >= 0 ? '' : '-' }} {{ currency }}{{ Math.abs(totalProfit()) | number: "1.2-2" }}</span>-->
+<!--              <span class="percentage-change">-->
+<!--                  {{ totalProfitPercentage() | number: "1.2-2" }} %-->
+<!--                  <fa-icon [icon]="totalProfit() > 0 ? faCaretUp : faCaretDown"-->
+<!--                           class="{{totalProfit() > 0 ? 'profit' : 'loss'}}"></fa-icon>-->
+<!--              </span>-->
+<!--            </div>-->
           </div>
         </mat-card-content>
       </mat-card>

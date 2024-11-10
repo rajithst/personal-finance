@@ -69,7 +69,7 @@ export interface TransactionUpdateDialogData {
 @Component({
   selector: 'app-transaction-update',
   templateUrl: './transaction-update.component.html',
-  styleUrl: './transaction-update.component.css',
+  styleUrl: './transaction-update.component.scss',
   standalone: true,
   imports: [
     MatDialogTitle,
@@ -323,7 +323,7 @@ export class TransactionUpdateDialog implements OnInit {
 @Component({
   selector: 'app-transaction-delete',
   templateUrl: './transaction-delete.component.html',
-  styleUrl: './transaction-delete.component.css',
+  styleUrl: './transaction-delete.component.scss',
   standalone: true,
   imports: [
     MatDialogTitle,

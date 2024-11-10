@@ -16,7 +16,7 @@ import { NgIf, DecimalPipe, DatePipe } from '@angular/common';
 @Component({
     selector: 'app-payee-detail',
     templateUrl: './payee-detail.component.html',
-    styleUrl: './payee-detail.component.css',
+    styleUrl: './payee-detail.component.scss',
     standalone: true,
     imports: [
         NgIf,

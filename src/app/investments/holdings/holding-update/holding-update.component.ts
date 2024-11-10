@@ -6,7 +6,6 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { SessionService } from '../../service/session.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { StockPurchase } from '../../model/transaction';
@@ -29,7 +28,7 @@ interface HoldingUpdateData {
 @Component({
     selector: 'app-holding-update',
     templateUrl: './holding-update.component.html',
-    styleUrl: './holding-update.component.css',
+    styleUrl: './holding-update.component.scss',
     standalone: true,
     imports: [
         MatDialogTitle,
@@ -53,9 +52,7 @@ interface HoldingUpdateData {
     ],
 })
 export class HoldingUpdateComponent implements OnInit {
-  sessionService = inject(SessionService);
   apiService = inject(ApiService);
-  sessionData = this.sessionService.getData();
   companies = signal<CompanyInfo[]>([]);
   company = signal<CompanyInfo | null>(null);
   companyName = computed(() => this.company()?.company_name);
@@ -102,7 +99,6 @@ export class HoldingUpdateComponent implements OnInit {
     const payload = this.transactionForm.value as StockPurchase;
     this.apiService.updateStockPurchase(payload).subscribe((value) => {
       if (value) {
-        this.sessionService.replaceHoldings(value.holding);
         this.dialogRef.close({ refresh: true });
       } else {
         this.dialogRef.close({ refresh: false });

@@ -41,7 +41,7 @@ import {
 @Component({
   selector: 'app-transaction-category',
   templateUrl: './transaction-category.component.html',
-  styleUrl: './transaction-category.component.css',
+  styleUrl: './transaction-category.component.scss',
   standalone: true,
   imports: [
     MatCard,
@@ -89,7 +89,7 @@ export class TransactionCategoryComponent implements OnInit {
 
   editCategory(settings: CategorySettings) {
     const dialog = this.dialog.open(CategoryEditComponent, {
-      width: '850px',
+      maxWidth: '850px',
       position: {
         top: '5%',
       },
@@ -120,7 +120,7 @@ export class TransactionCategoryComponent implements OnInit {
 
   addCategory() {
     const dialog = this.dialog.open(CategoryEditComponent, {
-      width: '850px',
+      maxWidth: '850px',
       position: {
         top: '5%',
       },

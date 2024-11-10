@@ -21,7 +21,7 @@ export interface TransactionViewMoreDialogData {
 @Component({
   selector: 'app-view-more',
   templateUrl: './view-more.component.html',
-  styleUrl: './view-more.component.css',
+  styleUrl: './view-more.component.scss',
   standalone: true,
   imports: [
     MatDialogTitle,

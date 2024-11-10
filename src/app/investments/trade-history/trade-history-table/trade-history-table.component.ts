@@ -19,7 +19,7 @@ import { MatCard, MatCardContent } from '@angular/material/card';
 @Component({
     selector: 'app-trade-history-table',
     templateUrl: './trade-history-table.component.html',
-    styleUrl: './trade-history-table.component.css',
+    styleUrl: './trade-history-table.component.scss',
     standalone: true,
     imports: [
         MatCard,

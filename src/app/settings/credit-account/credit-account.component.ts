@@ -31,7 +31,7 @@ import {
 @Component({
   selector: 'app-credit-account',
   templateUrl: './credit-account.component.html',
-  styleUrl: './credit-account.component.css',
+  styleUrl: './credit-account.component.scss',
   standalone: true,
   imports: [
     MatCard,
@@ -64,7 +64,7 @@ export class CreditAccountComponent {
 
   editAccount(element: CreditAccount) {
     const dialog = this.dialog.open(AccountEditComponent, {
-      width: '850px',
+      maxWidth: '850px',
       position: {
         top: '5%',
       },

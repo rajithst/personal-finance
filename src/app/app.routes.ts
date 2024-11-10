@@ -54,8 +54,8 @@ export const APP_ROUTES: Routes = [
     path: 'investments',
     canActivate: [isUserAuthenticated],
     loadChildren: () =>
-      import('./investments/investments.routes').then(
-        (m) => m.INVESTMENT_ROUTES,
+      import('./investments/dashboard/dashboard.routes').then(
+        (m) => m.INVESTMENT_DASHBOARD_ROUTES,
       ),
   },
   {

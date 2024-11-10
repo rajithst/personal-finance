@@ -4,7 +4,7 @@ import { DataService } from '../../service/data.service';
 @Component({
     selector: 'app-searchbar',
     templateUrl: './searchbar.component.html',
-    styleUrl: './searchbar.component.css',
+    styleUrl: './searchbar.component.scss',
     standalone: true,
 })
 export class SearchbarComponent implements OnDestroy {

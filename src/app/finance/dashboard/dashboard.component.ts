@@ -37,7 +37,7 @@ import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 @Component({
     selector: 'app-transaction-dashboard',
     templateUrl: './dashboard.component.html',
-    styleUrl: './dashboard.component.css',
+    styleUrl: './dashboard.component.scss',
     standalone: true,
     imports: [
         MatGridList,

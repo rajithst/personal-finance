@@ -4,7 +4,7 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/m
 @Component({
     selector: 'app-user-log',
     templateUrl: './user-log.component.html',
-    styleUrl: './user-log.component.css',
+    styleUrl: './user-log.component.scss',
     standalone: true,
     imports: [
         MatCard,

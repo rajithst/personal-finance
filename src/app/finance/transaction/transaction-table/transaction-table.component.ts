@@ -114,13 +114,13 @@ interface FilterParamChip {
   name: string | undefined;
 }
 
-const DIALOG_WIDTH = '850px';
+const DIALOG_WIDTH = '900px';
 const DIALOG_TOP_POSITION = '5%';
 
 @Component({
   selector: 'app-transaction-table',
   templateUrl: './transaction-table.component.html',
-  styleUrl: './transaction-table.component.css',
+  styleUrl: './transaction-table.component.scss',
   standalone: true,
   imports: [
     NgIf,
@@ -289,7 +289,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   editTransaction(item: TransactionExpand) {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -315,7 +315,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   deleteTransaction(item: TransactionExpand) {
     const dialog = this.dialog.open(TransactionDeleteDialog, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -338,7 +338,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   addTransaction() {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -380,7 +380,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     if (!mergeIds) return;
 
     const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -411,7 +411,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   splitTransaction(item: TransactionExpand, tableIndex: number) {
     const dialog = this.dialog.open(TransactionSplitComponent, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -440,7 +440,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   bulkEditTransactions() {
     const dialog = this.dialog.open(TransactionBulkEditComponent, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -454,7 +454,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   bulkDeleteTransactions() {
     const dialog = this.dialog.open(TransactionBulkEditComponent, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -487,7 +487,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   importTransaction() {
     const dialog = this.dialog.open(TransactionImportComponent, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -813,7 +813,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   viewMoreInfo(element: TransactionExpand) {
     const dialog = this.dialog.open(TransactionViewMoreDialog, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },

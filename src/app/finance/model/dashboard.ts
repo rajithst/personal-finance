@@ -64,7 +64,7 @@ export interface ChartOptionSwitchEmit {
 export const PIE_CHART_CONFIG = {
   title: '',
   width: 550,
-  height: 300,
+  height: 290,
   pieHole: 0.2,
   pieSliceText: 'percentage',
   chartArea: { left: 30, top: 50, width: '90%', height: '70%' },
@@ -81,7 +81,7 @@ export const PIE_CHART_CONFIG = {
 export const BAR_MULTI_CHART_CONFIG = {
   title: '',
   width: 580,
-  height: 300,
+  height: 290,
   colors: ['#cf5a5a', '#d59b6c'],
   chartArea: { left: 0, top: 20, width: '100%', height: '70%' },
   legend: { position: 'right', textStyle: { color: 'blue', fontSize: 10 } },
@@ -90,7 +90,7 @@ export const BAR_MULTI_CHART_CONFIG = {
 export const BAR_CHART_CONFIG = {
   title: '',
   width: 580,
-  height: 300,
+  height: 290,
   colors: ['#23c623'],
   chartArea: { left: 0, top: 20, width: '100%', height: '70%' },
   legend: { position: 'none', textStyle: { color: 'blue', fontSize: 10 } },
@@ -99,7 +99,7 @@ export const BAR_CHART_CONFIG = {
 export const HORIZONTAL_BAR_CHART_CONFIG = {
   title: '',
   width: 550,
-  height: 300,
+  height: 290,
   is3D: true,
   bars: 'horizontal',
   chartArea: { left: 30, top: 50, width: '90%', height: '70%' },

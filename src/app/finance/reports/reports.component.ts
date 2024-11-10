@@ -1,19 +1,18 @@
 import { Component } from '@angular/core';
-import { MenuItem } from '../model/common';
-import { RouterOutlet } from '@angular/router';
-import { ToolbarMenuComponent } from '../../shared/toolbar-menu/toolbar-menu.component';
+import {RouterLink, RouterOutlet} from '@angular/router';
+import {MatTabLink, MatTabNav, MatTabNavPanel} from "@angular/material/tabs";
 
 @Component({
-    selector: 'app-reports',
-    templateUrl: './reports.component.html',
-    styleUrl: './reports.component.css',
-    standalone: true,
-    imports: [ToolbarMenuComponent, RouterOutlet],
+  selector: 'app-reports',
+  templateUrl: './reports.component.html',
+  styleUrl: './reports.component.scss',
+  standalone: true,
+  imports: [RouterOutlet, MatTabLink, MatTabNav, RouterLink, MatTabNavPanel],
 })
 export class ReportsComponent {
-  menuItems: MenuItem[] = [
-    { label: 'Expense', link: 'analytics' },
-    { label: 'Income', link: 'analytics' },
-    { label: 'Cashflow', link: 'analytics' },
+  tabs = [
+    { label: 'Analytics', route: 'analytics' },
+    { label: 'Cash flow', route: 'analytics' },
   ];
+  activeLink = this.tabs[0];
 }

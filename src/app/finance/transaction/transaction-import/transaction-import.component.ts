@@ -47,7 +47,7 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
 @Component({
   selector: 'app-transaction-import',
   templateUrl: './transaction-import.component.html',
-  styleUrl: './transaction-import.component.css',
+  styleUrl: './transaction-import.component.scss',
   standalone: true,
   imports: [
     MatDialogTitle,

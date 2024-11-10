@@ -43,7 +43,7 @@ interface AccountEditDialogData {
 @Component({
   selector: 'app-account-edit',
   templateUrl: './account-edit.component.html',
-  styleUrl: './account-edit.component.css',
+  styleUrl: './account-edit.component.scss',
   standalone: true,
   imports: [
     MatDialogTitle,

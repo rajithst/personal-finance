@@ -1,0 +1,17 @@
+:host {
+  transition: all 500ms ease-in-out;
+}
+
+.selected-menu-item {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.center-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.indented {
+  --mat-list-list-item-leading-icon-start-space: 48px;
+}

@@ -51,14 +51,14 @@
     <mat-chip class="annual-total-chip"
       >Total: ¥{{ showValues ? (totalAnnualAmount() | number: "1.2-2") : "--" }}
     </mat-chip>
-    <mat-chip-set aria-label="Fruit selection">
+    <mat-chip-set aria-label="selection">
       @for (chip of filterParamChips; track chip) {
-        <mat-chip-row (removed)="removeChip(chip)" class="filter-chip">
+        <mat-chip (removed)="removeChip(chip)" class="filter-chip">
           {{ chip.name }}
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
           </button>
-        </mat-chip-row>
+        </mat-chip>
       }
     </mat-chip-set>
   </div>
@@ -131,7 +131,7 @@
 </div>
 <div class="transaction-panel-container">
   @if (noData) {
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-content>
         <p class="no-records-message">No Records! Try changing filters.</p>
       </mat-card-content>

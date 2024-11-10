@@ -31,7 +31,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 @Component({
     selector: 'app-payees',
     templateUrl: './payees.component.html',
-    styleUrl: './payees.component.css',
+    styleUrl: './payees.component.scss',
     standalone: true,
     imports: [
         MatTable,
@@ -119,7 +119,7 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   editPayee(payee: DestinationMap) {
     const dialog = this.dialog.open(PayeeEditComponent, {
-      width: '850px',
+      maxWidth: '900px',
       position: {
         top: '5%',
       },
