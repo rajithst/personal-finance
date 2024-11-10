@@ -1,13 +1,6 @@
 import { Component, Input, signal } from '@angular/core';
 import { MatListModule, MatNavList } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import {
-  faChartLine,
-  faChartSimple,
-  faMoneyBillTransfer,
-  faPieChart,
-  faShop,
-} from '@fortawesome/free-solid-svg-icons';
 import { NgIf } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NavItemComponent } from '../nav-item/nav-item.component';
