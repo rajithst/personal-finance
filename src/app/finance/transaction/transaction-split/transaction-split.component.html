@@ -4,7 +4,7 @@
 </h2>
 <mat-dialog-content>
   <form [formGroup]="splitForm">
-    <h3>Transaction Information</h3>
+    <p class="title-text">Transaction Information</p>
     <ul>
       <li>Date: {{ transaction.date | date: "MMMM d, y" }}</li>
       <li>Payee: {{ transaction.destination }}</li>
@@ -19,11 +19,10 @@
     <mat-divider></mat-divider>
     <div class="split-header">
       <div class="split-title">
-        <h3>Add Splits</h3>
+        <p class="title-text">Add Splits</p>
       </div>
       <div class="split-actions">
-        <button (click)="onAddSplit()" color="primary" mat-raised-button>
-          Add Split
+        <button mat-raised-button (click)="onAddSplit()"> Add Split
         </button>
       </div>
     </div>
@@ -74,13 +73,9 @@
               </mat-form-field>
             </td>
             <td>
-              <div class="coincraft-action-button" (click)="removeSplit(i)">
-                <fa-icon
-                  [icon]="faTrash"
-                  size="xl"
-                  [style]="{ color: '#af5252' }"
-                ></fa-icon>
-              </div>
+              <button mat-mini-fab (click)="removeSplit(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
             </td>
           </tr>
         }

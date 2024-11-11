@@ -81,6 +81,9 @@ table.transaction-table tbody td:last-child {
 
 .filters-right > .edit-panel {
   display: flex;
+  > button {
+    margin: 0 2px;
+  }
 }
 
 .filters-right > .info-panel {
@@ -113,3 +116,29 @@ table.transaction-table tbody td:last-child {
   font-size: 14px;
 }
 
+.search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.search-input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin-left: 10px;
+  width: 150px;
+  transition: width 0.3s ease-in-out;
+}
+
+.search-input:focus {
+  width: 200px;
+  outline: none;
+}

@@ -54,11 +54,12 @@
   </mat-menu>
 </mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav opened mode="side" [style.width]="sidenavWith()">
-    <app-sidenav [collapsed]="collapsed()"></app-sidenav>
-  </mat-sidenav>
-  <mat-sidenav-content class="content" [style.margin-left]="sidenavWith()">
-    <loading></loading>
+  @if (authService.isLoggedIn) {
+    <mat-sidenav opened mode="side" [style.width]="sidenavWith()">
+      <app-sidenav [collapsed]="collapsed()"></app-sidenav>
+    </mat-sidenav>
+  }
+  <mat-sidenav-content class="content" [style.margin-left]="authService.isLoggedIn ? sidenavWith() : '0px'">
     <main class="main-container">
       <router-outlet></router-outlet>
     </main>

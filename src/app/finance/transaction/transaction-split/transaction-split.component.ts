@@ -45,10 +45,11 @@ import {
   MatLabel,
   MatPrefix,
 } from '@angular/material/form-field';
-import { MatButton } from '@angular/material/button';
+import {MatButton, MatMiniFabButton} from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
 import { NgIf, AsyncPipe, DecimalPipe, DatePipe } from '@angular/common';
 import { CdkScrollable } from '@angular/cdk/scrolling';
+import {MatIcon} from "@angular/material/icon";
 
 export interface TransactionSplitData {
   formData: TransactionExpand;
@@ -81,6 +82,8 @@ export interface TransactionSplitData {
     AsyncPipe,
     DecimalPipe,
     DatePipe,
+    MatIcon,
+    MatMiniFabButton,
   ],
 })
 export class TransactionSplitComponent implements OnInit {
