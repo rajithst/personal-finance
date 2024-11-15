@@ -1,6 +1,6 @@
 <div class="data-card-content">
 </div>
-<nav mat-tab-nav-bar mat-stretch-tabs [tabPanel]="tabPanel">
+<nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
   @for (link of tabs; track link) {
     <a mat-tab-link
        [routerLink]="link.route"
