@@ -1,46 +1,66 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { DestinationMap } from '../../model/payee';
 import { ActivatedRoute } from '@angular/router';
 import { TransactionExpand } from '../../model/transactions';
-import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { PayeeEditComponent } from '../payee-edit/payee-edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatDivider } from '@angular/material/divider';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardTitle,
+  MatCardContent,
+} from '@angular/material/card';
 import { NgIf, DecimalPipe, DatePipe } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
-    selector: 'app-payee-detail',
-    templateUrl: './payee-detail.component.html',
-    styleUrl: './payee-detail.component.scss',
-    standalone: true,
-    imports: [
-        NgIf,
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        FaIconComponent,
-        MatCardContent,
-        MatDivider,
-        MatTable,
-        MatSort,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatSortHeader,
-        MatCellDef,
-        MatCell,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        DecimalPipe,
-        DatePipe,
-    ],
+  selector: 'app-payee-detail',
+  templateUrl: './payee-detail.component.html',
+  styleUrl: './payee-detail.component.scss',
+  standalone: true,
+  imports: [
+    NgIf,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    FaIconComponent,
+    MatCardContent,
+    MatDivider,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    DecimalPipe,
+    DatePipe,
+    MatIcon,
+    MatIconButton,
+  ],
 })
 export class PayeeDetailComponent implements OnInit {
   payeeInfo: DestinationMap;
@@ -49,7 +69,6 @@ export class PayeeDetailComponent implements OnInit {
   lastMonthPayment = signal(0);
   dataSource: MatTableDataSource<TransactionExpand>;
   displayedColumns: string[] = ['Date', 'Account', 'Amount', 'Notes'];
-  protected readonly faPencil = faPencil;
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);

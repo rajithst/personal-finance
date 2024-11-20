@@ -39,7 +39,7 @@ export interface TransactionViewMoreDialogData {
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
       useValue: {
-        width: '900px',
+        maxWidth: '900px',
         position: {
           top: '5%',
         },

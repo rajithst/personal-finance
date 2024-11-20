@@ -3,16 +3,12 @@
     <mat-card-header>
       <div class="d-flex-align-sb card-title">
         <div class="title">
-          <mat-card-title> {{ payeeInfo.destination}}</mat-card-title>
+          <mat-card-title> {{ payeeInfo.destination }}</mat-card-title>
         </div>
         <div class="actions">
-          <div (click)="editPayee()" class="coincraft-action-button">
-            <fa-icon
-              [icon]="faPencil"
-              [style]="{ color: '#3699ff' }"
-              size="1x"
-            ></fa-icon>
-          </div>
+          <button mat-icon-button (click)="editPayee()" aria-label="Edit payee">
+            <mat-icon>edit</mat-icon>
+          </button>
         </div>
       </div>
     </mat-card-header>
@@ -24,8 +20,8 @@
               <li>
                 <span class="field-label">Name:</span>
                 <span class="field-value">{{
-                    payeeInfo.destination_original
-                  }}</span>
+                  payeeInfo.destination_original
+                }}</span>
               </li>
               <li>
                 <span class="field-label">Name Renamed:</span>
@@ -46,8 +42,8 @@
               <li>
                 <span class="field-label">Sub-Category:</span>
                 <span class="field-value">{{
-                    payeeInfo.subcategory_text
-                  }}</span>
+                  payeeInfo.subcategory_text
+                }}</span>
               </li>
               <li>
                 <span class="field-label">Keywords:</span>
@@ -60,7 +56,9 @@
           <ul>
             <li>
               <span class="field-label">Category Type: </span>
-              <span class="field-value">{{payeeInfo.category_type_text}}</span>
+              <span class="field-value">{{
+                payeeInfo.category_type_text
+              }}</span>
             </li>
             <li>
               <span class="field-label">Total Payment:</span>

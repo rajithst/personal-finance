@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { DataService } from '../../../service/data.service';
-import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { SUCCESS_ACTION } from '../../../shared/data/client.data';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,13 +19,14 @@ import {
   MatRow,
 } from '@angular/material/table';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import {
   MatCard,
   MatCardHeader,
   MatCardTitle,
   MatCardContent,
 } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-credit-account',
@@ -50,6 +50,8 @@ import {
     MatHeaderRow,
     MatRowDef,
     MatRow,
+    MatIcon,
+    MatIconButton,
   ],
 })
 export class CreditAccountComponent {
@@ -60,7 +62,6 @@ export class CreditAccountComponent {
   dataSource = new MatTableDataSource<CreditAccount>(this.accounts);
 
   displayedColumns = ['account_name', 'account_type', 'description', 'action'];
-  protected readonly faPencil = faPencil;
 
   editAccount(element: CreditAccount) {
     const dialog = this.dialog.open(AccountEditComponent, {

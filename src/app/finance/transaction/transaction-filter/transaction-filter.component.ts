@@ -43,6 +43,7 @@ import {
   MatListItem,
 } from '@angular/material/list';
 import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatCard } from '@angular/material/card';
 
 interface TransactionFilterData {
   filterParams: TransactionFilter;
@@ -69,10 +70,10 @@ interface TransactionFilterData {
     MatDialogActions,
     MatButton,
     MatDialogClose,
+    MatCard,
   ],
 })
 export class TransactionFilterComponent implements OnInit {
-
   protected readonly faLayerGroup = faLayerGroup;
   protected readonly faShop = faShop;
   protected readonly faCreditCard = faCreditCard;

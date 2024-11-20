@@ -5,39 +5,40 @@
         <mat-card-title>Account settings</mat-card-title>
       </div>
       <div class="actions">
-        <button mat-raised-button color="primary" (click)="addAccount()">Add New Account</button>
+        <button mat-raised-button color="primary" (click)="addAccount()">
+          Add New Account
+        </button>
       </div>
     </div>
   </mat-card-header>
   <mat-card-content>
     <table [dataSource]="dataSource" mat-table>
       <ng-container matColumnDef="account_name">
-        <th *matHeaderCellDef mat-header-cell> Account Name</th>
-        <td *matCellDef="let element" mat-cell> {{ element.account_name }}</td>
+        <th *matHeaderCellDef mat-header-cell>Account Name</th>
+        <td *matCellDef="let element" mat-cell>{{ element.account_name }}</td>
       </ng-container>
       <ng-container matColumnDef="account_type">
-        <th *matHeaderCellDef mat-header-cell> Account Type</th>
-        <td *matCellDef="let element" mat-cell> {{ element.account_type }}</td>
+        <th *matHeaderCellDef mat-header-cell>Account Type</th>
+        <td *matCellDef="let element" mat-cell>{{ element.account_type }}</td>
       </ng-container>
       <ng-container matColumnDef="description">
-        <th *matHeaderCellDef mat-header-cell> Description</th>
-        <td *matCellDef="let element" mat-cell> {{ element.description }}</td>
+        <th *matHeaderCellDef mat-header-cell>Description</th>
+        <td *matCellDef="let element" mat-cell>{{ element.description }}</td>
       </ng-container>
       <ng-container matColumnDef="action">
         <th *matHeaderCellDef mat-header-cell></th>
         <td *matCellDef="let element" mat-cell>
-          <div class="panel-actions">
-            <fa-icon
-              (click)="editAccount(element)"
-              [icon]="faPencil"
-              size="sm"
-              [style]="{ color: '#3699ff' }"
-            ></fa-icon>
-          </div>
+          <button
+            mat-icon-button
+            (click)="editAccount(element)"
+            aria-label="Edit Account"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
         </td>
       </ng-container>
       <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
     </table>
   </mat-card-content>
 </mat-card>

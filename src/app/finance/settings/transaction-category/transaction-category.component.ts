@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import {
   TransactionCategory,
   TransactionSubCategory,
@@ -30,13 +29,14 @@ import {
   MatExpansionPanelTitle,
   MatExpansionPanelDescription,
 } from '@angular/material/expansion';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import {
   MatCard,
   MatCardHeader,
   MatCardTitle,
   MatCardContent,
 } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-transaction-category',
@@ -65,12 +65,13 @@ import {
     MatHeaderRow,
     MatRowDef,
     MatRow,
+    MatIcon,
+    MatIconButton,
   ],
 })
 export class TransactionCategoryComponent implements OnInit {
   categorySettings: CategorySettings[] = [];
   displayedColumns: string[] = ['name', 'description'];
-  protected readonly faPencil = faPencil;
   private readonly dataService = inject(DataService);
   allCategories: TransactionCategory[] = this.dataService.getAllCategories();
   allSubCategories: TransactionSubCategory[] =
