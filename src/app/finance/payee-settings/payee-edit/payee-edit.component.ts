@@ -64,7 +64,7 @@ interface PayeeEditDialogData {
 @Component({
   selector: 'app-payee-edit',
   templateUrl: './payee-edit.component.html',
-  styleUrl: './payee-edit.component.css',
+  styleUrl: './payee-edit.component.scss',
   standalone: true,
   imports: [
     MatDialogTitle,

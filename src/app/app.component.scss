@@ -1,0 +1,39 @@
+mat-toolbar {
+  background: #d7e3ff;
+  position: relative;
+  z-index: 5;
+}
+
+.content {
+  padding: 5px;
+}
+
+mat-sidenav-container {
+  height: calc(100vh - 64px);
+}
+
+mat-sidenav,
+mat-sidenav-content {
+  transition: all 500ms ease-in-out;
+}
+
+.main-container {
+  height: calc(100vh - 64px);
+  overflow: hidden;
+  padding: 0 10px;
+  background: #faf7f7;
+}
+
+.nav-brand {
+  text-align: center;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.profile-menu-item {
+  margin-left: 10px;
+  font-size: 14px;
+}
+

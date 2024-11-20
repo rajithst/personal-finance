@@ -14,8 +14,6 @@ import {
 } from '../finance/model/transactions';
 import {
   CompanyResponse,
-  InvestmentDashboard,
-  InvestmentResponse,
   StockDailyPriceResponse,
 } from '../investments/model/investment';
 import {
@@ -39,6 +37,7 @@ import {
 import { MyProfile } from '../finance/model/profile';
 import { JwtTokenResponse } from '../auth/model';
 import { CreditAccount, CreditAccountRequest } from '../finance/model/account';
+import {InvestmentDashboard} from "../investments/model/dashboard";
 
 @Injectable({
   providedIn: 'root',
@@ -199,12 +198,7 @@ export class ApiService {
 
   getInvestmentDashboard(): Observable<InvestmentDashboard> {
     return this.http.get<InvestmentDashboard>(
-      `${this.SRC_URL}/investment/dashboard`,
-    );
-  }
-  getInvestments(): Observable<InvestmentResponse> {
-    return this.http.get<InvestmentResponse>(
-      `${this.SRC_URL}/investments/list`,
+      `${this.SRC_URL}/investments/dashboard/`,
     );
   }
 

@@ -22,7 +22,6 @@ import {
 import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { HoldingDetailsComponent } from '../holding-details/holding-details.component';
-import { SessionService } from '../../service/session.service';
 import { Holding, StockDailyPrice } from '../../model/investment';
 import { ApiService } from '../../../core/api.service';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
@@ -33,7 +32,7 @@ import { MatCard, MatCardContent } from '@angular/material/card';
 @Component({
     selector: 'app-holding-table',
     templateUrl: './holding-table.component.html',
-    styleUrl: './holding-table.component.css',
+    styleUrl: './holding-table.component.scss',
     standalone: true,
     imports: [
         MatCard,
@@ -91,8 +90,6 @@ export class HoldingTableComponent implements OnChanges {
   protected readonly faList = faList;
   private dialog = inject(MatDialog);
   private apiService = inject(ApiService);
-  private sessionService = inject(SessionService);
-  private sessionData = this.sessionService.getData();
 
   ngOnChanges(changes: SimpleChanges): void {
     this.currency =
@@ -132,8 +129,8 @@ export class HoldingTableComponent implements OnChanges {
 
   openModal(symbol: string, stockPriceHistory: StockDailyPrice[]) {
     const holdingData = this.holdings.find((h) => h.company === symbol);
-    const transactions = this.sessionData.transactions;
-    const purchaseHistory = transactions.filter((x) => x.company === symbol);
+    const transactions = null;
+    const purchaseHistory = null;
     const dialog = this.dialog.open(HoldingDetailsComponent, {
       width: '950px',
       position: {

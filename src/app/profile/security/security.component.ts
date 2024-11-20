@@ -4,7 +4,7 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/m
 @Component({
     selector: 'app-security',
     templateUrl: './security.component.html',
-    styleUrl: './security.component.css',
+    styleUrl: './security.component.scss',
     standalone: true,
     imports: [
         MatCard,

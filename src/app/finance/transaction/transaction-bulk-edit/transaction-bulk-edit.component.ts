@@ -26,7 +26,7 @@ export interface TransactionBulkEditData {
 @Component({
   selector: 'app-transaction-bulk-edit',
   templateUrl: './transaction-bulk-edit.component.html',
-  styleUrl: './transaction-bulk-edit.component.css',
+  styleUrl: './transaction-bulk-edit.component.scss',
   standalone: true,
   imports: [
     MatDialogTitle,

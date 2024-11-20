@@ -4,7 +4,7 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/m
 @Component({
     selector: 'app-billing',
     templateUrl: './billing.component.html',
-    styleUrl: './billing.component.css',
+    styleUrl: './billing.component.scss',
     standalone: true,
     imports: [
         MatCard,

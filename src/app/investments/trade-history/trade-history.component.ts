@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SessionService } from '../service/session.service';
 import { StockPurchaseHistory } from '../model/investment';
 import { TradeHistoryTableComponent } from './trade-history-table/trade-history-table.component';
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
@@ -7,7 +6,7 @@ import { MatTabGroup, MatTab } from '@angular/material/tabs';
 @Component({
     selector: 'app-trade-history',
     templateUrl: './trade-history.component.html',
-    styleUrl: './trade-history.component.css',
+    styleUrl: './trade-history.component.scss',
     standalone: true,
     imports: [
         MatTabGroup,
@@ -18,16 +17,8 @@ import { MatTabGroup, MatTab } from '@angular/material/tabs';
 export class TradeHistoryComponent implements OnInit {
   usTrades: StockPurchaseHistory[] = [];
   domesticTrades: StockPurchaseHistory[] = [];
-  private sessionData = this.sessionService.getData();
-
-  constructor(private sessionService: SessionService) {}
 
   ngOnInit(): void {
-    this.usTrades = this.sessionData.transactions.filter(
-      (x) => x.stock_currency === '$',
-    );
-    this.domesticTrades = this.sessionData.transactions.filter(
-      (x) => x.stock_currency === '¥',
-    );
+    // TODO document why this method 'ngOnInit' is empty
   }
 }

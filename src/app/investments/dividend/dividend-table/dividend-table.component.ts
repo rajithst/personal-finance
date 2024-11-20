@@ -15,7 +15,7 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/m
 @Component({
     selector: 'app-dividend-table',
     templateUrl: './dividend-table.component.html',
-    styleUrl: './dividend-table.component.css',
+    styleUrl: './dividend-table.component.scss',
     standalone: true,
     imports: [
         MatCard,

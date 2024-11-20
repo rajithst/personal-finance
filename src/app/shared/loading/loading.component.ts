@@ -10,13 +10,18 @@ import {
   Router,
 } from '@angular/router';
 import { MatProgressBar } from '@angular/material/progress-bar';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
-    selector: 'loading',
-    templateUrl: './loading.component.html',
-    styleUrl: './loading.component.css',
-    standalone: true,
-    imports: [MatProgressBar],
+  selector: 'loading',
+  template: `
+    @if (loading()) {
+      <mat-spinner></mat-spinner>
+    }
+  `,
+  styles: ``,
+  standalone: true,
+  imports: [MatProgressBar, MatProgressSpinner],
 })
 export class LoadingComponent implements OnInit {
   @Input()

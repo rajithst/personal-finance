@@ -1,54 +1,11 @@
-<loading></loading>
-<app-toolbar-menu [menuItems]="menuItems"></app-toolbar-menu>
-<div class="data-card-content">
-  <mat-grid-list
-    [gutterSize]="'5px'"
-    class="filter-toolbar"
-    cols="3"
-    rowHeight="50px"
-  >
-    <mat-grid-tile>
-      <div class="toolbar-header">
-        <h2>{{ title.getTitle() }}</h2>
-      </div>
-      <div class="range-filter">
-        <div class="range-filter-actions">
-          <div
-            (click)="changeFilterYear('prev')"
-            class="range-action"
-            matRipple
-          >
-            <fa-icon
-              [icon]="faSquareCaretLeft"
-              [style]="{ color: '#4a4949' }"
-              size="1x"
-            ></fa-icon>
-          </div>
-          <div class="range-filter-title">
-            <h3 class="range-title">{{ currentYear }}</h3>
-          </div>
-          <div
-            (click)="changeFilterYear('next')"
-            class="range-action"
-            matRipple
-          >
-            <fa-icon
-              [icon]="faSquareCaretRight"
-              [style]="{ color: '#4a4949' }"
-              size="1x"
-            ></fa-icon>
-          </div>
-        </div>
-      </div>
-    </mat-grid-tile>
-    <mat-grid-tile>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <div class="searchbar-wrapper">
-        <app-searchbar></app-searchbar>
-      </div>
-    </mat-grid-tile>
-  </mat-grid-list>
+<nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
+  @for (link of tabs; track link) {
+    <a mat-tab-link
+       [routerLink]="link.route"
+       (click)="activeLink = link"
+       [active]="activeLink == link"> {{link.label}} </a>
+  }
+</nav>
+<mat-tab-nav-panel #tabPanel>
   <router-outlet></router-outlet>
-
-</div>
+</mat-tab-nav-panel>

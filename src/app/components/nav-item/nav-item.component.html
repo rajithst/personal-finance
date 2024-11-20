@@ -1,0 +1,50 @@
+<a
+  class="center-flex"
+  mat-list-item
+  [routerLink]="item().route"
+  routerLinkActive="selected-menu-item"
+  #rla="routerLinkActive"
+  [activated]="rla.isActive"
+  (click)="toggleNested()"
+>
+  <mat-icon
+    [fontSet]="rla.isActive ? 'material-icons' : 'material-icons-outlined'"
+    matListItemIcon
+    >{{ item().icon }}</mat-icon
+  >
+  @if (!collapsed()) {
+    <span matListItemTitle>{{ item().display_name }}</span>
+  }
+  @if (item().children && !collapsed()) {
+    <span matListItemMeta>
+      <mat-icon>{{
+        nestedMenuOpen() ? "expand_less" : "expand_more"
+      }}</mat-icon>
+    </span>
+  }
+</a>
+@if (item().children && nestedMenuOpen()) {
+  <div>
+    @for (child of item().children; track child.display_name) {
+      <a
+        class="center-flex indented"
+        mat-list-item
+        [routerLink]="child.route"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [activated]="rla.isActive"
+      >
+        <mat-icon
+          [fontSet]="
+            rla.isActive ? 'material-icons' : 'material-icons-outlined'
+          "
+          matListItemIcon
+          >{{ child.icon }}</mat-icon
+        >
+        @if (!collapsed()) {
+          <span matListItemTitle>{{ child.display_name }}</span>
+        }
+      </a>
+    }
+  </div>
+}

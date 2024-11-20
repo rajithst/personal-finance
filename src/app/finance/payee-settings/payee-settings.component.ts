@@ -1,35 +1,38 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { DataService } from '../../service/data.service';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
-import { MenuItem } from '../model/common';
+import {ActivatedRoute, RouterLink, RouterOutlet} from '@angular/router';
 import { SearchbarComponent } from '../../shared/searchbar/searchbar.component';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import { ToolbarMenuComponent } from '../../shared/toolbar-menu/toolbar-menu.component';
 import { LoadingComponent } from '../../shared/loading/loading.component';
+import {MatTabLink, MatTabNav, MatTabNavPanel} from "@angular/material/tabs";
 
 @Component({
-    selector: 'app-payee-settings',
-    templateUrl: './payee-settings.component.html',
-    styleUrl: './payee-settings.component.css',
-    standalone: true,
-    imports: [
-        LoadingComponent,
-        ToolbarMenuComponent,
-        MatGridList,
-        MatGridTile,
-        SearchbarComponent,
-        RouterOutlet,
-    ],
+  selector: 'app-payee-settings',
+  templateUrl: './payee-settings.component.html',
+  styleUrl: './payee-settings.component.scss',
+  standalone: true,
+  imports: [
+    LoadingComponent,
+    MatGridList,
+    MatGridTile,
+    SearchbarComponent,
+    RouterOutlet,
+    MatTabLink,
+    MatTabNav,
+    RouterLink,
+    MatTabNavPanel,
+  ],
 })
 export class PayeeSettingsComponent implements OnInit {
   activatedRoute = inject(ActivatedRoute);
   dataService = inject(DataService);
   title = inject(Title);
-  menuItems: MenuItem[] = [
-    { label: 'Payees', link: 'payees' },
-    { label: 'Recurring Payments', link: 'recurring-payments' },
+  tabs = [
+    { label: 'All Payees', route: 'payees' },
+    { label: 'Recurring Payees', route: 'recurring-payments' },
   ];
+  activeLink = this.tabs[0];
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ payeeData }) => {

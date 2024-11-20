@@ -16,7 +16,7 @@ import { NgIf, DecimalPipe, DatePipe } from '@angular/common';
 @Component({
     selector: 'app-payee-detail',
     templateUrl: './payee-detail.component.html',
-    styleUrl: './payee-detail.component.css',
+    styleUrl: './payee-detail.component.scss',
     standalone: true,
     imports: [
         NgIf,
@@ -72,10 +72,9 @@ export class PayeeDetailComponent implements OnInit {
 
   editPayee() {
     const dialog = this.dialog.open(PayeeEditComponent, {
-      width: '850px',
-      height: '600px',
+      maxWidth: '900px',
       position: {
-        top: '100px',
+        top: '5%',
       },
       data: { payee: this.payeeInfo },
     });

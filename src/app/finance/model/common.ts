@@ -23,8 +23,4 @@ export interface ClientSettings {
   transaction_sub_categories: TransactionSubCategory[];
 }
 
-export interface MenuItem {
-  link: string;
-  label: string;
-  icon?: any;
-}
+

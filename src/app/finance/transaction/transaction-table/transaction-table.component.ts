@@ -22,21 +22,14 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
-  faCirclePlus,
   faCodeMerge,
   faEdit,
   faEllipsisV,
-  faExpand,
-  faEye,
-  faEyeSlash,
-  faFilter,
   faLink,
   faList,
-  faMinimize,
   faPencil,
   faScissors,
   faTrash,
-  faUpload,
   faChartColumn,
   faMessage,
   faInfo,
@@ -101,6 +94,7 @@ import {
   DatePipe,
 } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
+import {MatButton, MatMiniFabButton} from "@angular/material/button";
 
 interface TransactionActionResult {
   refresh: boolean;
@@ -114,13 +108,13 @@ interface FilterParamChip {
   name: string | undefined;
 }
 
-const DIALOG_WIDTH = '850px';
+const DIALOG_WIDTH = '900px';
 const DIALOG_TOP_POSITION = '5%';
 
 @Component({
   selector: 'app-transaction-table',
   templateUrl: './transaction-table.component.html',
-  styleUrl: './transaction-table.component.css',
+  styleUrl: './transaction-table.component.scss',
   standalone: true,
   imports: [
     NgIf,
@@ -159,6 +153,8 @@ const DIALOG_TOP_POSITION = '5%';
     MatRow,
     DecimalPipe,
     DatePipe,
+    MatMiniFabButton,
+    MatButton,
   ],
 })
 export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
@@ -181,6 +177,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     return this.segments().at(segmentLength - 1);
   });
 
+  isSearchBarVisible = false;
   noData = true;
   showValues = false;
   selection = new SelectionModel<TransactionExpand>(true, []);
@@ -207,15 +204,8 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   protected readonly faEllipsisV = faEllipsisV;
   protected readonly faPencil = faPencil;
   protected readonly faCodeMerge = faCodeMerge;
-  protected readonly faCirclePlus = faCirclePlus;
-  protected readonly faExpand = faExpand;
-  protected readonly faMinimize = faMinimize;
-  protected readonly faUpload = faUpload;
-  protected readonly faFilter = faFilter;
   protected readonly faChartColumn = faChartColumn;
   protected readonly faLink = faLink;
-  protected readonly faEye = faEye;
-  protected readonly faEyeSlash = faEyeSlash;
   protected readonly faMessage = faMessage;
   protected readonly faInfo = faInfo;
   protected readonly destroyed$ = new ReplaySubject<void>(1);
@@ -289,7 +279,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   editTransaction(item: TransactionExpand) {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -315,7 +305,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   deleteTransaction(item: TransactionExpand) {
     const dialog = this.dialog.open(TransactionDeleteDialog, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -338,7 +328,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   addTransaction() {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -380,7 +370,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     if (!mergeIds) return;
 
     const dialog = this.dialog.open(TransactionUpdateDialog, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -411,7 +401,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   splitTransaction(item: TransactionExpand, tableIndex: number) {
     const dialog = this.dialog.open(TransactionSplitComponent, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -440,7 +430,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   bulkEditTransactions() {
     const dialog = this.dialog.open(TransactionBulkEditComponent, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -454,7 +444,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   bulkDeleteTransactions() {
     const dialog = this.dialog.open(TransactionBulkEditComponent, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -487,7 +477,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   importTransaction() {
     const dialog = this.dialog.open(TransactionImportComponent, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
@@ -525,11 +515,11 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   openFilters() {
     this.dialog.closeAll();
-    const rect = this.filterButton()?.nativeElement.getBoundingClientRect();
+    // const rect = this.filterButton()?.nativeElement.getBoundingClientRect();
     const dialog = this.dialog.open(TransactionFilterComponent, {
-      width: '700px',
-      height: '500px',
-      position: { top: `${rect.bottom + 10}px`, right: `20px` },
+      maxWidth: '700px',
+      // maxHeight: '500px',
+      // position: { top: `${rect.bottom + 10}px`, right: `20px` },
       hasBackdrop: true,
       data: { filterParams: this.filterParams },
     });
@@ -813,7 +803,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   viewMoreInfo(element: TransactionExpand) {
     const dialog = this.dialog.open(TransactionViewMoreDialog, {
-      width: DIALOG_WIDTH,
+      maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },

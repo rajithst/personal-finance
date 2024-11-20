@@ -74,6 +74,4 @@ export interface Holding {
 
 
 
-export interface InvestmentDashboard {
 
-}
