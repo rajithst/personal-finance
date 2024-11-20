@@ -1,9 +1,10 @@
 <div class="sidenav-header">
 <!--  <img src="" alt="" width="100", height="100">-->
   <div class="header-text"></div>
-  <mat-nav-list>
+  <mat-nav-list class="sidenav-content">
     @for (item of menuItems(); track item.display_name) {
       <app-nav-item [item]="item" [collapsed]="sideNavCollapsed()"/>
     }
   </mat-nav-list>
+
 </div>

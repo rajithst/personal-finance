@@ -16,18 +16,18 @@ import {
   MatDialogActions,
   MatDialogClose,
 } from '@angular/material/dialog';
-import { TransactionSubCategory } from '../../../finance/model/common';
+import { TransactionSubCategory } from '../../../model/common';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { ApiService } from '../../../core/api.service';
+import { ApiService } from '../../../../core/api.service';
 import {
   CategorySettings,
   CategorySettingsRequest,
-} from '../../../finance/model/category-settings';
+} from '../../../model/category-settings';
 import {
   ERROR_ACTION,
   SUCCESS_ACTION,
   TRANSACTION_TYPES,
-} from '../../../shared/data/client.data';
+} from '../../../../shared/data/client.data';
 import { MatButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';

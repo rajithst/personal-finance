@@ -60,8 +60,8 @@ export interface Widget {
 
     .widget-settings-button {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 10px;
+      right: 10px;
     }
   `,
   host: {

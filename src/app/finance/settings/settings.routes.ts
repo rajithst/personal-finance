@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { UserLogComponent } from './user-log/user-log.component';
+import { ActivityLog } from './activity-log/activity-log.component';
 import { SettingsComponent } from './settings.component';
 import { TransactionCategoryComponent } from './transaction-category/transaction-category.component';
 import { CreditAccountComponent } from './credit-account/credit-account.component';
@@ -11,20 +11,20 @@ export const SETTINGS_ROUTES: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'category-settings',
+        redirectTo: 'category',
         pathMatch: 'full',
       },
       {
-        path: 'category-settings',
+        path: 'category',
         component: TransactionCategoryComponent,
       },
       {
-        path: 'accounts',
+        path: 'credit-accounts',
         component: CreditAccountComponent,
       },
       {
-        path: 'user-log',
-        component: UserLogComponent,
+        path: 'activity-log',
+        component: ActivityLog,
       },
     ],
   },

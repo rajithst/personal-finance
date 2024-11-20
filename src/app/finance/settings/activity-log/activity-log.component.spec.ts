@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserLogComponent } from './user-log.component';
+import { ActivityLog } from './activity-log.component';
 
 describe('UserLogComponent', () => {
-  let component: UserLogComponent;
-  let fixture: ComponentFixture<UserLogComponent>;
+  let component: ActivityLog;
+  let fixture: ComponentFixture<ActivityLog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [UserLogComponent],
+    imports: [ActivityLog],
 }).compileComponents();
 
-    fixture = TestBed.createComponent(UserLogComponent);
+    fixture = TestBed.createComponent(ActivityLog);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

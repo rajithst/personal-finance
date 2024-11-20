@@ -14,8 +14,27 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'loading',
-  templateUrl: './loading.component.html',
-  styleUrl: './loading.component.scss',
+  template: `
+    @if (loading()) {
+      <mat-spinner></mat-spinner>
+    }
+  `,
+  styles: `
+    .spinner-container {
+      position: fixed;
+      height: 100vh;
+      width: 100vw;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.32);
+      z-index: 20000;
+    }
+  `,
   standalone: true,
   imports: [MatProgressBar, MatProgressSpinner],
 })

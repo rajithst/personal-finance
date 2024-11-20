@@ -1,9 +1,9 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   ChartComponent,
   ChartConfig,
 } from '../../../components/widget/chartbox.component';
-import { DashboardService } from '../../../service/dashboard.service';
+import { DashboardService } from '../dashboard.service';
 import { MONTHS } from '../../../shared/data/client.data';
 import { DropDownType } from '../../../shared/data/shared.data';
 import { TransactionCategory } from '../../model/common';

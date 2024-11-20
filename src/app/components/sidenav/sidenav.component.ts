@@ -50,6 +50,11 @@ export class SidenavComponent {
       icon: 'store',
     },
     {
+      display_name: 'Finance Settings',
+      route: '/finance-settings',
+      icon: 'settings',
+    },
+    {
       display_name: 'Reports',
       route: '/reports',
       icon: 'pie_chart',

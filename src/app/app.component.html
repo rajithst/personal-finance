@@ -27,7 +27,7 @@
       ></fa-icon>
       <span class="profile-menu-item">{{authService.currentUser?.first_name}} {{authService.currentUser?.last_name}}</span>
     </button>
-    <button mat-menu-item routerLink="settings">
+    <button mat-menu-item routerLink="app-settings">
       <fa-icon
         [icon]="faGear"
         [style]="{ color: '#3699ff' }"
@@ -35,7 +35,7 @@
       ></fa-icon>
       <span class="profile-menu-item">Settings</span>
     </button>
-    <button mat-menu-item routerLink="settings/user-log">
+    <button mat-menu-item routerLink="app-activity-log">
       <fa-icon
         [icon]="faList"
         [style]="{ color: '#3699ff' }"

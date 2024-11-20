@@ -1,40 +1,15 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { MONTHS } from '../../shared/data/client.data';
+import { Component, inject, OnDestroy } from '@angular/core';
 import {
-  faCreditCard,
-  faFileInvoiceDollar,
-  faPiggyBank,
-  faSackDollar,
-} from '@fortawesome/free-solid-svg-icons';
-import {
-  BAR_CHART_CONFIG,
-  BAR_MULTI_CHART_CONFIG,
-  ChartData,
-  ChartOptionSwitchEmit,
   DashboardResponse,
-  HORIZONTAL_BAR_CHART_CONFIG,
-  KeyValueArray,
-  PIE_CHART_CONFIG,
 } from '../model/dashboard';
 import { DataService } from '../../service/data.service';
-import { DropDownType } from '../../shared/data/shared.data';
-import { forkJoin, Observable, of, ReplaySubject, takeUntil } from 'rxjs';
+import { forkJoin, ReplaySubject, takeUntil } from 'rxjs';
 import { ApiService } from '../../core/api.service';
-import { CreditAccount } from '../model/account';
-import { TransactionCategory } from '../model/common';
-import { AsyncPipe, DecimalPipe } from '@angular/common';
-import { ChartboxComponent } from '../../shared/chartbox/chartbox.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { MatCard, MatCardContent } from '@angular/material/card';
-import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import {
   Widget,
   WidgetComponent,
 } from '../../components/widget/widget.component';
-import { DashboardService } from '../../service/dashboard.service';
-import { MatButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { DashboardService } from './dashboard.service';
 import {
   IncomeVsPaymentsWidget,
   IncomeVsSavingsWidget,
@@ -70,20 +45,7 @@ import {
   `,
   standalone: true,
   imports: [
-    MatGridList,
-    MatGridTile,
-    MatCard,
-    MatCardContent,
-    MatIcon,
-    FaIconComponent,
-    ChartboxComponent,
-    AsyncPipe,
-    DecimalPipe,
     WidgetComponent,
-    MatButton,
-    MatMenu,
-    MatMenuItem,
-    MatMenuTrigger,
   ],
   providers: [DashboardService],
 })

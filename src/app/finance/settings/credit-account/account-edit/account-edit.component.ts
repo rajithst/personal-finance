@@ -22,12 +22,12 @@ import {
   CREDIT_ACCOUNT_TYPE_CREDIT_CARD,
   ERROR_ACTION,
   SUCCESS_ACTION,
-} from '../../../shared/data/client.data';
+} from '../../../../shared/data/client.data';
 import {
   CreditAccount,
   CreditAccountRequest,
-} from '../../../finance/model/account';
-import { ApiService } from '../../../core/api.service';
+} from '../../../model/account';
+import { ApiService } from '../../../../core/api.service';
 import { MatButton } from '@angular/material/button';
 import { MatInput } from '@angular/material/input';
 import { MatOption } from '@angular/material/core';

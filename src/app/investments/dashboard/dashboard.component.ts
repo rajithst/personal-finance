@@ -1,11 +1,4 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {
-  faCaretDown,
-  faCaretUp,
-  faJpy,
-  faLineChart,
-  faMoneyBill,
-} from '@fortawesome/free-solid-svg-icons';
 import { NgClass, DecimalPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatCard, MatCardContent } from '@angular/material/card';
@@ -29,12 +22,6 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class InvestmentDashboardComponent implements OnInit {
 
-  protected readonly faCaretUp = faCaretUp;
-  protected readonly faLineChart = faLineChart;
-  protected readonly faJpy = faJpy;
-  protected readonly faMoneyBill = faMoneyBill;
-  protected readonly faCaretDown = faCaretDown;
-  protected readonly Math = Math;
 
   private readonly activatedRoute = inject(ActivatedRoute);
 

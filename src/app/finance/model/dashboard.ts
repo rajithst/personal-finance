@@ -1,6 +1,6 @@
 import { DropDownType } from '../../shared/data/shared.data';
 
-interface DashboardTransaction {
+export interface DashboardTransaction {
   year: number;
   month: number;
   amount: number;

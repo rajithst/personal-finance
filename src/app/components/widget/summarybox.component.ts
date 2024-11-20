@@ -17,17 +17,14 @@ export interface ChartConfig {
       <p class="statistics" [style.color]="color() ?? 'inherit'">
         {{ summaryValue() }}
       </p>
-      @if (icon() && icon() == 'up') {
-        <mat-icon class="up-style">arrow_circle_up</mat-icon>
-      }
-      @if (icon() && icon() == 'down') {
-        <mat-icon class="down-style">arrow_circle_down</mat-icon>
+      @if (iconText()) {
+        <mat-icon [style.color]="iconColor() ?? 'inherit'">{{iconText()}}</mat-icon>
       }
     </div>
 
     <div class="stat-sub-text">
       @if (summarySubValue()) {
-        <span>{{ summarySubValue() }}</span>
+        <span [style.color]="subValueColor() ?? 'inherit'">{{ summarySubValue() }}</span>
       }
       @if (summarySubText()) {
         {{ summarySubText() }}
@@ -49,18 +46,14 @@ export interface ChartConfig {
       text-align: center;
       font-size: 12px;
     }
-    .up-style {
-      color: green;
-    }
-    .down-style {
-      color: red;
-    }
   `,
 })
 export class SummaryComponent {
   summaryValue = input.required<number | string>();
   summarySubText = input<string>();
   summarySubValue = input<string>();
-  icon = input<string>();
+  iconColor = input<string>();
+  iconText = input<string>();
   color = input<string>();
+  subValueColor = input<string>();
 }

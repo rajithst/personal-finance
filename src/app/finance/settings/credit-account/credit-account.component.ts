@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { DataService } from '../../service/data.service';
+import { DataService } from '../../../service/data.service';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
-import { SUCCESS_ACTION } from '../../shared/data/client.data';
+import { SUCCESS_ACTION } from '../../../shared/data/client.data';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AccountEditComponent } from './account-edit/account-edit.component';
-import { CreditAccount } from '../../finance/model/account';
+import { CreditAccount } from '../../model/account';
 import {
   MatTableDataSource,
   MatTable,
