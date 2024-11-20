@@ -1,50 +1,38 @@
 <div
   *ngIf="selection.selected.length > 1"
   [ngClass]="{ 'highlight-merge-panel': selection.selected.length > 1 }"
-  class="d-flex-align-c"
+  class="merge-panel d-flex-align-c"
 >
   <div class="merge-description">
     <span>Selected {{ selection.selected.length }} Transactions!</span>
   </div>
-  <div
+  <button
+    mat-mini-fab
     (click)="mergeTransactions()"
-    class="coincraft-action-button"
-    matRipple
+    aria-label="Merge Transaction"
     matTooltip="Merge Transactions"
     matTooltipPosition="below"
   >
-    <fa-icon
-      [icon]="faCodeMerge"
-      [style]="{ color: '#4a4949' }"
-      size="1x"
-    ></fa-icon>
-  </div>
-  <div
+    <mat-icon>library_add</mat-icon>
+  </button>
+  <button
+    mat-mini-fab
     (click)="bulkEditTransactions()"
-    class="coincraft-action-button"
-    matRipple
+    aria-label="Bulk Edit Transaction"
     matTooltip="Bulk Edit"
     matTooltipPosition="below"
   >
-    <fa-icon
-      [icon]="faPencil"
-      [style]="{ color: '#4a4949' }"
-      size="1x"
-    ></fa-icon>
-  </div>
-  <div
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button
+    mat-mini-fab
     (click)="bulkDeleteTransactions()"
-    class="coincraft-action-button"
-    matRipple
+    aria-label="Bulk Delete Transaction"
     matTooltip="Bulk Delete"
     matTooltipPosition="below"
   >
-    <fa-icon
-      [icon]="faTrash"
-      [style]="{ color: '#af5252' }"
-      size="1x"
-    ></fa-icon>
-  </div>
+    <mat-icon>delete</mat-icon>
+  </button>
 </div>
 <div *ngIf="selection.selected.length <= 1" class="filters-right">
   <div class="info-panel">
@@ -84,13 +72,12 @@
       [matTooltip]="showValues ? 'Hide values' : 'Show Values'"
       matTooltipPosition="below"
     >
-      @if(showValues) {
+      @if (showValues) {
         <mat-icon>visibility_off</mat-icon>
       }
-      @if(!showValues) {
+      @if (!showValues) {
         <mat-icon>visibility</mat-icon>
       }
-
     </button>
     <button
       (click)="panelAction()"
@@ -98,13 +85,12 @@
       [matTooltip]="allExpanded ? 'Minimize All' : 'Expand All'"
       matTooltipPosition="below"
     >
-      @if(allExpanded) {
+      @if (allExpanded) {
         <mat-icon>unfold_less</mat-icon>
       }
-      @if(!allExpanded) {
+      @if (!allExpanded) {
         <mat-icon>expand</mat-icon>
       }
-
     </button>
     <button
       (click)="openFilters()"
@@ -152,21 +138,13 @@
               ></mat-panel-title
             >
 
-            <mat-panel-description>
-              <div class="panel-actions" (click)="$event.stopPropagation()">
-                <fa-icon
-                  [icon]="faChartColumn"
-                  size="sm"
-                  [style]="{ color: '#3699ff' }"
-                ></fa-icon>
-              </div>
-            </mat-panel-description>
+            <mat-panel-description> </mat-panel-description>
           </mat-expansion-panel-header>
           <table
             mat-table
             matSort
             [dataSource]="allDataSource[i]"
-            class="mat-elevation-z8 dividend-table"
+            class="mat-elevation-z8"
             (matSortChange)="onSortData($event, i)"
           >
             <ng-container matColumnDef="select">
@@ -271,93 +249,50 @@
               <th mat-header-cell mat-sort-header *matHeaderCellDef>Amount</th>
               <td mat-cell *matCellDef="let element">
                 ¥{{ showValues ? (element.amount | number: "1.2-2") : "--" }}
-                <span
-                  *ngIf="element.notes"
-                  #tooltip="matTooltip"
-                  [matTooltip]="element.notes"
-                  matTooltipPosition="right"
-                  matTooltipClass="multiline-tooltip"
-                >
-                  <fa-icon
-                    [icon]="faMessage"
-                    [style]="{ color: '#3699ff' }"
-                  ></fa-icon>
-                </span>
               </td>
             </ng-container>
 
             <ng-container matColumnDef="Actions">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element">
-                <span class="transaction-actions" [matMenuTriggerFor]="menu">
-                  <fa-icon
-                    [icon]="faEllipsisV"
-                    size="lg"
-                    [style]="{ color: '#3699ff' }"
-                  ></fa-icon>
-                </span>
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item (click)="viewMoreInfo(element)">
-                    <fa-icon
-                      [icon]="faInfo"
-                      [style]="{ color: '#3699ff' }"
-                    ></fa-icon>
-                    <span class="transaction-action-item">View More</span>
+                    <mat-icon>info</mat-icon>
+                    <span>View More</span>
                   </button>
                   <button mat-menu-item (click)="editTransaction(element)">
-                    <fa-icon
-                      [icon]="faEdit"
-                      size="sm"
-                      [style]="{ color: '#3699ff' }"
-                    ></fa-icon>
-                    <span class="transaction-action-item">Edit</span>
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit</span>
                   </button>
                   <button
                     mat-menu-item
                     (click)="splitTransaction(element, i)"
                     *ngIf="transactionType !== INCOME"
                   >
-                    <fa-icon
-                      [icon]="faScissors"
-                      size="sm"
-                      [style]="{ color: '#3699ff' }"
-                    ></fa-icon>
-                    <span class="transaction-action-item">Split</span>
+                    <mat-icon>splitscreen</mat-icon>
+                    <span>split</span>
                   </button>
                   <button
                     mat-menu-item
                     (click)="showPayeeDetail(element.destination)"
                   >
-                    <fa-icon
-                      [icon]="faLink"
-                      size="sm"
-                      [style]="{ color: '#3699ff' }"
-                    ></fa-icon>
-                    <span class="transaction-action-item"
-                      >View Payee Details</span
-                    >
+                    <mat-icon>store</mat-icon>
+                    <span>View Payee details</span>
                   </button>
                   <button
                     mat-menu-item
                     [disabled]="!element.is_merge"
                     *ngIf="transactionType !== INCOME"
                   >
-                    <fa-icon
-                      [icon]="faList"
-                      size="sm"
-                      [style]="{ color: '#3699ff' }"
-                    ></fa-icon>
-                    <span class="transaction-action-item"
-                      >Show Merge history</span
-                    >
+                    <mat-icon>history</mat-icon>
+                    <span>Merge History</span>
                   </button>
                   <button mat-menu-item (click)="deleteTransaction(element)">
-                    <fa-icon
-                      [icon]="faTrash"
-                      size="sm"
-                      [style]="{ color: 'red' }"
-                    ></fa-icon>
-                    <span class="transaction-action-item">Delete</span>
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete</span>
                   </button>
                 </mat-menu>
               </td>

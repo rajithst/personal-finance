@@ -2,54 +2,15 @@
   margin: 10px 0;
 }
 
+.merge-panel {
+  display: flex;
+  > button {
+    margin: 0 2px;
+  }
+}
 .transaction-item-panel .mat-expansion-panel-header-description {
   justify-content: end;
   align-items: center;
-}
-
-table.transaction-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-table.transaction-table thead {
-  background-color: #f2f2f2;
-}
-
-table.transaction-table thead th,
-tbody td {
-  padding: 0 10px;
-  text-align: center;
-}
-
-table.transaction-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-table.transaction-table tbody tr:hover {
-  background-color: #f0f0f0;
-}
-
-table.transaction-table tbody td {
-  border-bottom: 1px solid #ddd;
-  line-height: 40px;
-}
-
-table.transaction-table tbody td:first-child {
-  font-weight: bold;
-}
-
-table.transaction-table tbody td:last-child {
-  font-style: italic;
-}
-
-.transaction-actions {
-  cursor: pointer;
-}
-
-.transaction-action-item {
-  margin-left: 10px;
-  font-size: 14px;
 }
 
 .highlight-merge-panel {
@@ -63,6 +24,7 @@ table.transaction-table tbody td:last-child {
   align-items: center;
   font-weight: 800;
   color: blue;
+  margin: 0 10px;
 }
 
 .filters-right {
@@ -114,31 +76,4 @@ table.transaction-table tbody td:last-child {
   text-align: center;
   font-weight: 800;
   font-size: 14px;
-}
-
-.search-container {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.icon-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-}
-
-.search-input {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 5px 10px;
-  margin-left: 10px;
-  width: 150px;
-  transition: width 0.3s ease-in-out;
-}
-
-.search-input:focus {
-  width: 200px;
-  outline: none;
 }

@@ -1,12 +1,9 @@
-.payee-table-container {
-  height: calc(100vh - 230px);
+mat-card {
+  margin-top: 10px;
+  height: calc(100vh - 200px);
   overflow: auto;
 }
-
-
 
 .payee-edit-icon {
   cursor: pointer;
 }
-
-

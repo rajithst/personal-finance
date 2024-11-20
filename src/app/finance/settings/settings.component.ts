@@ -1,9 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {ActivatedRoute, RouterLink, RouterOutlet} from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { DataService } from '../../service/data.service';
 import { MatNavList } from '@angular/material/list';
-import { MatSidenavContainer, MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
-import {MatTabLink, MatTabNav, MatTabNavPanel} from "@angular/material/tabs";
+import {
+  MatSidenavContainer,
+  MatSidenav,
+  MatSidenavContent,
+} from '@angular/material/sidenav';
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-settings',

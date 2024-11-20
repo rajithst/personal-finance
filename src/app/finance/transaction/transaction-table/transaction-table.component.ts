@@ -22,19 +22,6 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
-  faCodeMerge,
-  faEdit,
-  faEllipsisV,
-  faLink,
-  faList,
-  faPencil,
-  faScissors,
-  faTrash,
-  faChartColumn,
-  faMessage,
-  faInfo,
-} from '@fortawesome/free-solid-svg-icons';
-import {
   MatTableDataSource,
   MatTable,
   MatColumnDef,
@@ -94,7 +81,7 @@ import {
   DatePipe,
 } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import {MatButton, MatMiniFabButton} from "@angular/material/button";
+import {MatButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
 
 interface TransactionActionResult {
   refresh: boolean;
@@ -155,6 +142,7 @@ const DIALOG_TOP_POSITION = '5%';
     DatePipe,
     MatMiniFabButton,
     MatButton,
+    MatIconButton,
   ],
 })
 export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
@@ -197,17 +185,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     'TransactionType',
     'Actions',
   ];
-  protected readonly faTrash = faTrash;
-  protected readonly faEdit = faEdit;
-  protected readonly faList = faList;
-  protected readonly faScissors = faScissors;
-  protected readonly faEllipsisV = faEllipsisV;
-  protected readonly faPencil = faPencil;
-  protected readonly faCodeMerge = faCodeMerge;
-  protected readonly faChartColumn = faChartColumn;
-  protected readonly faLink = faLink;
-  protected readonly faMessage = faMessage;
-  protected readonly faInfo = faInfo;
   protected readonly destroyed$ = new ReplaySubject<void>(1);
   protected readonly INCOME = INCOME;
 
