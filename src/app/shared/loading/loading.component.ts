@@ -10,7 +10,7 @@ import {
   Router,
 } from '@angular/router';
 import { MatProgressBar } from '@angular/material/progress-bar';
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'loading',
@@ -19,22 +19,7 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
       <mat-spinner></mat-spinner>
     }
   `,
-  styles: `
-    .spinner-container {
-      position: fixed;
-      height: 100vh;
-      width: 100vw;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.32);
-      z-index: 20000;
-    }
-  `,
+  styles: ``,
   standalone: true,
   imports: [MatProgressBar, MatProgressSpinner],
 })

@@ -1,13 +1,7 @@
-import { Component, ElementRef, input, OnInit, viewChild } from '@angular/core';
-import Chart, { ChartTypeRegistry } from 'chart.js/auto';
+import { Component, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 
-export interface ChartConfig {
-  type: string;
-  data: any;
-  options: any;
-}
 @Component({
   selector: 'app-summary',
   standalone: true,
@@ -18,13 +12,17 @@ export interface ChartConfig {
         {{ summaryValue() }}
       </p>
       @if (iconText()) {
-        <mat-icon [style.color]="iconColor() ?? 'inherit'">{{iconText()}}</mat-icon>
+        <mat-icon [style.color]="iconColor() ?? 'inherit'">{{
+          iconText()
+        }}</mat-icon>
       }
     </div>
 
     <div class="stat-sub-text">
       @if (summarySubValue()) {
-        <span [style.color]="subValueColor() ?? 'inherit'">{{ summarySubValue() }}</span>
+        <span [style.color]="subValueColor() ?? 'inherit'">{{
+          summarySubValue()
+        }}</span>
       }
       @if (summarySubText()) {
         {{ summarySubText() }}
