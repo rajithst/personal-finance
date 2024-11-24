@@ -1,13 +1,1 @@
-<mat-tab-group mat-align-tabs="start" mat-stretch-tabs="false">
-  <mat-tab label="US Stocks">
-    <div class="table-container">
-      <app-dividend-table [dividends]="usDividends"></app-dividend-table>
-    </div>
-  </mat-tab>
-  <mat-tab label="Domestic Stocks">
-    <div class="table-container">
-      <app-dividend-table [dividends]="domesticDividends"></app-dividend-table>
-    </div>
-  </mat-tab>
-
-</mat-tab-group>
+<app-dividend-table [dividends]="domesticDividends"></app-dividend-table>

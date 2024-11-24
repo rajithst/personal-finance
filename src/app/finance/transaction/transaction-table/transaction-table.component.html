@@ -51,16 +51,8 @@
     </mat-chip-set>
   </div>
   <div class="edit-panel">
-    <input
-      *ngIf="isSearchBarVisible"
-      type="text"
-      placeholder="Search..."
-      class="search-input"
-      (blur)="this.isSearchBarVisible = false"
-    />
     <button
       class="coincraft-action-button"
-      (click)="this.isSearchBarVisible = !this.isSearchBarVisible"
       mat-mini-fab
       matTooltip="Search Transactions"
       matTooltipPosition="below"

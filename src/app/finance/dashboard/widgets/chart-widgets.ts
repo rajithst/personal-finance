@@ -4,7 +4,7 @@ import { DashboardService } from '../dashboard.service';
 import { TRANSACTION_TYPE_INCOME_ID } from '../../../shared/data/client.data';
 import { DataService } from '../../../service/data.service';
 import { ChartUtilityService } from '../chart-utils.service';
-import { ChartWidgetBase } from './chart-widget-base';
+import { ChartWidgetBase } from '../../../components/widget/chart-widget-base';
 
 @Component({
   selector: 'app-income-vs-payments',

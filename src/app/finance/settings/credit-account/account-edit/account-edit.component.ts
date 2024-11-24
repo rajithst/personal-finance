@@ -14,13 +14,14 @@ import {
   MatDialogClose,
 } from '@angular/material/dialog';
 import {
-  ACCOUNT_PROVIDER_DOCOMO_CARD,
-  ACCOUNT_PROVIDER_EPOS_CARD,
-  ACCOUNT_PROVIDER_MIZUHO,
-  ACCOUNT_PROVIDER_RAKUTEN,
-  CREDIT_ACCOUNT_TYPE_BANK_ACCOUNT,
-  CREDIT_ACCOUNT_TYPE_CREDIT_CARD,
+  ACCOUNT_TYPE_BANK_ACCOUNT,
+  ACCOUNT_TYPE_CREDIT_CARD,
+  ACCOUNT_TYPE_INVESTMENT_ACCOUNT,
+  ACCOUNT_TYPES,
+  BANK_ACCOUNT_PROVIDERS,
+  CREDIT_CARD_PROVIDERS,
   ERROR_ACTION,
+  INVESTMENT_ACCOUNT_PROVIDERS,
   SUCCESS_ACTION,
 } from '../../../../shared/data/client.data';
 import {
@@ -66,28 +67,28 @@ export class AccountEditComponent implements OnInit {
   data = inject<AccountEditDialogData>(MAT_DIALOG_DATA);
 
   creditAccountForm: FormGroup;
-  ACCOUNT_TYPES = [
-    CREDIT_ACCOUNT_TYPE_CREDIT_CARD,
-    CREDIT_ACCOUNT_TYPE_BANK_ACCOUNT,
-  ];
-  ACCOUNT_PROVIDERS = [
-    ACCOUNT_PROVIDER_RAKUTEN,
-    ACCOUNT_PROVIDER_MIZUHO,
-    ACCOUNT_PROVIDER_EPOS_CARD,
-    ACCOUNT_PROVIDER_DOCOMO_CARD,
-  ];
+
+  accountProviders: string[] = [];
+  accountTypeControl = new FormControl<string | null>(null,[Validators.required])
 
   ngOnInit() {
     this.creditAccountForm = this.getCreditAccountForm(this.data.account);
+    this.accountTypeControl.valueChanges.subscribe(value => {
+      if (value === ACCOUNT_TYPE_CREDIT_CARD) {
+        this.accountProviders = CREDIT_CARD_PROVIDERS;
+      } else if (value === ACCOUNT_TYPE_BANK_ACCOUNT) {
+        this.accountProviders = BANK_ACCOUNT_PROVIDERS;
+      } else if (value === ACCOUNT_TYPE_INVESTMENT_ACCOUNT) {
+        this.accountProviders = INVESTMENT_ACCOUNT_PROVIDERS;
+      }
+    })
   }
 
   private getCreditAccountForm(account: CreditAccount | null) {
+    this.accountTypeControl.setValue(account?.account_type ?? '', {emitEvent: true});
     return new FormGroup({
       id: new FormControl<number | null>(account ? account.id : null),
-      account_type: new FormControl<string>(
-        account ? account.account_type : '',
-        [Validators.required],
-      ),
+      account_type: this.accountTypeControl,
       account_name: new FormControl<string | null>(
         account ? account.account_name : null,
         [Validators.required],
@@ -122,4 +123,6 @@ export class AccountEditComponent implements OnInit {
       }
     });
   }
+
+  protected readonly ACCOUNT_TYPES = ACCOUNT_TYPES;
 }

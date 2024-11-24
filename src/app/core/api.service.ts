@@ -236,4 +236,15 @@ export class ApiService {
       `${this.SRC_URL}/investments/company`,
     );
   }
+
+  uploadHoldingTransactions(formData: FormData) {
+    return this.http.post(
+      `${this.SRC_URL}/investments/stocks/purchases/upload/`,
+      formData,
+      {
+        reportProgress: true,
+        observe: 'events',
+      },
+    );
+  }
 }
