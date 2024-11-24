@@ -1,10 +1,11 @@
-import {Component, ElementRef, input, OnInit, viewChild} from "@angular/core";
-import Chart, {ChartTypeRegistry} from "chart.js/auto";
+import { Component, ElementRef, input, OnInit, viewChild } from '@angular/core';
+import Chart, { ChartTypeRegistry } from 'chart.js/auto';
 
 export interface ChartConfig {
   type: string;
-  data: any
-  options: any
+  data: any;
+  plugins: any;
+  options: any;
 }
 @Component({
   selector: 'app-chart',
@@ -27,20 +28,25 @@ export class ChartComponent implements OnInit {
   chart = viewChild.required<ElementRef>('chart');
 
   ngOnInit() {
-    console.log(this.chartConfig().data);
     new Chart(this.chart().nativeElement, {
       type: this.chartConfig().type as keyof ChartTypeRegistry,
       data: this.chartConfig().data,
       options: {
+        ...this.chartConfig().options,
         maintainAspectRatio: true,
         responsive: true,
         elements: {
           line: {
-            tension: 0.4
-          }
+            tension: 0.4,
+          },
         },
-        plugins: this.chartConfig().options
+        plugins: {
+          ...this.chartConfig().plugins,
+          legend: {
+            position: 'bottom',
+          },
+        },
       },
-    })
+    });
   }
 }

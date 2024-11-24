@@ -8,6 +8,7 @@ $theme: mat.define-theme((
   )
 ));
 html {
+  @include mat.core-theme($theme);
   @include mat.all-component-themes($theme);
 }
 body {

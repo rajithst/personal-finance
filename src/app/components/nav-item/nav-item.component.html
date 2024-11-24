@@ -1,11 +1,12 @@
 <a
-  class="center-flex"
+  class="center-flex menu-item"
   mat-list-item
   [routerLink]="item().route"
   routerLinkActive="selected-menu-item"
   #rla="routerLinkActive"
   [activated]="rla.isActive"
   (click)="toggleNested()"
+
 >
   <mat-icon
     [fontSet]="rla.isActive ? 'material-icons' : 'material-icons-outlined'"

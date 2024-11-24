@@ -1,7 +1,12 @@
+@use '@angular/material' as mat;
+
 mat-toolbar {
   background: #d7e3ff;
   position: relative;
   z-index: 5;
+  @include mat.toolbar-overrides((
+    standard-height: 60px,
+  ));
 }
 
 .content {
@@ -17,11 +22,16 @@ mat-sidenav-content {
   transition: all 500ms ease-in-out;
 }
 
+mat-sidenav {
+  @include mat.sidenav-overrides((
+    container-divider-color: rgb(0, 0, 0, 0.1),
+    container-shape: 0px
+  ))
+}
 .main-container {
   height: calc(100vh - 64px);
   overflow: hidden;
   padding: 0 10px;
-  background: #faf7f7;
 }
 
 .nav-brand {
