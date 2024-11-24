@@ -14,8 +14,6 @@ import {DecimalPipe} from "@angular/common";
 import {MatChip} from "@angular/material/chips";
 import {MatIcon} from "@angular/material/icon";
 import {MatMiniFabButton} from "@angular/material/button";
-import {TransactionImportComponent} from "../../finance/transaction/transaction-import/transaction-import.component";
-import {SUCCESS_ACTION} from "../../shared/data/client.data";
 import {HoldingImportComponent} from "./holding-import/holding-import.component";
 
 const DIALOG_WIDTH = '900px';

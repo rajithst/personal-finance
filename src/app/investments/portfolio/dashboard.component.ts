@@ -7,7 +7,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../core/api.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import {Widget, WidgetComponent} from '../../components/widget/widget.component';
-import {TotalIncomeWidget} from "../../finance/dashboard/widgets/summary-widgets";
 import {TotalInvestmentWidget} from "./widgets/summary-widgets";
 import {PortfolioAllocationWidget} from "./widgets/chart-widgets";
 
@@ -49,8 +48,6 @@ export class PortfolioComponent implements OnInit {
   widgets: Widget[] = [];
   constructor() {
     const activatedRoute = inject(ActivatedRoute);
-    const settings$ = this.apiService.initSettings();
-    const dashboard$ = this.apiService.getDashboard();
     activatedRoute.data
       .pipe(takeUntil(this.destroyed$))
       .subscribe(({ investments }) => {

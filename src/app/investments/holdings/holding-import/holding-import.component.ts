@@ -12,8 +12,6 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {MatIcon} from "@angular/material/icon";
 import {provideNativeDateAdapter} from "@angular/material/core";
 import moment from "moment/moment";
-import {SUCCESS_ACTION} from "../../../shared/data/client.data";
-import {throwError} from "rxjs";
 import {ApiService} from "../../../core/api.service";
 
 @Component({
