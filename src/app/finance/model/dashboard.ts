@@ -1,4 +1,5 @@
 import { DropDownType } from '../../shared/data/shared.data';
+import {TransactionExpand} from "./transactions";
 
 export interface DashboardTransaction {
   year: number;
@@ -15,6 +16,7 @@ export interface DashboardResponse {
   payment: DashboardTransaction[];
   saving: DashboardTransaction[];
   income: DashboardTransaction[];
+  top_ten_expenses: Partial<TransactionExpand>[];
   category_wise_expenses: MonthlyCategorySum;
   account_wise_expenses: MonthlyCategorySum;
   payment_by_destination: MonthlyPayment;

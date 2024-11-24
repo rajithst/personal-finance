@@ -1,12 +1,12 @@
-import {Component, input, Type} from '@angular/core';
-import {NgComponentOutlet} from "@angular/common";
-import {MatIconButton} from "@angular/material/button";
-import {MatIcon} from "@angular/material/icon";
+import { Component, input, Type } from '@angular/core';
+import { NgComponentOutlet } from '@angular/common';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 export interface Widget {
   id: number;
   label: string;
-  content: Type<unknown>,
+  content: Type<unknown>;
   rows?: number;
   columns?: number;
   backgroundColor?: string;
@@ -19,20 +19,22 @@ export interface Widget {
   standalone: true,
   imports: [NgComponentOutlet, MatIconButton, MatIcon],
   template: `
-    <div class="container mat-elevation-z3"
-         [style.background-color]="data().backgroundColor ?? 'white'"
-         [style.color]="data().color ?? 'inherit'"
+    <div
+      class="container mat-elevation-z3"
+      [style.background-color]="data().backgroundColor ?? 'white'"
+      [style.color]="data().color ?? 'inherit'"
     >
-      <h3 class="widget-header">{{data().label}}</h3>
-      @if(!data().hideSettingsButton) {
-        <button mat-icon-button
-                class="widget-settings-button"
-                [style.--mdc-icon-button-icon-color]="data().color"
+      <h3 class="widget-header">{{ data().label }}</h3>
+      @if (!data().hideSettingsButton) {
+        <button
+          mat-icon-button
+          class="widget-settings-button"
+          [style.--mdc-icon-button-icon-color]="data().color"
         >
-          <mat-icon >settings</mat-icon>
+          <mat-icon>more_vert</mat-icon>
         </button>
       }
-      <ng-container [ngComponentOutlet]="data().content"/>
+      <ng-container [ngComponentOutlet]="data().content" />
     </div>
   `,
   styles: `
@@ -65,8 +67,9 @@ export interface Widget {
     }
   `,
   host: {
-    '[style.grid-area]': '"span "+(data().rows ?? 1) +"/ span "+(data().columns ?? 1)'
-  }
+    '[style.grid-area]':
+      '"span "+(data().rows ?? 1) +"/ span "+(data().columns ?? 1)',
+  },
 })
 export class WidgetComponent {
   data = input.required<Widget>();

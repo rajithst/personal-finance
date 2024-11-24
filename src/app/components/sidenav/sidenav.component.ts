@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import {Component, computed, Input, signal} from '@angular/core';
 import { MatListModule, MatNavList } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { NgIf } from '@angular/common';
@@ -33,6 +33,8 @@ export class SidenavComponent {
   @Input() set collapsed(value: boolean) {
     this.sideNavCollapsed.set(value);
   }
+  logoHeight = computed(() => this.sideNavCollapsed() ? '32': '100');
+  logoWidth = computed(() => this.sideNavCollapsed() ? '32': '180');
   menuItems = signal<MenuItem[]>([
     {
       display_name: 'Dashboard',

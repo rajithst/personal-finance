@@ -11,11 +11,12 @@ import {
 } from '../../components/widget/widget.component';
 import { DashboardService } from './dashboard.service';
 import {
+  CashFlowWidget,
   IncomeVsPaymentsWidget,
   IncomeVsSavingsWidget,
   MonthlyAccountUsageWidget,
   MonthlyExpenseCategoryWidget,
-  MonthlyPaymentCategoryWidget,
+  MonthlyPaymentCategoryWidget, TopExpensesWidget,
 } from './widgets/chart-widgets';
 import {
   TotalExpenseWidget,
@@ -23,6 +24,7 @@ import {
   TotalPaymentsWidget,
   TotalSavingsWidget,
 } from './widgets/summary-widgets';
+import {ChartUtilityService} from "./chart-utils.service";
 
 @Component({
   selector: 'app-transaction-dashboard',
@@ -47,13 +49,14 @@ import {
   imports: [
     WidgetComponent,
   ],
-  providers: [DashboardService],
+  providers: [DashboardService, ChartUtilityService],
 })
 export class TransactionDashboardComponent implements OnDestroy {
   private readonly dataService = inject(DataService);
   private readonly apiService = inject(ApiService);
   protected readonly destroyed$ = new ReplaySubject<void>(1);
-  readonly widgetStore = inject(DashboardService);
+  readonly dashboardService = inject(DashboardService);
+  readonly chartUtilityService = inject(ChartUtilityService);
 
   dashboardData: DashboardResponse;
   widgets: Widget[] = [];
@@ -65,7 +68,7 @@ export class TransactionDashboardComponent implements OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe(({ settings, dashboard }) => {
         this.dataService.setClientSettings(settings);
-        this.widgetStore.setDashboardData(dashboard);
+        this.dashboardService.setDashboardData(dashboard);
         this.prepareWidgets();
       });
   }
@@ -114,43 +117,50 @@ export class TransactionDashboardComponent implements OnDestroy {
       },
       {
         id: 1,
-        label: 'Income vs Payments',
+        label: `Cashflow Breakdown (${this.chartUtilityService.getCurrentYear()})`,
+        content: CashFlowWidget,
+        rows: 3,
+        columns: 2,
+      },
+      {
+        id: 1,
+        label: `Income vs Payments (${this.chartUtilityService.getCurrentYear()})`,
         content: IncomeVsPaymentsWidget,
         rows: 3,
         columns: 2,
       },
       {
         id: 1,
-        label: 'Income vs Savings',
+        label: `Income vs Savings (${this.chartUtilityService.getCurrentYear()})`,
         content: IncomeVsSavingsWidget,
         rows: 3,
         columns: 2,
       },
       {
         id: 1,
-        label: 'Spending Breakdown',
+        label: `Spending Breakdown (${this.chartUtilityService.getCurrentMonth()})`,
         content: MonthlyExpenseCategoryWidget,
         rows: 3,
         columns: 1,
       },
       {
         id: 1,
-        label: 'Payment Breakdown',
+        label: `Payment Breakdown (${this.chartUtilityService.getCurrentMonth()})`,
         content: MonthlyPaymentCategoryWidget,
         rows: 3,
         columns: 1,
       },
       {
         id: 1,
-        label: 'Account usage breakdown',
-        content: MonthlyAccountUsageWidget,
+        label: `Top Expenses (${this.chartUtilityService.getCurrentMonth()})`,
+        content: TopExpensesWidget,
         rows: 3,
-        columns: 1,
+        columns: 2,
       },
       {
         id: 1,
-        label: 'Monthly Expense',
-        content: MonthlyExpenseCategoryWidget,
+        label: `Account usage (${this.chartUtilityService.getCurrentMonth()})`,
+        content: MonthlyAccountUsageWidget,
         rows: 3,
         columns: 1,
       },
