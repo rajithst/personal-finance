@@ -214,7 +214,6 @@ export class MonthlyAccountUsageWidget implements OnInit {
 export class MonthlyPaymentCategoryWidget implements OnInit {
   private dashboardService = inject(DashboardService);
   private chartUtility = inject(ChartUtilityService);
-  private dataService = inject(DataService);
   labels: string[] = [];
   datasets: any[] = [];
   ngOnInit() {
