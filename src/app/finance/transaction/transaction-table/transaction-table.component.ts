@@ -1,9 +1,8 @@
 import {
   Component,
   computed,
-  ElementRef,
   inject,
-  Input,
+  input,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -57,7 +56,6 @@ import {
 } from '../../model/common';
 import { TransactionImportComponent } from '../transaction-import/transaction-import.component';
 import { EXPENSE, INCOME } from '../../../shared/data/shared.data';
-import { ApiService } from '../../../core/api.service';
 import { CreditAccount } from '../../model/account';
 import { TransactionViewMoreDialog } from './view-more/view-more.component';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
@@ -86,6 +84,7 @@ import {
   MatIconButton,
   MatMiniFabButton,
 } from '@angular/material/button';
+import { LoadingComponent } from '../../../shared/loading/loading.component';
 
 interface TransactionActionResult {
   refresh: boolean;
@@ -147,20 +146,18 @@ const DIALOG_TOP_POSITION = '5%';
     MatMiniFabButton,
     MatButton,
     MatIconButton,
+    LoadingComponent,
   ],
 })
 export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() transactions: MonthlyTransaction[];
-  @Input() transactionType: string;
+  transactions = input.required<MonthlyTransaction[]>();
+  transactionType = input.required<string>();
   accordion = viewChild.required(MatAccordion);
-  filterButton = viewChild<ElementRef>('filterButton');
-
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly loadingService = inject(LoadingService);
   private readonly dataService = inject(DataService);
   private readonly router = inject(Router);
-  private readonly apiService = inject(ApiService);
 
   totalAnnualAmount = signal<number>(0);
   segments = signal(this.router.url.split('/'));
@@ -169,8 +166,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     return this.segments().at(segmentLength - 1);
   });
 
-  isSearchBarVisible = false;
-  noData = true;
+  loading = computed(() => this.transactions().length == 0);
   showValues = false;
   selection = new SelectionModel<TransactionExpand>(true, []);
   allDataSource: MatTableDataSource<TransactionExpand>[] = [];
@@ -197,6 +193,10 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     this.dataService.getAllSubCategories();
   TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getAllCategories();
+
+  constructor() {
+    this.loadingService.loadingOn();
+  }
 
   ngOnInit(): void {
     if (this.lastSegment() !== EXPENSE) {
@@ -227,9 +227,8 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    this.noData = this.transactions.length == 0;
     this.allTransactions =
-      this.transactions.length > 0 ? this.transactions : [];
+      this.transactions().length > 0 ? this.transactions() : [];
     this.totalAnnualAmount.set(0);
     this.allTransactions.forEach((x: MonthlyTransaction, index: number) => {
       this.allDataSource.splice(
@@ -244,18 +243,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.createFilterChips();
     this.applyFiltersToTables();
-  }
-
-  reConfirmInitSettings() {
-    if (
-      this.TRANSACTION_CATEGORIES.length === 0 ||
-      this.TRANSACTION_SUB_CATEGORIES.length === 0 ||
-      this.CREDIT_ACCOUNTS.length === 0
-    ) {
-      this.apiService.initSettings().subscribe((value) => {
-        this.dataService.setClientSettings(value);
-      });
-    }
   }
 
   editTransaction(item: TransactionExpand) {

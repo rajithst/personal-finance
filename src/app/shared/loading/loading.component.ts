@@ -16,10 +16,40 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
   selector: 'loading',
   template: `
     @if (loading()) {
-      <mat-spinner></mat-spinner>
+      <div class="spinner-container">
+        <div class="backdrop"></div>
+        <mat-spinner class="spinner"></mat-spinner>
+      </div>
     }
   `,
-  styles: ``,
+  styles: `
+    .spinner-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000; /* Ensure it appears above other content */
+    }
+
+    .backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+      z-index: -1; /* Ensure the backdrop is behind the spinner */
+    }
+
+    .spinner {
+      z-index: 1001; /* Spinner should be above the backdrop */
+    }
+
+  `,
   standalone: true,
   imports: [MatProgressBar, MatProgressSpinner],
 })

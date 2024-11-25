@@ -33,6 +33,8 @@ import { MatIcon } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import moment from 'moment/moment';
 import { ApiService } from '../../../core/api.service';
+import { DataService } from '../../../service/data.service';
+import { ACCOUNT_TYPE_INVESTMENT_ACCOUNT } from '../../../shared/data/client.data';
 
 @Component({
   selector: 'app-holding-import',
@@ -68,6 +70,7 @@ import { ApiService } from '../../../core/api.service';
 })
 export class HoldingImportComponent {
   private readonly apiService = inject(ApiService);
+  private readonly dataService = inject(DataService);
 
   accountForm = new FormGroup({
     account: new FormControl<number | null>(null),
@@ -83,7 +86,9 @@ export class HoldingImportComponent {
     drop_duplicates: new FormControl<boolean>(true),
     from_last_import_date: new FormControl<boolean>(false),
   });
-  myAccounts: any[] = [];
+  myAccounts: any[] = this.dataService
+    .getAccounts()
+    .filter((x) => x.account_type === ACCOUNT_TYPE_INVESTMENT_ACCOUNT);
   files: Array<File> = [];
 
   onChange(event: any) {

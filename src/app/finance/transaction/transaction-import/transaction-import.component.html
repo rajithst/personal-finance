@@ -1,118 +1,131 @@
 <h2 mat-dialog-title>Import Transaction</h2>
 <mat-dialog-content>
-  <mat-stepper #stepper [linear]="true" orientation="vertical">
-    <mat-step>
-      <div class="step-content">
-        <form [formGroup]="accountForm">
-          <ng-template matStepLabel>Select Account</ng-template>
-          <mat-form-field appearance="outline" class="coincraft-input">
-            <mat-label>Account</mat-label>
-            <mat-select formControlName="account">
-              @for (exc of this.myAccounts; track exc) {
-                <mat-option [value]="exc.id">{{ exc.account_name }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-          <div class="step-actions">
-            <button color="primary" mat-raised-button matStepperNext>
-              Next
+  @if(!clickSubmit) {
+    <mat-stepper #stepper [linear]="true" orientation="vertical">
+      <mat-step>
+        <div class="step-content">
+          <form [formGroup]="accountForm">
+            <ng-template matStepLabel>Select Account</ng-template>
+            <mat-form-field appearance="outline" class="coincraft-input">
+              <mat-label>Account</mat-label>
+              <mat-select formControlName="account">
+                @for (exc of this.myAccounts; track exc) {
+                  <mat-option [value]="exc.id">{{ exc.account_name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <div class="step-actions">
+              <button color="primary" mat-raised-button matStepperNext>
+                Next
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-step>
+      <mat-step>
+        <div class="step-content">
+          <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Attach Files</ng-template>
+            <button (click)="fileUpload.click()" color="warn" mat-button>
+              <mat-icon>file_upload</mat-icon>
+              Upload
             </button>
-          </div>
-        </form>
-      </div>
-    </mat-step>
-    <mat-step>
-      <div class="step-content">
-        <form [formGroup]="secondFormGroup">
-          <ng-template matStepLabel>Attach Files</ng-template>
-          <button (click)="fileUpload.click()" color="warn" mat-button>
-            <mat-icon>file_upload</mat-icon>
-            Upload
-          </button>
-          <ul>
-            @for (exc of this.files; track exc) {
-              <li>
-                {{ exc.name }}
-                <span (click)="deleteAttachment(exc.name)"
-                  ><fa-icon [icon]="faTrash"></fa-icon
-                ></span>
-              </li>
-            }
-          </ul>
-          <input
-            #fileUpload
-            (change)="onChange($event)"
-            class="file-input"
-            multiple
-            style="display: none"
-            type="file"
-          />
+            <ul>
+              @for (exc of this.files; track exc) {
+                <li>
+                  {{ exc.name }}
+                  <button mat-icon-button aria-label="delete button" (click)="deleteAttachment(exc.name)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+
+                </li>
+              }
+            </ul>
+            <input
+              #fileUpload
+              (change)="onChange($event)"
+              class="file-input"
+              multiple
+              style="display: none"
+              type="file"
+            />
+            <div class="step-actions">
+              <button mat-raised-button matStepperPrevious>Back</button>
+              <button color="primary" mat-raised-button matStepperNext>
+                Next
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Advanced Settings</ng-template>
+        <div class="step-content">
+          <mat-form-field class="coincraft-input">
+            <mat-label>Date range</mat-label>
+            <mat-date-range-input [formGroup]="rangeForm" [rangePicker]="picker">
+              <input
+                formControlName="start"
+                matStartDate
+                placeholder="Start date"
+              />
+              <input formControlName="end" matEndDate placeholder="End date" />
+            </mat-date-range-input>
+            <mat-datepicker-toggle
+              [for]="picker"
+              matIconSuffix
+            ></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+          <section [formGroup]="otherInfoForm" class="example-section">
+            <p>
+              <mat-checkbox formControlName="drop_duplicates"
+              >Drop Duplicates
+              </mat-checkbox>
+            </p>
+            <p>
+              <mat-checkbox formControlName="from_last_import_date"
+              >Import from last date ({{
+                  getLastImportDate() | date: "MMMM d, y"
+                }})
+              </mat-checkbox>
+            </p>
+          </section>
           <div class="step-actions">
             <button mat-raised-button matStepperPrevious>Back</button>
-            <button color="primary" mat-raised-button matStepperNext>
-              Next
-            </button>
+            <button color="primary" mat-raised-button matStepperNext>Next</button>
           </div>
-        </form>
-      </div>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Advanced Settings</ng-template>
-      <div class="step-content">
-        <mat-form-field class="coincraft-input">
-          <mat-label>Date range</mat-label>
-          <mat-date-range-input [formGroup]="rangeForm" [rangePicker]="picker">
-            <input
-              formControlName="start"
-              matStartDate
-              placeholder="Start date"
-            />
-            <input formControlName="end" matEndDate placeholder="End date" />
-          </mat-date-range-input>
-          <mat-datepicker-toggle
-            [for]="picker"
-            matIconSuffix
-          ></mat-datepicker-toggle>
-          <mat-date-range-picker #picker></mat-date-range-picker>
-        </mat-form-field>
-        <section [formGroup]="otherInfoForm" class="example-section">
-          <p>
-            <mat-checkbox formControlName="drop_duplicates"
-              >Drop Duplicates
-            </mat-checkbox>
-          </p>
-          <p>
-            <mat-checkbox formControlName="from_last_import_date"
-              >Import from last date ({{
-                getLastImportDate() | date: "MMMM d, y"
-              }})
-            </mat-checkbox>
-          </p>
-        </section>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Review And Import</ng-template>
+        <div class="step-content">
+          <p>Import with settings.</p>
+        </div>
         <div class="step-actions">
           <button mat-raised-button matStepperPrevious>Back</button>
-          <button color="primary" mat-raised-button matStepperNext>Next</button>
+          <button
+            (click)="import()"
+            [disabled]="!isValidToSubmit()"
+            color="primary"
+            mat-raised-button
+          >
+            Import
+          </button>
         </div>
-      </div>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Review And Import</ng-template>
-      <div class="step-content">
-        <p>Import with settings.</p>
-      </div>
-      <div class="step-actions">
-        <button mat-raised-button matStepperPrevious>Back</button>
-        <button
-          (click)="import()"
-          [disabled]="!isValidToSubmit()"
-          color="primary"
-          mat-raised-button
-        >
-          Import
-        </button>
-      </div>
-    </mat-step>
-  </mat-stepper>
+      </mat-step>
+    </mat-stepper>
+  }
+  @if (clickSubmit) {
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <h3 class="import-title">Importing data.</h3>
+        <p>Progress: {{progress}}% </p>
+        <mat-progress-bar mode="buffer" bufferValue="100" value="{{progress}}"></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+  }
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

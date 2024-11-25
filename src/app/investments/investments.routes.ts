@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { PortfolioComponent } from './portfolio/dashboard.component';
+import { PortfolioComponent } from './portfolio/portfolio.component';
 import { InvestmentsComponent } from './investments.component';
 import { HoldingsComponent } from './holdings/holdings.component';
 import { DividendComponent } from './dividend/dividend.component';

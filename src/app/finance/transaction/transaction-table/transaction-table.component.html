@@ -112,17 +112,17 @@
   </div>
 </div>
 <div class="transaction-panel-container">
-  @if (noData) {
+  @if (loading()) {
     <mat-card appearance="outlined">
       <mat-card-content>
-        <p class="no-records-message">No Records! Try changing filters.</p>
+        <p class="no-records-message">Loading...</p>
       </mat-card-content>
     </mat-card>
   }
-  @if (!noData) {
+  @if (!loading()) {
     <mat-accordion class="transaction-item-panel" multi="true">
       @for (data of allTransactions; track data; let i = $index) {
-        <mat-expansion-panel class="transaction-panel">
+        <mat-expansion-panel class="transaction-panel" #monthlyPanel>
           <mat-expansion-panel-header>
             <mat-panel-title
               >{{ data.year }} - {{ data.month_text }} :
@@ -263,7 +263,7 @@
                   <button
                     mat-menu-item
                     (click)="splitTransaction(element, i)"
-                    *ngIf="transactionType !== INCOME"
+                    *ngIf="transactionType() !== INCOME"
                   >
                     <mat-icon>splitscreen</mat-icon>
                     <span>split</span>
@@ -278,7 +278,7 @@
                   <button
                     mat-menu-item
                     [disabled]="!element.is_merge"
-                    *ngIf="transactionType !== INCOME"
+                    *ngIf="transactionType() !== INCOME"
                   >
                     <mat-icon>history</mat-icon>
                     <span>Merge History</span>
