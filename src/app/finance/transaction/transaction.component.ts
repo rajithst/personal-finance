@@ -55,6 +55,7 @@ export class FinanceComponent {
     { label: 'Savings', route: 'saving' },
   ];
   activeLink = this.tabs[0];
+
   changeFilterYear(direction: string) {
     this.loadingService.loadingOn();
     if (direction === 'prev') {
@@ -79,6 +80,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   protected loadingService = inject(LoadingService);
   protected readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly dataService = inject(DataService);
+
   ngOnInit(): void {
     this.dataService.yearSwitch$
       .pipe(takeUntil(this.destroyed$))

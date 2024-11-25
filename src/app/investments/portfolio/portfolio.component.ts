@@ -1,17 +1,18 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { NgClass, DecimalPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../core/api.service';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { forkJoin, ReplaySubject, takeUntil } from 'rxjs';
 import {
   Widget,
   WidgetComponent,
 } from '../../components/widget/widget.component';
 import { TotalInvestmentWidget } from './widgets/summary-widgets';
 import { PortfolioAllocationWidget } from './widgets/chart-widgets';
+import { DataService } from '../../service/data.service';
+import { PortfolioService } from './portfolio.service';
 
 @Component({
   selector: 'app-portfolio',
@@ -43,23 +44,26 @@ import { PortfolioAllocationWidget } from './widgets/chart-widgets';
     DecimalPipe,
     WidgetComponent,
   ],
+  providers: [PortfolioService],
 })
-export class PortfolioComponent implements OnInit {
-  private readonly apiService = inject(ApiService);
+export class PortfolioComponent implements OnDestroy {
   protected readonly destroyed$ = new ReplaySubject<void>(1);
-
   widgets: Widget[] = [];
-  constructor() {
-    const activatedRoute = inject(ActivatedRoute);
-    activatedRoute.data
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(({ investments }) => {
-        console.log(investments);
-      });
-  }
 
-  ngOnInit(): void {
-    this.prepareWidgets();
+  constructor() {
+    const apiService = inject(ApiService);
+    const dataService = inject(DataService);
+    const portfolioService = inject(PortfolioService);
+    const settings$ = apiService.initSettings();
+    const portfolio$ = apiService.getPortfolio();
+
+    forkJoin({ settings: settings$, portfolio: portfolio$ })
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(({ settings, portfolio }) => {
+        dataService.setClientSettings(settings);
+        portfolioService.setPortfolioData(portfolio);
+        this.prepareWidgets();
+      });
   }
 
   prepareWidgets() {

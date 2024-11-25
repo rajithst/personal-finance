@@ -37,7 +37,7 @@ import {
 import { MyProfile } from '../finance/model/profile';
 import { JwtTokenResponse } from '../auth/model';
 import { CreditAccount, CreditAccountRequest } from '../finance/model/account';
-import { InvestmentDashboard } from '../investments/model/dashboard';
+import {PortfolioResponse} from "../investments/model/portfolio";
 
 @Injectable({
   providedIn: 'root',
@@ -151,7 +151,7 @@ export class ApiService {
       formData,
       {
         reportProgress: true,
-        observe: 'events',
+        observe: 'events' as const,
       },
     );
   }
@@ -196,9 +196,9 @@ export class ApiService {
 
   /* Investment Module APIs*/
 
-  getInvestmentDashboard(): Observable<InvestmentDashboard> {
-    return this.http.get<InvestmentDashboard>(
-      `${this.SRC_URL}/investments/dashboard/`,
+  getPortfolio(): Observable<PortfolioResponse> {
+    return this.http.get<PortfolioResponse>(
+      `${this.SRC_URL}/investments/portfolio/`,
     );
   }
 

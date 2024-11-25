@@ -1,10 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import {
-  ActivatedRoute,
-  RouterLink,
-  RouterLinkActive,
-  RouterOutlet,
-} from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 
 @Component({
@@ -37,8 +32,7 @@ import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
     MatTabNavPanel,
   ],
 })
-export class InvestmentsComponent implements OnInit {
-  private readonly activatedRoute = inject(ActivatedRoute);
+export class InvestmentsComponent {
   tabs = [
     { label: 'Portfolio', route: 'portfolio' },
     { label: 'Holdings', route: 'holdings' },
@@ -46,7 +40,4 @@ export class InvestmentsComponent implements OnInit {
     { label: 'Purchase History', route: 'purchase-history' },
   ];
   activeLink = this.tabs[0];
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ investments }) => {});
-  }
 }

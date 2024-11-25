@@ -2,32 +2,32 @@ import { Component, inject } from '@angular/core';
 import { ApiService } from '../../../core/api.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DataService } from '../../../service/data.service';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { throwError } from 'rxjs';
 import {
-  MatDialogRef,
-  MatDialogTitle,
-  MatDialogContent,
   MatDialogActions,
   MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
 } from '@angular/material/dialog';
 import {
+  ACCOUNT_TYPE_BANK_ACCOUNT,
+  ACCOUNT_TYPE_CREDIT_CARD,
   CANCEL_ACTION,
-  SUCCESS_ACTION,
 } from '../../../shared/data/client.data';
 import moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { MatCheckbox } from '@angular/material/checkbox';
 import {
-  MatDateRangeInput,
-  MatStartDate,
-  MatEndDate,
   MatDatepickerToggle,
+  MatDateRangeInput,
   MatDateRangePicker,
+  MatEndDate,
+  MatStartDate,
 } from '@angular/material/datepicker';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatIcon } from '@angular/material/icon';
-import { MatButton } from '@angular/material/button';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import { MatOption, provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import {
@@ -36,13 +36,16 @@ import {
   MatSuffix,
 } from '@angular/material/form-field';
 import {
-  MatStepper,
   MatStep,
   MatStepLabel,
+  MatStepper,
   MatStepperNext,
   MatStepperPrevious,
 } from '@angular/material/stepper';
 import { CdkScrollable } from '@angular/cdk/scrolling';
+import { HttpEventType } from '@angular/common/http';
+import {MatProgressBar} from "@angular/material/progress-bar";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-transaction-import',
@@ -76,6 +79,10 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
     MatDialogActions,
     MatDialogClose,
     DatePipe,
+    MatProgressBar,
+    MatCard,
+    MatCardContent,
+    MatIconButton,
   ],
   providers: [provideNativeDateAdapter()],
 })
@@ -84,11 +91,15 @@ export class TransactionImportComponent {
   private readonly dataService = inject(DataService);
   private readonly dialogRef = inject(MatDialogRef<TransactionImportComponent>);
 
-  protected readonly faTrash = faTrash;
+  creditAccountTypes = [ACCOUNT_TYPE_CREDIT_CARD, ACCOUNT_TYPE_BANK_ACCOUNT];
 
-  status: 'initial' | 'uploading' | 'success' | 'fail' = 'initial';
+  progress = 0;
+  clickSubmit = false;
+  uploadComplete = false;
   files: Array<File> = [];
-  myAccounts = this.dataService.getAccounts();
+  myAccounts = this.dataService
+    .getAccounts()
+    .filter((x) => this.creditAccountTypes.includes(x.account_type));
 
   accountForm = new FormGroup({
     account: new FormControl<number | null>(null),
@@ -116,6 +127,7 @@ export class TransactionImportComponent {
   }
 
   import() {
+    this.clickSubmit = true;
     const formData = new FormData();
     this.files.forEach((x) => {
       formData.append('files', x);
@@ -141,15 +153,19 @@ export class TransactionImportComponent {
     formData.append('end_date', importEndDate);
     const upload$ = this.apiService.uploadTransactions(formData);
     upload$.subscribe({
-      next: () => {
-        this.dialogRef.close({
-          refresh: true,
-          data: null,
-          action: SUCCESS_ACTION,
-        });
+      next: (event) => {
+        switch (event.type) {
+          case HttpEventType.UploadProgress:
+            if (event.total) {
+              this.progress = Math.round((event.loaded / event.total) * 100);
+            }
+            break;
+          case HttpEventType.Response:
+            this.progress = 100;
+            this.uploadComplete = true;
+        }
       },
       error: (error: any) => {
-        this.status = 'fail';
         return throwError(() => error);
       },
     });
