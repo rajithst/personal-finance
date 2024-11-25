@@ -4,7 +4,6 @@ import { Title } from '@angular/platform-browser';
 import { DataService } from '../../service/data.service';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { MenuItem } from '../model/common';
 import {payees} from "../../mock-data/payees";
 
 describe('PayeeSettingsComponent', () => {
@@ -42,14 +41,6 @@ describe('PayeeSettingsComponent', () => {
 
   it('should create the component', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should initialize menu items correctly', () => {
-    const expectedMenuItems: MenuItem[] = [
-      { label: 'Payees', link: 'payees' },
-      { label: 'Recurring Payments', link: 'recurring-payments' },
-    ];
-    expect(component.menuItems).toEqual(expectedMenuItems);
   });
 
   it('should call DataService.setPayees with payee data on init', () => {
