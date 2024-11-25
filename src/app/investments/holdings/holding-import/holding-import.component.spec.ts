@@ -1,19 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NavItemComponent } from './nav-item.component';
+import { HoldingImportComponent } from './holding-import.component';
 
-describe('NavItemComponent', () => {
-  let component: NavItemComponent;
-  let fixture: ComponentFixture<NavItemComponent>;
+describe('HoldingImportComponent', () => {
+  let component: HoldingImportComponent;
+  let fixture: ComponentFixture<HoldingImportComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [],
-      imports: [NavItemComponent]
+      declarations: [HoldingImportComponent]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(NavItemComponent);
+    
+    fixture = TestBed.createComponent(HoldingImportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

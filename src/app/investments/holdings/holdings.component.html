@@ -1,68 +1,52 @@
-<mat-grid-list
-  [gutterSize]="'5px'"
-  class="filter-toolbar"
-  cols="3"
-  rowHeight="40px"
->
-  <mat-grid-tile>
-    <div class="toolbar-header">
-      <h2>Protofolio</h2>
-    </div>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <div class="search-bar-wrapper">
-      <input
-        #searchInput
-        (keyup)="applyFilter()"
-        class="search-bar"
-        placeholder="Search"
-        type="text"
-      />
-    </div>
-
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <div class="filters-right">
-      <div class="edit-panel">
-        <div
-          class="coincraft-action-button"
-          matRipple
-          matTooltip="Upload Transactions"
-          matTooltipPosition="below"
-        >
-          <fa-icon
-            [icon]="faUpload"
-            [style]="{ color: '#4a4949' }"
-            size="1x"
-          ></fa-icon>
-        </div>
-        <div
-          (click)="addTransaction()"
-          class="coincraft-action-button"
-          matRipple
-          matTooltip="Add Transactions"
-          matTooltipPosition="below"
-        >
-          <fa-icon
-            [icon]="faCirclePlus"
-            [style]="{ color: '#4a4949' }"
-            size="1x"
-          ></fa-icon>
-        </div>
-      </div>
-    </div>
-  </mat-grid-tile>
-</mat-grid-list>
-<mat-tab-group mat-align-tabs="start" mat-stretch-tabs="false">
-  <mat-tab label="US Stocks">
-    <div class="table-container">
-      <app-holding-table [holdings]="usHoldings"></app-holding-table>
-    </div>
-  </mat-tab>
-  <mat-tab label="Domestic Stocks">
-    <div class="table-container">
-      <app-holding-table [holdings]="domesticHoldings"></app-holding-table>
-    </div>
-  </mat-tab>
-</mat-tab-group>
-
+<div class="filters-right">
+  <div class="info-panel">
+  </div>
+  <div class="edit-panel">
+    <button
+      class="coincraft-action-button"
+      mat-mini-fab
+      matTooltip="Search Transactions"
+      matTooltipPosition="below"
+    >
+      <mat-icon>search</mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      (click)="showValueAction()"
+      [matTooltip]="showValues ? 'Hide values' : 'Show Values'"
+      matTooltipPosition="below"
+    >
+      @if (showValues) {
+        <mat-icon>visibility_off</mat-icon>
+      }
+      @if (!showValues) {
+        <mat-icon>visibility</mat-icon>
+      }
+    </button>
+    <button
+      (click)="openFilters()"
+      mat-mini-fab
+      matTooltip="Filter Transactions"
+      matTooltipPosition="below"
+    >
+      <mat-icon>filter_alt</mat-icon>
+    </button>
+    <button
+      (click)="importTransaction()"
+      mat-mini-fab
+      matTooltip="Upload Transactions"
+      matTooltipPosition="below"
+    >
+      <mat-icon>upload</mat-icon>
+    </button>
+    <button
+      (click)="addTransaction()"
+      mat-mini-fab
+      matTooltip="Add Transactions"
+      matTooltipPosition="below"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>
+<app-holding-table [holdings]="usHoldings"></app-holding-table>

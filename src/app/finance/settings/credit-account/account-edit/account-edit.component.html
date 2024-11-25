@@ -20,7 +20,7 @@
           <mat-form-field appearance="outline" class="fill coincraft-input">
             <mat-label>Account Provider</mat-label>
             <mat-select formControlName="provider">
-              @for (exc of ACCOUNT_PROVIDERS; track exc) {
+              @for (exc of accountProviders; track exc) {
                 <mat-option [value]="exc">
                   {{ exc }}
                 </mat-option>

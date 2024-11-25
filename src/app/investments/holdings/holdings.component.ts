@@ -10,22 +10,34 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatRipple } from '@angular/material/core';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
+import {DecimalPipe} from "@angular/common";
+import {MatChip} from "@angular/material/chips";
+import {MatIcon} from "@angular/material/icon";
+import {MatMiniFabButton} from "@angular/material/button";
+import {HoldingImportComponent} from "./holding-import/holding-import.component";
+
+const DIALOG_WIDTH = '900px';
+const DIALOG_TOP_POSITION = '5%';
 
 @Component({
-    selector: 'app-holdings',
-    templateUrl: './holdings.component.html',
-    styleUrl: './holdings.component.scss',
-    standalone: true,
-    imports: [
-        MatGridList,
-        MatGridTile,
-        MatRipple,
-        MatTooltip,
-        FaIconComponent,
-        MatTabGroup,
-        MatTab,
-        HoldingTableComponent,
-    ],
+  selector: 'app-holdings',
+  templateUrl: './holdings.component.html',
+  styleUrl: './holdings.component.scss',
+  standalone: true,
+  imports: [
+    MatGridList,
+    MatGridTile,
+    MatRipple,
+    MatTooltip,
+    FaIconComponent,
+    MatTabGroup,
+    MatTab,
+    HoldingTableComponent,
+    DecimalPipe,
+    MatChip,
+    MatIcon,
+    MatMiniFabButton,
+  ],
 })
 export class HoldingsComponent implements OnInit {
   holdings: Holding[] = [];
@@ -35,14 +47,14 @@ export class HoldingsComponent implements OnInit {
   protected readonly faUpload = faUpload;
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  showValues = true;
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   addTransaction() {
     const dialog = this.dialog.open(HoldingUpdateComponent, {
-      width: '800px',
-      height: '500px',
+      maxWidth: '800px',
+      maxHeight: '500px',
       position: {
         top: '10%',
       },
@@ -58,4 +70,21 @@ export class HoldingsComponent implements OnInit {
   }
 
   applyFilter() {}
+
+  importTransaction() {
+    const dialog = this.dialog.open(HoldingImportComponent, {
+      maxWidth: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
+    });
+  }
+
+  openFilters() {
+
+  }
+
+  showValueAction() {
+
+  }
 }

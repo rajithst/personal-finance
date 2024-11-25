@@ -38,7 +38,7 @@ export class SidenavComponent {
   menuItems = signal<MenuItem[]>([
     {
       display_name: 'Dashboard',
-      route: '/dashboard',
+      route: 'dashboard',
       icon: 'dashboard',
     },
     {
@@ -52,11 +52,6 @@ export class SidenavComponent {
       icon: 'store',
     },
     {
-      display_name: 'Finance Settings',
-      route: '/finance-settings',
-      icon: 'settings',
-    },
-    {
       display_name: 'Reports',
       route: '/reports',
       icon: 'pie_chart',
@@ -65,6 +60,11 @@ export class SidenavComponent {
       display_name: 'Investments',
       route: '/investments',
       icon: 'query_stats',
+    },
+    {
+      display_name: 'Settings',
+      route: '/finance-settings',
+      icon: 'settings',
     },
   ]);
 }

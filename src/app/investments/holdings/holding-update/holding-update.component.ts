@@ -6,18 +6,38 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose,
+} from '@angular/material/dialog';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { StockPurchase } from '../../model/transaction';
 import moment from 'moment/moment';
 import { CompanyInfo } from '../../model/investment';
 import { ApiService } from '../../../core/api.service';
 import { MatButton } from '@angular/material/button';
-import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
 import { MatInput } from '@angular/material/input';
-import { MatOption } from '@angular/material/core';
+import {MatOption, provideNativeDateAdapter} from '@angular/material/core';
 import { MatSelect, MatSelectTrigger } from '@angular/material/select';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import {
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/form-field';
 import { NgIf } from '@angular/common';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 
@@ -26,30 +46,31 @@ interface HoldingUpdateData {
 }
 
 @Component({
-    selector: 'app-holding-update',
-    templateUrl: './holding-update.component.html',
-    styleUrl: './holding-update.component.scss',
-    standalone: true,
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        ReactiveFormsModule,
-        NgIf,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatSelectTrigger,
-        MatOption,
-        MatInput,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatSuffix,
-        MatDatepicker,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-    ],
+  selector: 'app-holding-update',
+  templateUrl: './holding-update.component.html',
+  styleUrl: './holding-update.component.scss',
+  standalone: true,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatSelectTrigger,
+    MatOption,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
+  providers: [provideNativeDateAdapter()]
 })
 export class HoldingUpdateComponent implements OnInit {
   apiService = inject(ApiService);

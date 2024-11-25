@@ -2,7 +2,7 @@ import { Component, input, OnInit } from '@angular/core';
 import {
   ChartComponent,
   ChartConfig,
-} from '../../../components/widget/chartbox.component';
+} from './chartbox.component';
 
 @Component({
   selector: 'app-chart-widget',

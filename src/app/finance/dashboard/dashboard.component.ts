@@ -27,7 +27,7 @@ import {
 import {ChartUtilityService} from "./chart-utils.service";
 
 @Component({
-  selector: 'app-transaction-dashboard',
+  selector: 'app-transaction-portfolio',
   template: `
     <div class="dashboard-widgets">
       @for (widget of widgets; track widget) {

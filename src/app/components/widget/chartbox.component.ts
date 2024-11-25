@@ -28,7 +28,7 @@ export class ChartComponent implements OnInit {
   chart = viewChild.required<ElementRef>('chart');
 
   ngOnInit() {
-    new Chart(this.chart().nativeElement, {
+    const chart = new Chart(this.chart().nativeElement, {
       type: this.chartConfig().type as keyof ChartTypeRegistry,
       data: this.chartConfig().data,
       options: {
@@ -45,6 +45,16 @@ export class ChartComponent implements OnInit {
           legend: {
             position: 'bottom',
           },
+        },
+        onClick: (evt: Event) => {
+          var elements = chart.getElementsAtEventForMode(
+            evt,
+            'index',
+            { intersect: true },
+            false,
+          );
+          var index = elements[0].index;
+          console.log(elements, index);
         },
       },
     });

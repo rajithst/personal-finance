@@ -1,45 +1,14 @@
-.stock-container {
-  margin: 1%;
-  height: 90vh;
-}
-
-.holding.table-container {
-  max-height: 100%;
-  overflow-x: auto;
-}
-
-.toolbar-header {
-  width: 100%;
-  text-align: left;
-  padding: 10px;
-}
-
 .filters-right {
-  width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  background: #dadada;
+  padding: 5px;
+  border-radius: 10px;
 }
-
-.edit-panel {
+.filters-right > .edit-panel {
   display: flex;
-}
-
-.search-bar {
-  margin: 0 5px;
-  width: 90%;
-  height: 30px;
-  padding: 0 20px;
-  font-size: 1rem;
-  border: 1px solid #d0cfce;
-  border-radius: 5px;
-  outline: none;
-
-  &:focus {
-    border: 1px solid #9f9c9c;
-    transition: 0.35s ease;
+  > button {
+    margin: 0 2px;
   }
-}
-
-.search-bar-wrapper {
-  width: 95%;
 }

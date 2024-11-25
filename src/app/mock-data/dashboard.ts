@@ -91,5 +91,6 @@ export const dashboardData = {
       { "amount": 250, "destination": "Vendor C", "destination_original": "Vendor C" },
       { "amount": 300, "destination": "Vendor D", "destination_original": "Vendor D" }
     ]
-  }
+  },
+  "top_ten_expenses": []
 }
