@@ -1,7 +1,5 @@
 import { Component, inject, OnDestroy } from '@angular/core';
-import {
-  DashboardResponse,
-} from '../model/dashboard';
+import { DashboardResponse } from '../model/dashboard';
 import { DataService } from '../../service/data.service';
 import { forkJoin, ReplaySubject, takeUntil } from 'rxjs';
 import { ApiService } from '../../core/api.service';
@@ -16,7 +14,8 @@ import {
   IncomeVsSavingsWidget,
   MonthlyAccountUsageWidget,
   MonthlyExpenseCategoryWidget,
-  MonthlyPaymentCategoryWidget, TopExpensesWidget,
+  MonthlyPaymentCategoryWidget,
+  TopExpensesWidget,
 } from './widgets/chart-widgets';
 import {
   TotalExpenseWidget,
@@ -24,7 +23,7 @@ import {
   TotalPaymentsWidget,
   TotalSavingsWidget,
 } from './widgets/summary-widgets';
-import {ChartUtilityService} from "./chart-utils.service";
+import { ChartUtilityService } from './chart-utils.service';
 
 @Component({
   selector: 'app-transaction-portfolio',
@@ -46,9 +45,7 @@ import {ChartUtilityService} from "./chart-utils.service";
     }
   `,
   standalone: true,
-  imports: [
-    WidgetComponent,
-  ],
+  imports: [WidgetComponent],
   providers: [DashboardService, ChartUtilityService],
 })
 export class TransactionDashboardComponent implements OnDestroy {

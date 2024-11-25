@@ -8,8 +8,8 @@ describe('HoldingUpdateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [HoldingUpdateComponent],
-}).compileComponents();
+      imports: [HoldingUpdateComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HoldingUpdateComponent);
     component = fixture.componentInstance;

@@ -1,22 +1,26 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 :host {
   transition: all 500ms ease-in-out;
 }
 
 .menu-item {
-  @include mat.list-overrides((
-    active-indicator-shape: 0px,
-    active-indicator-color: rgba(0, 0, 0, 0.1),
-    list-item-one-line-container-height: 50px
-  ))
+  @include mat.list-overrides(
+    (
+      active-indicator-shape: 0px,
+      active-indicator-color: rgba(0, 0, 0, 0.1),
+      list-item-one-line-container-height: 50px,
+    )
+  );
 }
 
 .selected-menu-item {
   background: rgba(0, 0, 0, 0.05);
-  @include mat.list-overrides((
-    list-item-leading-icon-color: blue
-  ))
+  @include mat.list-overrides(
+    (
+      list-item-leading-icon-color: blue,
+    )
+  );
 }
 
 .center-flex {

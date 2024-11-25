@@ -81,7 +81,11 @@ import {
   DatePipe,
 } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import {MatButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
+import {
+  MatButton,
+  MatIconButton,
+  MatMiniFabButton,
+} from '@angular/material/button';
 
 interface TransactionActionResult {
   refresh: boolean;

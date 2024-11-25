@@ -9,9 +9,8 @@ describe('WidgetComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [],
-      imports: [WidgetComponent]
-    })
-    .compileComponents();
+      imports: [WidgetComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(WidgetComponent);
     component = fixture.componentInstance;

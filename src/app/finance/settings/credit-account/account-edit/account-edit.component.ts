@@ -24,10 +24,7 @@ import {
   INVESTMENT_ACCOUNT_PROVIDERS,
   SUCCESS_ACTION,
 } from '../../../../shared/data/client.data';
-import {
-  CreditAccount,
-  CreditAccountRequest,
-} from '../../../model/account';
+import { CreditAccount, CreditAccountRequest } from '../../../model/account';
 import { ApiService } from '../../../../core/api.service';
 import { MatButton } from '@angular/material/button';
 import { MatInput } from '@angular/material/input';
@@ -69,11 +66,13 @@ export class AccountEditComponent implements OnInit {
   creditAccountForm: FormGroup;
 
   accountProviders: string[] = [];
-  accountTypeControl = new FormControl<string | null>(null,[Validators.required])
+  accountTypeControl = new FormControl<string | null>(null, [
+    Validators.required,
+  ]);
 
   ngOnInit() {
     this.creditAccountForm = this.getCreditAccountForm(this.data.account);
-    this.accountTypeControl.valueChanges.subscribe(value => {
+    this.accountTypeControl.valueChanges.subscribe((value) => {
       if (value === ACCOUNT_TYPE_CREDIT_CARD) {
         this.accountProviders = CREDIT_CARD_PROVIDERS;
       } else if (value === ACCOUNT_TYPE_BANK_ACCOUNT) {
@@ -81,11 +80,13 @@ export class AccountEditComponent implements OnInit {
       } else if (value === ACCOUNT_TYPE_INVESTMENT_ACCOUNT) {
         this.accountProviders = INVESTMENT_ACCOUNT_PROVIDERS;
       }
-    })
+    });
   }
 
   private getCreditAccountForm(account: CreditAccount | null) {
-    this.accountTypeControl.setValue(account?.account_type ?? '', {emitEvent: true});
+    this.accountTypeControl.setValue(account?.account_type ?? '', {
+      emitEvent: true,
+    });
     return new FormGroup({
       id: new FormControl<number | null>(account ? account.id : null),
       account_type: this.accountTypeControl,

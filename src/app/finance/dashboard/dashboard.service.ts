@@ -9,5 +9,4 @@ export class DashboardService {
     console.log(data);
     this.dashboardData.set(data);
   }
-
 }

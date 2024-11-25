@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardTitle,
+  MatCardContent,
+} from '@angular/material/card';
 
 @Component({
-    selector: 'app-security',
-    templateUrl: './security.component.html',
-    styleUrl: './security.component.scss',
-    standalone: true,
-    imports: [
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatCardContent,
-    ],
+  selector: 'app-security',
+  templateUrl: './security.component.html',
+  styleUrl: './security.component.scss',
+  standalone: true,
+  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent],
 })
 export class SecurityComponent {}

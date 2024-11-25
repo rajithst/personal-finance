@@ -1,5 +1,5 @@
 import { DropDownType } from '../../shared/data/shared.data';
-import {TransactionExpand} from "./transactions";
+import { TransactionExpand } from './transactions';
 
 export interface DashboardTransaction {
   year: number;

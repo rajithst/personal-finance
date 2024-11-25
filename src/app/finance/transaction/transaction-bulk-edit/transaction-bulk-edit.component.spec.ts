@@ -8,8 +8,8 @@ describe('TransactionBulkEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TransactionBulkEditComponent],
-}).compileComponents();
+      imports: [TransactionBulkEditComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TransactionBulkEditComponent);
     component = fixture.componentInstance;

@@ -6,7 +6,8 @@ import {
   MatDialogContent,
   MatDialogActions,
   MatDialogClose,
-  MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig,
+  MAT_DIALOG_DEFAULT_OPTIONS,
+  MatDialogConfig,
 } from '@angular/material/dialog';
 import { Transaction } from '../../../model/transactions';
 import { MatButton } from '@angular/material/button';

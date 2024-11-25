@@ -1,5 +1,4 @@
-import {CreditAccount} from "./account";
-
+import { CreditAccount } from './account';
 
 export interface TransactionCategory {
   id: number;
@@ -22,5 +21,3 @@ export interface ClientSettings {
   transaction_categories: TransactionCategory[];
   transaction_sub_categories: TransactionSubCategory[];
 }
-
-

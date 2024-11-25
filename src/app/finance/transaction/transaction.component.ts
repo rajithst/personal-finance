@@ -18,7 +18,6 @@ import { ApiService } from '../../core/api.service';
 import { AsyncPipe } from '@angular/common';
 import { TransactionTableComponent } from './transaction-table/transaction-table.component';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { SearchbarComponent } from '../../shared/searchbar/searchbar.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatRipple } from '@angular/material/core';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
@@ -37,7 +36,6 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatTabsModule,
     MatRipple,
     FaIconComponent,
-    SearchbarComponent,
     RouterOutlet,
     RouterLink,
   ],

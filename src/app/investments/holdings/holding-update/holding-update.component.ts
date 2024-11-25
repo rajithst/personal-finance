@@ -31,7 +31,7 @@ import {
   MatDatepicker,
 } from '@angular/material/datepicker';
 import { MatInput } from '@angular/material/input';
-import {MatOption, provideNativeDateAdapter} from '@angular/material/core';
+import { MatOption, provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelect, MatSelectTrigger } from '@angular/material/select';
 import {
   MatFormField,
@@ -70,7 +70,7 @@ interface HoldingUpdateData {
     MatButton,
     MatDialogClose,
   ],
-  providers: [provideNativeDateAdapter()]
+  providers: [provideNativeDateAdapter()],
 })
 export class HoldingUpdateComponent implements OnInit {
   apiService = inject(ApiService);

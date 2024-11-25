@@ -71,7 +71,3 @@ export interface Holding {
   company_name: string;
   image: string;
 }
-
-
-
-

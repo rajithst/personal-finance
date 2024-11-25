@@ -4,11 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { JsonPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-stock',
-    templateUrl: './stock.component.html',
-    styleUrl: './stock.component.scss',
-    standalone: true,
-    imports: [JsonPipe],
+  selector: 'app-stock',
+  templateUrl: './stock.component.html',
+  styleUrl: './stock.component.scss',
+  standalone: true,
+  imports: [JsonPipe],
 })
 export class StockComponent implements OnInit {
   stock?: Stock;

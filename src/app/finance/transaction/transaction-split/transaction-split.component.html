@@ -11,7 +11,7 @@
       <li>
         Amount: ¥{{ transactionAmount() | number: "1.2-2" }}
         <span *ngIf="splitTotal() > 0"
-        >(New Amount: ¥{{ remainAmount() | number: "1.2-2" }})</span
+          >(New Amount: ¥{{ remainAmount() | number: "1.2-2" }})</span
         >
       </li>
       <li>Split Total: ¥{{ splitTotal() | number: "1.2-2" }}</li>
@@ -22,8 +22,7 @@
         <p class="title-text">Add Splits</p>
       </div>
       <div class="split-actions">
-        <button mat-raised-button (click)="onAddSplit()"> Add Split
-        </button>
+        <button mat-raised-button (click)="onAddSplit()">Add Split</button>
       </div>
     </div>
     <table>
@@ -45,9 +44,8 @@
 
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                   @for (option of filteredPayees[i] | async; track option) {
-                    <mat-option [value]="option.destination">{{
-                        option.destination
-                      }}
+                    <mat-option [value]="option.destination"
+                      >{{ option.destination }}
                     </mat-option>
                   }
                 </mat-autocomplete>
@@ -59,7 +57,7 @@
                 <mat-select formControlName="category">
                   @for (exc of this.TRANSACTION_CATEGORIES; track exc) {
                     <mat-option [value]="exc.id"
-                    >{{ exc.category }}
+                      >{{ exc.category }}
                     </mat-option>
                   }
                 </mat-select>
@@ -68,7 +66,7 @@
             <td>
               <mat-form-field appearance="outline" class="split-input">
                 <mat-label>Amount</mat-label>
-                <input matInput placeholder="Amount" formControlName="amount"/>
+                <input matInput placeholder="Amount" formControlName="amount" />
                 <span matTextPrefix>¥&nbsp;</span>
               </mat-form-field>
             </td>

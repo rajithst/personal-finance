@@ -10,11 +10,11 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatRipple } from '@angular/material/core';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import {DecimalPipe} from "@angular/common";
-import {MatChip} from "@angular/material/chips";
-import {MatIcon} from "@angular/material/icon";
-import {MatMiniFabButton} from "@angular/material/button";
-import {HoldingImportComponent} from "./holding-import/holding-import.component";
+import { DecimalPipe } from '@angular/common';
+import { MatChip } from '@angular/material/chips';
+import { MatIcon } from '@angular/material/icon';
+import { MatMiniFabButton } from '@angular/material/button';
+import { HoldingImportComponent } from './holding-import/holding-import.component';
 
 const DIALOG_WIDTH = '900px';
 const DIALOG_TOP_POSITION = '5%';
@@ -80,11 +80,7 @@ export class HoldingsComponent implements OnInit {
     });
   }
 
-  openFilters() {
+  openFilters() {}
 
-  }
-
-  showValueAction() {
-
-  }
+  showValueAction() {}
 }

@@ -8,9 +8,8 @@ describe('ViewMoreComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TransactionViewMoreDialog]
-})
-    .compileComponents();
+      imports: [TransactionViewMoreDialog],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TransactionViewMoreDialog);
     component = fixture.componentInstance;

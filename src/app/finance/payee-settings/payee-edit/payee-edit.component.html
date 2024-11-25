@@ -20,7 +20,7 @@
         <td colspan="2">
           <mat-form-field appearance="outline" class="payee-input">
             <mat-label>Payee Rename to</mat-label>
-            <input formControlName="destination" matInput placeholder="Payee"/>
+            <input formControlName="destination" matInput placeholder="Payee" />
           </mat-form-field>
         </td>
       </tr>
@@ -76,7 +76,7 @@
   <div class="payee-rules">
     <div class="rule-title">
       <span
-      >If Payee name contains below keywords, map to
+        >If Payee name contains below keywords, map to
         {{ payeeForm.get("destination")?.value }}. (Current and Future
         transactions)</span
       >

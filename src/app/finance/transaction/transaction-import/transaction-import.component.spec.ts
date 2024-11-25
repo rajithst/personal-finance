@@ -6,7 +6,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {accounts} from "../../../mock-data/init_settings";
+import { accounts } from '../../../mock-data/init_settings';
 
 describe('TransactionImportComponent', () => {
   let component: TransactionImportComponent;
@@ -16,7 +16,9 @@ describe('TransactionImportComponent', () => {
   let dialogRef: jasmine.SpyObj<MatDialogRef<TransactionImportComponent>>;
 
   beforeEach(async () => {
-    const apiServiceSpy = jasmine.createSpyObj('ApiService', ['uploadTransactions']);
+    const apiServiceSpy = jasmine.createSpyObj('ApiService', [
+      'uploadTransactions',
+    ]);
     const dataServiceSpy = jasmine.createSpyObj('DataService', ['getAccounts']);
     const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
 
@@ -35,7 +37,9 @@ describe('TransactionImportComponent', () => {
     component = fixture.componentInstance;
     apiService = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
     dataService = TestBed.inject(DataService) as jasmine.SpyObj<DataService>;
-    dialogRef = TestBed.inject(MatDialogRef) as jasmine.SpyObj<MatDialogRef<TransactionImportComponent>>;
+    dialogRef = TestBed.inject(MatDialogRef) as jasmine.SpyObj<
+      MatDialogRef<TransactionImportComponent>
+    >;
 
     dataService.getAccounts.and.returnValue(accounts);
     fixture.detectChanges();
@@ -75,7 +79,9 @@ describe('TransactionImportComponent', () => {
     it('should handle error and set status to "fail" on failure', () => {
       component.files = [new File(['content'], 'test-file.txt')];
       component.accountForm.get('account')?.setValue(1);
-      apiService.uploadTransactions.and.returnValue(throwError(() => new Error('Upload failed')));
+      apiService.uploadTransactions.and.returnValue(
+        throwError(() => new Error('Upload failed')),
+      );
 
       component.import();
       expect(component.status).toBe('fail');
@@ -84,7 +90,10 @@ describe('TransactionImportComponent', () => {
 
   describe('deleteAttachment', () => {
     it('should remove specified file from files array', () => {
-      component.files = [new File(['content'], 'file1.txt'), new File(['content'], 'file2.txt')];
+      component.files = [
+        new File(['content'], 'file1.txt'),
+        new File(['content'], 'file2.txt'),
+      ];
 
       component.deleteAttachment('file1.txt');
       expect(component.files.length).toBe(1);

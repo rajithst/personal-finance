@@ -1,11 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { DataService } from '../../service/data.service';
-import {ActivatedRoute, RouterLink, RouterOutlet} from '@angular/router';
-import { SearchbarComponent } from '../../shared/searchbar/searchbar.component';
+import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { LoadingComponent } from '../../shared/loading/loading.component';
-import {MatTabLink, MatTabNav, MatTabNavPanel} from "@angular/material/tabs";
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-payee-settings',
@@ -16,7 +15,6 @@ import {MatTabLink, MatTabNav, MatTabNavPanel} from "@angular/material/tabs";
     LoadingComponent,
     MatGridList,
     MatGridTile,
-    SearchbarComponent,
     RouterOutlet,
     MatTabLink,
     MatTabNav,

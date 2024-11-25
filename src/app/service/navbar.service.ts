@@ -1,6 +1,6 @@
-import {inject, Injectable} from '@angular/core';
-import {Event, NavigationEnd, Router} from '@angular/router';
-import {BehaviorSubject} from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { Event, NavigationEnd, Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class NavbarService {

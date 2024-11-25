@@ -19,7 +19,19 @@ import {
   faPlus,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { HoldingDetailsComponent } from '../holding-details/holding-details.component';
 import { Holding, StockDailyPrice } from '../../model/investment';
@@ -30,32 +42,32 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatCard, MatCardContent } from '@angular/material/card';
 
 @Component({
-    selector: 'app-holding-table',
-    templateUrl: './holding-table.component.html',
-    styleUrl: './holding-table.component.scss',
-    standalone: true,
-    imports: [
-        MatCard,
-        MatCardContent,
-        FaIconComponent,
-        NgClass,
-        MatTable,
-        MatSort,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatSortHeader,
-        MatCellDef,
-        MatCell,
-        MatMenuTrigger,
-        MatMenu,
-        MatMenuItem,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        DecimalPipe,
-    ],
+  selector: 'app-holding-table',
+  templateUrl: './holding-table.component.html',
+  styleUrl: './holding-table.component.scss',
+  standalone: true,
+  imports: [
+    MatCard,
+    MatCardContent,
+    FaIconComponent,
+    NgClass,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    DecimalPipe,
+  ],
 })
 export class HoldingTableComponent implements OnChanges {
   @Input() holdings: Holding[] = [];

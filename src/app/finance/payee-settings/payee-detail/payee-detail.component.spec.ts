@@ -7,9 +7,9 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { TransactionExpand } from '../../model/transactions';
 import { DestinationMap } from '../../model/payee';
-import {payees} from "../../../mock-data/payees";
-import {transactions} from "../../../mock-data/transactions";
-import {NoopAnimationsModule} from "@angular/platform-browser/animations";
+import { payees } from '../../../mock-data/payees';
+import { transactions } from '../../../mock-data/transactions';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('PayeeDetailComponent', () => {
   let component: PayeeDetailComponent;
@@ -58,7 +58,7 @@ describe('PayeeDetailComponent', () => {
   });
 
   it('should calculate totalPayment correctly', () => {
-    component.ngOnInit();  // Ensure ngOnInit is called to calculate totalPayment
+    component.ngOnInit(); // Ensure ngOnInit is called to calculate totalPayment
     expect(component.totalPayment()).toBe(2650.75);
   });
 
@@ -69,11 +69,10 @@ describe('PayeeDetailComponent', () => {
 
   it('should open dialog and handle result in editPayee method', () => {
     const mockDialogRef = {
-
       afterClosed: () => {
         const updatedPayee: DestinationMap = payees[0];
         updatedPayee.destination = 'updated destination';
-        return of({ payee: updatedPayee, mergeIds: null })
+        return of({ payee: updatedPayee, mergeIds: null });
       },
     };
     dialogSpy.open.and.returnValue(mockDialogRef as any);
@@ -85,6 +84,8 @@ describe('PayeeDetailComponent', () => {
     const updatedPayee: DestinationMap = payees[0];
     updatedPayee.destination = 'updated destination';
     expect(component.payeeInfo).toEqual(updatedPayee);
-    expect(snackBarSpy.open).toHaveBeenCalledWith('Updated!', 'Success', { duration: 3000 });
+    expect(snackBarSpy.open).toHaveBeenCalledWith('Updated!', 'Success', {
+      duration: 3000,
+    });
   });
 });

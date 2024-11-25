@@ -33,8 +33,7 @@
             @for (exc of this.files; track exc) {
               <li>
                 {{ exc.name }}
-                <span (click)="deleteAttachment(exc.name)"
-                ></span>
+                <span (click)="deleteAttachment(exc.name)"></span>
               </li>
             }
           </ul>
@@ -77,7 +76,7 @@
         <section [formGroup]="otherInfoForm" class="example-section">
           <p>
             <mat-checkbox formControlName="drop_duplicates"
-            >Drop Duplicates
+              >Drop Duplicates
             </mat-checkbox>
           </p>
         </section>
