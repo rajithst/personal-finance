@@ -33,7 +33,7 @@
         <td>
           <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Date</mat-label>
-            <input [matDatepicker]="picker" formControlName="date" matInput/>
+            <input [matDatepicker]="picker" formControlName="date" matInput />
             <mat-datepicker-toggle
               [for]="picker"
               matIconSuffix
@@ -46,13 +46,13 @@
         <td colspan="2">
           <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Payee</mat-label>
-            <input formControlName="destination" matInput placeholder="Payee"/>
+            <input formControlName="destination" matInput placeholder="Payee" />
           </mat-form-field>
         </td>
         <td>
           <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Amount</mat-label>
-            <input formControlName="amount" matInput placeholder="Amount"/>
+            <input formControlName="amount" matInput placeholder="Amount" />
             <span matTextPrefix>¥&nbsp;</span>
           </mat-form-field>
         </td>
@@ -81,7 +81,7 @@
         <td>
           <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Payee Alias (English)</mat-label>
-            <input formControlName="alias" matInput placeholder="Destination"/>
+            <input formControlName="alias" matInput placeholder="Destination" />
           </mat-form-field>
         </td>
       </tr>
@@ -95,10 +95,9 @@
         <ul class="rules-list">
           <li>
             <mat-checkbox color="primary" formControlName="update_similar"
-            >Update all transactions for payee
+              >Update all transactions for payee
               {{ transactionForm.get("destination")?.value }}
-            </mat-checkbox
-            >
+            </mat-checkbox>
           </li>
         </ul>
       </div>
@@ -121,5 +120,12 @@
 
 <mat-dialog-actions align="end" class="expense-form-footer">
   <button (click)="cancel()" mat-dialog-close mat-raised-button>Cancel</button>
-  <button (click)="submit()" [disabled]="transactionForm.invalid" color="primary" mat-raised-button>Save</button>
+  <button
+    (click)="submit()"
+    [disabled]="transactionForm.invalid"
+    color="primary"
+    mat-raised-button
+  >
+    Save
+  </button>
 </mat-dialog-actions>

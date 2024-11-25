@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import {
   faGear,
@@ -47,7 +41,7 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
     SidenavComponent,
   ],
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
   authService = inject(AuthService);
   protected readonly faList = faList;
   protected readonly faSignOut = faSignOut;
@@ -56,6 +50,4 @@ export class AppComponent implements AfterViewInit {
 
   collapsed = signal(false);
   sidenavWith = computed(() => (this.collapsed() ? '60px' : '200px'));
-
-  ngAfterViewInit() {}
 }

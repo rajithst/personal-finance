@@ -4,7 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { DataService } from '../../service/data.service';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import {payees} from "../../mock-data/payees";
+import { payees } from '../../mock-data/payees';
 
 describe('PayeeSettingsComponent', () => {
   let component: PayeeSettingsComponent;
@@ -15,7 +15,10 @@ describe('PayeeSettingsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     // Mock DataService
-    dataServiceSpy = jasmine.createSpyObj('DataService', ['setPayees', 'setSearchQuery']);
+    dataServiceSpy = jasmine.createSpyObj('DataService', [
+      'setPayees',
+      'setSearchQuery',
+    ]);
     titleServiceSpy = jasmine.createSpyObj('Title', ['setTitle', 'getTitle']);
     titleServiceSpy.getTitle.and.returnValue('Mock Title');
     // Stub ActivatedRoute with a mock observable for data

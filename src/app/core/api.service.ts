@@ -37,7 +37,7 @@ import {
 import { MyProfile } from '../finance/model/profile';
 import { JwtTokenResponse } from '../auth/model';
 import { CreditAccount, CreditAccountRequest } from '../finance/model/account';
-import {InvestmentDashboard} from "../investments/model/dashboard";
+import { InvestmentDashboard } from '../investments/model/dashboard';
 
 @Injectable({
   providedIn: 'root',

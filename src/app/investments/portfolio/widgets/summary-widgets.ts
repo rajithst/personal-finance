@@ -1,7 +1,7 @@
-import {Component, inject} from "@angular/core";
-import {DecimalPipe} from "@angular/common";
-import {SummaryComponent} from "../../../components/widget/summarybox.component";
-import {ChartUtilityService} from "../chart-utils.service";
+import { Component, inject } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { SummaryComponent } from '../../../components/widget/summarybox.component';
+import { ChartUtilityService } from '../chart-utils.service';
 
 @Component({
   selector: 'app-total-investment',

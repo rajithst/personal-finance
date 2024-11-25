@@ -8,10 +8,9 @@ describe('HoldingImportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HoldingImportComponent]
-    })
-    .compileComponents();
-    
+      declarations: [HoldingImportComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(HoldingImportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

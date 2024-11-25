@@ -1,9 +1,9 @@
-import {Component, input, signal} from '@angular/core';
-import {RouterLink, RouterLinkActive} from "@angular/router";
-import {MatListItem, MatListItemMeta} from "@angular/material/list";
-import {MatIcon} from "@angular/material/icon";
-import {MenuItem} from "../sidenav/sidenav.component";
-import {NgIf} from "@angular/common";
+import { Component, input, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatListItem, MatListItemMeta } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import { MenuItem } from '../sidenav/sidenav.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-nav-item',
@@ -25,7 +25,7 @@ export class NavItemComponent {
   nestedMenuOpen = signal(false);
 
   toggleNested() {
-    if(this.item()?.children) {
+    if (this.item()?.children) {
       this.nestedMenuOpen.set(!this.nestedMenuOpen());
     }
   }

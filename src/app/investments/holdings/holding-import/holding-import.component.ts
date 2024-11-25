@@ -1,18 +1,38 @@
-import {Component, inject} from '@angular/core';
-import {DatePipe} from "@angular/common";
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatButton} from "@angular/material/button";
-import {MatCheckbox} from "@angular/material/checkbox";
-import {MatDatepickerToggle, MatDateRangeInput, MatDateRangePicker} from "@angular/material/datepicker";
-import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
-import {MatStep, MatStepLabel, MatStepper, MatStepperNext, MatStepperPrevious} from "@angular/material/stepper";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {MatIcon} from "@angular/material/icon";
-import {provideNativeDateAdapter} from "@angular/material/core";
-import moment from "moment/moment";
-import {ApiService} from "../../../core/api.service";
+import { Component, inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
+import {
+  MatDatepickerToggle,
+  MatDateRangeInput,
+  MatDateRangePicker,
+} from '@angular/material/datepicker';
+import {
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {
+  MatStep,
+  MatStepLabel,
+  MatStepper,
+  MatStepperNext,
+  MatStepperPrevious,
+} from '@angular/material/stepper';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatIcon } from '@angular/material/icon';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import moment from 'moment/moment';
+import { ApiService } from '../../../core/api.service';
 
 @Component({
   selector: 'app-holding-import',
@@ -44,7 +64,7 @@ import {ApiService} from "../../../core/api.service";
     MatOption,
     MatDialogTitle,
   ],
-  providers:[provideNativeDateAdapter()]
+  providers: [provideNativeDateAdapter()],
 })
 export class HoldingImportComponent {
   private readonly apiService = inject(ApiService);
@@ -77,7 +97,6 @@ export class HoldingImportComponent {
   }
 
   import() {
-
     const formData = new FormData();
     this.files.forEach((x) => {
       formData.append('files', x);
@@ -99,11 +118,8 @@ export class HoldingImportComponent {
     formData.append('end_date', importEndDate);
     const upload$ = this.apiService.uploadHoldingTransactions(formData);
     upload$.subscribe({
-      next: () => {
-      },
-      error: (error: any) => {
-
-      },
+      next: () => {},
+      error: (error: any) => {},
     });
   }
 
@@ -111,11 +127,9 @@ export class HoldingImportComponent {
     this.files = this.files.filter((x) => x.name !== name);
   }
 
-
   isValidToSubmit() {
     return false;
   }
-
 
   cancel() {}
 }

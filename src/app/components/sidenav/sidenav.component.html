@@ -1,5 +1,10 @@
 <div class="sidenav-header">
-  <img src="assets/main_logo.webp" alt="" [width]="logoWidth()" [height]="logoHeight()">
+  <img
+    src="assets/main_logo.webp"
+    alt=""
+    [width]="logoWidth()"
+    [height]="logoHeight()"
+  />
   <div class="header-text"></div>
   <mat-nav-list class="sidenav-content">
     @for (item of menuItems(); track item.display_name) {

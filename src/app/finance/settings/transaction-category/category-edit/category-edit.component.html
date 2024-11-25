@@ -6,7 +6,7 @@
     <table class="expense-field-table">
       <th></th>
       <tr>
-        <td *ngIf="data.task==='add'">
+        <td *ngIf="data.task === 'add'">
           <mat-form-field appearance="outline" class="fill coincraft-input">
             <mat-label>Transaction Type</mat-label>
             <mat-select formControlName="category_type">
@@ -63,7 +63,9 @@
       <p>Sub-Category settings</p>
     </div>
     <div>
-      <button (click)="onAddSubCategory()" color="primary" mat-raised-button>Add Sub Category</button>
+      <button (click)="onAddSubCategory()" color="primary" mat-raised-button>
+        Add Sub Category
+      </button>
     </div>
   </div>
   <form [formGroup]="subCategoryForm">
@@ -95,7 +97,10 @@
               </mat-form-field>
             </td>
             <td>
-              <div class="coincraft-action-button" (click)="deleteSubCategory(i)">
+              <div
+                class="coincraft-action-button"
+                (click)="deleteSubCategory(i)"
+              >
                 <fa-icon
                   [icon]="faTrash"
                   size="xl"
@@ -108,9 +113,15 @@
       </ng-container>
     </table>
   </form>
-
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-dialog-close mat-raised-button>Cancel</button>
-  <button (click)="submit()" color="primary" mat-raised-button [disabled]="categoryForm.invalid || subCategoryForm.invalid">Save</button>
+  <button
+    (click)="submit()"
+    color="primary"
+    mat-raised-button
+    [disabled]="categoryForm.invalid || subCategoryForm.invalid"
+  >
+    Save
+  </button>
 </mat-dialog-actions>

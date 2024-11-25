@@ -6,9 +6,12 @@ import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../core/api.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
-import {Widget, WidgetComponent} from '../../components/widget/widget.component';
-import {TotalInvestmentWidget} from "./widgets/summary-widgets";
-import {PortfolioAllocationWidget} from "./widgets/chart-widgets";
+import {
+  Widget,
+  WidgetComponent,
+} from '../../components/widget/widget.component';
+import { TotalInvestmentWidget } from './widgets/summary-widgets';
+import { PortfolioAllocationWidget } from './widgets/chart-widgets';
 
 @Component({
   selector: 'app-portfolio',

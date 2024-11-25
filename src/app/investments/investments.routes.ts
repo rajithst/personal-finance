@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import {PortfolioComponent} from "./portfolio/dashboard.component";
-import {InvestmentsComponent} from "./investments.component";
-import {HoldingsComponent} from "./holdings/holdings.component";
-import {DividendComponent} from "./dividend/dividend.component";
-import {TradeHistoryComponent} from "./trade-history/trade-history.component";
+import { PortfolioComponent } from './portfolio/dashboard.component';
+import { InvestmentsComponent } from './investments.component';
+import { HoldingsComponent } from './holdings/holdings.component';
+import { DividendComponent } from './dividend/dividend.component';
+import { TradeHistoryComponent } from './trade-history/trade-history.component';
 
 export const INVESTMENT_ROUTES: Routes = [
   {

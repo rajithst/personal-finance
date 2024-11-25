@@ -62,7 +62,9 @@ export const APP_ROUTES: Routes = [
     path: 'finance-settings',
     canActivate: [isUserAuthenticated],
     loadChildren: () =>
-      import('./finance/settings/settings.routes').then((m) => m.SETTINGS_ROUTES),
+      import('./finance/settings/settings.routes').then(
+        (m) => m.SETTINGS_ROUTES,
+      ),
     resolve: {
       settings: settingsResolver,
     },

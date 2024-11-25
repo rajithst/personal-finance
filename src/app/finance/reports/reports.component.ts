@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
-import {MatTabLink, MatTabNav, MatTabNavPanel} from "@angular/material/tabs";
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-reports',

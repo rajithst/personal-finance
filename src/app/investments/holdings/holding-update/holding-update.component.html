@@ -13,7 +13,11 @@
                 <mat-select-trigger>
                   <div class="selected-company">
                     <div class="selected-company-image">
-                      <img alt="" class="ticker-image" src="{{companyImage()}}"/>
+                      <img
+                        alt=""
+                        class="ticker-image"
+                        src="{{ companyImage() }}"
+                      />
                     </div>
                     <div class="selected-company-name">
                       <span>{{ companyName() }}</span>
@@ -23,7 +27,13 @@
                 @for (cmp of companies(); track cmp) {
                   <mat-option [value]="cmp.symbol">
                     <div class="holding-item-contents-1">
-                      <div class="company-image"><img src="{{cmp.image}}" alt="" class="ticker-image"></div>
+                      <div class="company-image">
+                        <img
+                          src="{{ cmp.image }}"
+                          alt=""
+                          class="ticker-image"
+                        />
+                      </div>
                       <div class="company-ticker">
                         <div class="company-name">{{ cmp.company_name }}</div>
                         <div class="company-symbol">{{ cmp.symbol }}</div>
@@ -38,20 +48,31 @@
         <tr>
           <td>
             <mat-form-field appearance="outline" class="fill trade-input">
-              <mat-label>Share Price <span *ngIf="company()">({{ currency() }})</span></mat-label>
-              <input formControlName="purchase_price" matInput placeholder="Share price"/>
+              <mat-label
+                >Share Price
+                <span *ngIf="company()">({{ currency() }})</span></mat-label
+              >
+              <input
+                formControlName="purchase_price"
+                matInput
+                placeholder="Share price"
+              />
             </mat-form-field>
           </td>
           <td>
             <mat-form-field appearance="outline" class="fill trade-input">
               <mat-label>Shares</mat-label>
-              <input formControlName="quantity" matInput placeholder="Shares"/>
+              <input formControlName="quantity" matInput placeholder="Shares" />
             </mat-form-field>
           </td>
           <td>
             <mat-form-field appearance="outline" class="fill trade-input">
               <mat-label>Date</mat-label>
-              <input [matDatepicker]="picker" formControlName="purchase_date" matInput/>
+              <input
+                [matDatepicker]="picker"
+                formControlName="purchase_date"
+                matInput
+              />
               <mat-datepicker-toggle
                 [for]="picker"
                 matIconSuffix
@@ -73,17 +94,17 @@
           <td>
             <mat-form-field appearance="outline" class="fill trade-input">
               <mat-label>Exchange Rate</mat-label>
-              <input formControlName="exchange_rate" matInput placeholder="Exchange Rate"/>
+              <input
+                formControlName="exchange_rate"
+                matInput
+                placeholder="Exchange Rate"
+              />
             </mat-form-field>
           </td>
           <td>
             <mat-form-field appearance="outline" class="fill trade-input">
               <mat-label>Notes</mat-label>
-              <input
-                formControlName="notes"
-                matInput
-                placeholder="Notes"
-              />
+              <input formControlName="notes" matInput placeholder="Notes" />
             </mat-form-field>
           </td>
         </tr>

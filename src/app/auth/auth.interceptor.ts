@@ -15,7 +15,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(newReq).pipe(
     catchError((err) => {
       if (
-        err.status === 401 && err.url !== `${environment.apiUrl}/auth/jwt/create`
+        err.status === 401 &&
+        err.url !== `${environment.apiUrl}/auth/jwt/create`
       ) {
         authService.unAuthorizedLogout();
       }

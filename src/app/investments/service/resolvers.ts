@@ -10,5 +10,5 @@ export const investmentDataResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
 ) => {
-  return inject(ApiService).getInvestmentDashboard()
+  return inject(ApiService).getInvestmentDashboard();
 };

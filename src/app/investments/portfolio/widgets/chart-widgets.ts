@@ -1,6 +1,6 @@
-import {Component, inject, OnInit} from "@angular/core";
-import {ChartWidgetBase} from "../../../components/widget/chart-widget-base";
-import {ChartUtilityService} from "../chart-utils.service";
+import { Component, inject, OnInit } from '@angular/core';
+import { ChartWidgetBase } from '../../../components/widget/chart-widget-base';
+import { ChartUtilityService } from '../chart-utils.service';
 
 @Component({
   selector: 'app-monthly-investments',
@@ -13,7 +13,7 @@ import {ChartUtilityService} from "../chart-utils.service";
     ></app-chart-widget>
   `,
   imports: [ChartWidgetBase],
-  providers: [ChartUtilityService]
+  providers: [ChartUtilityService],
 })
 export class PortfolioAllocationWidget implements OnInit {
   chartUtility = inject(ChartUtilityService);

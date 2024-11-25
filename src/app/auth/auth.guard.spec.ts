@@ -5,7 +5,9 @@ import { isUserAuthenticated } from './auth.guard';
 
 describe('authGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => isUserAuthenticated(...guardParameters));
+    TestBed.runInInjectionContext(() =>
+      isUserAuthenticated(...guardParameters),
+    );
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

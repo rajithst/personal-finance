@@ -4,7 +4,7 @@ nav {
   @include mat.tabs-overrides(
     (
       divider-height: 0px,
-      label-text-line-height: 3px
+      label-text-line-height: 3px,
     )
   );
   margin-bottom: 5px;

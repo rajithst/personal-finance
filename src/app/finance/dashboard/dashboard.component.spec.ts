@@ -58,5 +58,4 @@ describe('TransactionDashboardComponent', () => {
   it('should create the TransactionDashboardComponent', () => {
     expect(component).toBeTruthy();
   });
-
 });

@@ -152,7 +152,9 @@ export class PayeeEditComponent implements OnInit {
       ),
     });
     if (this.data.payee.keywords) {
-      this.keywords = this.data.payee.keywords.split(',').map(keyword => keyword.trim());
+      this.keywords = this.data.payee.keywords
+        .split(',')
+        .map((keyword) => keyword.trim());
     }
     this.setTransactionCategories(transactionType);
     this.setTransactionSubCategories(payeeData.category);

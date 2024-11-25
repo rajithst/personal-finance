@@ -139,7 +139,7 @@ export const transaction_subcategories = [
 ];
 
 export const initSettings = {
-  'accounts': accounts,
-  'transaction_categories': transaction_categories,
-  'transaction_sub_categories': transaction_subcategories
-}
+  accounts: accounts,
+  transaction_categories: transaction_categories,
+  transaction_sub_categories: transaction_subcategories,
+};

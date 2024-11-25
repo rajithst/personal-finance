@@ -6,12 +6,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { DataService } from '../../../service/data.service';
-import {of} from 'rxjs';
+import { of } from 'rxjs';
 import { DestinationMap } from '../../model/payee';
-import {payees} from "../../../mock-data/payees";
-import {PayeeEditComponent} from "../payee-edit/payee-edit.component";
-import {NoopAnimationsModule} from "@angular/platform-browser/animations";
-import {provideRouter} from "@angular/router";
+import { payees } from '../../../mock-data/payees';
+import { PayeeEditComponent } from '../payee-edit/payee-edit.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
 
 describe('PayeesComponent', () => {
   let component: PayeesComponent;
@@ -21,19 +21,30 @@ describe('PayeesComponent', () => {
   let snackBar: jasmine.SpyObj<MatSnackBar>;
 
   beforeEach(async () => {
-    const dataServiceSpy = jasmine.createSpyObj('DataService', ['getPayees', 'searchBar$']);
+    const dataServiceSpy = jasmine.createSpyObj('DataService', [
+      'getPayees',
+      'searchBar$',
+    ]);
     const dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
     const snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     await TestBed.configureTestingModule({
       declarations: [],
-      imports: [PayeesComponent, NoopAnimationsModule, MatTableModule, MatSortModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule],
+      imports: [
+        PayeesComponent,
+        NoopAnimationsModule,
+        MatTableModule,
+        MatSortModule,
+        MatPaginatorModule,
+        MatDialogModule,
+        MatSnackBarModule,
+      ],
       providers: [
         provideRouter([]),
         { provide: DataService, useValue: dataServiceSpy },
         { provide: MatDialog, useValue: dialogSpy },
-        { provide: MatSnackBar, useValue: snackBarSpy }
-      ]
+        { provide: MatSnackBar, useValue: snackBarSpy },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PayeesComponent);
@@ -62,7 +73,6 @@ describe('PayeesComponent', () => {
     expect(component.dataSource.data[0].destination).toBe('Tokyo');
   });
 
-
   it('should select all rows when toggleAllRows is called', () => {
     component.preparePayeeTable();
     component.toggleAllRows();
@@ -79,7 +89,10 @@ describe('PayeesComponent', () => {
   it('should open edit dialog and update payee data when editPayee is called', () => {
     const payee = payees[0] as DestinationMap;
     const dialogRefSpyObj = jasmine.createSpyObj({
-      afterClosed: of({ payee: { id: 1, destination: 'Updated Payee 1' }, mergeIds: null })
+      afterClosed: of({
+        payee: { id: 1, destination: 'Updated Payee 1' },
+        mergeIds: null,
+      }),
     });
     dialog.open.and.returnValue(dialogRefSpyObj);
 
@@ -88,12 +101,14 @@ describe('PayeesComponent', () => {
     expect(dialog.open).toHaveBeenCalledWith(PayeeEditComponent, {
       width: '850px',
       position: { top: '5%' },
-      data: { payee }
+      data: { payee },
     });
     // @ts-ignore
-    dialogRefSpyObj.afterClosed().subscribe(result => {
+    dialogRefSpyObj.afterClosed().subscribe((result) => {
       expect(component.dataSource.data[0].destination).toBe('Updated Payee 1');
-      expect(snackBar.open).toHaveBeenCalledWith('Updated!', 'Success', { duration: 3000 });
+      expect(snackBar.open).toHaveBeenCalledWith('Updated!', 'Success', {
+        duration: 3000,
+      });
     });
   });
 

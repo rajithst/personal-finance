@@ -25,7 +25,10 @@
         [style]="{ color: '#3699ff' }"
         size="sm"
       ></fa-icon>
-      <span class="profile-menu-item">{{authService.currentUser?.first_name}} {{authService.currentUser?.last_name}}</span>
+      <span class="profile-menu-item"
+        >{{ authService.currentUser?.first_name }}
+        {{ authService.currentUser?.last_name }}</span
+      >
     </button>
     <button mat-menu-item routerLink="app-settings">
       <fa-icon
@@ -59,7 +62,10 @@
       <app-sidenav [collapsed]="collapsed()"></app-sidenav>
     </mat-sidenav>
   }
-  <mat-sidenav-content class="content" [style.margin-left]="authService.isLoggedIn ? sidenavWith() : '0px'">
+  <mat-sidenav-content
+    class="content"
+    [style.margin-left]="authService.isLoggedIn ? sidenavWith() : '0px'"
+  >
     <main class="main-container">
       <router-outlet></router-outlet>
     </main>

@@ -5,15 +5,11 @@ import { DividendTableComponent } from './dividend-table/dividend-table.componen
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
 
 @Component({
-    selector: 'app-dividend',
-    templateUrl: './dividend.component.html',
-    styleUrl: './dividend.component.scss',
-    standalone: true,
-    imports: [
-        MatTabGroup,
-        MatTab,
-        DividendTableComponent,
-    ],
+  selector: 'app-dividend',
+  templateUrl: './dividend.component.html',
+  styleUrl: './dividend.component.scss',
+  standalone: true,
+  imports: [MatTabGroup, MatTab, DividendTableComponent],
 })
 export class DividendComponent implements OnInit {
   usDividends: any[] = [];
@@ -21,9 +17,7 @@ export class DividendComponent implements OnInit {
   protected readonly faCaretUp = faCaretUp;
   protected readonly faCaretDown = faCaretDown;
 
-  constructor(
-    private dialog: MatDialog,
-  ) {}
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.usDividends = [];

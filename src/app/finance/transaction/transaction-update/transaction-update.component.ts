@@ -110,7 +110,7 @@ export class TransactionUpdateDialog implements OnInit {
   private readonly apiService = inject(ApiService);
   private readonly dataService = inject(DataService);
   private readonly dialogRef = inject(MatDialogRef<TransactionUpdateDialog>);
-  data = inject<TransactionUpdateDialogData>(MAT_DIALOG_DATA)
+  data = inject<TransactionUpdateDialogData>(MAT_DIALOG_DATA);
 
   TRANSACTION_TYPES: DropDownType[] = TRANSACTION_TYPES;
   ACCOUNTS: CreditAccount[] = this.dataService.getClientSettings().accounts;
