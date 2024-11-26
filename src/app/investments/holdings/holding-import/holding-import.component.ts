@@ -12,7 +12,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import {
   MatDatepickerToggle,
   MatDateRangeInput,
-  MatDateRangePicker,
+  MatDateRangePicker, MatEndDate, MatStartDate,
 } from '@angular/material/datepicker';
 import {
   MatDialogActions,
@@ -27,7 +27,7 @@ import {
   MatStepperNext,
   MatStepperPrevious,
 } from '@angular/material/stepper';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatIcon } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -35,6 +35,7 @@ import moment from 'moment/moment';
 import { ApiService } from '../../../core/api.service';
 import { DataService } from '../../../service/data.service';
 import { ACCOUNT_TYPE_INVESTMENT_ACCOUNT } from '../../../shared/data/client.data';
+import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 
 @Component({
   selector: 'app-holding-import',
@@ -55,6 +56,8 @@ import { ACCOUNT_TYPE_INVESTMENT_ACCOUNT } from '../../../shared/data/client.dat
     MatFormField,
     MatLabel,
     MatIcon,
+    MatStartDate,
+    MatEndDate,
     MatSelect,
     MatStepperPrevious,
     MatStepperNext,
@@ -65,6 +68,9 @@ import { ACCOUNT_TYPE_INVESTMENT_ACCOUNT } from '../../../shared/data/client.dat
     MatDialogClose,
     MatOption,
     MatDialogTitle,
+    MatSuffix,
+    MatRadioGroup,
+    MatRadioButton,
   ],
   providers: [provideNativeDateAdapter()],
 })
@@ -76,6 +82,7 @@ export class HoldingImportComponent {
     account: new FormControl<number | null>(null),
   });
   secondFormGroup = new FormGroup({
+    target: new FormControl<string | null>(null),
     file: new FormControl(null),
   });
   readonly rangeForm = new FormGroup({

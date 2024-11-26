@@ -25,26 +25,44 @@
       <div class="step-content">
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Attach Files</ng-template>
-          <button (click)="fileUpload.click()" color="warn" mat-button>
-            <mat-icon>file_upload</mat-icon>
-            Upload
-          </button>
-          <ul>
-            @for (exc of this.files; track exc) {
-              <li>
-                {{ exc.name }}
-                <span (click)="deleteAttachment(exc.name)"></span>
-              </li>
-            }
-          </ul>
-          <input
-            #fileUpload
-            (change)="onChange($event)"
-            class="file-input"
-            multiple
-            style="display: none"
-            type="file"
-          />
+          <div class="upload-contents">
+            <div class="upload-category">
+              <mat-radio-group formControlName="target">
+                <mat-radio-button value="FOREIGN"
+                  >Foreign Stocks</mat-radio-button
+                >
+                <mat-radio-button value="DOMESTIC"
+                  >Domestic Stocks</mat-radio-button
+                >
+              </mat-radio-group>
+            </div>
+            <div class="upload-section">
+              <div class="upload-box">
+                <label for="file-upload" class="upload-label">
+                  <span>Drag & drop your file here or click to upload</span>
+                  <input
+                    #fileUpload
+                    (change)="onChange($event)"
+                    class="file-input"
+                    id="file-upload"
+                    multiple
+                    type="file"
+                  />
+                </label>
+              </div>
+              <div id="file-list" class="file-list">
+                <ul>
+                  @for (exc of this.files; track exc) {
+                    <li>
+                      {{ exc.name }}
+                      <span (click)="deleteAttachment(exc.name)"></span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
+
           <div class="step-actions">
             <button mat-raised-button matStepperPrevious>Back</button>
             <button color="primary" mat-raised-button matStepperNext>
@@ -73,13 +91,6 @@
           ></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
-        <section [formGroup]="otherInfoForm" class="example-section">
-          <p>
-            <mat-checkbox formControlName="drop_duplicates"
-              >Drop Duplicates
-            </mat-checkbox>
-          </p>
-        </section>
         <div class="step-actions">
           <button mat-raised-button matStepperPrevious>Back</button>
           <button color="primary" mat-raised-button matStepperNext>Next</button>
