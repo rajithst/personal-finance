@@ -39,7 +39,8 @@ mat-form-field, mat-card {
   padding: 20px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 400px;
+  width: 480px;
+  margin-bottom: 10px;
 }
 
 .upload-box {
@@ -70,4 +71,8 @@ mat-form-field, mat-card {
   font-size: 14px;
   overflow: auto;
   max-height: 100px;
+}
+
+mat-list-item {
+  text-align: left;
 }

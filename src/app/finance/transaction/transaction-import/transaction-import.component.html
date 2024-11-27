@@ -1,6 +1,6 @@
-<h2 mat-dialog-title>Import Transaction</h2>
+<script src="transaction-import.component.ts"></script><h2 mat-dialog-title>Import Transaction</h2>
 <mat-dialog-content>
-  @if(!clickSubmit) {
+  @if (!clickSubmit) {
     <mat-stepper #stepper [linear]="true" orientation="vertical">
       <mat-step>
         <div class="step-content">
@@ -10,7 +10,9 @@
               <mat-label>Account</mat-label>
               <mat-select formControlName="account">
                 @for (exc of this.myAccounts; track exc) {
-                  <mat-option [value]="exc.id">{{ exc.account_name }}</mat-option>
+                  <mat-option [value]="exc">{{
+                    exc.account_name
+                  }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -26,29 +28,30 @@
         <div class="step-content">
           <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Attach Files</ng-template>
-            <button (click)="fileUpload.click()" color="warn" mat-button>
-              <mat-icon>file_upload</mat-icon>
-              Upload
-            </button>
-            <ul>
-              @for (exc of this.files; track exc) {
-                <li>
-                  {{ exc.name }}
-                  <button mat-icon-button aria-label="delete button" (click)="deleteAttachment(exc.name)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-
-                </li>
-              }
-            </ul>
-            <input
-              #fileUpload
-              (change)="onChange($event)"
-              class="file-input"
-              multiple
-              style="display: none"
-              type="file"
-            />
+            <div class="upload-section">
+              <div class="upload-box">
+                <label for="file-upload" class="upload-label">
+                  <span>Drag & drop your file here or click to upload</span>
+                  <input
+                    #fileUpload
+                    (change)="onChange($event)"
+                    class="file-input"
+                    id="file-upload"
+                    multiple
+                    type="file"
+                  />
+                </label>
+              </div>
+              <div id="file-list" class="file-list">
+                <mat-list>
+                  @for (exc of this.files; track exc) {
+                    <mat-list-item>
+                      {{ exc.name }}
+                    </mat-list-item>
+                  }
+                </mat-list>
+              </div>
+            </div>
             <div class="step-actions">
               <button mat-raised-button matStepperPrevious>Back</button>
               <button color="primary" mat-raised-button matStepperNext>
@@ -63,7 +66,10 @@
         <div class="step-content">
           <mat-form-field class="coincraft-input">
             <mat-label>Date range</mat-label>
-            <mat-date-range-input [formGroup]="rangeForm" [rangePicker]="picker">
+            <mat-date-range-input
+              [formGroup]="rangeForm"
+              [rangePicker]="picker"
+            >
               <input
                 formControlName="start"
                 matStartDate
@@ -80,12 +86,12 @@
           <section [formGroup]="otherInfoForm" class="example-section">
             <p>
               <mat-checkbox formControlName="drop_duplicates"
-              >Drop Duplicates
+                >Drop Duplicates
               </mat-checkbox>
             </p>
             <p>
               <mat-checkbox formControlName="from_last_import_date"
-              >Import from last date ({{
+                >Import from last date ({{
                   getLastImportDate() | date: "MMMM d, y"
                 }})
               </mat-checkbox>
@@ -93,14 +99,37 @@
           </section>
           <div class="step-actions">
             <button mat-raised-button matStepperPrevious>Back</button>
-            <button color="primary" mat-raised-button matStepperNext>Next</button>
+            <button color="primary" mat-raised-button matStepperNext>
+              Next
+            </button>
           </div>
         </div>
       </mat-step>
       <mat-step>
         <ng-template matStepLabel>Review And Import</ng-template>
         <div class="step-content">
-          <p>Import with settings.</p>
+          <dl>
+            <dt>Account:</dt>
+            <dd>{{selectedAccountName}}</dd>
+          </dl>
+          <dl>
+            <dt>Files:</dt>
+            @for (exc of this.files; track exc) {
+              <dd>{{ exc.name }}</dd>
+            }
+          </dl>
+          <dl>
+            <dt>Date range:</dt>
+            <dd>{{importFirstDate}} - {{importLastDate}}</dd>
+          </dl>
+          <dl>
+            <dt>Drop duplicates:</dt>
+            <dd>{{dropDuplicates ? 'Yes' : 'No'}}</dd>
+          </dl>
+          <dl>
+            <dt>Import from last imported date:</dt>
+            <dd>{{importFromLastDate ? 'Yes' : 'No'}}</dd>
+          </dl>
         </div>
         <div class="step-actions">
           <button mat-raised-button matStepperPrevious>Back</button>
@@ -120,12 +149,15 @@
     <mat-card appearance="outlined">
       <mat-card-content>
         <h3 class="import-title">Importing data.</h3>
-        <p>Progress: {{progress}}% </p>
-        <mat-progress-bar mode="buffer" bufferValue="100" value="{{progress}}"></mat-progress-bar>
+        <p>Progress: {{ progress }}%</p>
+        <mat-progress-bar
+          mode="buffer"
+          bufferValue="100"
+          value="{{ progress }}"
+        ></mat-progress-bar>
       </mat-card-content>
     </mat-card>
   }
-
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
