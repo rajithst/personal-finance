@@ -85,6 +85,7 @@ import {
   MatMiniFabButton,
 } from '@angular/material/button';
 import { LoadingComponent } from '../../../shared/loading/loading.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 interface TransactionActionResult {
   refresh: boolean;
@@ -147,12 +148,14 @@ const DIALOG_TOP_POSITION = '5%';
     MatButton,
     MatIconButton,
     LoadingComponent,
+    MatProgressSpinner,
   ],
 })
 export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
-  transactions = input.required<MonthlyTransaction[]>();
+  transactions = input.required<MonthlyTransaction[] | null>();
   transactionType = input.required<string>();
   accordion = viewChild.required(MatAccordion);
+
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly loadingService = inject(LoadingService);
@@ -166,7 +169,8 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     return this.segments().at(segmentLength - 1);
   });
 
-  loading = computed(() => this.transactions().length == 0);
+  noData = false;
+  loading = computed(() => this.transactions() === null);
   showValues = false;
   selection = new SelectionModel<TransactionExpand>(true, []);
   allDataSource: MatTableDataSource<TransactionExpand>[] = [];
@@ -194,10 +198,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getAllCategories();
 
-  constructor() {
-    this.loadingService.loadingOn();
-  }
-
   ngOnInit(): void {
     if (this.lastSegment() !== EXPENSE) {
       const idx = this.displayedColumns.indexOf('TransactionType');
@@ -205,7 +205,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.displayedColumns.splice(idx, 1);
       }
     }
-    this.dataService.yearSwitch$
+    this.dataService.year$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
         this.filterParams.year = value;
@@ -217,18 +217,11 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe((value) => {
         this.showValues = value;
       });
-    this.dataService.searchBar$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((value) => {
-        this.filterParams.query = value ? value.trim() : '';
-        this.applyFiltersToTables();
-      });
-    //this.reConfirmInitSettings();
   }
 
   ngOnChanges() {
     this.allTransactions =
-      this.transactions().length > 0 ? this.transactions() : [];
+      this.transactions() !== null ? this.transactions()! : [];
     this.totalAnnualAmount.set(0);
     this.allTransactions.forEach((x: MonthlyTransaction, index: number) => {
       this.allDataSource.splice(
@@ -243,6 +236,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.createFilterChips();
     this.applyFiltersToTables();
+    this.noData = this.allTransactions.length === 0;
   }
 
   editTransaction(item: TransactionExpand) {

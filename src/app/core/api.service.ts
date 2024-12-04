@@ -13,7 +13,7 @@ import {
   TransactionsResponse,
 } from '../finance/model/transactions';
 import {
-  CompanyResponse,
+  CompanyResponse, Holding,
   StockDailyPriceResponse,
 } from '../investments/model/investment';
 import {
@@ -37,7 +37,7 @@ import {
 import { MyProfile } from '../finance/model/profile';
 import { JwtTokenResponse } from '../auth/model';
 import { CreditAccount, CreditAccountRequest } from '../finance/model/account';
-import {PortfolioResponse} from "../investments/model/portfolio";
+import {Portfolio, PortfolioPerformanceResponse} from "../investments/model/portfolio";
 
 @Injectable({
   providedIn: 'root',
@@ -196,10 +196,20 @@ export class ApiService {
 
   /* Investment Module APIs*/
 
-  getPortfolio(): Observable<PortfolioResponse> {
-    return this.http.get<PortfolioResponse>(
+  getPortfolios(): Observable<Portfolio[]> {
+    return this.http.get<Portfolio[]>(
       `${this.SRC_URL}/investments/portfolio/`,
     );
+  }
+
+  getPortfolioPerformance(): Observable<PortfolioPerformanceResponse> {
+    return this.http.get<PortfolioPerformanceResponse>(
+      `${this.SRC_URL}/investments/dashboard/`,
+    )
+  }
+
+  getHoldings(): Observable<Holding[]> {
+    return this.http.get<Holding[]>(`${this.SRC_URL}/investments/holdings/`,)
   }
 
   updateStockPurchaseHistory(payload: StockPurchase): Observable<any> {

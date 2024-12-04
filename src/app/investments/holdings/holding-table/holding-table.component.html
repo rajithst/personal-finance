@@ -16,12 +16,12 @@
             <div class="company-ticker">
               <div class="company-name">
                 <a
-                  (click)="openStockDetail(element.company)"
+                  (click)="openStockDetail(element.company_ticker)"
                   href="javascript:void(0)"
                   >{{ element.company_name }}</a
                 >
               </div>
-              <div class="company-symbol">{{ element.company }}</div>
+              <div class="company-symbol">{{ element.company_ticker }}</div>
             </div>
           </div>
         </td>
@@ -35,8 +35,7 @@
           Cost per share
         </th>
         <td *matCellDef="let element" mat-cell>
-          {{ element.stock_currency
-          }}{{ element.average_price | number: "1.2-2" }}
+          {{ element.average_price }}
         </td>
       </ng-container>
       <ng-container matColumnDef="CurrentShareValue">
@@ -44,8 +43,7 @@
           Current share value
         </th>
         <td *matCellDef="let element" mat-cell>
-          {{ element.stock_currency
-          }}{{ element.current_price | number: "1.2-2" }}
+          {{ element.current_price }}
         </td>
       </ng-container>
       <ng-container matColumnDef="TotalInvestment">
@@ -53,15 +51,13 @@
           Total Investment
         </th>
         <td *matCellDef="let element" mat-cell>
-          {{ element.stock_currency
-          }}{{ element.total_investment | number: "1.2-2" }}
+          {{ element.total_investment }}
         </td>
       </ng-container>
       <ng-container matColumnDef="CurrentValue">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Current Value</th>
         <td *matCellDef="let element" mat-cell>
-          {{ element.stock_currency
-          }}{{ element.current_value | number: "1.2-2" }}
+          {{ element.current_value }}
         </td>
       </ng-container>
       <ng-container matColumnDef="TotalProfit">
@@ -69,73 +65,44 @@
         <td *matCellDef="let element" mat-cell>
           <div
             [ngClass]="{
-              profit: element.profit_loss >= 0,
-              loss: element.profit_loss < 0
+              profit: element.profit_loss_value >= 0,
+              loss: element.profit_loss_value < 0
             }"
             class="profit-loss"
           >
-            <span>{{ formatValue(element.profit_loss) }} </span>
+            <span>{{ element.profit_loss }} </span>
           </div>
           <div
             [ngClass]="{
-              profit: element.profit_loss >= 0,
-              loss: element.profit_loss < 0
+              profit: element.profit_loss_value >= 0,
+              loss: element.profit_loss_value < 0
             }"
             class="profit-loss-percentage"
           >
-            <fa-icon
-              [icon]="
-                element.profit_change_percentage > 0 ? faCaretUp : faCaretDown
-              "
-            ></fa-icon>
-            {{ element.profit_change_percentage | number: "1.2-2" }} %
+            {{ element.profit_change_percentage }}
           </div>
         </td>
       </ng-container>
-      <ng-container matColumnDef="ShareInProtofolio">
+      <ng-container matColumnDef="ShareInPortfolio">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>
-          Share in protofolio
+          Share in portfolio
         </th>
         <td *matCellDef="let element" mat-cell>
-          {{
-            (element.total_investment / totalInvestment) * 100 | number: "1.2-2"
-          }}
-          %
+          {{ element.share_in_portfolio }}
         </td>
       </ng-container>
       <ng-container matColumnDef="Actions">
         <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
         <td *matCellDef="let element" mat-cell>
-          <span [matMenuTriggerFor]="menu" class="holding-actions">
-            <fa-icon
-              [icon]="faEllipsis"
-              [style]="{ color: '#3699ff' }"
-              size="lg"
-            ></fa-icon>
-          </span>
+          <span [matMenuTriggerFor]="menu" class="holding-actions"> </span>
           <mat-menu #menu="matMenu">
             <button mat-menu-item>
-              <fa-icon
-                [icon]="faPlus"
-                [style]="{ color: '#3699ff' }"
-                size="sm"
-              ></fa-icon>
               <span class="holding-action-item">Add Transaction</span>
             </button>
             <button mat-menu-item>
-              <fa-icon
-                [icon]="faList"
-                [style]="{ color: '#3699ff' }"
-                size="sm"
-              ></fa-icon>
               <span class="holding-action-item">Show History</span>
             </button>
             <button mat-menu-item>
-              <fa-icon
-                [icon]="faTrash"
-                [style]="{ color: 'red' }"
-                size="sm"
-              ></fa-icon>
               <span class="holding-action-item">Delete</span>
             </button>
           </mat-menu>

@@ -20,7 +20,7 @@ import { ChartWidgetBase } from '../../../components/widget/chart-widget-base';
   imports: [ChartWidgetBase],
 })
 export class CashFlowWidget implements OnInit {
-  private dashboardService = inject(DashboardService);
+  private readonly dashboardService = inject(DashboardService);
   chartUtility = inject(ChartUtilityService);
   options = {
     scales: {

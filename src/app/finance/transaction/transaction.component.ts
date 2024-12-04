@@ -1,9 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { LoadingService } from '../../shared/loading/loading.service';
-import {
-  faSquareCaretLeft,
-  faSquareCaretRight,
-} from '@fortawesome/free-solid-svg-icons';
 import { DataService } from '../../service/data.service';
 import { map, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { MonthlyTransaction, TransactionFilter } from '../model/transactions';
@@ -23,6 +19,8 @@ import { MatRipple } from '@angular/material/core';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import {MatButton} from "@angular/material/button";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-transaction',
@@ -38,16 +36,15 @@ import { MatTabsModule } from '@angular/material/tabs';
     FaIconComponent,
     RouterOutlet,
     RouterLink,
+    MatButton,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger,
   ],
 })
 export class FinanceComponent {
   title = inject(Title);
-  today = new Date();
-  currentYear = this.today.getFullYear();
-  protected readonly faSquareCaretRight = faSquareCaretRight;
-  protected readonly faSquareCaretLeft = faSquareCaretLeft;
-  protected loadingService = inject(LoadingService);
-  private readonly dataService = inject(DataService);
+  dataService = inject(DataService);
   tabs = [
     { label: 'All Transactions', route: 'expense' },
     { label: 'Income', route: 'income' },
@@ -55,15 +52,10 @@ export class FinanceComponent {
     { label: 'Savings', route: 'saving' },
   ];
   activeLink = this.tabs[0];
+  financeYears: number[] = [2020, 2021, 2022, 2023, 2024, 2025]
 
-  changeFilterYear(direction: string) {
-    this.loadingService.loadingOn();
-    if (direction === 'prev') {
-      this.currentYear = this.currentYear - 1;
-    } else {
-      this.currentYear = this.currentYear + 1;
-    }
-    this.dataService.setFilterYear(this.currentYear);
+  onYearSelect(year: number) {
+    this.dataService.setFilterYear(year);
   }
 }
 
@@ -75,16 +67,17 @@ export class FinanceComponent {
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
   target: string = EXPENSE;
-  data$: Observable<MonthlyTransaction[]>;
+  data$: Observable<MonthlyTransaction[] | null>;
   protected apiService = inject(ApiService);
   protected loadingService = inject(LoadingService);
   protected readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly dataService = inject(DataService);
 
   ngOnInit(): void {
-    this.dataService.yearSwitch$
+    this.dataService.year$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
+        console.log('from year');
         this.extracted({ target: this.target, year: value });
       });
 
@@ -117,7 +110,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 @Component({
   selector: 'app-expenses',
   template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+    '<app-transaction-table [transactions]="(data$ | async) ?? null" [transactionType]="target"></app-transaction-table>',
   styles: '',
   standalone: true,
   imports: [TransactionTableComponent, AsyncPipe],

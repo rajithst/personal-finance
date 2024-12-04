@@ -11,7 +11,6 @@
     </button>
     <button
       mat-mini-fab
-      (click)="showValueAction()"
       [matTooltip]="showValues ? 'Hide values' : 'Show Values'"
       matTooltipPosition="below"
     >
@@ -23,7 +22,6 @@
       }
     </button>
     <button
-      (click)="openFilters()"
       mat-mini-fab
       matTooltip="Filter Transactions"
       matTooltipPosition="below"
@@ -48,4 +46,4 @@
     </button>
   </div>
 </div>
-<app-holding-table [holdings]="usHoldings"></app-holding-table>
+<app-holding-table [holdings]="holdings$ | async"></app-holding-table>

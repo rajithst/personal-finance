@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { DatePipe, NgClass } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   FormControl,
@@ -13,11 +13,13 @@ import {
   MatDatepickerToggle,
   MatDateRangeInput,
   MatDateRangePicker,
+  MatEndDate,
+  MatStartDate,
 } from '@angular/material/datepicker';
 import {
   MatDialogActions,
   MatDialogClose,
-  MatDialogContent,
+  MatDialogContent, MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
 import {
@@ -27,14 +29,27 @@ import {
   MatStepperNext,
   MatStepperPrevious,
 } from '@angular/material/stepper';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import {
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatIcon } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import moment from 'moment/moment';
 import { ApiService } from '../../../core/api.service';
 import { DataService } from '../../../service/data.service';
-import { ACCOUNT_TYPE_INVESTMENT_ACCOUNT } from '../../../shared/data/client.data';
+import {ACCOUNT_TYPE_INVESTMENT_ACCOUNT, CANCEL_ACTION, SUCCESS_ACTION} from '../../../shared/data/client.data';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { HttpEventType } from '@angular/common/http';
+import { throwError } from 'rxjs';
+import { CreditAccount } from '../../../finance/model/account';
+import { PortfolioService } from '../../service/portfolio.service';
+import { Portfolio } from '../../model/portfolio';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-holding-import',
@@ -55,6 +70,8 @@ import { ACCOUNT_TYPE_INVESTMENT_ACCOUNT } from '../../../shared/data/client.dat
     MatFormField,
     MatLabel,
     MatIcon,
+    MatStartDate,
+    MatEndDate,
     MatSelect,
     MatStepperPrevious,
     MatStepperNext,
@@ -65,31 +82,80 @@ import { ACCOUNT_TYPE_INVESTMENT_ACCOUNT } from '../../../shared/data/client.dat
     MatDialogClose,
     MatOption,
     MatDialogTitle,
+    MatSuffix,
+    MatRadioGroup,
+    MatRadioButton,
+    MatCard,
+    MatCardContent,
+    MatProgressBar,
+    MatProgressSpinner,
+    NgClass,
   ],
   providers: [provideNativeDateAdapter()],
 })
-export class HoldingImportComponent {
+export class HoldingImportComponent implements OnInit {
   private readonly apiService = inject(ApiService);
   private readonly dataService = inject(DataService);
+  private readonly portfolioService = inject(PortfolioService);
+  private readonly dialogRef = inject(MatDialogRef<HoldingImportComponent>);
+
+  myAccounts: CreditAccount[] = this.dataService
+    .getAccounts()
+    .filter((x) => x.account_type === ACCOUNT_TYPE_INVESTMENT_ACCOUNT);
+  myPortfolios: Portfolio[] = [];
+  progress = 0;
+  clickSubmit = false;
+  uploadComplete = false;
+  files: Array<File> = [];
 
   accountForm = new FormGroup({
-    account: new FormControl<number | null>(null),
+    account: new FormControl<CreditAccount | null>(null),
+    portfolio: new FormControl<Portfolio | null>(null),
   });
   secondFormGroup = new FormGroup({
+    target: new FormControl<string | null>(null),
     file: new FormControl(null),
   });
+
   readonly rangeForm = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
-  otherInfoForm = new FormGroup({
-    drop_duplicates: new FormControl<boolean>(true),
-    from_last_import_date: new FormControl<boolean>(false),
-  });
-  myAccounts: any[] = this.dataService
-    .getAccounts()
-    .filter((x) => x.account_type === ACCOUNT_TYPE_INVESTMENT_ACCOUNT);
-  files: Array<File> = [];
+
+  get selectedAccountName() {
+    return this.accountForm.get('account')?.value?.account_name ?? '';
+  }
+  get selectedPortfolio() {
+    return this.accountForm.get('portfolio')?.value?.name ?? '';
+  }
+  get selectedTargetName() {
+    return this.secondFormGroup.get('target')?.value ?? '';
+  }
+
+  get firstImportDate() {
+    return this.rangeForm.get('start')?.value ?? '';
+  }
+
+  get lastImportDate() {
+    return this.rangeForm.get('end')?.value ?? '';
+  }
+
+  get importFirstDate() {
+    return this.firstImportDate
+      ? `${moment(this.firstImportDate).format('YYYY-MM-DD').toString()}`
+      : '';
+  }
+  get importLastDate() {
+    return this.lastImportDate
+      ? `${moment(this.lastImportDate).format('YYYY-MM-DD').toString()}`
+      : '';
+  }
+
+  ngOnInit() {
+    this.portfolioService.portfolios.subscribe((data) => {
+      this.myPortfolios = data;
+    });
+  }
 
   onChange(event: any) {
     const uploadHook = event.target as HTMLInputElement;
@@ -106,26 +172,40 @@ export class HoldingImportComponent {
     this.files.forEach((x) => {
       formData.append('files', x);
     });
-    const accountId = this.accountForm.get('account')?.value;
-    const dt1 = this.rangeForm.get('start')?.value;
-    const dt2 = this.rangeForm.get('end')?.value;
-    let importStartDate = '';
-    let importEndDate = '';
-    if (dt1) {
-      importStartDate = moment(dt1).format('YYYY-MM-DD').toString();
-    }
-    if (dt2) {
-      importEndDate = moment(dt2).format('YYYY-MM-DD').toString();
-    }
-
-    formData.append('account_id', accountId!.toString());
+    const accountId =
+      this.accountForm.get('account')?.value?.id.toString() ?? '';
+    const portfolioId =
+      this.accountForm.get('portfolio')?.value?.id.toString() ?? '';
+    const importStartDate = this.importFirstDate ?? '';
+    const importEndDate = this.importLastDate ?? '';
+    const target = this.secondFormGroup.get('target')?.value ?? '';
+    formData.append('account', accountId);
+    formData.append('portfolio', portfolioId);
     formData.append('start_date', importStartDate);
     formData.append('end_date', importEndDate);
-    const upload$ = this.apiService.uploadHoldingTransactions(formData);
-    upload$.subscribe({
-      next: () => {},
-      error: (error: any) => {},
-    });
+    formData.append('target', target);
+    setTimeout(() => {
+      this.clickSubmit = true;
+      const upload$ = this.apiService.uploadHoldingTransactions(formData);
+      upload$.subscribe({
+        next: (event) => {
+          console.log(event);
+          switch (event.type) {
+            case HttpEventType.UploadProgress:
+              if (event.total) {
+                this.progress = Math.round((event.loaded / event.total) * 100);
+              }
+              break;
+            case HttpEventType.Response:
+              this.progress = 100;
+              this.uploadComplete = true;
+          }
+        },
+        error: (error: any) => {
+          return throwError(() => error);
+        },
+      });
+    }, 2000);
   }
 
   deleteAttachment(name: string) {
@@ -133,8 +213,22 @@ export class HoldingImportComponent {
   }
 
   isValidToSubmit() {
-    return false;
+    return !this.accountForm.invalid && this.files.length > 0;
   }
 
-  cancel() {}
+  cancel() {
+    this.dialogRef.close({
+      refresh: false,
+      data: null,
+      action: CANCEL_ACTION,
+    })
+  }
+
+  close() {
+    this.dialogRef.close({
+      refresh: true,
+      data: null,
+      action: SUCCESS_ACTION,
+    })
+  }
 }
