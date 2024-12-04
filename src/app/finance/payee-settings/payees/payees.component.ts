@@ -27,7 +27,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataService } from '../../../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PayeeEditComponent } from '../payee-edit/payee-edit.component';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import {
   TRANSACTION_TYPE_EXPENSE_ID,
   TRANSACTION_TYPE_INCOME_ID,

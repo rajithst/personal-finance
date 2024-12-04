@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Holding } from '../model/investment';
-import { faCirclePlus, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { HoldingUpdateComponent } from './holding-update/holding-update.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -75,8 +74,6 @@ export class HoldingsComponent implements OnInit {
     });
   }
 
-  applyFilter() {}
-
   importTransaction() {
     const dialog = this.dialog.open(HoldingImportComponent, {
       maxWidth: DIALOG_WIDTH,
@@ -91,8 +88,4 @@ export class HoldingsComponent implements OnInit {
       }
     });
   }
-
-  openFilters() {}
-
-  showValueAction() {}
 }

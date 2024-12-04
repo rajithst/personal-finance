@@ -4,7 +4,6 @@ import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { ApiService } from '../core/api.service';
-import { DataService } from '../service/data.service';
 import { PortfolioService } from './service/portfolio.service';
 import { Portfolio } from './model/portfolio';
 

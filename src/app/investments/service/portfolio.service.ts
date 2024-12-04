@@ -1,4 +1,4 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Portfolio, PortfolioPerformanceResponse } from '../model/portfolio';
 import { BehaviorSubject } from 'rxjs';
 
