@@ -15,7 +15,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { HoldingImportComponent } from './holding-import/holding-import.component';
 import { ApiService } from '../../core/api.service';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 const DIALOG_WIDTH = '900px';
 const DIALOG_TOP_POSITION = '5%';
