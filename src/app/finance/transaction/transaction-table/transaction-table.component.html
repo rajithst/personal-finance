@@ -113,13 +113,18 @@
 </div>
 <div class="transaction-panel-container">
   @if (loading()) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+  @if (noData && !loading()) {
     <mat-card appearance="outlined">
       <mat-card-content>
-        <p class="no-records-message">Loading...</p>
+        <p class="no-records-message">No data.</p>
       </mat-card-content>
     </mat-card>
   }
-  @if (!loading()) {
+  @if (!noData) {
     <mat-accordion class="transaction-item-panel" multi="true">
       @for (data of allTransactions; track data; let i = $index) {
         <mat-expansion-panel class="transaction-panel" #monthlyPanel>

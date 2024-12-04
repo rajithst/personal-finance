@@ -9,3 +9,19 @@ nav {
   );
   margin-bottom: 5px;
 }
+
+.main-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.toolbar-actions {
+  display: flex;
+  flex-direction: row;
+  > button {
+    margin: 0 5px;
+  }
+}
+div[mat-tab-group] {
+  flex-grow: 1;
+}

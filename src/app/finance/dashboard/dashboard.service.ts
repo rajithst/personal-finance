@@ -6,7 +6,6 @@ export class DashboardService {
   dashboardData = signal<DashboardResponse | null>(null);
 
   setDashboardData(data: DashboardResponse) {
-    console.log(data);
     this.dashboardData.set(data);
   }
 }

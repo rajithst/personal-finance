@@ -1,24 +1,13 @@
 import {
   Component,
   inject,
-  Input,
+  input,
   OnChanges,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 
-import {
-  faCaretDown,
-  faCaretUp,
-  faEllipsis,
-  faJpy,
-  faLineChart,
-  faList,
-  faMoneyBill,
-  faPlus,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
 import {
   MatTableDataSource,
   MatTable,
@@ -40,6 +29,21 @@ import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { NgClass, DecimalPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatCard, MatCardContent } from '@angular/material/card';
+
+interface TableElement {
+  company_name: string;
+  company_ticker: string;
+  image: string;
+  quantity: number;
+  average_price: string;
+  current_price: string;
+  total_investment: string;
+  current_value: string;
+  profit_loss_value: number;
+  profit_loss: string;
+  profit_change_percentage: string;
+  share_in_portfolio: string;
+}
 
 @Component({
   selector: 'app-holding-table',
@@ -70,14 +74,8 @@ import { MatCard, MatCardContent } from '@angular/material/card';
   ],
 })
 export class HoldingTableComponent implements OnChanges {
-  @Input() holdings: Holding[] = [];
+  holdings = input.required<Holding[] | null>();
   @ViewChild(MatSort) sort: MatSort;
-  totalShares: number = 0;
-  totalInvestment: number = 0;
-  totalCurrentPrice: number = 0;
-  totalProfit: number = 0;
-  totalProfitPercentage: number = 0;
-  currency: string = 'USD';
   displayedColumns: string[] = [
     'Stock',
     'Shares',
@@ -86,49 +84,53 @@ export class HoldingTableComponent implements OnChanges {
     'TotalInvestment',
     'CurrentValue',
     'TotalProfit',
-    'ShareInProtofolio',
+    'ShareInPortfolio',
     'Actions',
   ];
-  dataSource = new MatTableDataSource<Holding>();
-  protected readonly faCaretDown = faCaretDown;
-  protected readonly faCaretUp = faCaretUp;
-  protected readonly faLineChart = faLineChart;
-  protected readonly faMoneyBill = faMoneyBill;
-  protected readonly faEllipsis = faEllipsis;
-  protected readonly faJpy = faJpy;
-  protected readonly faPlus = faPlus;
-  protected readonly faTrash = faTrash;
-  protected readonly Math = Math;
-  protected readonly faList = faList;
-  private dialog = inject(MatDialog);
-  private apiService = inject(ApiService);
+  dataSource = new MatTableDataSource<TableElement>();
+  private readonly dialog = inject(MatDialog);
+  private readonly apiService = inject(ApiService);
+  totalInvestment: number = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.currency =
-      this.holdings.length > 0 ? this.holdings[0].stock_currency : '$';
-    this.totalShares = this.holdings.reduce((ac, cv) => ac + cv['quantity'], 0);
-    this.totalInvestment = this.holdings.reduce(
-      (ac, cv) => ac + cv['total_investment'],
-      0,
-    );
-    this.totalCurrentPrice = this.holdings.reduce(
-      (ac, cv) => ac + cv['current_value'],
-      0,
-    );
-    this.totalProfit = this.holdings.reduce(
-      (ac, cv) => ac + cv['profit_loss'],
-      0,
-    );
-    this.totalProfitPercentage =
-      (this.totalProfit / this.totalInvestment) * 100;
-    this.dataSource = new MatTableDataSource<Holding>(this.holdings);
+    const tableData = this.formatData();
+    this.dataSource = new MatTableDataSource<TableElement>(tableData ?? []);
     this.dataSource.sort = this.sort;
   }
 
-  formatValue(value: number): string {
+  formatData() {
+    const totalInvestment =
+      this.holdings()?.reduce((ac, cv) => ac + cv['total_investment'], 0) ?? 0;
+    const holdings = this.holdings();
+    const formattedHoldings: TableElement[] = [];
+    const valuePrefix = (value: number) => (value > 0 ? '+' : '-');
+    const formattedValue = (value: number) => Math.abs(value).toFixed(2);
+
+    holdings?.map((x) => {
+      const holdingShare = (x.total_investment / totalInvestment)*100
+      const obj: TableElement = {
+        company_name: x.company_name,
+        company_ticker: x.company,
+        image: x.image,
+        quantity: x.quantity,
+        average_price: `${x.stock_currency}${formattedValue(x.average_price)}`,
+        current_price: `${x.stock_currency}${formattedValue(x.current_price)}`,
+        total_investment: `${x.stock_currency}${formattedValue(x.total_investment)}`,
+        current_value: `${x.stock_currency}${formattedValue(x.current_value)}`,
+        profit_loss_value: x.profit_loss,
+        profit_loss: `${valuePrefix(x.profit_loss)}${x.stock_currency}${formattedValue(x.profit_loss)}`,
+        profit_change_percentage: `${valuePrefix(x.profit_loss)}${x.stock_currency}${formattedValue(x.profit_change_percentage)}%`,
+        share_in_portfolio: `${formattedValue(holdingShare)}%`,
+      };
+      formattedHoldings.push(obj);
+    });
+    return formattedHoldings;
+  }
+
+  formatValue(value: number, currency: string) {
     const prefix = value > 0 ? '+' : '-';
     const formattedValue = Math.abs(value);
-    return `${prefix} ${this.currency}${formattedValue.toFixed(2)}`;
+    return `${prefix} ${currency}${formattedValue.toFixed(2)}`;
   }
 
   openStockDetail(symbol: string) {
@@ -140,7 +142,7 @@ export class HoldingTableComponent implements OnChanges {
   }
 
   openModal(symbol: string, stockPriceHistory: StockDailyPrice[]) {
-    const holdingData = this.holdings.find((h) => h.company === symbol);
+    const holdingData = this.holdings()?.find((h) => h.company === symbol);
     const transactions = null;
     const purchaseHistory = null;
     const dialog = this.dialog.open(HoldingDetailsComponent, {
@@ -149,10 +151,6 @@ export class HoldingTableComponent implements OnChanges {
         top: '50px',
       },
       data: { symbol: symbol, holdingData, purchaseHistory, stockPriceHistory },
-    });
-    dialog.afterClosed().subscribe((result) => {
-      if (result) {
-      }
     });
   }
 }

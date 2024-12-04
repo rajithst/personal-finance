@@ -101,11 +101,6 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.preparePayeeTable();
-    this.dataService.searchBar$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((value) => {
-        this.dataSource.filter = value ? value.trim().toLowerCase() : '';
-      });
   }
 
   ngAfterViewInit() {

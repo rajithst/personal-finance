@@ -12,7 +12,7 @@ import {
 import { TotalInvestmentWidget } from './widgets/summary-widgets';
 import { PortfolioAllocationWidget } from './widgets/chart-widgets';
 import { DataService } from '../../service/data.service';
-import { PortfolioService } from './portfolio.service';
+import { PortfolioService } from '../service/portfolio.service';
 
 @Component({
   selector: 'app-portfolio',
@@ -55,13 +55,13 @@ export class PortfolioComponent implements OnDestroy {
     const dataService = inject(DataService);
     const portfolioService = inject(PortfolioService);
     const settings$ = apiService.initSettings();
-    const portfolio$ = apiService.getPortfolio();
+    const performance$ = apiService.getPortfolioPerformance();
 
-    forkJoin({ settings: settings$, portfolio: portfolio$ })
+    forkJoin({ settings: settings$, performance: performance$ })
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(({ settings, portfolio }) => {
+      .subscribe(({ settings, performance }) => {
         dataService.setClientSettings(settings);
-        portfolioService.setPortfolioData(portfolio);
+        portfolioService.setPortfolioPerformance(performance);
         this.prepareWidgets();
       });
   }

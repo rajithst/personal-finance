@@ -14,10 +14,6 @@ import { MyProfile } from '../finance/model/profile';
   providedIn: 'root',
 })
 export class DataService {
-  private readonly year$ = new BehaviorSubject<number>(
-    new Date().getFullYear(),
-  );
-  yearSwitch$ = this.year$.asObservable();
   private readonly payees$ = new BehaviorSubject<DestinationMap[]>([]);
   private readonly settings$ = new BehaviorSubject<ClientSettings>(
     this.getEmptyClientSettings(),
@@ -26,10 +22,18 @@ export class DataService {
   valueVisibility$ = this.valueVisible$.asObservable();
   private readonly refresher$ = new BehaviorSubject<boolean>(false);
   refresh$ = this.refresher$.asObservable();
-  private readonly search$ = new BehaviorSubject('');
-  searchBar$ = this.search$.asObservable();
   private readonly profile$ = new BehaviorSubject<MyProfile | null>(null);
-  myProfile$ = this.profile$.asObservable();
+
+  private readonly filterYear$ = new BehaviorSubject<number>(new Date().getFullYear());
+  year$ = this.filterYear$.asObservable();
+
+  getFilterYear() {
+    return this.filterYear$.value;
+  }
+
+  setFilterYear(year: number) {
+    this.filterYear$.next(year);
+  }
 
   setClientSettings(clientSettings: ClientSettings) {
     this.settings$.next(clientSettings);
@@ -39,16 +43,8 @@ export class DataService {
     return this.settings$.value;
   }
 
-  setFilterYear(year: number) {
-    this.year$.next(year);
-  }
-
   setRefresh(value: boolean) {
     this.refresher$.next(value);
-  }
-
-  getFilterYear() {
-    return this.year$.value;
   }
 
   setValueVisibility(value: boolean) {
@@ -99,10 +95,6 @@ export class DataService {
     );
   }
 
-  setSearchQuery(query: string) {
-    this.search$.next(query);
-  }
-
   setMyProfile(myProfile: MyProfile) {
     this.profile$.next(myProfile);
   }
@@ -118,4 +110,6 @@ export class DataService {
       transaction_sub_categories: [],
     };
   }
+
+
 }

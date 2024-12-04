@@ -48,4 +48,4 @@
     </button>
   </div>
 </div>
-<app-holding-table [holdings]="usHoldings"></app-holding-table>
+<app-holding-table [holdings]="holdings$ | async"></app-holding-table>

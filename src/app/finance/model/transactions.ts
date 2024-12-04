@@ -85,3 +85,8 @@ export interface TransactionSplitResponse {
   status: number;
   data: TransactionExpand[] | null;
 }
+export interface TransactionActionResult {
+  refresh: boolean;
+  data: TransactionExpand | TransactionExpand[] | null;
+  action: string;
+}

@@ -10,7 +10,7 @@ export class ChartUtilityService {
   lastMonthNumber = new Date().getMonth() - 1;
   currentMonthKey = `${this.currentYear}-${String(this.currentMonthNumber).padStart(2, '0')}-01`;
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private readonly dashboardService: DashboardService) {}
 
   private filter(
     data: DashboardTransaction[] | null,
