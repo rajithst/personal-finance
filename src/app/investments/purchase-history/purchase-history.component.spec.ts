@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TradeHistoryComponent } from './trade-history.component';
+import { PurchaseHistoryComponent } from './purchase-history.component';
 
 describe('TradeHistoryComponent', () => {
-  let component: TradeHistoryComponent;
-  let fixture: ComponentFixture<TradeHistoryComponent>;
+  let component: PurchaseHistoryComponent;
+  let fixture: ComponentFixture<PurchaseHistoryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TradeHistoryComponent],
+      imports: [PurchaseHistoryComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TradeHistoryComponent);
+    fixture = TestBed.createComponent(PurchaseHistoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

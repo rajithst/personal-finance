@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   inject,
   input,
   OnChanges,
@@ -29,6 +30,7 @@ import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { NgClass, DecimalPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 interface TableElement {
   company_name: string;
@@ -71,6 +73,7 @@ interface TableElement {
     MatRowDef,
     MatRow,
     DecimalPipe,
+    MatProgressSpinner,
   ],
 })
 export class HoldingTableComponent implements OnChanges {
@@ -90,7 +93,8 @@ export class HoldingTableComponent implements OnChanges {
   dataSource = new MatTableDataSource<TableElement>();
   private readonly dialog = inject(MatDialog);
   private readonly apiService = inject(ApiService);
-  totalInvestment: number = 0;
+  loading = computed(() => this.holdings() === null);
+  noData = computed(() => !this.loading() && this.holdings()?.length === 0);
 
   ngOnChanges(changes: SimpleChanges): void {
     const tableData = this.formatData();
@@ -107,7 +111,7 @@ export class HoldingTableComponent implements OnChanges {
     const formattedValue = (value: number) => Math.abs(value).toFixed(2);
 
     holdings?.map((x) => {
-      const holdingShare = (x.total_investment / totalInvestment)*100
+      const holdingShare = (x.total_investment / totalInvestment) * 100;
       const obj: TableElement = {
         company_name: x.company_name,
         company_ticker: x.company,

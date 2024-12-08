@@ -19,8 +19,8 @@ import { MatRipple } from '@angular/material/core';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { LoadingComponent } from '../../shared/loading/loading.component';
 import { MatTabsModule } from '@angular/material/tabs';
-import {MatButton} from "@angular/material/button";
-import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import { MatButton } from '@angular/material/button';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-transaction',
@@ -52,7 +52,7 @@ export class FinanceComponent {
     { label: 'Savings', route: 'saving' },
   ];
   activeLink = this.tabs[0];
-  financeYears: number[] = [2020, 2021, 2022, 2023, 2024, 2025]
+  financeYears: number[] = [2020, 2021, 2022, 2023, 2024, 2025];
 
   onYearSelect(year: number) {
     this.dataService.setFilterYear(year);

@@ -1,13 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import {
-  faCaretDown,
-  faCaretUp,
-  faCircleCheck,
-  faEdit,
-  faEllipsis,
-  faPlus,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import {Component, input, OnChanges, SimpleChanges} from '@angular/core';
 import {
   MatTableDataSource,
   MatTable,
@@ -29,7 +20,7 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatCard, MatCardContent } from '@angular/material/card';
 
 @Component({
-  selector: 'app-trade-history-table',
+  selector: 'app-purchase-history-table',
   templateUrl: './trade-history-table.component.html',
   styleUrl: './trade-history-table.component.scss',
   standalone: true,
@@ -56,7 +47,7 @@ import { MatCard, MatCardContent } from '@angular/material/card';
   ],
 })
 export class TradeHistoryTableComponent implements OnChanges {
-  @Input() trades: StockPurchaseHistory[] = [];
+  purchaseHistory = input.required<StockPurchaseHistory[] | null>();
   displayedColumns: string[] = [
     'Stock',
     'Date',
@@ -69,15 +60,8 @@ export class TradeHistoryTableComponent implements OnChanges {
     'Actions',
   ];
   dataSource = new MatTableDataSource<StockPurchaseHistory>();
-  protected readonly faCircleCheck = faCircleCheck;
-  protected readonly faCaretUp = faCaretUp;
-  protected readonly faCaretDown = faCaretDown;
-  protected readonly faEllipsis = faEllipsis;
-  protected readonly faPlus = faPlus;
-  protected readonly faTrash = faTrash;
-  protected readonly faEdit = faEdit;
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.dataSource = new MatTableDataSource<StockPurchaseHistory>(this.trades);
+    //this.dataSource = new MatTableDataSource<StockPurchaseHistory>(this.trades);
   }
 }

@@ -47,7 +47,6 @@ import { MatProgressBar } from '@angular/material/progress-bar';
 import { HttpEventType } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { CreditAccount } from '../../../finance/model/account';
-import { PortfolioService } from '../../service/portfolio.service';
 import { Portfolio } from '../../model/portfolio';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
@@ -96,7 +95,6 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 export class HoldingImportComponent implements OnInit {
   private readonly apiService = inject(ApiService);
   private readonly dataService = inject(DataService);
-  private readonly portfolioService = inject(PortfolioService);
   private readonly dialogRef = inject(MatDialogRef<HoldingImportComponent>);
 
   myAccounts: CreditAccount[] = this.dataService
@@ -152,9 +150,9 @@ export class HoldingImportComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.portfolioService.portfolios.subscribe((data) => {
-      this.myPortfolios = data;
-    });
+    // this.portfolioService.portfolios.subscribe((data) => {
+    //   this.myPortfolios = data;
+    // });
   }
 
   onChange(event: any) {

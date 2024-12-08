@@ -14,5 +14,19 @@ import { ChartUtilityService } from '../chart-utils.service';
 export class TotalInvestmentWidget {
   chartUtilityService = inject(ChartUtilityService);
   decimalPipe = inject(DecimalPipe);
-  formattedValue = `¥ ${this.decimalPipe.transform(10000, '1.2-2')}`;
+  formattedValue = `¥ ${this.decimalPipe.transform(this.chartUtilityService.getTotalInvestments(), '1.2-2')}`;
+}
+
+@Component({
+  selector: 'app-portfolio-value',
+  standalone: true,
+  providers: [DecimalPipe, ChartUtilityService],
+  imports: [SummaryComponent],
+  template: `<app-summary [summaryValue]="formattedValue"></app-summary>`,
+  styles: ``,
+})
+export class PortfolioValueWidget {
+  chartUtilityService = inject(ChartUtilityService);
+  decimalPipe = inject(DecimalPipe);
+  formattedValue = `¥ ${this.decimalPipe.transform(this.chartUtilityService.getPortfolioValue(), '1.2-2')}`;
 }

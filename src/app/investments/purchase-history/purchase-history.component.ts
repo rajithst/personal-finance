@@ -4,13 +4,13 @@ import { TradeHistoryTableComponent } from './trade-history-table/trade-history-
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
 
 @Component({
-  selector: 'app-trade-history',
-  templateUrl: './trade-history.component.html',
-  styleUrl: './trade-history.component.scss',
+  selector: 'app-purchase-history',
+  templateUrl: './purchase-history.component.html',
+  styleUrl: './purchase-history.component.scss',
   standalone: true,
   imports: [MatTabGroup, MatTab, TradeHistoryTableComponent],
 })
-export class TradeHistoryComponent implements OnInit {
+export class PurchaseHistoryComponent implements OnInit {
   usTrades: StockPurchaseHistory[] = [];
   domesticTrades: StockPurchaseHistory[] = [];
 

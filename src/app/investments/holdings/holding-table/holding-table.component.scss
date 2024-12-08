@@ -1,6 +1,6 @@
-.stock-table-card {
-  height: 70vh;
-  overflow-x: auto;
+.holding-panel-container {
+  height: calc(100vh - 230px);
+  overflow: auto;
 }
 
 table.portfolio-table {
