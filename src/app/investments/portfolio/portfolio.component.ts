@@ -9,7 +9,7 @@ import {
   Widget,
   WidgetComponent,
 } from '../../components/widget/widget.component';
-import {PortfolioValueWidget, TotalInvestmentWidget} from './widgets/summary-widgets';
+import {PortfolioGainsWidget, PortfolioValueWidget} from './widgets/summary-widgets';
 import {
   IndustryAllocationWidget,
   MonthlyInvestmentWidget,
@@ -87,8 +87,8 @@ export class PortfolioComponent implements OnDestroy {
       },
       {
         id: 1,
-        label: 'Total Investment',
-        content: TotalInvestmentWidget,
+        label: 'Portfolio Gains',
+        content: PortfolioGainsWidget,
         rows: 1,
         columns: 1,
         backgroundColor: '#003f5c',
@@ -98,7 +98,7 @@ export class PortfolioComponent implements OnDestroy {
       {
         id: 1,
         label: 'IRR',
-        content: TotalInvestmentWidget,
+        content: PortfolioGainsWidget,
         rows: 1,
         columns: 1,
         backgroundColor: '#003f5c',
@@ -108,7 +108,7 @@ export class PortfolioComponent implements OnDestroy {
       {
         id: 1,
         label: 'Passive Income',
-        content: TotalInvestmentWidget,
+        content: PortfolioGainsWidget,
         rows: 1,
         columns: 1,
         backgroundColor: '#003f5c',

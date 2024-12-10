@@ -1,14 +1,5 @@
-import { Component, Input } from '@angular/core';
-import {
-  faCaretDown,
-  faCaretUp,
-  faCircleCheck,
-  faJpy,
-  faLineChart,
-  faMoneyBill,
-} from '@fortawesome/free-solid-svg-icons';
+import {Component, computed, input} from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   MatTable,
   MatColumnDef,
@@ -25,6 +16,8 @@ import {
   MatCardTitle,
   MatCardContent,
 } from '@angular/material/card';
+import { Dividend, DividendIncome } from '../../model/stock';
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-dividend-table',
@@ -42,15 +35,16 @@ import {
     MatHeaderCell,
     MatCellDef,
     MatCell,
-    FaIconComponent,
     MatRowDef,
     MatRow,
     DecimalPipe,
+    MatProgressSpinner,
   ],
 })
 export class DividendTableComponent {
-  @Input() dividends: any[] = [];
-
+  dividends = input.required<DividendIncome[] | null>();
+  loading = computed(() => this.dividends() === null);
+  noData = computed(() => !this.loading() && this.dividends()?.length === 0);
   displayedColumns: string[] = [
     'position',
     'name',
@@ -58,13 +52,6 @@ export class DividendTableComponent {
     'symbol',
     'action',
   ];
-  protected readonly faCaretUp = faCaretUp;
-  protected readonly faMoneyBill = faMoneyBill;
-  protected readonly faLineChart = faLineChart;
-  protected readonly faJpy = faJpy;
-  protected readonly faCaretDown = faCaretDown;
-  protected readonly Math = Math;
-  protected readonly faCircleCheck = faCircleCheck;
 
   dividendPaymentFlow(element: any) {}
 }

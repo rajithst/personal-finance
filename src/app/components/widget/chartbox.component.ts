@@ -28,6 +28,7 @@ export class ChartComponent implements OnInit {
   chart = viewChild.required<ElementRef>('chart');
 
   ngOnInit() {
+    console.log(this.chartConfig().plugins);
     const chart = new Chart(this.chart().nativeElement, {
       type: this.chartConfig().type as keyof ChartTypeRegistry,
       data: this.chartConfig().data,
@@ -42,9 +43,7 @@ export class ChartComponent implements OnInit {
         },
         plugins: {
           ...this.chartConfig().plugins,
-          legend: {
-            position: 'bottom',
-          },
+
         },
         onClick: (evt: Event) => {
           var elements = chart.getElementsAtEventForMode(

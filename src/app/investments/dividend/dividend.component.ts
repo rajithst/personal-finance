@@ -1,26 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import {Component, inject, OnInit} from '@angular/core';
 import { DividendTableComponent } from './dividend-table/dividend-table.component';
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import {Observable} from "rxjs";
+import {ApiService} from "../../core/api.service";
+import {AsyncPipe} from "@angular/common";
+import {Dividend, DividendIncome} from "../model/stock";
 
 @Component({
   selector: 'app-dividend',
-  templateUrl: './dividend.component.html',
-  styleUrl: './dividend.component.scss',
+  template: `<app-dividend-table
+    [dividends]="dividends$ | async"
+  ></app-dividend-table>`,
+  styles: ``,
   standalone: true,
-  imports: [MatTabGroup, MatTab, DividendTableComponent],
+  imports: [DividendTableComponent, AsyncPipe],
 })
 export class DividendComponent implements OnInit {
-  usDividends: any[] = [];
-  domesticDividends: any[] = [];
-  protected readonly faCaretUp = faCaretUp;
-  protected readonly faCaretDown = faCaretDown;
-
-  constructor(private dialog: MatDialog) {}
+  private readonly apiService = inject(ApiService);
+  dividends$: Observable<DividendIncome[]>;
 
   ngOnInit(): void {
-    this.usDividends = [];
-    this.domesticDividends = [];
+    this.dividends$ = this.apiService.getDividends();
   }
 }

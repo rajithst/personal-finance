@@ -19,6 +19,10 @@ export class ChartUtilityService {
     return this.portfolioService.portfolioData()?.current_portfolio_value ?? 0;
   }
 
+  getTotalProfit() {
+    return this.getPortfolioValue() - this.getTotalInvestments();
+  }
+
   getMonthList() {
     return MONTHS.map((month) => month.viewValue);
   }
@@ -32,4 +36,6 @@ export class ChartUtilityService {
   getCurrentYear() {
     return this.currentYear.toString();
   }
+
+
 }

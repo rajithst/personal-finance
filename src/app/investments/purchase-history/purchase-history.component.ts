@@ -1,20 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { StockPurchaseHistory } from '../model/investment';
-import { TradeHistoryTableComponent } from './trade-history-table/trade-history-table.component';
+import { PurchaseHistoryTableComponent } from './purchase-history-table/purchase-history-table.component';
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { AsyncPipe } from '@angular/common';
+import { Observable } from 'rxjs';
+import { ApiService } from '../../core/api.service';
 
 @Component({
   selector: 'app-purchase-history',
-  templateUrl: './purchase-history.component.html',
-  styleUrl: './purchase-history.component.scss',
+  template: `
+    <app-purchase-history-table
+      [purchaseHistory]="purchaseHistory$ | async"
+    ></app-purchase-history-table>
+  `,
+  styles: ``,
   standalone: true,
-  imports: [MatTabGroup, MatTab, TradeHistoryTableComponent],
+  imports: [MatTabGroup, MatTab, PurchaseHistoryTableComponent, AsyncPipe],
 })
 export class PurchaseHistoryComponent implements OnInit {
-  usTrades: StockPurchaseHistory[] = [];
-  domesticTrades: StockPurchaseHistory[] = [];
+  private readonly apiService = inject(ApiService);
+  purchaseHistory$: Observable<StockPurchaseHistory[]>;
 
   ngOnInit(): void {
-    // TODO document why this method 'ngOnInit' is empty
+    this.purchaseHistory$ = this.apiService.getStockPurchaseHistory();
   }
 }

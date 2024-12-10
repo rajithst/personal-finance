@@ -22,7 +22,7 @@ export class ChartWidgetBase implements OnInit {
   };
 
   ngOnInit() {
-    console.log(this.options());
+    console.log(this.plugins());
     this.chartConfig = {
       type: this.chartType(),
       data: { labels: this.labels(), datasets: this.datasets() },

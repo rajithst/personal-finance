@@ -31,6 +31,7 @@ export class PortfolioAllocationWidget implements OnInit {
       [chartType]="'doughnut'"
       [labels]="labels"
       [datasets]="datasets"
+      [plugins]="plugins"
     ></app-chart-widget>
   `,
   styles: ``,
@@ -40,7 +41,11 @@ export class IndustryAllocationWidget implements OnInit {
 
   labels: string[] = [];
   datasets: any[] = [];
-
+  plugins: any = {
+    legend: {
+      position: 'right',
+    },
+  };
   ngOnInit() {
     const data =
       this.portfolioService.portfolioData()?.industry_allocation ?? [];
@@ -60,6 +65,7 @@ export class IndustryAllocationWidget implements OnInit {
       [chartType]="'doughnut'"
       [labels]="labels"
       [datasets]="datasets"
+      [plugins]="plugins"
     ></app-chart-widget>
   `,
   styles: ``,
@@ -69,7 +75,11 @@ export class SectorAllocationWidget implements OnInit {
 
   labels: string[] = [];
   datasets: any[] = [];
-
+  plugins: any = {
+    legend: {
+      position: 'right',
+    },
+  };
   ngOnInit() {
     const data = this.portfolioService.portfolioData()?.sector_allocation ?? [];
     this.labels = Object.keys(data);
@@ -85,7 +95,7 @@ export class SectorAllocationWidget implements OnInit {
   imports: [ChartWidgetBase],
   template: `
     <app-chart-widget
-      [chartType]="'line'"
+      [chartType]="'bar'"
       [labels]="labels"
       [datasets]="datasets"
     ></app-chart-widget>
