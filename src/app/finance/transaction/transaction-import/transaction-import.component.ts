@@ -14,6 +14,7 @@ import {
   ACCOUNT_TYPE_BANK_ACCOUNT,
   ACCOUNT_TYPE_CREDIT_CARD,
   CANCEL_ACTION,
+  SUCCESS_ACTION,
 } from '../../../shared/data/client.data';
 import moment from 'moment';
 import { DatePipe } from '@angular/common';
@@ -48,6 +49,7 @@ import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatList, MatListItem, MatListItemIcon } from '@angular/material/list';
 import { CreditAccount } from '../../model/account';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-transaction-import',
@@ -88,6 +90,7 @@ import { CreditAccount } from '../../model/account';
     MatList,
     MatListItem,
     MatListItemIcon,
+    MatProgressSpinner,
   ],
   providers: [provideNativeDateAdapter()],
 })
@@ -124,19 +127,31 @@ export class TransactionImportComponent {
     return this.accountForm.get('account')?.value?.account_name ?? '';
   }
 
+  get firstImportDate() {
+    return this.rangeForm.get('start')?.value ?? '';
+  }
+
+  get lastImportDate() {
+    return this.rangeForm.get('end')?.value ?? '';
+  }
+
   get importFirstDate() {
-    return `${moment(this.rangeForm.get('start')?.value).format('YYYY-MM-DD').toString()}`
+    return this.firstImportDate
+      ? `${moment(this.firstImportDate).format('YYYY-MM-DD').toString()}`
+      : '';
   }
   get importLastDate() {
-     return `${moment(this.rangeForm.get('end')?.value).format('YYYY-MM-DD').toString()}`;
+    return this.lastImportDate
+      ? `${moment(this.lastImportDate).format('YYYY-MM-DD').toString()}`
+      : '';
   }
 
   get dropDuplicates() {
-    return this.otherInfoForm.get('drop_duplicates')?.value
+    return this.otherInfoForm.get('drop_duplicates')?.value;
   }
 
   get importFromLastDate() {
-    return this.otherInfoForm.get('from_last_import_date')?.value
+    return this.otherInfoForm.get('from_last_import_date')?.value;
   }
 
   onChange(event: any) {
@@ -158,10 +173,8 @@ export class TransactionImportComponent {
     const accountId = this.accountForm.get('account')?.value?.id;
     const dropDuplicates = this.dropDuplicates;
     const lastDate = this.importFromLastDate;
-    const dt1 = this.importFirstDate;
-    const dt2 = this.importLastDate;
-    let importStartDate = dt1 ?? '';
-    let importEndDate = dt2 ?? '';
+    let importStartDate = this.importFirstDate ?? '';
+    let importEndDate = this.importLastDate ?? '';
 
     formData.append('account_id', accountId!.toString());
     formData.append('drop_duplicates', dropDuplicates === true ? '1' : '0');
@@ -169,23 +182,26 @@ export class TransactionImportComponent {
     formData.append('start_date', importStartDate);
     formData.append('end_date', importEndDate);
     const upload$ = this.apiService.uploadTransactions(formData);
-    upload$.subscribe({
-      next: (event) => {
-        switch (event.type) {
-          case HttpEventType.UploadProgress:
-            if (event.total) {
-              this.progress = Math.round((event.loaded / event.total) * 100);
-            }
-            break;
-          case HttpEventType.Response:
-            this.progress = 100;
-            this.uploadComplete = true;
-        }
-      },
-      error: (error: any) => {
-        return throwError(() => error);
-      },
-    });
+    setTimeout(() => {
+      this.clickSubmit = true;
+      upload$.subscribe({
+        next: (event) => {
+          switch (event.type) {
+            case HttpEventType.UploadProgress:
+              if (event.total) {
+                this.progress = Math.round((event.loaded / event.total) * 100);
+              }
+              break;
+            case HttpEventType.Response:
+              this.progress = 100;
+              this.uploadComplete = true;
+          }
+        },
+        error: (error: any) => {
+          return throwError(() => error);
+        },
+      });
+    }, 2000);
   }
 
   deleteAttachment(name: string) {
@@ -208,6 +224,14 @@ export class TransactionImportComponent {
       refresh: false,
       data: null,
       action: CANCEL_ACTION,
+    });
+  }
+
+  close() {
+    this.dialogRef.close({
+      refresh: true,
+      data: null,
+      action: SUCCESS_ACTION,
     });
   }
 }

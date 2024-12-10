@@ -169,8 +169,8 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     return this.segments().at(segmentLength - 1);
   });
 
-  noData = false;
   loading = computed(() => this.transactions() === null);
+  noData = computed(() => !this.loading() && this.transactions()?.length === 0);
   showValues = false;
   selection = new SelectionModel<TransactionExpand>(true, []);
   allDataSource: MatTableDataSource<TransactionExpand>[] = [];
@@ -236,7 +236,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.createFilterChips();
     this.applyFiltersToTables();
-    this.noData = this.allTransactions.length === 0;
   }
 
   editTransaction(item: TransactionExpand) {

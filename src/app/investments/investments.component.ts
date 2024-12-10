@@ -4,7 +4,6 @@ import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { ApiService } from '../core/api.service';
-import { PortfolioService } from './service/portfolio.service';
 import { Portfolio } from './model/portfolio';
 
 @Component({
@@ -79,12 +78,12 @@ export class InvestmentsComponent {
   ];
   activeLink = this.tabs[0];
   myPortfolios: Portfolio[] = [];
-  private readonly portfolioService = inject(PortfolioService);
+  //private readonly portfolioService = inject(PortfolioService);
 
   constructor() {
     const apiService = inject(ApiService);
     apiService.getPortfolios().subscribe((portfolios) => {
-      this.portfolioService.setPortfolios(portfolios);
+      //this.portfolioService.setPortfolios(portfolios);
       this.myPortfolios = portfolios;
     });
   }

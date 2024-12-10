@@ -20,8 +20,10 @@
 .dividend-title-header {
   display: flex;
   align-items: center;
-  width: 200px;
   justify-content: space-between;
+  > div {
+    margin: 0 5px;
+  }
 }
 
 .dividend-title-header > .dividend-amount {

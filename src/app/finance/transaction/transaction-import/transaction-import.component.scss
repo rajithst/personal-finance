@@ -5,7 +5,6 @@
   width: 500px;
   padding: 10px;
 }
-
 .step-actions {
   display: flex;
   flex-direction: row;
@@ -64,4 +63,28 @@ mat-card {
 
 .right-icon {
   margin-left: auto;
+}
+
+.callout-panel {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #428f42;
+}
+.success-class {
+  color: #8ee48e;
+}
+
+.importing-steps {
+  display: flex;
+  flex-direction: column;
+  > .step {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px 0;
+    > div {
+      margin: 0 5px;
+    }
+  }
 }

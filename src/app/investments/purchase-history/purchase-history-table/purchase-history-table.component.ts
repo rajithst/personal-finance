@@ -1,13 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import {
-  faCaretDown,
-  faCaretUp,
-  faCircleCheck,
-  faEdit,
-  faEllipsis,
-  faPlus,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import {Component, computed, input, OnChanges, SimpleChanges} from '@angular/core';
 import {
   MatTableDataSource,
   MatTable,
@@ -27,11 +18,12 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatCard, MatCardContent } from '@angular/material/card';
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
-  selector: 'app-trade-history-table',
-  templateUrl: './trade-history-table.component.html',
-  styleUrl: './trade-history-table.component.scss',
+  selector: 'app-purchase-history-table',
+  templateUrl: './purchase-history-table.component.html',
+  styleUrl: './purchase-history-table.component.scss',
   standalone: true,
   imports: [
     MatCard,
@@ -53,10 +45,11 @@ import { MatCard, MatCardContent } from '@angular/material/card';
     MatRowDef,
     MatRow,
     DecimalPipe,
+    MatProgressSpinner,
   ],
 })
-export class TradeHistoryTableComponent implements OnChanges {
-  @Input() trades: StockPurchaseHistory[] = [];
+export class PurchaseHistoryTableComponent implements OnChanges {
+  purchaseHistory = input.required<StockPurchaseHistory[] | null>();
   displayedColumns: string[] = [
     'Stock',
     'Date',
@@ -64,20 +57,18 @@ export class TradeHistoryTableComponent implements OnChanges {
     'Industry',
     'Sector',
     'Price',
-    'CurrentShareValue',
-    'TotalProfit',
     'Actions',
   ];
   dataSource = new MatTableDataSource<StockPurchaseHistory>();
-  protected readonly faCircleCheck = faCircleCheck;
-  protected readonly faCaretUp = faCaretUp;
-  protected readonly faCaretDown = faCaretDown;
-  protected readonly faEllipsis = faEllipsis;
-  protected readonly faPlus = faPlus;
-  protected readonly faTrash = faTrash;
-  protected readonly faEdit = faEdit;
+  loading = computed(() => this.purchaseHistory() === null);
+  noData = computed(
+    () => !this.loading() && this.purchaseHistory()?.length === 0,
+  );
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.dataSource = new MatTableDataSource<StockPurchaseHistory>(this.trades);
+    console.log(this.purchaseHistory());
+    this.dataSource = new MatTableDataSource<StockPurchaseHistory>(
+      this.purchaseHistory() ?? [],
+    );
   }
 }

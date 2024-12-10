@@ -3,7 +3,7 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
 import { InvestmentsComponent } from './investments.component';
 import { HoldingsComponent } from './holdings/holdings.component';
 import { DividendComponent } from './dividend/dividend.component';
-import { TradeHistoryComponent } from './trade-history/trade-history.component';
+import { PurchaseHistoryComponent } from './purchase-history/purchase-history.component';
 
 export const INVESTMENT_ROUTES: Routes = [
   {
@@ -32,7 +32,7 @@ export const INVESTMENT_ROUTES: Routes = [
       },
       {
         path: 'purchase-history',
-        component: TradeHistoryComponent,
+        component: PurchaseHistoryComponent,
         title: 'Expense Activity',
       },
     ],

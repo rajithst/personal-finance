@@ -9,10 +9,14 @@ import {
   Widget,
   WidgetComponent,
 } from '../../components/widget/widget.component';
-import { TotalInvestmentWidget } from './widgets/summary-widgets';
-import { PortfolioAllocationWidget } from './widgets/chart-widgets';
+import {PortfolioGainsWidget, PortfolioValueWidget} from './widgets/summary-widgets';
+import {
+  IndustryAllocationWidget,
+  MonthlyInvestmentWidget,
+  SectorAllocationWidget
+} from './widgets/chart-widgets';
 import { DataService } from '../../service/data.service';
-import { PortfolioService } from '../service/portfolio.service';
+import { PortfolioService } from './portfolio.service';
 
 @Component({
   selector: 'app-portfolio',
@@ -48,12 +52,13 @@ import { PortfolioService } from '../service/portfolio.service';
 })
 export class PortfolioComponent implements OnDestroy {
   protected readonly destroyed$ = new ReplaySubject<void>(1);
+  private readonly portfolioService = inject(PortfolioService);
   widgets: Widget[] = [];
 
   constructor() {
     const apiService = inject(ApiService);
     const dataService = inject(DataService);
-    const portfolioService = inject(PortfolioService);
+
     const settings$ = apiService.initSettings();
     const performance$ = apiService.getPortfolioPerformance();
 
@@ -61,7 +66,9 @@ export class PortfolioComponent implements OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe(({ settings, performance }) => {
         dataService.setClientSettings(settings);
-        portfolioService.setPortfolioPerformance(performance);
+        console.log(performance);
+        this.portfolioService.setPortfolioData(performance);
+        console.log(this.portfolioService.portfolioData());
         this.prepareWidgets();
       });
   }
@@ -71,7 +78,7 @@ export class PortfolioComponent implements OnDestroy {
       {
         id: 1,
         label: 'Portfolio Value',
-        content: TotalInvestmentWidget,
+        content: PortfolioValueWidget,
         rows: 1,
         columns: 1,
         backgroundColor: '#003f5c',
@@ -80,8 +87,8 @@ export class PortfolioComponent implements OnDestroy {
       },
       {
         id: 1,
-        label: 'Total Profit',
-        content: TotalInvestmentWidget,
+        label: 'Portfolio Gains',
+        content: PortfolioGainsWidget,
         rows: 1,
         columns: 1,
         backgroundColor: '#003f5c',
@@ -91,7 +98,7 @@ export class PortfolioComponent implements OnDestroy {
       {
         id: 1,
         label: 'IRR',
-        content: TotalInvestmentWidget,
+        content: PortfolioGainsWidget,
         rows: 1,
         columns: 1,
         backgroundColor: '#003f5c',
@@ -101,7 +108,7 @@ export class PortfolioComponent implements OnDestroy {
       {
         id: 1,
         label: 'Passive Income',
-        content: TotalInvestmentWidget,
+        content: PortfolioGainsWidget,
         rows: 1,
         columns: 1,
         backgroundColor: '#003f5c',
@@ -110,9 +117,25 @@ export class PortfolioComponent implements OnDestroy {
       },
       {
         id: 1,
-        label: 'Portfolio',
-        content: PortfolioAllocationWidget,
-        rows: 1,
+        label: 'Industry Allocation',
+        content: IndustryAllocationWidget,
+        rows: 3,
+        columns: 1,
+        hideSettingsButton: true,
+      },
+      {
+        id: 1,
+        label: 'Sector Allocation',
+        content: SectorAllocationWidget,
+        rows: 3,
+        columns: 1,
+        hideSettingsButton: true,
+      },
+      {
+        id: 1,
+        label: 'Monthly Investment',
+        content: MonthlyInvestmentWidget,
+        rows: 3,
         columns: 2,
         hideSettingsButton: true,
       },

@@ -110,7 +110,7 @@
         <div class="step-content">
           <dl>
             <dt>Account:</dt>
-            <dd>{{selectedAccountName}}</dd>
+            <dd>{{ selectedAccountName }}</dd>
           </dl>
           <dl>
             <dt>Files:</dt>
@@ -119,14 +119,10 @@
             }
           </dl>
           <dl>
-            <dt>Date range:</dt>
-            <dd>{{importFirstDate}} - {{importLastDate}}</dd>
-          </dl>
-          <dl>
             <dt>Drop duplicates:</dt>
             <dd>{{dropDuplicates ? 'Yes' : 'No'}}</dd>
-          </dl>
-          <dl>
+            <dt>Date range:</dt>
+            <dd>{{ importFirstDate }} - {{ importLastDate }}</dd>
             <dt>Import from last imported date:</dt>
             <dd>{{importFromLastDate ? 'Yes' : 'No'}}</dd>
           </dl>
@@ -146,20 +142,58 @@
     </mat-stepper>
   }
   @if (clickSubmit) {
-    <mat-card appearance="outlined">
-      <mat-card-content>
-        <h3 class="import-title">Importing data.</h3>
-        <p>Progress: {{ progress }}%</p>
-        <mat-progress-bar
-          mode="buffer"
-          bufferValue="100"
-          value="{{ progress }}"
-        ></mat-progress-bar>
-      </mat-card-content>
-    </mat-card>
+    <div class="step-content">
+      <mat-card appearance="outlined">
+        <mat-card-content>
+          <div class="importing-steps">
+            @if (progress == 100 && uploadComplete) {
+              <div class="callout-panel">
+                <p>Finished import. You can close the dialog.</p>
+              </div>
+            }
+            <div class="step">
+              <div class="step-status">
+                @if (progress < 100) {
+                  <mat-spinner [diameter]="20"></mat-spinner>
+                }
+                @if (progress == 100) {
+                  <mat-icon class="success-class">check_circle</mat-icon>
+                }
+              </div>
+              <div class="step-name">Uploading files ({{ progress }}%).</div>
+            </div>
+            <div class="step">
+              <div class="step-status">
+                @if (!uploadComplete) {
+                  <mat-spinner [diameter]="20"></mat-spinner>
+                }
+                @if (uploadComplete) {
+                  <mat-icon class="success-class">check_circle</mat-icon>
+                }
+              </div>
+              <div class="step-name">Preparing transactions.</div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
   }
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button (click)="cancel()" mat-dialog-close mat-raised-button>Cancel</button>
+  @if (!clickSubmit) {
+    <button (click)="cancel()" mat-dialog-close mat-raised-button>
+      Cancel
+    </button>
+  }
+  @if (uploadComplete && progress == 100) {
+    <button
+      (click)="close()"
+      mat-dialog-close
+      mat-raised-button
+      color="primary"
+    >
+      Close
+    </button>
+  }
 </mat-dialog-actions>
