@@ -13,8 +13,10 @@ import {
   TransactionsResponse,
 } from '../finance/model/transactions';
 import {
-  CompanyResponse, Holding,
-  StockDailyPriceResponse, StockPurchaseHistory,
+  CompanyResponse,
+  Holding,
+  StockDailyPriceResponse,
+  StockPurchaseHistory,
 } from '../investments/model/investment';
 import {
   StockPurchase,
@@ -37,8 +39,11 @@ import {
 import { MyProfile } from '../finance/model/profile';
 import { JwtTokenResponse } from '../auth/model';
 import { CreditAccount, CreditAccountRequest } from '../finance/model/account';
-import {Portfolio, PortfolioPerformanceResponse} from "../investments/model/portfolio";
-import {Dividend, DividendIncome} from "../investments/model/stock";
+import {
+  Portfolio,
+  PortfolioPerformanceResponse,
+} from '../investments/model/portfolio';
+import { DividendIncome } from '../investments/model/stock';
 
 @Injectable({
   providedIn: 'root',
@@ -198,23 +203,23 @@ export class ApiService {
   /* Investment Module APIs*/
 
   getPortfolios(): Observable<Portfolio[]> {
-    return this.http.get<Portfolio[]>(
-      `${this.SRC_URL}/investments/portfolio/`,
-    );
+    return this.http.get<Portfolio[]>(`${this.SRC_URL}/investments/portfolio/`);
   }
 
   getPortfolioPerformance(): Observable<PortfolioPerformanceResponse> {
     return this.http.get<PortfolioPerformanceResponse>(
       `${this.SRC_URL}/investments/dashboard/`,
-    )
+    );
   }
 
   getHoldings(): Observable<Holding[]> {
-    return this.http.get<Holding[]>(`${this.SRC_URL}/investments/holdings/`,)
+    return this.http.get<Holding[]>(`${this.SRC_URL}/investments/holdings/`);
   }
 
   getDividends(): Observable<DividendIncome[]> {
-    return this.http.get<DividendIncome[]>(`${this.SRC_URL}/investments/dividends/income/`,)
+    return this.http.get<DividendIncome[]>(
+      `${this.SRC_URL}/investments/dividends/income/`,
+    );
   }
   updateStockPurchaseHistory(payload: StockPurchase): Observable<any> {
     return this.http.post(
@@ -226,7 +231,7 @@ export class ApiService {
   getStockPurchaseHistory(): Observable<StockPurchaseHistory[]> {
     return this.http.get<StockPurchaseHistory[]>(
       `${this.SRC_URL}/investments/stocks/purchases/history/`,
-    )
+    );
   }
   getStockPriceHistory(payload: string): Observable<StockDailyPriceResponse> {
     return this.http.get<StockDailyPriceResponse>(
@@ -266,6 +271,4 @@ export class ApiService {
       },
     );
   }
-
-
 }

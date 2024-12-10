@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { SummaryComponent } from '../../../components/widget/summarybox.component';
 import { ChartUtilityService } from '../chart-utils.service';

@@ -1,4 +1,4 @@
-import {Component, computed, input} from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import {
   MatTable,
@@ -16,8 +16,8 @@ import {
   MatCardTitle,
   MatCardContent,
 } from '@angular/material/card';
-import { Dividend, DividendIncome } from '../../model/stock';
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import { DividendIncome } from '../../model/stock';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-dividend-table',

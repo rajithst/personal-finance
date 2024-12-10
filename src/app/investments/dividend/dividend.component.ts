@@ -1,10 +1,9 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { DividendTableComponent } from './dividend-table/dividend-table.component';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import {Observable} from "rxjs";
-import {ApiService} from "../../core/api.service";
-import {AsyncPipe} from "@angular/common";
-import {Dividend, DividendIncome} from "../model/stock";
+import { Observable } from 'rxjs';
+import { ApiService } from '../../core/api.service';
+import { AsyncPipe } from '@angular/common';
+import { DividendIncome } from '../model/stock';
 
 @Component({
   selector: 'app-dividend',
