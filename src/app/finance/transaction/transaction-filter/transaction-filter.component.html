@@ -8,27 +8,12 @@
         hideSingleSelectionIndicator
       >
         <mat-list-option (click)="clickOnMainFilter('categories')">
-          <fa-icon
-            [icon]="faLayerGroup"
-            [style]="{ color: '#4a4949' }"
-            size="1x"
-          ></fa-icon>
           Categories
         </mat-list-option>
         <mat-list-option (click)="clickOnMainFilter('accounts')">
-          <fa-icon
-            [icon]="faCreditCard"
-            [style]="{ color: '#4a4949' }"
-            size="1x"
-          ></fa-icon>
           Accounts
         </mat-list-option>
         <mat-list-option (click)="clickOnMainFilter('payee')">
-          <fa-icon
-            [icon]="faShop"
-            [style]="{ color: '#4a4949' }"
-            size="1x"
-          ></fa-icon>
           Payee
         </mat-list-option>
       </mat-selection-list>

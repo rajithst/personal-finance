@@ -20,38 +20,18 @@
   </button>
   <mat-menu #menu="matMenu">
     <button mat-menu-item routerLink="profile">
-      <fa-icon
-        [icon]="faUserCircle"
-        [style]="{ color: '#3699ff' }"
-        size="sm"
-      ></fa-icon>
       <span class="profile-menu-item"
         >{{ authService.currentUser?.first_name }}
         {{ authService.currentUser?.last_name }}</span
       >
     </button>
     <button mat-menu-item routerLink="app-settings">
-      <fa-icon
-        [icon]="faGear"
-        [style]="{ color: '#3699ff' }"
-        size="sm"
-      ></fa-icon>
       <span class="profile-menu-item">Settings</span>
     </button>
     <button mat-menu-item routerLink="app-activity-log">
-      <fa-icon
-        [icon]="faList"
-        [style]="{ color: '#3699ff' }"
-        size="sm"
-      ></fa-icon>
       <span class="profile-menu-item">Activity Log</span>
     </button>
     <button (click)="authService.logout()" mat-menu-item>
-      <fa-icon
-        [icon]="faSignOut"
-        [style]="{ color: '#3699ff' }"
-        size="sm"
-      ></fa-icon>
       <span class="profile-menu-item">Log Out</span>
     </button>
   </mat-menu>

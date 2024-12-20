@@ -17,7 +17,6 @@ import {
   MatDialogClose,
 } from '@angular/material/dialog';
 import { TransactionSubCategory } from '../../../model/common';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../../../../core/api.service';
 import {
   CategorySettings,
@@ -30,7 +29,6 @@ import {
 } from '../../../../shared/data/client.data';
 import { MatButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatRipple } from '@angular/material/core';
@@ -60,7 +58,6 @@ interface CategoryEditDialogData {
         MatInput,
         MatRipple,
         MatTooltip,
-        FaIconComponent,
         MatDivider,
         MatButton,
         MatDialogActions,
@@ -82,7 +79,6 @@ export class CategoryEditComponent implements OnInit {
   deletedSubCategories: TransactionSubCategory[] = [];
   isCategoryDeleted = false;
 
-  protected readonly faTrash = faTrash;
   protected readonly TRANSACTION_TYPES = TRANSACTION_TYPES;
 
   get subcategories(): FormControl[] {
