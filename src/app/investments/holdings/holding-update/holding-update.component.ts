@@ -20,7 +20,6 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { StockPurchase } from '../../model/transaction';
 import moment from 'moment/moment';
 import { CompanyInfo } from '../../model/investment';
 import { ApiService } from '../../../core/api.service';
@@ -88,7 +87,7 @@ export class HoldingUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.apiService.getCompanies().subscribe((value) => {
-      this.companies.set(value.companies);
+      this.companies.set(value);
     });
     this.transactionForm.get('company')?.valueChanges.subscribe((value) => {
       if (value) {
@@ -117,14 +116,14 @@ export class HoldingUpdateComponent implements OnInit {
     this.transactionForm.value.purchase_price = Number(
       this.transactionForm.value.purchase_price,
     );
-    const payload = this.transactionForm.value as StockPurchase;
-    this.apiService.updateStockPurchase(payload).subscribe((value) => {
-      if (value) {
-        this.dialogRef.close({ refresh: true });
-      } else {
-        this.dialogRef.close({ refresh: false });
-      }
-    });
+    //const payload = this.transactionForm.value as StockPurchase;
+    // this.apiService.updateStockPurchase(payload).subscribe((value) => {
+    //   if (value) {
+    //     this.dialogRef.close({ refresh: true });
+    //   } else {
+    //     this.dialogRef.close({ refresh: false });
+    //   }
+    // });
   }
 
   private getNewTransactionForm() {

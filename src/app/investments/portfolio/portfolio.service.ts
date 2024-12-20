@@ -1,10 +1,10 @@
 import { Injectable, signal } from '@angular/core';
-import { PortfolioPerformanceResponse } from '../model/portfolio';
+import { PortfolioPerformance } from '../model/portfolio';
 @Injectable()
 export class PortfolioService {
-  portfolioData = signal<PortfolioPerformanceResponse | null>(null);
+  portfolioData = signal<PortfolioPerformance | null>(null);
 
-  setPortfolioData(data: PortfolioPerformanceResponse) {
+  setPortfolioData(data: PortfolioPerformance) {
     this.portfolioData.set(data);
   }
 }

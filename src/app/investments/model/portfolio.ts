@@ -4,7 +4,7 @@ export interface Portfolio {
   description?: string;
   currency?: string;
 }
-export interface PortfolioPerformanceResponse {
+export interface PortfolioPerformance {
   total_investment: number;
   current_portfolio_value: number;
   total_profit: number;

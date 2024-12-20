@@ -57,18 +57,12 @@ export class PortfolioComponent implements OnDestroy {
 
   constructor() {
     const apiService = inject(ApiService);
-    const dataService = inject(DataService);
-
-    const settings$ = apiService.initSettings();
     const performance$ = apiService.getPortfolioPerformance();
 
-    forkJoin({ settings: settings$, performance: performance$ })
+    performance$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(({ settings, performance }) => {
-        dataService.setClientSettings(settings);
-        console.log(performance);
+      .subscribe((performance) => {
         this.portfolioService.setPortfolioData(performance);
-        console.log(this.portfolioService.portfolioData());
         this.prepareWidgets();
       });
   }

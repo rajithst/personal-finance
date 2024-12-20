@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Holding } from '../model/investment';
 import { MatDialog } from '@angular/material/dialog';
 import { HoldingUpdateComponent } from './holding-update/holding-update.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,6 +15,7 @@ import { MatMiniFabButton } from '@angular/material/button';
 import { HoldingImportComponent } from './holding-import/holding-import.component';
 import { ApiService } from '../../core/api.service';
 import { Observable } from 'rxjs';
+import { Holding } from '../model/holding';
 
 const DIALOG_WIDTH = '900px';
 const DIALOG_TOP_POSITION = '5%';

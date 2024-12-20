@@ -14,11 +14,13 @@ export class ChartWidgetBase implements OnInit {
   datasets = input.required<any[]>();
   plugins = input<any>({});
   options = input<any>({});
+  datalabels = input<any>({});
   chartConfig: ChartConfig = {
     type: '',
     data: {},
     plugins: {},
     options: {},
+    datalabels: {},
   };
 
   ngOnInit() {
@@ -28,6 +30,7 @@ export class ChartWidgetBase implements OnInit {
       data: { labels: this.labels(), datasets: this.datasets() },
       plugins: this.plugins(),
       options: this.options(),
+      datalabels: this.datalabels(),
     };
   }
 }

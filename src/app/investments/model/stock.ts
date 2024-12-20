@@ -3,26 +3,33 @@ export interface Stock {
   company_name: string;
 }
 
-export interface DividendIncome {
-  total: number;
+export interface StockPurchaseHistory {
+  id: number;
+  purchase_date: string;
   year: number;
   month: number;
-  month_text: string;
-  dividends: Dividend[];
-}
-export interface Dividend {
-  id: number;
-  amount: number;
   quantity: number;
+  purchase_price: number;
+  stock_currency: string;
+  exchange_rate: number;
   company: string;
   company_name: string;
-  image: string;
   industry: string;
-  month: number;
-  month_text: string;
-  payment_date: string;
-  payment_received: boolean;
   sector: string;
-  stock_currency: string;
-  year: number;
+  image: string;
+}
+
+export interface StockPriceHistory {
+  id: number;
+  date: string;
+  current_price: number;
+  change: number;
+  change_percentage: number;
+  day_high_price: number;
+  day_low_price: number;
+  company: string;
+  company_name: string;
+  industry: string;
+  sector: string;
+  image: string;
 }

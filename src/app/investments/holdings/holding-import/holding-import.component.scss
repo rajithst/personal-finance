@@ -115,3 +115,12 @@ mat-list-item {
 .success-class {
   color: #8ee48e;
 }
+
+.delete-icon {
+  cursor: pointer;
+  padding: 3px;
+  border: 1px solid #4939e0;
+  border-radius: 5px;
+  font-size: 12px;
+  margin-left: 5px;
+}

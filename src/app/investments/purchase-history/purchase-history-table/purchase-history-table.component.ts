@@ -12,13 +12,13 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { StockPurchaseHistory } from '../../model/investment';
 import { DecimalPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {StockPurchaseHistory} from "../../model/stock";
 
 @Component({
   selector: 'app-purchase-history-table',

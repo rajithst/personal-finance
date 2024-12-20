@@ -24,13 +24,14 @@ import {
 } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { HoldingDetailsComponent } from '../holding-details/holding-details.component';
-import { Holding, StockDailyPrice } from '../../model/investment';
 import { ApiService } from '../../../core/api.service';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { NgClass, DecimalPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatIcon } from '@angular/material/icon';
+import {Holding} from "../../model/holding";
 
 interface TableElement {
   company_name: string;
@@ -74,6 +75,7 @@ interface TableElement {
     MatRow,
     DecimalPipe,
     MatProgressSpinner,
+    MatIcon,
   ],
 })
 export class HoldingTableComponent implements OnChanges {
@@ -123,7 +125,7 @@ export class HoldingTableComponent implements OnChanges {
         current_value: `${x.stock_currency}${formattedValue(x.current_value)}`,
         profit_loss_value: x.profit_loss,
         profit_loss: `${valuePrefix(x.profit_loss)}${x.stock_currency}${formattedValue(x.profit_loss)}`,
-        profit_change_percentage: `${valuePrefix(x.profit_loss)}${x.stock_currency}${formattedValue(x.profit_change_percentage)}%`,
+        profit_change_percentage: `${formattedValue(x.profit_change_percentage)}%`,
         share_in_portfolio: `${formattedValue(holdingShare)}%`,
       };
       formattedHoldings.push(obj);
@@ -138,23 +140,23 @@ export class HoldingTableComponent implements OnChanges {
   }
 
   openStockDetail(symbol: string) {
-    let stockPriceHistory: StockDailyPrice[] = [];
-    this.apiService.getStockPriceHistory(symbol).subscribe((value) => {
-      stockPriceHistory = value.prices;
-      this.openModal(symbol, stockPriceHistory);
-    });
+    // let stockPriceHistory: StockDailyPrice[] = [];
+    // this.apiService.getStockPriceHistory(symbol).subscribe((value) => {
+    //   // stockPriceHistory = value.prices;
+    //   // this.openModal(symbol, stockPriceHistory);
+    // });
   }
 
-  openModal(symbol: string, stockPriceHistory: StockDailyPrice[]) {
-    const holdingData = this.holdings()?.find((h) => h.company === symbol);
-    const transactions = null;
-    const purchaseHistory = null;
-    const dialog = this.dialog.open(HoldingDetailsComponent, {
-      width: '950px',
-      position: {
-        top: '50px',
-      },
-      data: { symbol: symbol, holdingData, purchaseHistory, stockPriceHistory },
-    });
-  }
+  // openModal(symbol: string, stockPriceHistory: StockDailyPrice[]) {
+  //   const holdingData = this.holdings()?.find((h) => h.company === symbol);
+  //   const transactions = null;
+  //   const purchaseHistory = null;
+  //   const dialog = this.dialog.open(HoldingDetailsComponent, {
+  //     width: '950px',
+  //     position: {
+  //       top: '50px',
+  //     },
+  //     data: { symbol: symbol, holdingData, purchaseHistory, stockPriceHistory },
+  //   });
+  // }
 }

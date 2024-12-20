@@ -17,7 +17,7 @@
             <mat-form-field appearance="outline" class="coincraft-input">
               <mat-label>Portfolio</mat-label>
               <mat-select formControlName="portfolio">
-                @for (exc of myPortfolios; track exc) {
+                @for (exc of myPortfolios$ | async; track exc) {
                   <mat-option [value]="exc">{{ exc.name }}</mat-option>
                 }
               </mat-select>
@@ -64,7 +64,7 @@
                     @for (exc of this.files; track exc) {
                       <li>
                         {{ exc.name }}
-                        <span (click)="deleteAttachment(exc.name)"></span>
+                        <span (click)="deleteAttachment(exc.name)" class="delete-icon">delete</span>
                       </li>
                     }
                   </ul>

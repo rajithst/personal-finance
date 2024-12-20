@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   BulkDeleteRequest,
   BulkDeleteResponse,
@@ -12,16 +12,6 @@ import {
   TransactionSplitResponse,
   TransactionsResponse,
 } from '../finance/model/transactions';
-import {
-  CompanyResponse,
-  Holding,
-  StockDailyPriceResponse,
-  StockPurchaseHistory,
-} from '../investments/model/investment';
-import {
-  StockPurchase,
-  StockPurchaseResponse,
-} from '../investments/model/transaction';
 import { environment } from '../../environments/environment';
 import {
   DestinationMap,
@@ -41,9 +31,24 @@ import { JwtTokenResponse } from '../auth/model';
 import { CreditAccount, CreditAccountRequest } from '../finance/model/account';
 import {
   Portfolio,
-  PortfolioPerformanceResponse,
+  PortfolioPerformance,
 } from '../investments/model/portfolio';
-import { DividendIncome } from '../investments/model/stock';
+import { Holding } from '../investments/model/holding';
+import { MonthlyDividend } from '../investments/model/dividend';
+import {
+  StockPriceHistory,
+  StockPurchaseHistory,
+} from '../investments/model/stock';
+import { CompanyInfo } from '../investments/model/investment';
+
+export interface BaseAPIResponse {
+  status: boolean;
+  message: string;
+}
+
+export interface APIResponse<T> extends BaseAPIResponse {
+  data: T;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -201,64 +206,74 @@ export class ApiService {
   }
 
   /* Investment Module APIs*/
-
-  getPortfolios(): Observable<Portfolio[]> {
-    return this.http.get<Portfolio[]>(`${this.SRC_URL}/investments/portfolio/`);
+  private mapToData<T>(response: APIResponse<T>): T {
+    return response.data;
   }
 
-  getPortfolioPerformance(): Observable<PortfolioPerformanceResponse> {
-    return this.http.get<PortfolioPerformanceResponse>(
-      `${this.SRC_URL}/investments/dashboard/`,
-    );
+  getPortfolios(): Observable<Portfolio[]> {
+    return this.http
+      .get<APIResponse<Portfolio[]>>(`${this.SRC_URL}/investments/portfolio/`)
+      .pipe(map(this.mapToData));
+  }
+
+  getPortfolioPerformance(): Observable<PortfolioPerformance> {
+    return this.http
+      .get<
+        APIResponse<PortfolioPerformance>
+      >(`${this.SRC_URL}/investments/dashboard/`)
+      .pipe(map(this.mapToData));
   }
 
   getHoldings(): Observable<Holding[]> {
-    return this.http.get<Holding[]>(`${this.SRC_URL}/investments/holdings/`);
+    return this.http
+      .get<APIResponse<Holding[]>>(`${this.SRC_URL}/investments/holdings/`)
+      .pipe(map(this.mapToData));
   }
 
-  getDividends(): Observable<DividendIncome[]> {
-    return this.http.get<DividendIncome[]>(
-      `${this.SRC_URL}/investments/dividends/income/`,
-    );
-  }
-  updateStockPurchaseHistory(payload: StockPurchase): Observable<any> {
-    return this.http.post(
-      `${this.SRC_URL}/investments/stock-purchase/`,
-      payload,
-    );
+  getDividends(): Observable<MonthlyDividend[]> {
+    return this.http
+      .get<
+        APIResponse<MonthlyDividend[]>
+      >(`${this.SRC_URL}/investments/dividends/income/`)
+      .pipe(map(this.mapToData));
   }
 
   getStockPurchaseHistory(): Observable<StockPurchaseHistory[]> {
-    return this.http.get<StockPurchaseHistory[]>(
-      `${this.SRC_URL}/investments/stocks/purchases/history/`,
-    );
-  }
-  getStockPriceHistory(payload: string): Observable<StockDailyPriceResponse> {
-    return this.http.get<StockDailyPriceResponse>(
-      `${this.SRC_URL}/investments/stock-summary/${payload}/`,
-    );
+    return this.http
+      .get<
+        APIResponse<StockPurchaseHistory[]>
+      >(`${this.SRC_URL}/investments/stocks/purchase/history/`)
+      .pipe(map(this.mapToData));
   }
 
-  updateStockPurchase(
-    payload: StockPurchase,
-  ): Observable<StockPurchaseResponse> {
-    if (payload.id) {
-      return this.http.put<StockPurchaseResponse>(
-        `${this.SRC_URL}/investments/stock-purchase-history/${payload.id}/`,
-        payload,
-      );
-    } else {
-      return this.http.post<StockPurchaseResponse>(
-        `${this.SRC_URL}/investments/stock-purchase-history/`,
-        payload,
-      );
-    }
+  getStockPriceHistory(payload: string): Observable<StockPriceHistory> {
+    return this.http
+      .get<
+        APIResponse<StockPriceHistory>
+      >(`${this.SRC_URL}/investments/stocks/price/history/?company=${payload}/`)
+      .pipe(map(this.mapToData));
   }
 
-  getCompanies(): Observable<CompanyResponse> {
-    return this.http.get<CompanyResponse>(
-      `${this.SRC_URL}/investments/company`,
-    );
+  // updateStockPurchase(
+  //   payload: StockPurchase,
+  // ): Observable<StockPurchaseResponse> {
+  //   if (payload.id) {
+  //     return this.http.put<StockPurchaseResponse>(
+  //       `${this.SRC_URL}/investments/stock-purchase-history/${payload.id}/`,
+  //       payload,
+  //     );
+  //   } else {
+  //     return this.http.post<StockPurchaseResponse>(
+  //       `${this.SRC_URL}/investments/stock-purchase-history/`,
+  //       payload,
+  //     );
+  //   }
+  // }
+
+  getCompanies(): Observable<CompanyInfo[]> {
+    return this.http
+      .get<APIResponse<CompanyInfo[]>>(`${this.SRC_URL}/investments/company`)
+      .pipe(map(this.mapToData));
   }
 
   uploadHoldingTransactions(formData: FormData) {
