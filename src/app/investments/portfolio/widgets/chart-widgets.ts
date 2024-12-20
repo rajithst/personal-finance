@@ -43,7 +43,7 @@ export class IndustryAllocationWidget implements OnInit {
   datasets: any[] = [];
   plugins: any = {
     legend: {
-      position: 'right',
+      display: false,
     },
   };
   ngOnInit() {
@@ -51,7 +51,10 @@ export class IndustryAllocationWidget implements OnInit {
       this.portfolioService.portfolioData()?.industry_allocation ?? [];
     this.labels = Object.keys(data);
     this.datasets = [
-      { label: 'Industry Allocation', data: Object.values(data) || [] },
+      {
+        label: 'Industry Allocation',
+        data: Object.values(data) || [],
+      },
     ];
   }
 }
@@ -77,7 +80,7 @@ export class SectorAllocationWidget implements OnInit {
   datasets: any[] = [];
   plugins: any = {
     legend: {
-      position: 'right',
+      display: false,
     },
   };
   ngOnInit() {

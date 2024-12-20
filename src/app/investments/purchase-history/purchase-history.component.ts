@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { StockPurchaseHistory } from '../model/investment';
 import { PurchaseHistoryTableComponent } from './purchase-history-table/purchase-history-table.component';
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { AsyncPipe } from '@angular/common';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../core/api.service';
+import {StockPurchaseHistory} from "../model/stock";
 
 @Component({
   selector: 'app-purchase-history',

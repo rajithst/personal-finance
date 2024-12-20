@@ -84,7 +84,12 @@
                 }"
                 class="profit-loss"
               >
-                <span>{{ element.profit_loss }} </span>
+                <div class="dis-flex-row-align-c-jus-c">
+                  <div></div>
+                  <div>
+                    <span>{{ element.profit_loss }}</span>
+                  </div>
+                </div>
               </div>
               <div
                 [ngClass]="{
@@ -93,7 +98,12 @@
                 }"
                 class="profit-loss-percentage"
               >
-                {{ element.profit_change_percentage }}
+                <div class="dis-flex-row-align-c-jus-c">
+                  <div><mat-icon>{{element.profit_loss_value > 0 ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon></div>
+                  <div>
+                    <span>{{ element.profit_change_percentage }}</span>
+                  </div>
+                </div>
               </div>
             </td>
           </ng-container>

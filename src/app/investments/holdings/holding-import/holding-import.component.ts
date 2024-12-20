@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { DatePipe, NgClass } from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   FormControl,
@@ -19,7 +19,8 @@ import {
 import {
   MatDialogActions,
   MatDialogClose,
-  MatDialogContent, MatDialogRef,
+  MatDialogContent,
+  MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
 import {
@@ -40,12 +41,16 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import moment from 'moment/moment';
 import { ApiService } from '../../../core/api.service';
 import { DataService } from '../../../service/data.service';
-import {ACCOUNT_TYPE_INVESTMENT_ACCOUNT, CANCEL_ACTION, SUCCESS_ACTION} from '../../../shared/data/client.data';
+import {
+  ACCOUNT_TYPE_INVESTMENT_ACCOUNT,
+  CANCEL_ACTION,
+  SUCCESS_ACTION,
+} from '../../../shared/data/client.data';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { HttpEventType } from '@angular/common/http';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { CreditAccount } from '../../../finance/model/account';
 import { Portfolio } from '../../model/portfolio';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -89,10 +94,11 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     MatProgressBar,
     MatProgressSpinner,
     NgClass,
+    AsyncPipe,
   ],
   providers: [provideNativeDateAdapter()],
 })
-export class HoldingImportComponent implements OnInit {
+export class HoldingImportComponent {
   private readonly apiService = inject(ApiService);
   private readonly dataService = inject(DataService);
   private readonly dialogRef = inject(MatDialogRef<HoldingImportComponent>);
@@ -100,7 +106,7 @@ export class HoldingImportComponent implements OnInit {
   myAccounts: CreditAccount[] = this.dataService
     .getAccounts()
     .filter((x) => x.account_type === ACCOUNT_TYPE_INVESTMENT_ACCOUNT);
-  myPortfolios: Portfolio[] = [];
+  myPortfolios$: Observable<Portfolio[]> = this.apiService.getPortfolios();
   progress = 0;
   clickSubmit = false;
   uploadComplete = false;
@@ -149,12 +155,6 @@ export class HoldingImportComponent implements OnInit {
       : '';
   }
 
-  ngOnInit() {
-    // this.portfolioService.portfolios.subscribe((data) => {
-    //   this.myPortfolios = data;
-    // });
-  }
-
   onChange(event: any) {
     const uploadHook = event.target as HTMLInputElement;
     if (uploadHook.files && uploadHook.files.length > 0) {
@@ -182,8 +182,8 @@ export class HoldingImportComponent implements OnInit {
     formData.append('start_date', importStartDate);
     formData.append('end_date', importEndDate);
     formData.append('target', target);
+    this.clickSubmit = true;
     setTimeout(() => {
-      this.clickSubmit = true;
       const upload$ = this.apiService.uploadHoldingTransactions(formData);
       upload$.subscribe({
         next: (event) => {
@@ -203,7 +203,7 @@ export class HoldingImportComponent implements OnInit {
           return throwError(() => error);
         },
       });
-    }, 2000);
+    }, 1500);
   }
 
   deleteAttachment(name: string) {
@@ -219,7 +219,7 @@ export class HoldingImportComponent implements OnInit {
       refresh: false,
       data: null,
       action: CANCEL_ACTION,
-    })
+    });
   }
 
   close() {
@@ -227,6 +227,6 @@ export class HoldingImportComponent implements OnInit {
       refresh: true,
       data: null,
       action: SUCCESS_ACTION,
-    })
+    });
   }
 }

@@ -7,11 +7,7 @@ import {
   MatDialogActions,
   MatDialogClose,
 } from '@angular/material/dialog';
-import {
-  Holding,
-  StockDailyPrice,
-  StockPurchaseHistory,
-} from '../../model/investment';
+
 import {
   MatTableDataSource,
   MatTable,
@@ -31,12 +27,14 @@ import { NgClass, DecimalPipe } from '@angular/common';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { CdkScrollable } from '@angular/cdk/scrolling';
+import {StockPriceHistory, StockPurchaseHistory} from "../../model/stock";
+import {Holding} from "../../model/holding";
 
 interface HoldingDetailsData {
   symbol: string;
   holdingData: Holding;
   purchaseHistory: StockPurchaseHistory[];
-  stockPriceHistory: StockDailyPrice[];
+  stockPriceHistory: StockPriceHistory[];
 }
 
 @Component({
