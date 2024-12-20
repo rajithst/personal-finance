@@ -1,10 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
-  faCreditCard,
-  faLayerGroup,
-  faShop,
-} from '@fortawesome/free-solid-svg-icons';
-import {
   NA_CATEGORY_ID,
   NA_SUB_CATEGORY_ID,
 } from '../../../shared/data/client.data';
@@ -35,7 +30,6 @@ import { MatButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatRipple } from '@angular/material/core';
 import { NgIf } from '@angular/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   MatSelectionList,
   MatListOption,
@@ -43,7 +37,6 @@ import {
   MatListItem,
 } from '@angular/material/list';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatCard } from '@angular/material/card';
 
 interface TransactionFilterData {
   filterParams: TransactionFilter;
@@ -53,14 +46,12 @@ interface TransactionFilterData {
   selector: 'app-transaction-filter',
   templateUrl: './transaction-filter.component.html',
   styleUrl: './transaction-filter.component.scss',
-  standalone: true,
   imports: [
     MatDialogTitle,
     CdkScrollable,
     MatDialogContent,
     MatSelectionList,
     MatListOption,
-    FaIconComponent,
     ReactiveFormsModule,
     NgIf,
     MatList,
@@ -70,13 +61,9 @@ interface TransactionFilterData {
     MatDialogActions,
     MatButton,
     MatDialogClose,
-    MatCard,
   ],
 })
 export class TransactionFilterComponent implements OnInit {
-  protected readonly faLayerGroup = faLayerGroup;
-  protected readonly faShop = faShop;
-  protected readonly faCreditCard = faCreditCard;
   private readonly formBuilder = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<TransactionFilterComponent>);
   private readonly loadingService = inject(LoadingService);

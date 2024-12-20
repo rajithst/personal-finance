@@ -15,12 +15,11 @@ export interface Widget {
 }
 
 @Component({
-  selector: 'app-widget',
-  standalone: true,
-  imports: [NgComponentOutlet, MatIconButton, MatIcon],
-  template: `
+    selector: 'app-widget',
+    imports: [NgComponentOutlet, MatIconButton, MatIcon],
+    template: `
     <div
-      class="container mat-elevation-z3"
+      class="container mat-elevation-z1"
       [style.background-color]="data().backgroundColor ?? 'white'"
       [style.color]="data().color ?? 'inherit'"
     >
@@ -37,7 +36,7 @@ export interface Widget {
       <ng-container [ngComponentOutlet]="data().content" />
     </div>
   `,
-  styles: `
+    styles: `
     :host {
       display: block;
       border-radius: 16px;
@@ -66,10 +65,9 @@ export interface Widget {
       right: 10px;
     }
   `,
-  host: {
-    '[style.grid-area]':
-      '"span "+(data().rows ?? 1) +"/ span "+(data().columns ?? 1)',
-  },
+    host: {
+        '[style.grid-area]': '"span "+(data().rows ?? 1) +"/ span "+(data().columns ?? 1)',
+    }
 })
 export class WidgetComponent {
   data = input.required<Widget>();

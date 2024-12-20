@@ -3,11 +3,10 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 
 @Component({
-  selector: 'app-reports',
-  templateUrl: './reports.component.html',
-  styleUrl: './reports.component.scss',
-  standalone: true,
-  imports: [RouterOutlet, MatTabLink, MatTabNav, RouterLink, MatTabNavPanel],
+    selector: 'app-reports',
+    templateUrl: './reports.component.html',
+    styleUrl: './reports.component.scss',
+    imports: [RouterOutlet, MatTabLink, MatTabNav, RouterLink, MatTabNavPanel]
 })
 export class ReportsComponent {
   tabs = [

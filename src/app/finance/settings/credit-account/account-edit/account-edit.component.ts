@@ -39,24 +39,23 @@ interface AccountEditDialogData {
 }
 
 @Component({
-  selector: 'app-account-edit',
-  templateUrl: './account-edit.component.html',
-  styleUrl: './account-edit.component.scss',
-  standalone: true,
-  imports: [
-    MatDialogTitle,
-    CdkScrollable,
-    MatDialogContent,
-    ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatInput,
-    MatDialogActions,
-    MatButton,
-    MatDialogClose,
-  ],
+    selector: 'app-account-edit',
+    templateUrl: './account-edit.component.html',
+    styleUrl: './account-edit.component.scss',
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatInput,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ]
 })
 export class AccountEditComponent implements OnInit {
   private readonly apiService = inject(ApiService);

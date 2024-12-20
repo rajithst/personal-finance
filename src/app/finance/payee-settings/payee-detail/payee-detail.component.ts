@@ -20,7 +20,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatDivider } from '@angular/material/divider';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   MatCard,
   MatCardHeader,
@@ -35,13 +34,11 @@ import { MatIconButton } from '@angular/material/button';
   selector: 'app-payee-detail',
   templateUrl: './payee-detail.component.html',
   styleUrl: './payee-detail.component.scss',
-  standalone: true,
   imports: [
     NgIf,
     MatCard,
     MatCardHeader,
     MatCardTitle,
-    FaIconComponent,
     MatCardContent,
     MatDivider,
     MatTable,

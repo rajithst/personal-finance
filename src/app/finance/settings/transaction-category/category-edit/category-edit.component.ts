@@ -44,29 +44,28 @@ interface CategoryEditDialogData {
 }
 
 @Component({
-  selector: 'app-category-edit',
-  templateUrl: './category-edit.component.html',
-  styleUrl: './category-edit.component.scss',
-  standalone: true,
-  imports: [
-    MatDialogTitle,
-    CdkScrollable,
-    MatDialogContent,
-    ReactiveFormsModule,
-    NgIf,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatInput,
-    MatRipple,
-    MatTooltip,
-    FaIconComponent,
-    MatDivider,
-    MatButton,
-    MatDialogActions,
-    MatDialogClose,
-  ],
+    selector: 'app-category-edit',
+    templateUrl: './category-edit.component.html',
+    styleUrl: './category-edit.component.scss',
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        ReactiveFormsModule,
+        NgIf,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatInput,
+        MatRipple,
+        MatTooltip,
+        FaIconComponent,
+        MatDivider,
+        MatButton,
+        MatDialogActions,
+        MatDialogClose,
+    ]
 })
 export class CategoryEditComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
@@ -212,18 +211,17 @@ export class CategoryEditComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-action-confirm',
-  templateUrl: './category-edit-action-confirm.component.html',
-  styleUrl: './category-edit.component.scss',
-  standalone: true,
-  imports: [
-    MatDialogTitle,
-    CdkScrollable,
-    MatDialogContent,
-    MatDialogActions,
-    MatButton,
-    MatDialogClose,
-  ],
+    selector: 'app-action-confirm',
+    templateUrl: './category-edit-action-confirm.component.html',
+    styleUrl: './category-edit.component.scss',
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ]
 })
 export class ActionConfirmComponent {
   constructor(public dialogRef: MatDialogRef<ActionConfirmComponent>) {}

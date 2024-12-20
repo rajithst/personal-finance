@@ -1,8 +1,6 @@
 import { Component, computed, Input, signal } from '@angular/core';
 import { MatListModule, MatNavList } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { NgIf } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NavItemComponent } from '../nav-item/nav-item.component';
 
 export interface MenuItem {
@@ -17,16 +15,7 @@ export interface MenuItem {
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',
-  standalone: true,
-  imports: [
-    MatNavList,
-    MatListModule,
-    MatIconModule,
-    NgIf,
-    RouterLinkActive,
-    RouterLink,
-    NavItemComponent,
-  ],
+  imports: [MatNavList, MatListModule, MatIconModule, NavItemComponent],
 })
 export class SidenavComponent {
   sideNavCollapsed = signal(false);

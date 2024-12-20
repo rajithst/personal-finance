@@ -1,6 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { Component, inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -8,7 +7,6 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { MatCheckbox } from '@angular/material/checkbox';
 import {
   MatDatepickerToggle,
   MatDateRangeInput,
@@ -48,7 +46,6 @@ import {
 } from '../../../shared/data/client.data';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatCard, MatCardContent } from '@angular/material/card';
-import { MatProgressBar } from '@angular/material/progress-bar';
 import { HttpEventType } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { CreditAccount } from '../../../finance/model/account';
@@ -59,13 +56,9 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
   selector: 'app-holding-import',
   templateUrl: './holding-import.component.html',
   styleUrl: './holding-import.component.scss',
-  standalone: true,
   imports: [
-    DatePipe,
-    FaIconComponent,
     FormsModule,
     MatButton,
-    MatCheckbox,
     MatDateRangeInput,
     MatDialogContent,
     MatStepper,
@@ -91,9 +84,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     MatRadioButton,
     MatCard,
     MatCardContent,
-    MatProgressBar,
     MatProgressSpinner,
-    NgClass,
     AsyncPipe,
   ],
   providers: [provideNativeDateAdapter()],

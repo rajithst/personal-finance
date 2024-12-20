@@ -20,26 +20,25 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {MonthlyDividend} from "../../model/dividend";
 
 @Component({
-  selector: 'app-dividend-table',
-  templateUrl: './dividend-table.component.html',
-  styleUrl: './dividend-table.component.scss',
-  standalone: true,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatRowDef,
-    MatRow,
-    DecimalPipe,
-    MatProgressSpinner,
-  ],
+    selector: 'app-dividend-table',
+    templateUrl: './dividend-table.component.html',
+    styleUrl: './dividend-table.component.scss',
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        MatTable,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCellDef,
+        MatCell,
+        MatRowDef,
+        MatRow,
+        DecimalPipe,
+        MatProgressSpinner,
+    ]
 })
 export class DividendTableComponent {
   dividends = input.required<MonthlyDividend[] | null>();

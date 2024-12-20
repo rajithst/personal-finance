@@ -5,7 +5,6 @@ import { PortfolioService } from '../portfolio.service';
 
 @Component({
   selector: 'app-monthly-investments',
-  standalone: true,
   template: `
     <app-chart-widget
       [chartType]="'doughnut'"
@@ -16,15 +15,13 @@ import { PortfolioService } from '../portfolio.service';
   imports: [ChartWidgetBase],
   providers: [ChartUtilityService],
 })
-export class PortfolioAllocationWidget implements OnInit {
+export class PortfolioAllocationWidget {
   datasets: any[] = [];
   labels: string[] = [];
-  ngOnInit() {}
 }
 
 @Component({
   selector: 'app-industry-allocation',
-  standalone: true,
   imports: [ChartWidgetBase],
   template: `
     <app-chart-widget
@@ -37,7 +34,7 @@ export class PortfolioAllocationWidget implements OnInit {
   styles: ``,
 })
 export class IndustryAllocationWidget implements OnInit {
-  private portfolioService = inject(PortfolioService);
+  private readonly portfolioService = inject(PortfolioService);
 
   labels: string[] = [];
   datasets: any[] = [];
@@ -61,7 +58,6 @@ export class IndustryAllocationWidget implements OnInit {
 
 @Component({
   selector: 'app-sector-allocation',
-  standalone: true,
   imports: [ChartWidgetBase],
   template: `
     <app-chart-widget
@@ -74,7 +70,7 @@ export class IndustryAllocationWidget implements OnInit {
   styles: ``,
 })
 export class SectorAllocationWidget implements OnInit {
-  private portfolioService = inject(PortfolioService);
+  private readonly portfolioService = inject(PortfolioService);
 
   labels: string[] = [];
   datasets: any[] = [];
@@ -94,7 +90,6 @@ export class SectorAllocationWidget implements OnInit {
 
 @Component({
   selector: 'app-monthly-investment',
-  standalone: true,
   imports: [ChartWidgetBase],
   template: `
     <app-chart-widget
@@ -106,7 +101,7 @@ export class SectorAllocationWidget implements OnInit {
   styles: ``,
 })
 export class MonthlyInvestmentWidget implements OnInit {
-  private portfolioService = inject(PortfolioService);
+  private readonly portfolioService = inject(PortfolioService);
 
   labels: string[] = [];
   datasets: any[] = [];

@@ -3,13 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { HoldingUpdateComponent } from './holding-update/holding-update.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HoldingTableComponent } from './holding-table/holding-table.component';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatTooltip } from '@angular/material/tooltip';
-import { MatRipple } from '@angular/material/core';
-import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import { AsyncPipe, DecimalPipe } from '@angular/common';
-import { MatChip } from '@angular/material/chips';
+import { AsyncPipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { HoldingImportComponent } from './holding-import/holding-import.component';
@@ -24,18 +19,9 @@ const DIALOG_TOP_POSITION = '5%';
   selector: 'app-holdings',
   templateUrl: './holdings.component.html',
   styleUrl: './holdings.component.scss',
-  standalone: true,
   imports: [
-    MatGridList,
-    MatGridTile,
-    MatRipple,
     MatTooltip,
-    FaIconComponent,
-    MatTabGroup,
-    MatTab,
     HoldingTableComponent,
-    DecimalPipe,
-    MatChip,
     MatIcon,
     MatMiniFabButton,
     AsyncPipe,

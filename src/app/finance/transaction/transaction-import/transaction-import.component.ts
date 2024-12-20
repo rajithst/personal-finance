@@ -26,9 +26,8 @@ import {
   MatEndDate,
   MatStartDate,
 } from '@angular/material/datepicker';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatIcon } from '@angular/material/icon';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import { MatOption, provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import {
@@ -45,9 +44,8 @@ import {
 } from '@angular/material/stepper';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { HttpEventType } from '@angular/common/http';
-import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatCard, MatCardContent } from '@angular/material/card';
-import { MatList, MatListItem, MatListItemIcon } from '@angular/material/list';
+import { MatList, MatListItem } from '@angular/material/list';
 import { CreditAccount } from '../../model/account';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
@@ -55,7 +53,6 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
   selector: 'app-transaction-import',
   templateUrl: './transaction-import.component.html',
   styleUrl: './transaction-import.component.scss',
-  standalone: true,
   imports: [
     MatDialogTitle,
     CdkScrollable,
@@ -71,7 +68,6 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     MatButton,
     MatStepperNext,
     MatIcon,
-    FaIconComponent,
     MatStepperPrevious,
     MatDateRangeInput,
     MatStartDate,
@@ -83,13 +79,10 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     MatDialogActions,
     MatDialogClose,
     DatePipe,
-    MatProgressBar,
     MatCard,
     MatCardContent,
-    MatIconButton,
     MatList,
     MatListItem,
-    MatListItemIcon,
     MatProgressSpinner,
   ],
   providers: [provideNativeDateAdapter()],

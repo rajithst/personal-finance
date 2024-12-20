@@ -4,11 +4,10 @@ import { SummaryComponent } from '../../../components/widget/summarybox.componen
 import { ChartUtilityService } from '../chart-utils.service';
 
 @Component({
-  selector: 'app-portfolio-gains',
-  standalone: true,
-  providers: [DecimalPipe, ChartUtilityService],
-  imports: [SummaryComponent],
-  template: ` <app-summary
+    selector: 'app-portfolio-gains',
+    providers: [DecimalPipe, ChartUtilityService],
+    imports: [SummaryComponent],
+    template: ` <app-summary
     [summaryValue]="formattedValue"
     [color]="color"
     [iconText]="iconText"
@@ -17,7 +16,7 @@ import { ChartUtilityService } from '../chart-utils.service';
     [subValueColor]="color"
   >
   </app-summary>`,
-  styles: ``,
+    styles: ``
 })
 export class PortfolioGainsWidget {
   chartUtilityService = inject(ChartUtilityService);
@@ -32,15 +31,14 @@ export class PortfolioGainsWidget {
 }
 
 @Component({
-  selector: 'app-portfolio-value',
-  standalone: true,
-  providers: [DecimalPipe, ChartUtilityService],
-  imports: [SummaryComponent],
-  template: `<app-summary
+    selector: 'app-portfolio-value',
+    providers: [DecimalPipe, ChartUtilityService],
+    imports: [SummaryComponent],
+    template: `<app-summary
     [summaryValue]="formattedValue"
     [summarySubText]="summarySubText"
   ></app-summary>`,
-  styles: ``,
+    styles: ``
 })
 export class PortfolioValueWidget {
   chartUtilityService = inject(ChartUtilityService);

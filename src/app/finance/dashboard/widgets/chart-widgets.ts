@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ChartComponent } from '../../../components/widget/chartbox.component';
 import { DashboardService } from '../dashboard.service';
 import { TRANSACTION_TYPE_INCOME_ID } from '../../../shared/data/client.data';
 import { DataService } from '../../../service/data.service';
@@ -8,7 +7,6 @@ import { ChartWidgetBase } from '../../../components/widget/chart-widget-base';
 
 @Component({
   selector: 'app-income-vs-payments',
-  standalone: true,
   template: `
     <app-chart-widget
       [chartType]="'bar'"
@@ -59,7 +57,6 @@ export class CashFlowWidget implements OnInit {
 
 @Component({
   selector: 'app-income-vs-payments',
-  standalone: true,
   template: `
     <app-chart-widget
       [chartType]="'bar'"
@@ -70,7 +67,7 @@ export class CashFlowWidget implements OnInit {
   imports: [ChartWidgetBase],
 })
 export class IncomeVsPaymentsWidget implements OnInit {
-  private dashboardService = inject(DashboardService);
+  private readonly dashboardService = inject(DashboardService);
   chartUtility = inject(ChartUtilityService);
 
   datasets: any[] = [];
@@ -91,7 +88,6 @@ export class IncomeVsPaymentsWidget implements OnInit {
 
 @Component({
   selector: 'app-income-vs-savings',
-  standalone: true,
   template: `
     <app-chart-widget
       [chartType]="'bar'"
@@ -102,7 +98,7 @@ export class IncomeVsPaymentsWidget implements OnInit {
   imports: [ChartWidgetBase],
 })
 export class IncomeVsSavingsWidget implements OnInit {
-  private dashboardService = inject(DashboardService);
+  private readonly dashboardService = inject(DashboardService);
   chartUtility = inject(ChartUtilityService);
   datasets: any[] = [];
 
@@ -123,7 +119,6 @@ export class IncomeVsSavingsWidget implements OnInit {
 
 @Component({
   selector: 'app-monthly-expense-category',
-  standalone: true,
   template: `
     <app-chart-widget
       [chartType]="'doughnut'"
@@ -134,9 +129,9 @@ export class IncomeVsSavingsWidget implements OnInit {
   imports: [ChartWidgetBase],
 })
 export class MonthlyExpenseCategoryWidget implements OnInit {
-  private dashboardService = inject(DashboardService);
-  private chartUtility = inject(ChartUtilityService);
-  private dataService = inject(DataService);
+  private readonly dashboardService = inject(DashboardService);
+  private readonly chartUtility = inject(ChartUtilityService);
+  private readonly dataService = inject(DataService);
 
   labels: string[] = [];
   datasets: any[] = [];
@@ -164,8 +159,7 @@ export class MonthlyExpenseCategoryWidget implements OnInit {
 
 @Component({
   selector: 'app-monthly-account-usage',
-  standalone: true,
-  imports: [ChartComponent, ChartWidgetBase],
+  imports: [ChartWidgetBase],
   template: `
     <app-chart-widget
       [chartType]="'doughnut'"
@@ -176,9 +170,9 @@ export class MonthlyExpenseCategoryWidget implements OnInit {
   styles: ``,
 })
 export class MonthlyAccountUsageWidget implements OnInit {
-  private dashboardService = inject(DashboardService);
-  private chartUtility = inject(ChartUtilityService);
-  private dataService = inject(DataService);
+  private readonly dashboardService = inject(DashboardService);
+  private readonly chartUtility = inject(ChartUtilityService);
+  private readonly dataService = inject(DataService);
 
   labels: string[] = [];
   datasets: any[] = [];
@@ -202,8 +196,7 @@ export class MonthlyAccountUsageWidget implements OnInit {
 
 @Component({
   selector: 'app-monthly-payment-category',
-  standalone: true,
-  imports: [ChartComponent, ChartWidgetBase],
+  imports: [ChartWidgetBase],
   template: ` <app-chart-widget
     [chartType]="'doughnut'"
     [labels]="labels"
@@ -212,8 +205,8 @@ export class MonthlyAccountUsageWidget implements OnInit {
   styles: ``,
 })
 export class MonthlyPaymentCategoryWidget implements OnInit {
-  private dashboardService = inject(DashboardService);
-  private chartUtility = inject(ChartUtilityService);
+  private readonly dashboardService = inject(DashboardService);
+  private readonly chartUtility = inject(ChartUtilityService);
   labels: string[] = [];
   datasets: any[] = [];
   ngOnInit() {
@@ -234,7 +227,6 @@ export class MonthlyPaymentCategoryWidget implements OnInit {
 
 @Component({
   selector: 'app-top-expenses',
-  standalone: true,
   imports: [ChartWidgetBase],
   template: `
     <app-chart-widget
@@ -247,7 +239,7 @@ export class MonthlyPaymentCategoryWidget implements OnInit {
   styles: ``,
 })
 export class TopExpensesWidget implements OnInit {
-  private dashboardService = inject(DashboardService);
+  private readonly dashboardService = inject(DashboardService);
   labels: string[] = [];
   datasets: any[] = [];
   options = {

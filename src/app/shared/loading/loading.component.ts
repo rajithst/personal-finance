@@ -9,18 +9,17 @@ import {
   RouteConfigLoadStart,
   Router,
 } from '@angular/router';
-import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'loading',
-  template: `
+    selector: 'loading',
+    template: `
     <div class="spinner-container">
       <div class="backdrop"></div>
       <mat-spinner class="spinner"></mat-spinner>
     </div>
   `,
-  styles: `
+    styles: `
     .spinner-container {
       position: fixed;
       top: 0;
@@ -47,8 +46,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
       z-index: 1001; /* Spinner should be above the backdrop */
     }
   `,
-  standalone: true,
-  imports: [MatProgressBar, MatProgressSpinner],
+    imports: [MatProgressSpinner]
 })
 export class LoadingComponent implements OnInit {
   @Input()

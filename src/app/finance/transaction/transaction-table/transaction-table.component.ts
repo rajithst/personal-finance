@@ -61,15 +61,8 @@ import { TransactionViewMoreDialog } from './view-more/view-more.component';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
-import {
-  MatChip,
-  MatChipSet,
-  MatChipRow,
-  MatChipRemove,
-} from '@angular/material/chips';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatChip, MatChipSet, MatChipRemove } from '@angular/material/chips';
 import { MatTooltip } from '@angular/material/tooltip';
-import { MatRipple } from '@angular/material/core';
 import {
   NgIf,
   NgClass,
@@ -79,12 +72,7 @@ import {
   DatePipe,
 } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import {
-  MatButton,
-  MatIconButton,
-  MatMiniFabButton,
-} from '@angular/material/button';
-import { LoadingComponent } from '../../../shared/loading/loading.component';
+import { MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 interface TransactionActionResult {
@@ -106,16 +94,12 @@ const DIALOG_TOP_POSITION = '5%';
   selector: 'app-transaction-table',
   templateUrl: './transaction-table.component.html',
   styleUrl: './transaction-table.component.scss',
-  standalone: true,
   imports: [
     NgIf,
     NgClass,
-    MatRipple,
     MatTooltip,
-    FaIconComponent,
     MatChip,
     MatChipSet,
-    MatChipRow,
     MatChipRemove,
     MatIcon,
     MatAccordion,
@@ -145,9 +129,7 @@ const DIALOG_TOP_POSITION = '5%';
     DecimalPipe,
     DatePipe,
     MatMiniFabButton,
-    MatButton,
     MatIconButton,
-    LoadingComponent,
     MatProgressSpinner,
   ],
 })
@@ -476,11 +458,8 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   openFilters() {
     this.dialog.closeAll();
-    // const rect = this.filterButton()?.nativeElement.getBoundingClientRect();
     const dialog = this.dialog.open(TransactionFilterComponent, {
       maxWidth: '700px',
-      // maxHeight: '500px',
-      // position: { top: `${rect.bottom + 10}px`, right: `20px` },
       hasBackdrop: true,
       data: { filterParams: this.filterParams },
     });

@@ -1,7 +1,17 @@
-mat-card {
+@use "@angular/material" as mat;
+
+.payee-table {
   margin-top: 10px;
   height: calc(100vh - 200px);
   overflow: auto;
+}
+
+table {
+  @include mat.table-overrides(
+    (
+      row-item-outline-width: 0.2px,
+    )
+  );
 }
 
 .payee-edit-icon {
