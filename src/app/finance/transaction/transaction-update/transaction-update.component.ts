@@ -67,44 +67,43 @@ export interface TransactionUpdateDialogData {
 }
 
 @Component({
-  selector: 'app-transaction-update',
-  templateUrl: './transaction-update.component.html',
-  styleUrl: './transaction-update.component.scss',
-  standalone: true,
-  imports: [
-    MatDialogTitle,
-    NgIf,
-    CdkScrollable,
-    MatDialogContent,
-    ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatInput,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
-    MatPrefix,
-    MatDivider,
-    MatCheckbox,
-    MatDialogActions,
-    MatButton,
-    MatDialogClose,
-  ],
-  providers: [
-    provideNativeDateAdapter(),
-    {
-      provide: MAT_DIALOG_DEFAULT_OPTIONS,
-      useValue: {
-        width: '900px',
-        position: {
-          top: '5%',
+    selector: 'app-transaction-update',
+    templateUrl: './transaction-update.component.html',
+    styleUrl: './transaction-update.component.scss',
+    imports: [
+        MatDialogTitle,
+        NgIf,
+        CdkScrollable,
+        MatDialogContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatInput,
+        MatDatepickerInput,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+        MatPrefix,
+        MatDivider,
+        MatCheckbox,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
+    providers: [
+        provideNativeDateAdapter(),
+        {
+            provide: MAT_DIALOG_DEFAULT_OPTIONS,
+            useValue: {
+                width: '900px',
+                position: {
+                    top: '5%',
+                },
+            },
         },
-      },
-    },
-  ],
+    ]
 })
 export class TransactionUpdateDialog implements OnInit {
   private readonly apiService = inject(ApiService);
@@ -321,23 +320,22 @@ export class TransactionUpdateDialog implements OnInit {
 }
 
 @Component({
-  selector: 'app-transaction-delete',
-  templateUrl: './transaction-delete.component.html',
-  styleUrl: './transaction-delete.component.scss',
-  standalone: true,
-  imports: [
-    MatDialogTitle,
-    CdkScrollable,
-    MatDialogContent,
-    MatFormField,
-    MatInput,
-    ReactiveFormsModule,
-    FormsModule,
-    MatDialogActions,
-    MatButton,
-    MatDialogClose,
-    DecimalPipe,
-  ],
+    selector: 'app-transaction-delete',
+    templateUrl: './transaction-delete.component.html',
+    styleUrl: './transaction-delete.component.scss',
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        MatFormField,
+        MatInput,
+        ReactiveFormsModule,
+        FormsModule,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+        DecimalPipe,
+    ]
 })
 export class TransactionDeleteDialog extends TransactionUpdateDialog {
   deleteReason: string = '';

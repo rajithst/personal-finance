@@ -6,13 +6,12 @@ import { AsyncPipe } from '@angular/common';
 import { MonthlyDividend } from '../model/dividend';
 
 @Component({
-  selector: 'app-dividend',
-  template: `<app-dividend-table
+    selector: 'app-dividend',
+    template: `<app-dividend-table
     [dividends]="dividends$ | async"
   ></app-dividend-table>`,
-  styles: ``,
-  standalone: true,
-  imports: [DividendTableComponent, AsyncPipe],
+    styles: ``,
+    imports: [DividendTableComponent, AsyncPipe]
 })
 export class DividendComponent implements OnInit {
   private readonly apiService = inject(ApiService);

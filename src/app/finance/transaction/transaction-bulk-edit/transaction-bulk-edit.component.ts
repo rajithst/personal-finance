@@ -24,19 +24,18 @@ export interface TransactionBulkEditData {
 }
 
 @Component({
-  selector: 'app-transaction-bulk-edit',
-  templateUrl: './transaction-bulk-edit.component.html',
-  styleUrl: './transaction-bulk-edit.component.scss',
-  standalone: true,
-  imports: [
-    MatDialogTitle,
-    CdkScrollable,
-    MatDialogContent,
-    NgIf,
-    MatDialogActions,
-    MatButton,
-    MatDialogClose,
-  ],
+    selector: 'app-transaction-bulk-edit',
+    templateUrl: './transaction-bulk-edit.component.html',
+    styleUrl: './transaction-bulk-edit.component.scss',
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        NgIf,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ]
 })
 export class TransactionBulkEditComponent {
   private readonly apiService = inject(ApiService);

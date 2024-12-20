@@ -2,11 +2,10 @@ import { Component, input, OnInit } from '@angular/core';
 import { ChartComponent, ChartConfig } from './chartbox.component';
 
 @Component({
-  selector: 'app-chart-widget',
-  standalone: true,
-  template: ` <app-chart [chartConfig]="chartConfig"></app-chart> `,
-  styles: ``,
-  imports: [ChartComponent],
+    selector: 'app-chart-widget',
+    template: ` <app-chart [chartConfig]="chartConfig"></app-chart> `,
+    styles: ``,
+    imports: [ChartComponent]
 })
 export class ChartWidgetBase implements OnInit {
   chartType = input.required<string>();

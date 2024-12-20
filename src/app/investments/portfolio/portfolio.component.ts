@@ -1,21 +1,19 @@
 import { Component, inject, OnDestroy } from '@angular/core';
-import { NgClass, DecimalPipe } from '@angular/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { MatCard, MatCardContent } from '@angular/material/card';
-import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { ApiService } from '../../core/api.service';
-import { forkJoin, ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
 import {
   Widget,
   WidgetComponent,
 } from '../../components/widget/widget.component';
-import {PortfolioGainsWidget, PortfolioValueWidget} from './widgets/summary-widgets';
+import {
+  PortfolioGainsWidget,
+  PortfolioValueWidget,
+} from './widgets/summary-widgets';
 import {
   IndustryAllocationWidget,
   MonthlyInvestmentWidget,
-  SectorAllocationWidget
+  SectorAllocationWidget,
 } from './widgets/chart-widgets';
-import { DataService } from '../../service/data.service';
 import { PortfolioService } from './portfolio.service';
 
 @Component({
@@ -37,17 +35,7 @@ import { PortfolioService } from './portfolio.service';
       gap: 10px;
     }
   `,
-  standalone: true,
-  imports: [
-    MatGridList,
-    MatGridTile,
-    MatCard,
-    MatCardContent,
-    FaIconComponent,
-    NgClass,
-    DecimalPipe,
-    WidgetComponent,
-  ],
+  imports: [WidgetComponent],
   providers: [PortfolioService],
 })
 export class PortfolioComponent implements OnDestroy {
@@ -59,12 +47,10 @@ export class PortfolioComponent implements OnDestroy {
     const apiService = inject(ApiService);
     const performance$ = apiService.getPortfolioPerformance();
 
-    performance$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((performance) => {
-        this.portfolioService.setPortfolioData(performance);
-        this.prepareWidgets();
-      });
+    performance$.pipe(takeUntil(this.destroyed$)).subscribe((performance) => {
+      this.portfolioService.setPortfolioData(performance);
+      this.prepareWidgets();
+    });
   }
 
   prepareWidgets() {

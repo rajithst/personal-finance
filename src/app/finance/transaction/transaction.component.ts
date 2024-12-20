@@ -14,10 +14,6 @@ import { ApiService } from '../../core/api.service';
 import { AsyncPipe } from '@angular/common';
 import { TransactionTableComponent } from './transaction-table/transaction-table.component';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { MatRipple } from '@angular/material/core';
-import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import { LoadingComponent } from '../../shared/loading/loading.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
@@ -26,14 +22,8 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
   styleUrl: './transaction.component.scss',
-  standalone: true,
   imports: [
-    LoadingComponent,
-    MatGridList,
-    MatGridTile,
     MatTabsModule,
-    MatRipple,
-    FaIconComponent,
     RouterOutlet,
     RouterLink,
     MatButton,
@@ -112,7 +102,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   template:
     '<app-transaction-table [transactions]="(data$ | async) ?? null" [transactionType]="target"></app-transaction-table>',
   styles: '',
-  standalone: true,
   imports: [TransactionTableComponent, AsyncPipe],
 })
 export class ExpensesComponent extends TransactionDetailComponent {
@@ -124,7 +113,6 @@ export class ExpensesComponent extends TransactionDetailComponent {
   template:
     '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
   styles: '',
-  standalone: true,
   imports: [TransactionTableComponent, AsyncPipe],
 })
 export class PaymentsComponent extends TransactionDetailComponent {
@@ -136,7 +124,6 @@ export class PaymentsComponent extends TransactionDetailComponent {
   template:
     '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
   styles: '',
-  standalone: true,
   imports: [TransactionTableComponent, AsyncPipe],
 })
 export class SavingsComponent extends TransactionDetailComponent {
@@ -148,7 +135,6 @@ export class SavingsComponent extends TransactionDetailComponent {
   template:
     '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
   styles: '',
-  standalone: true,
   imports: [TransactionTableComponent, AsyncPipe],
 })
 export class IncomesComponent extends TransactionDetailComponent {

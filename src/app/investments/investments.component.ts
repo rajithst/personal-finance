@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
@@ -55,10 +55,8 @@ import { Portfolio } from './model/portfolio';
       flex-grow: 1;
     }
   `,
-  standalone: true,
   imports: [
     RouterLink,
-    RouterLinkActive,
     RouterOutlet,
     MatTabLink,
     MatTabNav,
@@ -78,12 +76,9 @@ export class InvestmentsComponent {
   ];
   activeLink = this.tabs[0];
   myPortfolios: Portfolio[] = [];
-  //private readonly portfolioService = inject(PortfolioService);
-
   constructor() {
     const apiService = inject(ApiService);
     apiService.getPortfolios().subscribe((portfolios) => {
-      //this.portfolioService.setPortfolios(portfolios);
       this.myPortfolios = portfolios;
     });
   }

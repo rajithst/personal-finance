@@ -34,7 +34,6 @@ import {
   TRANSACTION_TYPE_PAYMENTS_ID,
   TRANSACTION_TYPE_SAVINGS_ID,
 } from '../../../shared/data/client.data';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatChip } from '@angular/material/chips';
 import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -47,7 +46,6 @@ import { MatIconButton } from '@angular/material/button';
   selector: 'app-payees',
   templateUrl: './payees.component.html',
   styleUrl: './payees.component.scss',
-  standalone: true,
   imports: [
     MatTable,
     MatSort,
@@ -63,7 +61,6 @@ import { MatIconButton } from '@angular/material/button';
     NgSwitch,
     NgSwitchCase,
     MatChip,
-    FaIconComponent,
     MatHeaderRowDef,
     MatHeaderRow,
     MatRowDef,

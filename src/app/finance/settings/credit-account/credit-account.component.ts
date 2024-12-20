@@ -18,7 +18,6 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import {
   MatCard,
@@ -32,7 +31,6 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'app-credit-account',
   templateUrl: './credit-account.component.html',
   styleUrl: './credit-account.component.scss',
-  standalone: true,
   imports: [
     MatCard,
     MatCardHeader,
@@ -45,7 +43,6 @@ import { MatIcon } from '@angular/material/icon';
     MatHeaderCell,
     MatCellDef,
     MatCell,
-    FaIconComponent,
     MatHeaderRowDef,
     MatHeaderRow,
     MatRowDef,

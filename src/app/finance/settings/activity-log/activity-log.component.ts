@@ -7,10 +7,9 @@ import {
 } from '@angular/material/card';
 
 @Component({
-  selector: 'app-activity-log',
-  templateUrl: './activity-log.component.html',
-  styleUrl: './activity-log.component.scss',
-  standalone: true,
-  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent],
+    selector: 'app-activity-log',
+    templateUrl: './activity-log.component.html',
+    styleUrl: './activity-log.component.scss',
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent]
 })
 export class ActivityLog {}

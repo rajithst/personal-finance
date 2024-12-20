@@ -20,33 +20,32 @@ export interface TransactionViewMoreDialogData {
 }
 
 @Component({
-  selector: 'app-view-more',
-  templateUrl: './view-more.component.html',
-  styleUrl: './view-more.component.scss',
-  standalone: true,
-  imports: [
-    MatDialogTitle,
-    CdkScrollable,
-    MatDialogContent,
-    MatTabGroup,
-    MatTab,
-    MatCard,
-    MatCardContent,
-    MatDialogActions,
-    MatButton,
-    MatDialogClose,
-  ],
-  providers: [
-    {
-      provide: MAT_DIALOG_DEFAULT_OPTIONS,
-      useValue: {
-        maxWidth: '900px',
-        position: {
-          top: '5%',
+    selector: 'app-view-more',
+    templateUrl: './view-more.component.html',
+    styleUrl: './view-more.component.scss',
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        MatTabGroup,
+        MatTab,
+        MatCard,
+        MatCardContent,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
+    providers: [
+        {
+            provide: MAT_DIALOG_DEFAULT_OPTIONS,
+            useValue: {
+                maxWidth: '900px',
+                position: {
+                    top: '5%',
+                },
+            } as MatDialogConfig,
         },
-      } as MatDialogConfig,
-    },
-  ],
+    ]
 })
 export class TransactionViewMoreDialog {
   constructor(

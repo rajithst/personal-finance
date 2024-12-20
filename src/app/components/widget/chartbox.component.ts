@@ -1,7 +1,6 @@
 import { Component, ElementRef, input, OnInit, viewChild } from '@angular/core';
 import Chart, { ChartTypeRegistry } from 'chart.js/auto';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-//Chart.register(ChartDataLabels);
+
 export interface ChartConfig {
   type: string;
   data: any;
@@ -11,7 +10,6 @@ export interface ChartConfig {
 }
 @Component({
   selector: 'app-chart',
-  standalone: true,
   imports: [],
   template: `
     <div class="chart-container">
@@ -47,8 +45,6 @@ export class ChartComponent implements OnInit {
         },
         plugins: {
           ...this.chartConfig().plugins,
-
-
         },
         onClick: (evt: Event) => {
           var elements = chart.getElementsAtEventForMode(

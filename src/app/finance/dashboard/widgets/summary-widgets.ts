@@ -4,12 +4,11 @@ import { SummaryComponent } from '../../../components/widget/summarybox.componen
 import { ChartUtilityService } from '../chart-utils.service';
 
 @Component({
-  selector: 'app-total-income',
-  standalone: true,
-  providers: [DecimalPipe, ChartUtilityService],
-  imports: [SummaryComponent],
-  template: `<app-summary [summaryValue]="formattedValue"></app-summary>`,
-  styles: ``,
+    selector: 'app-total-income',
+    providers: [DecimalPipe, ChartUtilityService],
+    imports: [SummaryComponent],
+    template: `<app-summary [summaryValue]="formattedValue"></app-summary>`,
+    styles: ``
 })
 export class TotalIncomeWidget {
   chartUtilityService = inject(ChartUtilityService);
@@ -18,11 +17,10 @@ export class TotalIncomeWidget {
 }
 
 @Component({
-  selector: 'app-total-expense',
-  standalone: true,
-  providers: [DecimalPipe, ChartUtilityService],
-  imports: [SummaryComponent],
-  template: `<app-summary
+    selector: 'app-total-expense',
+    providers: [DecimalPipe, ChartUtilityService],
+    imports: [SummaryComponent],
+    template: `<app-summary
     [summaryValue]="formattedValue"
     [summarySubValue]="formattedDiff"
     [summarySubText]="summarySubText"
@@ -30,7 +28,7 @@ export class TotalIncomeWidget {
     [iconColor]="iconColor"
     [subValueColor]="iconColor"
   ></app-summary>`,
-  styles: ``,
+    styles: ``
 })
 export class TotalExpenseWidget {
   chartUtilityService = inject(ChartUtilityService);
@@ -45,11 +43,10 @@ export class TotalExpenseWidget {
 }
 
 @Component({
-  selector: 'app-total-payments',
-  standalone: true,
-  providers: [DecimalPipe, ChartUtilityService],
-  imports: [SummaryComponent],
-  template: `<app-summary
+    selector: 'app-total-payments',
+    providers: [DecimalPipe, ChartUtilityService],
+    imports: [SummaryComponent],
+    template: `<app-summary
     [summaryValue]="formattedValue"
     [summarySubValue]="formattedDiff"
     [summarySubText]="summarySubText"
@@ -57,7 +54,7 @@ export class TotalExpenseWidget {
     [iconColor]="iconColor"
     [subValueColor]="iconColor"
   ></app-summary>`,
-  styles: ``,
+    styles: ``
 })
 export class TotalPaymentsWidget {
   chartUtilityService = inject(ChartUtilityService);
@@ -73,11 +70,10 @@ export class TotalPaymentsWidget {
 }
 
 @Component({
-  selector: 'app-total-savings',
-  standalone: true,
-  providers: [DecimalPipe],
-  imports: [SummaryComponent],
-  template: `<app-summary
+    selector: 'app-total-savings',
+    providers: [DecimalPipe],
+    imports: [SummaryComponent],
+    template: `<app-summary
     [summaryValue]="formattedValue"
     [summarySubValue]="formattedDiff"
     [summarySubText]="summarySubText"
@@ -85,7 +81,7 @@ export class TotalPaymentsWidget {
     [iconColor]="iconColor"
     [subValueColor]="iconColor"
   ></app-summary>`,
-  styles: ``,
+    styles: ``
 })
 export class TotalSavingsWidget {
   chartUtilityService = inject(ChartUtilityService);

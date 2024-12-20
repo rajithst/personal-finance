@@ -21,7 +21,6 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   MatAccordion,
   MatExpansionPanel,
@@ -42,7 +41,6 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'app-transaction-category',
   templateUrl: './transaction-category.component.html',
   styleUrl: './transaction-category.component.scss',
-  standalone: true,
   imports: [
     MatCard,
     MatCardHeader,
@@ -54,7 +52,6 @@ import { MatIcon } from '@angular/material/icon';
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
     MatExpansionPanelDescription,
-    FaIconComponent,
     MatTable,
     MatColumnDef,
     MatHeaderCellDef,

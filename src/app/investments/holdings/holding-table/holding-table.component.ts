@@ -23,15 +23,13 @@ import {
   MatRow,
 } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { HoldingDetailsComponent } from '../holding-details/holding-details.component';
 import { ApiService } from '../../../core/api.service';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
-import { NgClass, DecimalPipe } from '@angular/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgClass } from '@angular/common';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatIcon } from '@angular/material/icon';
-import {Holding} from "../../model/holding";
+import { Holding } from '../../model/holding';
 
 interface TableElement {
   company_name: string;
@@ -52,11 +50,9 @@ interface TableElement {
   selector: 'app-holding-table',
   templateUrl: './holding-table.component.html',
   styleUrl: './holding-table.component.scss',
-  standalone: true,
   imports: [
     MatCard,
     MatCardContent,
-    FaIconComponent,
     NgClass,
     MatTable,
     MatSort,
@@ -73,7 +69,6 @@ interface TableElement {
     MatHeaderRow,
     MatRowDef,
     MatRow,
-    DecimalPipe,
     MatProgressSpinner,
     MatIcon,
   ],
@@ -93,8 +88,6 @@ export class HoldingTableComponent implements OnChanges {
     'Actions',
   ];
   dataSource = new MatTableDataSource<TableElement>();
-  private readonly dialog = inject(MatDialog);
-  private readonly apiService = inject(ApiService);
   loading = computed(() => this.holdings() === null);
   noData = computed(() => !this.loading() && this.holdings()?.length === 0);
 
@@ -133,30 +126,5 @@ export class HoldingTableComponent implements OnChanges {
     return formattedHoldings;
   }
 
-  formatValue(value: number, currency: string) {
-    const prefix = value > 0 ? '+' : '-';
-    const formattedValue = Math.abs(value);
-    return `${prefix} ${currency}${formattedValue.toFixed(2)}`;
-  }
-
-  openStockDetail(symbol: string) {
-    // let stockPriceHistory: StockDailyPrice[] = [];
-    // this.apiService.getStockPriceHistory(symbol).subscribe((value) => {
-    //   // stockPriceHistory = value.prices;
-    //   // this.openModal(symbol, stockPriceHistory);
-    // });
-  }
-
-  // openModal(symbol: string, stockPriceHistory: StockDailyPrice[]) {
-  //   const holdingData = this.holdings()?.find((h) => h.company === symbol);
-  //   const transactions = null;
-  //   const purchaseHistory = null;
-  //   const dialog = this.dialog.open(HoldingDetailsComponent, {
-  //     width: '950px',
-  //     position: {
-  //       top: '50px',
-  //     },
-  //     data: { symbol: symbol, holdingData, purchaseHistory, stockPriceHistory },
-  //   });
-  // }
+  openStockDetail(symbol: string) {}
 }

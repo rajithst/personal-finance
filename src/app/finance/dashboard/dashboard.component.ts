@@ -26,15 +26,15 @@ import {
 import { ChartUtilityService } from './chart-utils.service';
 
 @Component({
-  selector: 'app-transaction-portfolio',
-  template: `
+    selector: 'app-transaction-portfolio',
+    template: `
     <div class="dashboard-widgets">
       @for (widget of widgets; track widget) {
         <app-widget [data]="widget"></app-widget>
       }
     </div>
   `,
-  styles: `
+    styles: `
     .dashboard-widgets {
       height: 99%;
       overflow-y: auto;
@@ -44,9 +44,8 @@ import { ChartUtilityService } from './chart-utils.service';
       gap: 10px;
     }
   `,
-  standalone: true,
-  imports: [WidgetComponent],
-  providers: [DashboardService, ChartUtilityService],
+    imports: [WidgetComponent],
+    providers: [DashboardService, ChartUtilityService]
 })
 export class TransactionDashboardComponent implements OnDestroy {
   private readonly dataService = inject(DataService);

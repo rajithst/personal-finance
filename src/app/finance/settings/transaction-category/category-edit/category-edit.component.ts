@@ -17,7 +17,6 @@ import {
   MatDialogClose,
 } from '@angular/material/dialog';
 import { TransactionSubCategory } from '../../../model/common';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../../../../core/api.service';
 import {
   CategorySettings,
@@ -30,7 +29,6 @@ import {
 } from '../../../../shared/data/client.data';
 import { MatButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatRipple } from '@angular/material/core';
@@ -44,29 +42,27 @@ interface CategoryEditDialogData {
 }
 
 @Component({
-  selector: 'app-category-edit',
-  templateUrl: './category-edit.component.html',
-  styleUrl: './category-edit.component.scss',
-  standalone: true,
-  imports: [
-    MatDialogTitle,
-    CdkScrollable,
-    MatDialogContent,
-    ReactiveFormsModule,
-    NgIf,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatInput,
-    MatRipple,
-    MatTooltip,
-    FaIconComponent,
-    MatDivider,
-    MatButton,
-    MatDialogActions,
-    MatDialogClose,
-  ],
+    selector: 'app-category-edit',
+    templateUrl: './category-edit.component.html',
+    styleUrl: './category-edit.component.scss',
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        ReactiveFormsModule,
+        NgIf,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatInput,
+        MatRipple,
+        MatTooltip,
+        MatDivider,
+        MatButton,
+        MatDialogActions,
+        MatDialogClose,
+    ]
 })
 export class CategoryEditComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
@@ -83,7 +79,6 @@ export class CategoryEditComponent implements OnInit {
   deletedSubCategories: TransactionSubCategory[] = [];
   isCategoryDeleted = false;
 
-  protected readonly faTrash = faTrash;
   protected readonly TRANSACTION_TYPES = TRANSACTION_TYPES;
 
   get subcategories(): FormControl[] {
@@ -212,18 +207,17 @@ export class CategoryEditComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-action-confirm',
-  templateUrl: './category-edit-action-confirm.component.html',
-  styleUrl: './category-edit.component.scss',
-  standalone: true,
-  imports: [
-    MatDialogTitle,
-    CdkScrollable,
-    MatDialogContent,
-    MatDialogActions,
-    MatButton,
-    MatDialogClose,
-  ],
+    selector: 'app-action-confirm',
+    templateUrl: './category-edit-action-confirm.component.html',
+    styleUrl: './category-edit.component.scss',
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ]
 })
 export class ActionConfirmComponent {
   constructor(public dialogRef: MatDialogRef<ActionConfirmComponent>) {}

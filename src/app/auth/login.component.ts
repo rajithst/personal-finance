@@ -14,23 +14,22 @@ import { NgIf } from '@angular/common';
 import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
-  standalone: true,
-  imports: [
-    MatCard,
-    MatCardTitle,
-    ReactiveFormsModule,
-    MatCardContent,
-    NgIf,
-    MatFormField,
-    MatIcon,
-    MatSuffix,
-    MatLabel,
-    MatInput,
-    MatButton,
-  ],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.css',
+    imports: [
+        MatCard,
+        MatCardTitle,
+        ReactiveFormsModule,
+        MatCardContent,
+        NgIf,
+        MatFormField,
+        MatIcon,
+        MatSuffix,
+        MatLabel,
+        MatInput,
+        MatButton,
+    ]
 })
 export class LoginComponent implements OnInit {
   fb = inject(FormBuilder);

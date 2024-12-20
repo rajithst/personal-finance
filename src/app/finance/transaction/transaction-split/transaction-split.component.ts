@@ -26,13 +26,11 @@ import {
   NA_CATEGORY_ID,
   SUCCESS_ACTION,
 } from '../../../shared/data/client.data';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../../../core/api.service';
 import { map, Observable, startWith } from 'rxjs';
 import { DestinationMap } from '../../model/payee';
 import { DataService } from '../../../service/data.service';
 import { TransactionCategory } from '../../model/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
 import {
@@ -59,7 +57,6 @@ export interface TransactionSplitData {
   selector: 'app-transaction-split',
   templateUrl: './transaction-split.component.html',
   styleUrl: './transaction-split.component.scss',
-  standalone: true,
   imports: [
     MatDialogTitle,
     CdkScrollable,
@@ -76,7 +73,6 @@ export interface TransactionSplitData {
     MatOption,
     MatSelect,
     MatPrefix,
-    FaIconComponent,
     MatDialogActions,
     MatDialogClose,
     AsyncPipe,
@@ -103,7 +99,6 @@ export class TransactionSplitComponent implements OnInit {
   remainAmount = computed(() => {
     return this.transactionAmount() - this.splitTotal();
   });
-  protected readonly faTrash = faTrash;
   TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.dataService.getClientSettings().transaction_categories;
 

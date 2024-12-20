@@ -9,17 +9,16 @@ import {
 } from '@angular/material/sidenav';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss',
-  standalone: true,
-  imports: [
-    MatSidenavContainer,
-    MatSidenav,
-    MatNavList,
-    MatSidenavContent,
-    RouterOutlet,
-  ],
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrl: './profile.component.scss',
+    imports: [
+        MatSidenavContainer,
+        MatSidenav,
+        MatNavList,
+        MatSidenavContent,
+        RouterOutlet,
+    ]
 })
 export class ProfileComponent implements OnInit {
   activatedRoute = inject(ActivatedRoute);

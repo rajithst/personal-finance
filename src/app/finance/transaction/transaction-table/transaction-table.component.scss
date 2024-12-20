@@ -1,3 +1,13 @@
+@use "@angular/material" as mat;
+
+table {
+  @include mat.table-overrides(
+    (
+      row-item-outline-width: 0.2px,
+    )
+  );
+}
+
 .transaction-panel {
   margin: 10px 0;
 }
@@ -39,6 +49,7 @@
 .transaction-panel-container {
   height: calc(100vh - 230px);
   overflow: auto;
+  padding: 0 5px;
 }
 
 .filters-right > .edit-panel {

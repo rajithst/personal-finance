@@ -24,24 +24,23 @@ interface ProfileItem {
 }
 
 @Component({
-  selector: 'app-account',
-  templateUrl: './account.component.html',
-  styleUrl: './account.component.scss',
-  standalone: true,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatRowDef,
-    MatRow,
-  ],
+    selector: 'app-account',
+    templateUrl: './account.component.html',
+    styleUrl: './account.component.scss',
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        MatTable,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCellDef,
+        MatCell,
+        MatRowDef,
+        MatRow,
+    ]
 })
 export class AccountComponent implements OnInit {
   dataService = inject(DataService);
