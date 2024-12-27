@@ -13,7 +13,6 @@ import {
   MatDialogTitle,
   MatDialogContent,
   MatDialogActions,
-  MatDialogClose,
 } from '@angular/material/dialog';
 import { TransactionSubCategory } from '../../../model/common';
 import {
@@ -51,7 +50,6 @@ interface CategoryEditDialogData {
     MatDivider,
     MatButton,
     MatDialogActions,
-    MatDialogClose,
     MatIcon,
     MatIconButton,
   ],
