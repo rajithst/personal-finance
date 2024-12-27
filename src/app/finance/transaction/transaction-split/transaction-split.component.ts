@@ -20,17 +20,9 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import {
-  CANCEL_ACTION,
-  ERROR_ACTION,
-  NA_CATEGORY_ID,
-  SUCCESS_ACTION,
-} from '../../../shared/data/client.data';
 import { ApiService } from '../../../core/api.service';
 import { map, Observable, startWith } from 'rxjs';
-import { DestinationMap } from '../../model/payee';
-import { DataService } from '../../../service/data.service';
-import { TransactionCategory } from '../../model/common';
+import { Payee } from '../../model/payee';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
 import {
@@ -46,8 +38,8 @@ import {
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
 import { NgIf, AsyncPipe, DecimalPipe, DatePipe } from '@angular/common';
-import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatIcon } from '@angular/material/icon';
+import { FinanceStore } from '../../../core/store/finance.store';
 
 export interface TransactionSplitData {
   formData: TransactionExpand;
@@ -59,7 +51,6 @@ export interface TransactionSplitData {
   styleUrl: './transaction-split.component.scss',
   imports: [
     MatDialogTitle,
-    CdkScrollable,
     MatDialogContent,
     ReactiveFormsModule,
     NgIf,
@@ -85,22 +76,20 @@ export interface TransactionSplitData {
 export class TransactionSplitComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly apiService = inject(ApiService);
-  private readonly dataService = inject(DataService);
   private readonly dialogRef = inject(MatDialogRef<TransactionSplitComponent>);
+  private readonly store = inject(FinanceStore);
   data = inject<TransactionSplitData>(MAT_DIALOG_DATA);
 
   splitForm: FormGroup;
-  filteredPayees: Observable<DestinationMap[]>[] = [];
-  payees: DestinationMap[];
+  filteredPayees: Observable<Payee[]>[] = [];
+  payees: Payee[];
   transaction = this.data.formData;
-  disableCategorySelect = true;
+  transactionCategories = this.store.transactionSubCategories();
   transactionAmount = signal<number>(this.transaction.amount ?? 0);
   splitTotal = signal<number>(0);
   remainAmount = computed(() => {
     return this.transactionAmount() - this.splitTotal();
   });
-  TRANSACTION_CATEGORIES: TransactionCategory[] =
-    this.dataService.getClientSettings().transaction_categories;
 
   get splits(): FormControl[] {
     return (this.splitForm.get('splits') as FormArray)
@@ -108,10 +97,6 @@ export class TransactionSplitComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.apiService.getPayees().subscribe((result) => {
-      this.payees = result.payees;
-      this.filterPayeeControlValues(0);
-    });
     this.splitForm = this.formBuilder.group({
       splits: this.formBuilder.array([this.getNewFormArray()]),
     });
@@ -137,10 +122,10 @@ export class TransactionSplitComponent implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close({ refresh: false, data: null, action: CANCEL_ACTION });
+    this.dialogRef.close(false);
   }
 
-  submit() {
+  async submit() {
     const splitItems: TransactionSplit[] = this.splitForm.get('splits')?.value;
     if (splitItems) {
       const splitPayload: TransactionSplitRequest = {
@@ -148,29 +133,16 @@ export class TransactionSplitComponent implements OnInit {
         main: this.transaction,
         splits: splitItems,
       };
-      this.apiService.splitTransaction(splitPayload).subscribe((result) => {
-        if (result.status === 200 && result.data) {
-          const responseData = result.data;
-          this.dialogRef.close({
-            refresh: true,
-            data: responseData,
-            action: SUCCESS_ACTION,
-          });
-        } else {
-          this.dialogRef.close({
-            refresh: false,
-            data: null,
-            alert: ERROR_ACTION,
-          });
-        }
-      });
+      const updatedTransaction =
+        await this.apiService.splitTransaction(splitPayload);
+      this.dialogRef.close(updatedTransaction ?? null);
     }
   }
 
   private getNewFormArray() {
     return new FormGroup({
       destination: new FormControl<number | null>(null, [Validators.required]),
-      category: new FormControl<number>(NA_CATEGORY_ID, [Validators.required]),
+      category: new FormControl<number>(0, [Validators.required]),
       amount: new FormControl<number | null>(null, [Validators.required]),
     });
   }
@@ -194,7 +166,7 @@ export class TransactionSplitComponent implements OnInit {
     if (targetPayee) {
       return targetPayee.category;
     }
-    return NA_CATEGORY_ID;
+    return 0;
   }
 
   private filterPayeeControlValues(formIndex: number) {
@@ -208,7 +180,7 @@ export class TransactionSplitComponent implements OnInit {
       );
   }
 
-  private _filter(value: string): DestinationMap[] {
+  private _filter(value: string): Payee[] {
     const filterValue = value.toLowerCase();
 
     return this.payees.filter(

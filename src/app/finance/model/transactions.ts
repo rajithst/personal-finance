@@ -1,5 +1,5 @@
 export interface TransactionsResponse {
-  payload: MonthlyTransaction[];
+  data: MonthlyTransaction[];
 }
 
 export interface MonthlyTransaction {

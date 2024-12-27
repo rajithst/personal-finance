@@ -1,7 +1,6 @@
 import {
   Component,
   computed,
-  inject,
   input,
   OnChanges,
   SimpleChanges,
@@ -22,14 +21,12 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
-import { ApiService } from '../../../core/api.service';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { NgClass } from '@angular/common';
-import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatIcon } from '@angular/material/icon';
 import { Holding } from '../../model/holding';
+import { NorecordsComponent } from '../../../components/norecords/norecords.component';
 
 interface TableElement {
   company_name: string;
@@ -51,8 +48,6 @@ interface TableElement {
   templateUrl: './holding-table.component.html',
   styleUrl: './holding-table.component.scss',
   imports: [
-    MatCard,
-    MatCardContent,
     NgClass,
     MatTable,
     MatSort,
@@ -69,8 +64,9 @@ interface TableElement {
     MatHeaderRow,
     MatRowDef,
     MatRow,
-    MatProgressSpinner,
     MatIcon,
+    NorecordsComponent,
+    MatProgressSpinner,
   ],
 })
 export class HoldingTableComponent implements OnChanges {
@@ -125,6 +121,4 @@ export class HoldingTableComponent implements OnChanges {
     });
     return formattedHoldings;
   }
-
-  openStockDetail(symbol: string) {}
 }

@@ -1,10 +1,10 @@
-import { Component, inject } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import {Component, inject, OnInit} from '@angular/core';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { ApiService } from '../core/api.service';
 import { Portfolio } from './model/portfolio';
+import { InvestmentStore } from '../core/store/investment.store';
 
 @Component({
   selector: 'app-investments',
@@ -24,7 +24,7 @@ import { Portfolio } from './model/portfolio';
       </nav>
       <div class="toolbar-actions">
         <button mat-flat-button color="primary" [matMenuTriggerFor]="menu">
-          Switch Portfolio
+          {{currentPortfolio?.name || 'Select Portfolio'}}
         </button>
         <mat-menu #menu="matMenu">
           <button mat-menu-item>Create new portfolio</button>
@@ -67,19 +67,22 @@ import { Portfolio } from './model/portfolio';
     MatMenuItem,
   ],
 })
-export class InvestmentsComponent {
+export class InvestmentsComponent implements OnInit {
+  private readonly store = inject(InvestmentStore);
+  private readonly router = inject(Router);
   tabs = [
     { label: 'Portfolio', route: 'portfolio' },
     { label: 'Holdings', route: 'holdings' },
     { label: 'Dividends', route: 'dividends' },
     { label: 'Purchase History', route: 'purchase-history' },
   ];
-  activeLink = this.tabs[0];
-  myPortfolios: Portfolio[] = [];
-  constructor() {
-    const apiService = inject(ApiService);
-    apiService.getPortfolios().subscribe((portfolios) => {
-      this.myPortfolios = portfolios;
-    });
+  activeLink = { label: '', route: '' };
+  myPortfolios: Portfolio[] = this.store.portfolios();
+  currentPortfolio = this.store.currentPortfolio();
+
+  ngOnInit() {
+    const currentPath = this.router.url.split('/').at(-1);
+    this.activeLink = this.tabs.find((tab) => tab.route === currentPath) || this.tabs[0];
   }
+
 }

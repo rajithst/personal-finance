@@ -1,50 +1,48 @@
 <mat-toolbar class="mat-elevation-z3">
-  <button
-    (click)="collapsed.set(!collapsed())"
-    *ngIf="authService.isLoggedIn"
-    mat-icon-button
-    type="button"
-  >
-    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-  </button>
+  @if (isLoggedIn()) {
+    <button (click)="collapsed.set(!collapsed())" mat-icon-button type="button">
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+  }
   <div class="nav-brand">CoinCraft</div>
   <span class="example-spacer"></span>
-  <button
-    *ngIf="authService.isLoggedIn"
-    [matMenuTriggerFor]="menu"
-    aria-label="Example icon-button with share icon"
-    class="example-icon"
-    mat-icon-button
-  >
-    <mat-icon>person</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item routerLink="profile">
-      <span class="profile-menu-item"
-        >{{ authService.currentUser?.first_name }}
-        {{ authService.currentUser?.last_name }}</span
-      >
+  @if (isLoggedIn()) {
+    <button
+      [matMenuTriggerFor]="menu"
+      aria-label="Example icon-button with share icon"
+      class="example-icon"
+      mat-icon-button
+    >
+      <mat-icon>person</mat-icon>
     </button>
-    <button mat-menu-item routerLink="app-settings">
-      <span class="profile-menu-item">Settings</span>
-    </button>
-    <button mat-menu-item routerLink="app-activity-log">
-      <span class="profile-menu-item">Activity Log</span>
-    </button>
-    <button (click)="authService.logout()" mat-menu-item>
-      <span class="profile-menu-item">Log Out</span>
-    </button>
-  </mat-menu>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="profile">
+        <span class="profile-menu-item"
+          >{{ currentUser()?.first_name }}
+          {{ currentUser()?.last_name }}</span
+        >
+      </button>
+      <button mat-menu-item routerLink="app-settings">
+        <span class="profile-menu-item">Settings</span>
+      </button>
+      <button mat-menu-item routerLink="app-activity-log">
+        <span class="profile-menu-item">Activity Log</span>
+      </button>
+      <button (click)="logout()" mat-menu-item>
+        <span class="profile-menu-item">Log Out</span>
+      </button>
+    </mat-menu>
+  }
 </mat-toolbar>
 <mat-sidenav-container>
-  @if (authService.isLoggedIn) {
+  @if (isLoggedIn()) {
     <mat-sidenav opened mode="side" [style.width]="sidenavWith()">
       <app-sidenav [collapsed]="collapsed()"></app-sidenav>
     </mat-sidenav>
   }
   <mat-sidenav-content
     class="content"
-    [style.margin-left]="authService.isLoggedIn ? sidenavWith() : '0px'"
+    [style.margin-left]="isLoggedIn() ? sidenavWith() : '0px'"
   >
     <main class="main-container">
       <router-outlet></router-outlet>

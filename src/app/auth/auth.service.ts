@@ -1,27 +1,19 @@
-import { inject, Injectable, OnInit } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
 import { ApiService } from '../core/api.service';
-import { Router } from '@angular/router';
 import { JwtTokenResponse, UserToken } from './model';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService implements OnInit {
+export class AuthService {
   apiService = inject(ApiService);
-  router = inject(Router);
-  snackBar = inject(MatSnackBar);
   loggedInUser: UserToken | null = null;
   private readonly USER_STORAGE_KEY: string = 'iva2zK2d7p';
 
-  ngOnInit() {}
-
   async login(username: string, password: string) {
     const loginPayload = { username: username, password: password };
-    const login$ = this.apiService.login(loginPayload);
-    const result = await firstValueFrom(login$);
+    const result = await this.apiService.login(loginPayload);
     if (result.token) {
       localStorage.setItem(this.USER_STORAGE_KEY, JSON.stringify(result));
       return true;
@@ -29,9 +21,8 @@ export class AuthService implements OnInit {
     return false;
   }
 
-  logout() {
+  clearLocalStorage() {
     localStorage.removeItem(this.USER_STORAGE_KEY);
-    this.router.navigate(['/login']);
   }
 
   loadFromLocalStorage(): JwtTokenResponse | null {
@@ -53,6 +44,7 @@ export class AuthService implements OnInit {
     this.loggedInUser = {
       first_name: tokenClaims.first_name,
       last_name: tokenClaims.last_name,
+      email: tokenClaims.email,
       is_premium: tokenClaims.is_premium,
       user_id: tokenClaims.user_id,
       profile_id: tokenClaims.profile_id,
@@ -68,6 +60,6 @@ export class AuthService implements OnInit {
   }
 
   unAuthorizedLogout() {
-    this.logout();
+    this.clearLocalStorage();
   }
 }

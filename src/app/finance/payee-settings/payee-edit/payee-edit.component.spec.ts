@@ -4,8 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { ApiService } from '../../../core/api.service';
-import { DataService } from '../../../service/data.service';
-import { DestinationMap } from '../../model/payee';
+import { DataService } from '../../service/data.service';
+import { Payee } from '../../model/payee';
 import { payees } from '../../../mock-data/payees';
 import {
   transaction_categories,
@@ -17,7 +17,7 @@ import {
   TRANSACTION_TYPE_INCOME_ID,
   TRANSACTION_TYPE_PAYMENTS_ID,
   TRANSACTION_TYPE_SAVINGS_ID,
-} from '../../../shared/data/client.data';
+} from '../../data/client.data';
 
 describe('PayeeEditComponent', () => {
   let component: PayeeEditComponent;
@@ -26,7 +26,7 @@ describe('PayeeEditComponent', () => {
   let dataServiceSpy: jasmine.SpyObj<DataService>;
   let dialogRefSpy: jasmine.SpyObj<MatDialogRef<PayeeEditComponent>>;
 
-  const mockData: DestinationMap = payees[0] as DestinationMap;
+  const mockData: Payee = payees[0] as Payee;
   const expenseCategoryType = TRANSACTION_TYPE_EXPENSE_ID;
   const incomeCategoryType = TRANSACTION_TYPE_INCOME_ID;
   const savingsCategoryType = TRANSACTION_TYPE_SAVINGS_ID;
@@ -131,8 +131,8 @@ describe('PayeeEditComponent', () => {
     expect(component.keywords).not.toContain('keyword1');
   });
 
-  xit('should submit and close dialog with correct data', () => {
-    const updatedPayee = payees[0] as DestinationMap;
+  it('should submit and close dialog with correct data', () => {
+    const updatedPayee = payees[0] as Payee;
     updatedPayee.keywords = 'k1, k2, k3';
     apiServiceSpy.updatePayeeRules.and.returnValue(of(updatedPayee));
 

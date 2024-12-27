@@ -12,7 +12,7 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { DestinationMap } from '../../model/payee';
+import { Payee, PayeeDetail } from '../../model/payee';
 import { ActivatedRoute } from '@angular/router';
 import { TransactionExpand } from '../../model/transactions';
 import { PayeeEditComponent } from '../payee-edit/payee-edit.component';
@@ -29,6 +29,7 @@ import {
 import { NgIf, DecimalPipe, DatePipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
+import { ApiService } from '../../../core/api.service';
 
 @Component({
   selector: 'app-payee-detail',
@@ -60,30 +61,42 @@ import { MatIconButton } from '@angular/material/button';
   ],
 })
 export class PayeeDetailComponent implements OnInit {
-  payeeInfo: DestinationMap;
+  payeeInfo: Payee;
   payeeTransactions: TransactionExpand[];
   totalPayment = signal(0);
   lastMonthPayment = signal(0);
   dataSource: MatTableDataSource<TransactionExpand>;
   displayedColumns: string[] = ['Date', 'Account', 'Amount', 'Notes'];
   private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly apiService = inject(ApiService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ payee }) => {
-      this.payeeInfo = payee.payee;
-      this.payeeTransactions = payee.transactions;
-      this.totalPayment.set(
-        this.payeeTransactions.reduce(
-          (total, item) => total + (item.amount ?? 0),
-          0,
-        ),
-      );
-      this.dataSource = new MatTableDataSource<TransactionExpand>(
-        this.payeeTransactions,
-      );
-    });
+    this.getPayeeDetail().then();
+  }
+
+  async getPayeeDetail() {
+    const payeeId = this.activatedRoute.snapshot.paramMap.get('id');
+    const payeeName = this.activatedRoute.snapshot.paramMap.get('name');
+    let payeeDetail: PayeeDetail | null = null;
+    if (payeeId) {
+      payeeDetail = await this.apiService.getPayeeDetail(payeeId);
+    } else if (payeeName) {
+      payeeDetail = await this.apiService.getPayeeDetailByName(payeeName);
+    }
+    this.setDataSource(payeeDetail);
+  }
+
+  setDataSource(payeeDetail: PayeeDetail | null) {
+    if (!payeeDetail) {
+      return;
+    }
+    this.payeeInfo = payeeDetail.payee;
+    this.payeeTransactions = payeeDetail.transactions;
+    this.dataSource = new MatTableDataSource<TransactionExpand>(
+      this.payeeTransactions,
+    );
   }
 
   editPayee() {
@@ -98,7 +111,7 @@ export class PayeeDetailComponent implements OnInit {
       .afterClosed()
       .subscribe(
         (result: {
-          payee: DestinationMap | null;
+          payee: Payee | null;
           mergeIds: number[] | null;
         }) => {
           if (result?.payee) {

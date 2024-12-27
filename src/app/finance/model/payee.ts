@@ -1,10 +1,10 @@
 import { TransactionExpand } from './transactions';
 
 export interface PayeeResponse {
-  payees: DestinationMap[];
+  payees: Payee[];
 }
 
-export interface DestinationMap {
+export interface Payee {
   id: number;
   destination: string;
   destination_original: string;
@@ -18,11 +18,11 @@ export interface DestinationMap {
   keywords: string;
 }
 
-export interface DestinationMapRequest extends DestinationMap {
+export interface PayeeUpdateRequest extends Payee {
   merge_ids: number[];
 }
 
 export interface PayeeDetail {
-  payee: DestinationMap;
+  payee: Payee;
   transactions: TransactionExpand[];
 }

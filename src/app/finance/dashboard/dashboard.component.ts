@@ -1,7 +1,6 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { DashboardResponse } from '../model/dashboard';
-import { DataService } from '../../service/data.service';
-import { forkJoin, ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { ApiService } from '../../core/api.service';
 import {
   Widget,
@@ -26,47 +25,42 @@ import {
 import { ChartUtilityService } from './chart-utils.service';
 
 @Component({
-    selector: 'app-transaction-portfolio',
-    template: `
+  selector: 'app-transaction-portfolio',
+  template: `
     <div class="dashboard-widgets">
       @for (widget of widgets; track widget) {
         <app-widget [data]="widget"></app-widget>
       }
     </div>
   `,
-    styles: `
+  styles: `
     .dashboard-widgets {
       height: 99%;
       overflow-y: auto;
       display: grid;
       grid-template-columns: repeat(4, minmax(200px, 1fr));
       grid-auto-rows: 120px;
-      gap: 10px;
+      gap: 5px;
     }
   `,
-    imports: [WidgetComponent],
-    providers: [DashboardService, ChartUtilityService]
+  imports: [WidgetComponent],
+  providers: [DashboardService, ChartUtilityService],
 })
-export class TransactionDashboardComponent implements OnDestroy {
-  private readonly dataService = inject(DataService);
+export class TransactionDashboardComponent implements OnInit, OnDestroy {
   private readonly apiService = inject(ApiService);
   protected readonly destroyed$ = new ReplaySubject<void>(1);
   readonly dashboardService = inject(DashboardService);
   readonly chartUtilityService = inject(ChartUtilityService);
+  readonly currentYear = this.chartUtilityService.getCurrentYear();
 
   dashboardData: DashboardResponse;
   widgets: Widget[] = [];
-  constructor() {
-    const settings$ = this.apiService.initSettings();
-    const dashboard$ = this.apiService.getDashboard();
 
-    forkJoin({ settings: settings$, dashboard: dashboard$ })
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(({ settings, dashboard }) => {
-        this.dataService.setClientSettings(settings);
-        this.dashboardService.setDashboardData(dashboard);
-        this.prepareWidgets();
-      });
+  ngOnInit() {
+    this.apiService.getDashboard(Number(this.currentYear)).then((dashboardData) => {
+      this.dashboardService.setDashboardData(dashboardData);
+      this.prepareWidgets();
+    });
   }
 
   prepareWidgets() {

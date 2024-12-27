@@ -1,11 +1,6 @@
 import { Routes } from '@angular/router';
-import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { isUserAuthenticated } from './auth/auth.guard';
-import {
-  payeeResolver,
-  profileResolver,
-  settingsResolver,
-} from './service/resolvers';
 
 export const APP_ROUTES: Routes = [
   {
@@ -40,9 +35,6 @@ export const APP_ROUTES: Routes = [
       import('./finance/payee-settings/payee-settings.routes').then(
         (m) => m.PAYEE_SETTINGS_ROUTES,
       ),
-    resolve: {
-      payeeData: payeeResolver,
-    },
   },
   {
     path: 'reports',
@@ -65,18 +57,12 @@ export const APP_ROUTES: Routes = [
       import('./finance/settings/settings.routes').then(
         (m) => m.SETTINGS_ROUTES,
       ),
-    resolve: {
-      settings: settingsResolver,
-    },
   },
   {
     path: 'profile',
     canActivate: [isUserAuthenticated],
     loadChildren: () =>
       import('./profile/profile.routes').then((m) => m.PROFILE_ROUTES),
-    resolve: {
-      myAccount: profileResolver,
-    },
   },
   {
     path: '**',

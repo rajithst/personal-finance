@@ -6,12 +6,7 @@ import {
   PaymentsComponent,
   SavingsComponent,
 } from './transaction.component';
-import {
-  EXPENSE,
-  INCOME,
-  PAYMENT,
-  SAVING,
-} from '../../shared/data/shared.data';
+import {EXPENSE, INCOME, PAYMENT, SAVING} from "../data/client.data";
 
 export const TRANSACTION_ROUTES: Routes = [
   {

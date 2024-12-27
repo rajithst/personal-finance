@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DashboardService } from '../dashboard.service';
-import { TRANSACTION_TYPE_INCOME_ID } from '../../../shared/data/client.data';
-import { DataService } from '../../../service/data.service';
+import { TRANSACTION_TYPE_INCOME_ID } from '../../data/client.data';
 import { ChartUtilityService } from '../chart-utils.service';
 import { ChartWidgetBase } from '../../../components/widget/chart-widget-base';
+import { FinanceStore } from '../../../core/store/finance.store';
 
 @Component({
   selector: 'app-income-vs-payments',
@@ -127,17 +127,17 @@ export class IncomeVsSavingsWidget implements OnInit {
     ></app-chart-widget>
   `,
   imports: [ChartWidgetBase],
+  providers: [FinanceStore],
 })
 export class MonthlyExpenseCategoryWidget implements OnInit {
   private readonly dashboardService = inject(DashboardService);
   private readonly chartUtility = inject(ChartUtilityService);
-  private readonly dataService = inject(DataService);
-
+  private readonly store = inject(FinanceStore);
   labels: string[] = [];
   datasets: any[] = [];
 
   ngOnInit() {
-    const transactionCategories = this.dataService.getAllCategories();
+    const transactionCategories = this.store.transactionCategories();
     const data = this.dashboardService.dashboardData()?.category_wise_expenses;
     const targetKey = this.chartUtility.currentMonthKey;
     const categorySum: any[] = [];
@@ -168,17 +168,18 @@ export class MonthlyExpenseCategoryWidget implements OnInit {
     ></app-chart-widget>
   `,
   styles: ``,
+  providers: [FinanceStore],
 })
 export class MonthlyAccountUsageWidget implements OnInit {
   private readonly dashboardService = inject(DashboardService);
   private readonly chartUtility = inject(ChartUtilityService);
-  private readonly dataService = inject(DataService);
+  private readonly store = inject(FinanceStore);
 
   labels: string[] = [];
   datasets: any[] = [];
 
   ngOnInit() {
-    const creditAccounts = this.dataService.getAccounts();
+    const creditAccounts = this.store.creditAccounts();
     const data = this.dashboardService.dashboardData()?.account_wise_expenses;
     const targetKey = this.chartUtility.currentMonthKey;
     const categorySum: any[] = [];

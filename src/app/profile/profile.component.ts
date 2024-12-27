@@ -1,6 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
-import { DataService } from '../service/data.service';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { MatNavList } from '@angular/material/list';
 import {
   MatSidenavContainer,
@@ -9,24 +8,15 @@ import {
 } from '@angular/material/sidenav';
 
 @Component({
-    selector: 'app-profile',
-    templateUrl: './profile.component.html',
-    styleUrl: './profile.component.scss',
-    imports: [
-        MatSidenavContainer,
-        MatSidenav,
-        MatNavList,
-        MatSidenavContent,
-        RouterOutlet,
-    ]
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrl: './profile.component.scss',
+  imports: [
+    MatSidenavContainer,
+    MatSidenav,
+    MatNavList,
+    MatSidenavContent,
+    RouterOutlet,
+  ],
 })
-export class ProfileComponent implements OnInit {
-  activatedRoute = inject(ActivatedRoute);
-  dataService = inject(DataService);
-
-  ngOnInit() {
-    this.activatedRoute.data.subscribe(({ myAccount }) => {
-      this.dataService.setMyProfile(myAccount);
-    });
-  }
-}
+export class ProfileComponent {}

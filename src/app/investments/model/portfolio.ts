@@ -11,6 +11,7 @@ export interface PortfolioPerformance {
   monthly_investment: DateValueMap;
   sector_allocation: CategoryAllocation[];
   industry_allocation: CategoryAllocation[];
+  growth: any[];
 }
 
 export interface DateValueMap {

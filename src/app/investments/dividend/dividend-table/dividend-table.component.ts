@@ -16,29 +16,31 @@ import {
   MatCardTitle,
   MatCardContent,
 } from '@angular/material/card';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {MonthlyDividend} from "../../model/dividend";
+import {LoadingComponent} from "../../../components/loading/loading.component";
+import {NorecordsComponent} from "../../../components/norecords/norecords.component";
 
 @Component({
-    selector: 'app-dividend-table',
-    templateUrl: './dividend-table.component.html',
-    styleUrl: './dividend-table.component.scss',
-    imports: [
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatCardContent,
-        MatTable,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCellDef,
-        MatCell,
-        MatRowDef,
-        MatRow,
-        DecimalPipe,
-        MatProgressSpinner,
-    ]
+  selector: 'app-dividend-table',
+  templateUrl: './dividend-table.component.html',
+  styleUrl: './dividend-table.component.scss',
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatRowDef,
+    MatRow,
+    DecimalPipe,
+    LoadingComponent,
+    NorecordsComponent,
+  ],
 })
 export class DividendTableComponent {
   dividends = input.required<MonthlyDividend[] | null>();

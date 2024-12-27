@@ -21,17 +21,15 @@ import {
 import { DecimalPipe } from '@angular/common';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
-import { MatCard, MatCardContent } from '@angular/material/card';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { StockPurchaseHistory } from '../../model/stock';
+import {NorecordsComponent} from "../../../components/norecords/norecords.component";
+import {LoadingComponent} from "../../../components/loading/loading.component";
 
 @Component({
   selector: 'app-purchase-history-table',
   templateUrl: './purchase-history-table.component.html',
   styleUrl: './purchase-history-table.component.scss',
   imports: [
-    MatCard,
-    MatCardContent,
     MatTable,
     MatSort,
     MatColumnDef,
@@ -48,7 +46,8 @@ import { StockPurchaseHistory } from '../../model/stock';
     MatRowDef,
     MatRow,
     DecimalPipe,
-    MatProgressSpinner,
+    NorecordsComponent,
+    LoadingComponent,
   ],
 })
 export class PurchaseHistoryTableComponent implements OnChanges {

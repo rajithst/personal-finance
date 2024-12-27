@@ -1,11 +1,10 @@
 @use "@angular/material" as mat;
 
-table {
-  @include mat.table-overrides(
-    (
-      row-item-outline-width: 0.2px,
-    )
-  );
+mat-expansion-panel {
+  @include mat.expansion-overrides((
+    header-text-weight: 500,
+    header-text-size: 14px,
+  ));
 }
 
 .transaction-panel {
@@ -40,7 +39,7 @@ table {
 .filters-right {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px;
+  margin: 5px 0 5px 0;
   background: #dadada;
   padding: 5px;
   border-radius: 10px;
@@ -81,10 +80,4 @@ table {
 
 .subcategory-text {
   font-size: 12px;
-}
-
-.no-records-message {
-  text-align: center;
-  font-weight: 800;
-  font-size: 14px;
 }

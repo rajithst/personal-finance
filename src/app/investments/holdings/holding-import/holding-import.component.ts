@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -38,19 +37,14 @@ import { MatIcon } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import moment from 'moment/moment';
 import { ApiService } from '../../../core/api.service';
-import { DataService } from '../../../service/data.service';
-import {
-  ACCOUNT_TYPE_INVESTMENT_ACCOUNT,
-  CANCEL_ACTION,
-  SUCCESS_ACTION,
-} from '../../../shared/data/client.data';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { HttpEventType } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { CreditAccount } from '../../../finance/model/account';
 import { Portfolio } from '../../model/portfolio';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { InvestmentStore } from '../../../core/store/investment.store';
 
 @Component({
   selector: 'app-holding-import',
@@ -85,19 +79,16 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     MatCard,
     MatCardContent,
     MatProgressSpinner,
-    AsyncPipe,
   ],
   providers: [provideNativeDateAdapter()],
 })
 export class HoldingImportComponent {
   private readonly apiService = inject(ApiService);
-  private readonly dataService = inject(DataService);
+  private readonly store = inject(InvestmentStore);
   private readonly dialogRef = inject(MatDialogRef<HoldingImportComponent>);
 
-  myAccounts: CreditAccount[] = this.dataService
-    .getAccounts()
-    .filter((x) => x.account_type === ACCOUNT_TYPE_INVESTMENT_ACCOUNT);
-  myPortfolios$: Observable<Portfolio[]> = this.apiService.getPortfolios();
+  myAccounts: CreditAccount[] = this.store.brokerAccounts();
+  myPortfolios: Portfolio[] = this.store.portfolios();
   progress = 0;
   clickSubmit = false;
   uploadComplete = false;
@@ -156,7 +147,7 @@ export class HoldingImportComponent {
     }
   }
 
-  import() {
+  async import() {
     const formData = new FormData();
     this.files.forEach((x) => {
       formData.append('files', x);
@@ -206,18 +197,10 @@ export class HoldingImportComponent {
   }
 
   cancel() {
-    this.dialogRef.close({
-      refresh: false,
-      data: null,
-      action: CANCEL_ACTION,
-    });
+    this.dialogRef.close(false);
   }
 
   close() {
-    this.dialogRef.close({
-      refresh: true,
-      data: null,
-      action: SUCCESS_ACTION,
-    });
+    this.dialogRef.close(false);
   }
 }

@@ -1,45 +1,41 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import {
   BulkDeleteRequest,
   BulkDeleteResponse,
+  MonthlyTransaction,
   Transaction,
   TransactionExpand,
   TransactionFilter,
   TransactionMergeRequest,
   TransactionSplitRequest,
   TransactionSplitResponse,
-  TransactionsResponse,
 } from '../finance/model/transactions';
 import { environment } from '../../environments/environment';
-import {
-  DestinationMap,
-  DestinationMapRequest,
-  PayeeDetail,
-  PayeeResponse,
-} from '../finance/model/payee';
+import { Payee, PayeeUpdateRequest, PayeeDetail } from '../finance/model/payee';
 
 import { DashboardResponse } from '../finance/model/dashboard';
 import { ClientSettings } from '../finance/model/common';
 import {
+  CategoryDeleteResponse,
   CategorySettingsRequest,
   CategorySettingsResponse,
 } from '../finance/model/category-settings';
-import { MyProfile } from '../finance/model/profile';
-import { JwtTokenResponse } from '../auth/model';
+import { JwtTokenResponse, MyProfile } from '../auth/model';
 import { CreditAccount, CreditAccountRequest } from '../finance/model/account';
-import {
-  Portfolio,
-  PortfolioPerformance,
-} from '../investments/model/portfolio';
+import { PortfolioPerformance } from '../investments/model/portfolio';
 import { Holding } from '../investments/model/holding';
 import { MonthlyDividend } from '../investments/model/dividend';
 import {
   StockPriceHistory,
   StockPurchaseHistory,
+  StockPurchaseRequest,
 } from '../investments/model/stock';
-import { CompanyInfo } from '../investments/model/investment';
+import {
+  CompanyInfo,
+  InvestmentClientSettings,
+} from '../investments/model/investment';
 
 export interface BaseAPIResponse {
   status: boolean;
@@ -50,6 +46,10 @@ export interface APIResponse<T> extends BaseAPIResponse {
   data: T;
 }
 
+function mapToData<T>(response: APIResponse<T>): T {
+  return response.data;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -57,106 +57,123 @@ export class ApiService {
   private readonly SRC_URL = environment.apiUrl;
   private readonly http = inject(HttpClient);
 
-  login(loginPayload: {
+  async login(loginPayload: {
     username: string;
     password: string;
-  }): Observable<JwtTokenResponse> {
-    return this.http.post<JwtTokenResponse>(
+  }): Promise<JwtTokenResponse> {
+    const token$ = this.http.post<JwtTokenResponse>(
       `${this.SRC_URL}/auth/jwt/create`,
       loginPayload,
     );
+    return await firstValueFrom(token$);
   }
 
-  getDashboard(): Observable<DashboardResponse> {
-    return this.http.get<DashboardResponse>(
-      `${this.SRC_URL}/finance/dashboard/`,
+  async getDashboard(year: number): Promise<DashboardResponse> {
+    const dashboard$ = this.http.get<APIResponse<DashboardResponse>>(
+      `${this.SRC_URL}/finance/dashboard/?year=${year}`,
     );
+    return await firstValueFrom(dashboard$.pipe(map(mapToData)));
   }
 
-  getTransactions(
+  async getTransactions(
     payload: TransactionFilter,
-  ): Observable<TransactionsResponse> {
+  ): Promise<MonthlyTransaction[]> {
     const year = payload.year;
     const target = payload.target;
     const categories = payload.categories ? payload.categories.join(',') : '';
     const subcategories = payload.subcategories
       ? payload.subcategories.join(',')
       : '';
-    return this.http.get<TransactionsResponse>(
+    const transactions$ = this.http.get<APIResponse<MonthlyTransaction[]>>(
       `${this.SRC_URL}/finance/transaction/?year=${year}&target=${target}&cat=${categories}&subcat=${subcategories}`,
     );
+    return await firstValueFrom(transactions$.pipe(map(mapToData)));
   }
 
-  getPayees(): Observable<PayeeResponse> {
-    return this.http.get<PayeeResponse>(`${this.SRC_URL}/finance/payee/`);
+  async getPayees(): Promise<Payee[]> {
+    const payees$ = this.http.get<APIResponse<Payee[]>>(
+      `${this.SRC_URL}/finance/payee/`,
+    );
+    return await firstValueFrom(payees$.pipe(map(mapToData)));
   }
 
-  getPayeeDetail(payeeId: number | string): Observable<PayeeDetail> {
-    return this.http.get<PayeeDetail>(
+  async getPayeeDetail(payeeId: number | string): Promise<PayeeDetail> {
+    const payee$ = this.http.get<PayeeDetail>(
       `${this.SRC_URL}/finance/payee-detail/${payeeId}/`,
     );
+    return await firstValueFrom(payee$);
   }
 
-  getPayeeDetailByName(payeeName: string): Observable<PayeeDetail> {
-    return this.http.get<PayeeDetail>(
+  async getPayeeDetailByName(payeeName: string): Promise<PayeeDetail> {
+    const payee$ = this.http.get<PayeeDetail>(
       `${this.SRC_URL}/finance/payee-detail/${payeeName}/`,
     );
+    return await firstValueFrom(payee$);
   }
 
-  updateTransaction(payload: Transaction): Observable<TransactionExpand> {
+  async updateTransaction(payload: Transaction): Promise<TransactionExpand> {
+    let updatedTransaction$;
     if (payload.id) {
-      return this.http.put<TransactionExpand>(
+      updatedTransaction$ = this.http.put<APIResponse<TransactionExpand>>(
         `${this.SRC_URL}/finance/transaction/${payload.id}/`,
         payload,
       );
     } else {
-      return this.http.post<TransactionExpand>(
+      updatedTransaction$ = this.http.post<APIResponse<TransactionExpand>>(
         `${this.SRC_URL}/finance/transaction/`,
         payload,
       );
     }
+    return await firstValueFrom(updatedTransaction$.pipe(map(mapToData)));
   }
 
-  mergeTransaction(
+  async mergeTransaction(
     payload: TransactionMergeRequest,
-  ): Observable<TransactionExpand> {
-    return this.http.put<TransactionExpand>(
+  ): Promise<TransactionExpand> {
+    const updatedTransaction$ = this.http.put<APIResponse<TransactionExpand>>(
       `${this.SRC_URL}/finance/transaction/${payload.id}/`,
       payload,
     );
+    return await firstValueFrom(updatedTransaction$.pipe(map(mapToData)));
   }
 
-  splitTransaction(
+  async splitTransaction(
     payload: TransactionSplitRequest,
-  ): Observable<TransactionSplitResponse> {
-    return this.http.put<TransactionSplitResponse>(
+  ): Promise<TransactionSplitResponse> {
+    const splitResponse$ = this.http.put<APIResponse<TransactionSplitResponse>>(
       `${this.SRC_URL}/finance/bulk/transaction/`,
       payload,
     );
+    return await firstValueFrom(splitResponse$.pipe(map(mapToData)));
   }
 
-  updatePayeeRules(payload: DestinationMapRequest): Observable<DestinationMap> {
+  async updatePayeeRules(payload: PayeeUpdateRequest): Promise<Payee> {
+    let updatedPayee$;
     if (payload.id) {
-      return this.http.put<DestinationMap>(
+      updatedPayee$ = this.http.put<APIResponse<Payee>>(
         `${this.SRC_URL}/finance/payee/`,
         payload,
       );
     } else {
-      return this.http.post<DestinationMap>(
+      updatedPayee$ = this.http.post<APIResponse<Payee>>(
         `${this.SRC_URL}/finance/payee/`,
         payload,
       );
     }
+    return await firstValueFrom(updatedPayee$.pipe(map(mapToData)));
   }
 
-  bulkDeleteTransactions(payload: BulkDeleteRequest) {
-    return this.http.put<BulkDeleteResponse>(
+  async bulkDeleteTransactions(
+    payload: BulkDeleteRequest,
+  ): Promise<BulkDeleteResponse> {
+    const response$ = this.http.put<APIResponse<BulkDeleteResponse>>(
       `${this.SRC_URL}/finance/bulk/transaction/`,
       payload,
     );
+    return await firstValueFrom(response$.pipe(map(mapToData)));
   }
 
-  uploadTransactions(formData: FormData) {
+  uploadTransactions(formData: FormData): Observable<any> {
     return this.http.post(
       `${this.SRC_URL}/finance/import/transactions/`,
       formData,
@@ -167,116 +184,137 @@ export class ApiService {
     );
   }
 
-  getMyProfile() {
-    return this.http.get<MyProfile>(`${this.SRC_URL}/oauth/profile/me/`);
+  async getMyProfile(): Promise<MyProfile> {
+    const profile$ = this.http.get<MyProfile>(
+      `${this.SRC_URL}/oauth/profile/me/`,
+    );
+    return await firstValueFrom(profile$);
   }
 
-  updateCategory(payload: CategorySettingsRequest) {
+  async updateCategory(
+    payload: CategorySettingsRequest,
+  ): Promise<CategorySettingsResponse> {
+    let categorySettings$;
     if (payload.category.id) {
-      return this.http.put<CategorySettingsResponse>(
+      categorySettings$ = this.http.put<CategorySettingsResponse>(
         `${this.SRC_URL}/finance/category-settings/`,
         payload,
       );
     } else {
-      return this.http.post<CategorySettingsResponse>(
+      categorySettings$ = this.http.post<CategorySettingsResponse>(
         `${this.SRC_URL}/finance/category-settings/`,
         payload,
       );
     }
+
+    return await firstValueFrom(categorySettings$);
   }
 
-  initSettings(): Observable<ClientSettings> {
-    return this.http.get<ClientSettings>(`${this.SRC_URL}/finance/settings/`);
+  async deleteCategory(categoryId: number): Promise<CategoryDeleteResponse> {
+    const response$ = this.http.delete<APIResponse<CategoryDeleteResponse>>(
+      `${this.SRC_URL}/finance/category-settings/${categoryId}/`,
+    );
+    return await firstValueFrom(response$.pipe(map(mapToData)));
   }
 
-  updateCreditAccount(
+  async initSettings(): Promise<ClientSettings> {
+    const settings$ = this.http.get<ClientSettings>(
+      `${this.SRC_URL}/finance/settings/`,
+    );
+    return await firstValueFrom(settings$);
+  }
+
+  async updateCreditAccount(
     payload: CreditAccountRequest,
-  ): Observable<CreditAccount> {
+  ): Promise<CreditAccount> {
+    let creditAccount$;
     if (payload.id) {
-      return this.http.put<CreditAccount>(
+      creditAccount$ = this.http.put<CreditAccount>(
         `${this.SRC_URL}/finance/credit-account/`,
         payload,
       );
     } else {
-      return this.http.post<CreditAccount>(
+      creditAccount$ = this.http.post<CreditAccount>(
         `${this.SRC_URL}/finance/credit-account/`,
         payload,
       );
     }
+
+    return await firstValueFrom(creditAccount$);
   }
 
   /* Investment Module APIs*/
-  private mapToData<T>(response: APIResponse<T>): T {
-    return response.data;
+
+  async initInvestmentSettings(): Promise<InvestmentClientSettings> {
+    const settings$ = this.http.get<APIResponse<InvestmentClientSettings>>(
+      `${this.SRC_URL}/investments/settings/`,
+    );
+    return await firstValueFrom(settings$.pipe(map(mapToData)));
   }
 
-  getPortfolios(): Observable<Portfolio[]> {
-    return this.http
-      .get<APIResponse<Portfolio[]>>(`${this.SRC_URL}/investments/portfolio/`)
-      .pipe(map(this.mapToData));
+  async getPortfolioPerformance(
+    portfolio: number,
+  ): Promise<PortfolioPerformance> {
+    const portfolio$ = this.http.get<APIResponse<PortfolioPerformance>>(
+      `${this.SRC_URL}/investments/dashboard/?portfolio=${portfolio}`,
+    );
+    return await firstValueFrom(portfolio$.pipe(map(mapToData)));
   }
 
-  getPortfolioPerformance(): Observable<PortfolioPerformance> {
-    return this.http
-      .get<
-        APIResponse<PortfolioPerformance>
-      >(`${this.SRC_URL}/investments/dashboard/`)
-      .pipe(map(this.mapToData));
+  async getHoldings(portfolio: number): Promise<Holding[]> {
+    const holdings$ = this.http.get<APIResponse<Holding[]>>(
+      `${this.SRC_URL}/investments/holdings/?portfolio=${portfolio}`,
+    );
+    return await firstValueFrom(holdings$.pipe(map(mapToData)));
   }
 
-  getHoldings(): Observable<Holding[]> {
-    return this.http
-      .get<APIResponse<Holding[]>>(`${this.SRC_URL}/investments/holdings/`)
-      .pipe(map(this.mapToData));
+  async getDividends(portfolio: number): Promise<MonthlyDividend[]> {
+    const dividends$ = this.http.get<APIResponse<MonthlyDividend[]>>(
+      `${this.SRC_URL}/investments/dividends/income/?portfolio=${portfolio}`,
+    );
+    return await firstValueFrom(dividends$.pipe(map(mapToData)));
   }
 
-  getDividends(): Observable<MonthlyDividend[]> {
-    return this.http
-      .get<
-        APIResponse<MonthlyDividend[]>
-      >(`${this.SRC_URL}/investments/dividends/income/`)
-      .pipe(map(this.mapToData));
+  async getStockPurchaseHistory(
+    portfolio: number,
+  ): Promise<StockPurchaseHistory[]> {
+    const history$ = this.http.get<APIResponse<StockPurchaseHistory[]>>(
+      `${this.SRC_URL}/investments/stocks/purchase/history/?portfolio=${portfolio}`,
+    );
+    return await firstValueFrom(history$.pipe(map(mapToData)));
   }
 
-  getStockPurchaseHistory(): Observable<StockPurchaseHistory[]> {
-    return this.http
-      .get<
-        APIResponse<StockPurchaseHistory[]>
-      >(`${this.SRC_URL}/investments/stocks/purchase/history/`)
-      .pipe(map(this.mapToData));
+  async getStockPriceHistory(payload: string): Promise<StockPriceHistory> {
+    const history$ = this.http.get<APIResponse<StockPriceHistory>>(
+      `${this.SRC_URL}/investments/stocks/price/history/?company=${payload}/`,
+    );
+    return await firstValueFrom(history$.pipe(map(mapToData)));
   }
 
-  getStockPriceHistory(payload: string): Observable<StockPriceHistory> {
-    return this.http
-      .get<
-        APIResponse<StockPriceHistory>
-      >(`${this.SRC_URL}/investments/stocks/price/history/?company=${payload}/`)
-      .pipe(map(this.mapToData));
+  async updateStockPurchase(payload: StockPurchaseRequest): Promise<Holding> {
+    let updatedHolding$;
+    if (payload.id) {
+      updatedHolding$ = this.http.put<APIResponse<Holding>>(
+        `${this.SRC_URL}/investments/stocks/purchase/history/`,
+        payload,
+      );
+    } else {
+      updatedHolding$ = this.http.post<APIResponse<Holding>>(
+        `${this.SRC_URL}/investments/stocks/purchase/history/`,
+        payload,
+      );
+    }
+    return await firstValueFrom(updatedHolding$.pipe(map(mapToData)));
   }
 
-  // updateStockPurchase(
-  //   payload: StockPurchase,
-  // ): Observable<StockPurchaseResponse> {
-  //   if (payload.id) {
-  //     return this.http.put<StockPurchaseResponse>(
-  //       `${this.SRC_URL}/investments/stock-purchase-history/${payload.id}/`,
-  //       payload,
-  //     );
-  //   } else {
-  //     return this.http.post<StockPurchaseResponse>(
-  //       `${this.SRC_URL}/investments/stock-purchase-history/`,
-  //       payload,
-  //     );
-  //   }
-  // }
-
-  getCompanies(): Observable<CompanyInfo[]> {
-    return this.http
-      .get<APIResponse<CompanyInfo[]>>(`${this.SRC_URL}/investments/company`)
-      .pipe(map(this.mapToData));
+  async getCompanies(): Promise<CompanyInfo[]> {
+    const companies$ = this.http.get<APIResponse<CompanyInfo[]>>(
+      `${this.SRC_URL}/investments/company/list`,
+    );
+    return firstValueFrom(companies$.pipe(map(mapToData)));
   }
 
-  uploadHoldingTransactions(formData: FormData) {
+  uploadHoldingTransactions(formData: FormData): Observable<any> {
     return this.http.post(
       `${this.SRC_URL}/investments/stocks/purchases/upload/`,
       formData,

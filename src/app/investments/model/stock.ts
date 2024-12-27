@@ -33,3 +33,16 @@ export interface StockPriceHistory {
   sector: string;
   image: string;
 }
+
+export interface StockPurchaseRequest {
+  task: string;
+  id: number | null;
+  company: string;
+  purchase_date: string;
+  quantity: number | null;
+  purchase_price: number | null;
+  settlement_currency: string | null;
+  exchange_rate: number | null;
+  stock_currency: string;
+  notes: string;
+}

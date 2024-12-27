@@ -38,45 +38,49 @@ import {
   MatSuffix,
 } from '@angular/material/form-field';
 import { NgIf } from '@angular/common';
-import { CdkScrollable } from '@angular/cdk/scrolling';
+import { StockPurchaseRequest } from '../../model/stock';
+import { Portfolio } from '../../model/portfolio';
+import { InvestmentStore } from '../../../core/store/investment.store';
 
 interface HoldingUpdateData {
   task: string;
 }
 
 @Component({
-    selector: 'app-holding-update',
-    templateUrl: './holding-update.component.html',
-    styleUrl: './holding-update.component.scss',
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        ReactiveFormsModule,
-        NgIf,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatSelectTrigger,
-        MatOption,
-        MatInput,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatSuffix,
-        MatDatepicker,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-    ],
-    providers: [provideNativeDateAdapter()]
+  selector: 'app-holding-update',
+  templateUrl: './holding-update.component.html',
+  styleUrl: './holding-update.component.scss',
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatSelectTrigger,
+    MatOption,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
+  providers: [provideNativeDateAdapter()],
 })
 export class HoldingUpdateComponent implements OnInit {
-  apiService = inject(ApiService);
+  private readonly apiService = inject(ApiService);
+  private readonly store = inject(InvestmentStore);
+
   companies = signal<CompanyInfo[]>([]);
   company = signal<CompanyInfo | null>(null);
   companyName = computed(() => this.company()?.company_name);
   companyImage = computed(() => this.company()?.image);
   currency = computed(() => this.company()?.stock_currency);
+  portfolios = signal<Portfolio[]>([]);
   transactionForm = this.getNewTransactionForm();
 
   constructor(
@@ -85,9 +89,10 @@ export class HoldingUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.apiService.getCompanies().subscribe((value) => {
-      this.companies.set(value);
+    this.apiService.getCompanies().then((companies) => {
+      this.companies.set(companies);
     });
+    this.portfolios.set(this.store.portfolios());
     this.transactionForm.get('company')?.valueChanges.subscribe((value) => {
       if (value) {
         const selectedCompany = this.companies().find(
@@ -103,9 +108,11 @@ export class HoldingUpdateComponent implements OnInit {
     });
   }
 
-  cancel() {}
+  cancel() {
+    this.dialogRef.close({ refresh: false });
+  }
 
-  submit() {
+  async submit() {
     this.transactionForm.value.purchase_date = moment(
       this.transactionForm.value.purchase_date,
     ).format('YYYY-MM-DD');
@@ -115,20 +122,16 @@ export class HoldingUpdateComponent implements OnInit {
     this.transactionForm.value.purchase_price = Number(
       this.transactionForm.value.purchase_price,
     );
-    //const payload = this.transactionForm.value as StockPurchase;
-    // this.apiService.updateStockPurchase(payload).subscribe((value) => {
-    //   if (value) {
-    //     this.dialogRef.close({ refresh: true });
-    //   } else {
-    //     this.dialogRef.close({ refresh: false });
-    //   }
-    // });
+    const payload = this.transactionForm.value as StockPurchaseRequest;
+    const updatedPurchase = await this.apiService.updateStockPurchase(payload);
+    this.dialogRef.close({ refresh: !!updatedPurchase });
   }
 
   private getNewTransactionForm() {
     return new FormGroup({
       id: new FormControl<number | null>(null),
       company: new FormControl<string>('', [Validators.required]),
+      portfolio: new FormControl<number | null>(null, [Validators.required]),
       purchase_date: new FormControl<string>('', [Validators.required]),
       quantity: new FormControl<number | null>(null, [Validators.required]),
       purchase_price: new FormControl<number | null>(null, [

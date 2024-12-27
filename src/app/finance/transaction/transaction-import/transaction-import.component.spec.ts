@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TransactionImportComponent } from './transaction-import.component';
 import { ApiService } from '../../../core/api.service';
-import { DataService } from '../../../service/data.service';
+import { DataService } from '../../service/data.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';

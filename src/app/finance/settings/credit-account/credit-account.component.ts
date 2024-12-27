@@ -1,6 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { DataService } from '../../../service/data.service';
-import { SUCCESS_ACTION } from '../../../shared/data/client.data';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AccountEditComponent } from './account-edit/account-edit.component';
@@ -26,6 +24,10 @@ import {
   MatCardContent,
 } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
+import { FinanceStore } from '../../../core/store/finance.store';
+
+const DIALOG_WIDTH = '900px';
+const DIALOG_TOP_POSITION = '5%';
 
 @Component({
   selector: 'app-credit-account',
@@ -51,61 +53,42 @@ import { MatIcon } from '@angular/material/icon';
     MatIconButton,
   ],
 })
-export class CreditAccountComponent {
-  private readonly dataService = inject(DataService);
+export class CreditAccountComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
-  accounts = this.dataService.getAccounts();
-  dataSource = new MatTableDataSource<CreditAccount>(this.accounts);
+  private readonly store = inject(FinanceStore);
+
+  dataSource = new MatTableDataSource<CreditAccount>([]);
 
   displayedColumns = ['account_name', 'account_type', 'description', 'action'];
 
-  editAccount(element: CreditAccount) {
-    const dialog = this.dialog.open(AccountEditComponent, {
-      maxWidth: '850px',
-      position: {
-        top: '5%',
-      },
-      data: { account: element, task: 'edit' },
-    });
-    dialog.afterClosed().subscribe((result: any) => {
-      if (result && result.action === SUCCESS_ACTION) {
-        const targetId = this.accounts.findIndex((x) => x.id === element.id);
-        if (targetId !== -1) {
-          this.accounts[targetId] = result.data;
-          this.dataSource.data = this.accounts;
-          this.refreshClientSettings();
-          this.snackBar.open('Added!.', 'Success', {
-            duration: 3000,
-          });
-        }
-      }
-    });
+  ngOnInit(): void {
+    this.prepareAccounts();
   }
 
-  addAccount() {
-    const dialog = this.dialog.open(AccountEditComponent, {
-      width: '850px',
-      position: {
-        top: '5%',
-      },
-      data: { account: null, task: 'add' },
-    });
-    dialog.afterClosed().subscribe((result: any) => {
-      if (result && result.action === SUCCESS_ACTION) {
-        this.accounts.push(result.data);
-        this.dataSource.data = this.accounts;
-        this.refreshClientSettings();
-        this.snackBar.open('Added!.', 'Success', {
-          duration: 3000,
-        });
-      }
-    });
+  prepareAccounts() {
+    this.dataSource = new MatTableDataSource<CreditAccount>(
+      this.store.creditAccounts(),
+    );
   }
 
-  private refreshClientSettings() {
-    const clientSettings = this.dataService.getClientSettings();
-    clientSettings.accounts = this.accounts;
-    this.dataService.setClientSettings(clientSettings);
+  editAccount(element?: CreditAccount) {
+    const dialog = this.dialog.open(AccountEditComponent, {
+      maxWidth: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
+      data: { account: element ?? null, task: 'edit' },
+    });
+    dialog.afterClosed().subscribe((result: CreditAccount | null) => {
+      this.prepareAccounts();
+      const message = result
+        ? 'Updated Successfully!'
+        : 'Failed to update accounts!';
+      const action = result ? 'Success' : 'Error';
+      this.snackBar.open(message, action, {
+        duration: 3000,
+      });
+    });
   }
 }

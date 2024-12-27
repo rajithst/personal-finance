@@ -1,9 +1,10 @@
 import {
-  AfterViewInit,
   Component,
+  computed,
   inject,
   OnDestroy,
   OnInit,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
@@ -20,11 +21,10 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { DestinationMap } from '../../model/payee';
+import { Payee } from '../../model/payee';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DataService } from '../../../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PayeeEditComponent } from '../payee-edit/payee-edit.component';
 import { ReplaySubject } from 'rxjs';
@@ -33,14 +33,16 @@ import {
   TRANSACTION_TYPE_INCOME_ID,
   TRANSACTION_TYPE_PAYMENTS_ID,
   TRANSACTION_TYPE_SAVINGS_ID,
-} from '../../../shared/data/client.data';
+} from '../../data/client.data';
 import { MatChip } from '@angular/material/chips';
 import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
+import { LoadingComponent } from '../../../components/loading/loading.component';
+import { FinanceStore } from '../../../core/store/finance.store';
+import { NorecordsComponent } from '../../../components/norecords/norecords.component';
 
 @Component({
   selector: 'app-payees',
@@ -66,18 +68,18 @@ import { MatIconButton } from '@angular/material/button';
     MatRowDef,
     MatRow,
     MatPaginator,
-    MatCard,
-    MatCardContent,
     MatIcon,
     MatIconButton,
+    LoadingComponent,
+    NorecordsComponent,
   ],
 })
-export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PayeesComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatTable) table: MatTable<DestinationMap>;
+  @ViewChild(MatTable) table: MatTable<Payee>;
   @ViewChild(MatSort) sort: MatSort;
-  dataSource: MatTableDataSource<DestinationMap>;
-  selection = new SelectionModel<DestinationMap>(true, []);
+  dataSource: MatTableDataSource<Payee>;
+  selection = new SelectionModel<Payee>(true, []);
   displayedColumns: string[] = [
     'select',
     'Payee',
@@ -94,20 +96,20 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly TRANSACTION_TYPE_INCOME_ID = TRANSACTION_TYPE_INCOME_ID;
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
-  private readonly dataService = inject(DataService);
+  private readonly store = inject(FinanceStore);
+
+  payees = signal<Payee[]>([]);
+  loading = computed(() => this.payees() === null);
+  noData = computed(() => !this.loading() && this.payees()?.length === 0);
 
   ngOnInit(): void {
-    this.preparePayeeTable();
+    this.preparePayeeTable().then();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  preparePayeeTable() {
-    this.dataSource = new MatTableDataSource<DestinationMap>(
-      this.dataService.getPayees(),
-    );
+  async preparePayeeTable() {
+    await this.store.getPayees();
+    this.payees.set(this.store.payees());
+    this.dataSource = new MatTableDataSource<Payee>(this.payees());
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
@@ -127,44 +129,25 @@ export class PayeesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.selection.select(...this.dataSource.data);
   }
 
-  editPayee(payee: DestinationMap) {
+  editPayee(payee: Payee) {
     const dialog = this.dialog.open(PayeeEditComponent, {
       maxWidth: '900px',
+      height: '70%',
       position: {
         top: '5%',
       },
       data: { payee },
     });
-    dialog
-      .afterClosed()
-      .subscribe(
-        (result: {
-          payee: DestinationMap | null;
-          mergeIds: number[] | null;
-        }) => {
-          if (result?.payee) {
-            const updatedPayee = result.payee;
-            const id = this.dataSource.data.findIndex(
-              (x) => x.id === updatedPayee.id,
-            );
-            if (id !== -1) {
-              this.dataSource.data[id] = updatedPayee;
-            }
-            if (result.mergeIds) {
-              result.mergeIds.forEach((mergeId: number) => {
-                const idx = this.dataSource.data.findIndex(
-                  (x) => x.id === mergeId,
-                );
-                this.dataSource.data.splice(idx, 1);
-              });
-            }
-            this.dataSource.paginator = this.paginator;
-            this.snackBar.open('Updated!', 'Success', {
-              duration: 3000,
-            });
-          }
-        },
-      );
+    dialog.afterClosed().subscribe((result: Payee | null | undefined) => {
+      if (result !== undefined) {
+        this.preparePayeeTable().then();
+        const message = result ? 'Updated!' : 'Failed!';
+        const action = result ? 'Success' : 'Error';
+        this.snackBar.open(message, action, {
+          duration: 3000,
+        });
+      }
+    });
   }
 
   ngOnDestroy(): void {

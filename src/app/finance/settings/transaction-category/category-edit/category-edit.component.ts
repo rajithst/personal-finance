@@ -9,7 +9,6 @@ import {
 } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
-  MatDialog,
   MatDialogRef,
   MatDialogTitle,
   MatDialogContent,
@@ -17,58 +16,50 @@ import {
   MatDialogClose,
 } from '@angular/material/dialog';
 import { TransactionSubCategory } from '../../../model/common';
-import { ApiService } from '../../../../core/api.service';
 import {
   CategorySettings,
   CategorySettingsRequest,
 } from '../../../model/category-settings';
-import {
-  ERROR_ACTION,
-  SUCCESS_ACTION,
-  TRANSACTION_TYPES,
-} from '../../../../shared/data/client.data';
-import { MatButton } from '@angular/material/button';
+import { TRANSACTION_TYPES } from '../../../data/client.data';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
-import { MatTooltip } from '@angular/material/tooltip';
 import { MatInput } from '@angular/material/input';
-import { MatOption, MatRipple } from '@angular/material/core';
+import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { NgIf } from '@angular/common';
-import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FinanceStore } from '../../../../core/store/finance.store';
+import { MatIcon } from '@angular/material/icon';
+
 interface CategoryEditDialogData {
   settings: CategorySettings | null;
   task: string;
 }
 
 @Component({
-    selector: 'app-category-edit',
-    templateUrl: './category-edit.component.html',
-    styleUrl: './category-edit.component.scss',
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        ReactiveFormsModule,
-        NgIf,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatOption,
-        MatInput,
-        MatRipple,
-        MatTooltip,
-        MatDivider,
-        MatButton,
-        MatDialogActions,
-        MatDialogClose,
-    ]
+  selector: 'app-category-edit',
+  templateUrl: './category-edit.component.html',
+  styleUrl: './category-edit.component.scss',
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatInput,
+    MatDivider,
+    MatButton,
+    MatDialogActions,
+    MatDialogClose,
+    MatIcon,
+    MatIconButton,
+  ],
 })
 export class CategoryEditComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
-  private readonly dialog = inject(MatDialog);
-  private readonly apiService = inject(ApiService);
   private readonly dialogRef = inject(MatDialogRef<CategoryEditComponent>);
+  private readonly store = inject(FinanceStore);
   data = inject<CategoryEditDialogData>(MAT_DIALOG_DATA);
 
   displayedColumns: string[] = ['name', 'description', 'actions'];
@@ -104,7 +95,7 @@ export class CategoryEditComponent implements OnInit {
     }
   }
 
-  submit() {
+  async submit() {
     const allSubcategoryForms = this.subcategories;
     const touchedFormValues: TransactionSubCategory[] = [];
     allSubcategoryForms.forEach((x) => {
@@ -118,23 +109,10 @@ export class CategoryEditComponent implements OnInit {
       deleted_sub_categories: this.deletedSubCategories,
       delete_category: this.isCategoryDeleted,
     };
-    this.apiService
-      .updateCategory(categorySettingsPayload)
-      .subscribe((result) => {
-        if (result) {
-          this.dialogRef.close({
-            refresh: true,
-            data: result,
-            action: SUCCESS_ACTION,
-          });
-        } else {
-          this.dialogRef.close({
-            refresh: false,
-            data: null,
-            action: ERROR_ACTION,
-          });
-        }
-      });
+    const updatedCategory = await this.store.updateCategory(
+      categorySettingsPayload,
+    );
+    this.dialogRef.close(updatedCategory);
   }
 
   onAddSubCategory() {
@@ -157,16 +135,6 @@ export class CategoryEditComponent implements OnInit {
       this.deletedSubCategories.push(deletedItem);
     }
     controls.removeAt(formIndex);
-  }
-
-  deleteCategory() {
-    const confirm = this.dialog.open(ActionConfirmComponent);
-    confirm.afterClosed().subscribe((result: any) => {
-      if (result) {
-        this.isCategoryDeleted = true;
-        this.submit();
-      }
-    });
   }
 
   private getCategorySettingsForm(settings: CategorySettings | null) {
@@ -204,29 +172,8 @@ export class CategoryEditComponent implements OnInit {
       description: new FormControl<string | null>(settings.description),
     });
   }
-}
-
-@Component({
-    selector: 'app-action-confirm',
-    templateUrl: './category-edit-action-confirm.component.html',
-    styleUrl: './category-edit.component.scss',
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-    ]
-})
-export class ActionConfirmComponent {
-  constructor(public dialogRef: MatDialogRef<ActionConfirmComponent>) {}
 
   cancel() {
-    this.dialogRef.close(false);
-  }
-
-  confirm() {
-    this.dialogRef.close(true);
+    this.dialogRef.close();
   }
 }
