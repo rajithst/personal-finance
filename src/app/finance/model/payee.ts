@@ -1,9 +1,5 @@
 import { TransactionExpand } from './transactions';
 
-export interface PayeeResponse {
-  payees: Payee[];
-}
-
 export interface Payee {
   id: number;
   destination: string;

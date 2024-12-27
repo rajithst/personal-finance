@@ -195,10 +195,7 @@ export class TransactionUpdateDialog implements OnInit {
       const payload: TransactionRequest = this.transactionForm.value;
       const updatedTransaction =
         await this.apiService.updateTransaction(payload);
-      this.dialogRef.close({
-        data: updatedTransaction ?? null,
-        status: !!updatedTransaction,
-      });
+      this.dialogRef.close(updatedTransaction ?? null);
     } else if (this.data.task == 'merge') {
       const data = this.transactionForm.value;
       const payload: TransactionMergeRequest = {
@@ -207,10 +204,7 @@ export class TransactionUpdateDialog implements OnInit {
       };
       const updatedTransaction =
         await this.apiService.mergeTransaction(payload);
-      this.dialogRef.close({
-        data: updatedTransaction ?? null,
-        status: !!updatedTransaction,
-      });
+      this.dialogRef.close(updatedTransaction ?? null);
     }
   }
 
@@ -258,7 +252,7 @@ export class TransactionUpdateDialog implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close({ data: null, status: true });
+    this.dialogRef.close();
   }
 
   getNewTransactionForm(data: TransactionExpand | null) {
