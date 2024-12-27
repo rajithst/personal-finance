@@ -19,7 +19,7 @@ export interface Widget {
     imports: [NgComponentOutlet, MatIconButton, MatIcon],
     template: `
     <div
-      class="container mat-elevation-z1"
+      class="container mat-elevation-z3"
       [style.background-color]="data().backgroundColor ?? 'white'"
       [style.color]="data().color ?? 'inherit'"
     >
@@ -44,7 +44,7 @@ export interface Widget {
 
     .container {
       position: relative;
-      height: 100%;
+      height: 95%;
       width: 100%;
       padding: 10px 10px 30px 10px;
       border: 1px solid #dddddd;

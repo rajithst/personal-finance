@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { MONTHS } from '../../shared/data/client.data';
 import { DashboardTransaction } from '../model/dashboard';
 import { DashboardService } from './dashboard.service';
+import {MONTHS} from "./dashboard.data";
 
 @Injectable()
 export class ChartUtilityService {

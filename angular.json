@@ -43,8 +43,7 @@
               "src/styles.scss",
               "@angular/material/prebuilt-themes/azure-blue.css"
             ],
-            "scripts": [
-            ],
+            "scripts": [],
             "prerender": false,
             "allowedCommonJsDependencies": [
               "moment"
@@ -120,5 +119,10 @@
         }
       }
     }
+  },
+  "cli": {
+    "schematicCollections": [
+      "@ngrx/schematics"
+    ]
   }
 }

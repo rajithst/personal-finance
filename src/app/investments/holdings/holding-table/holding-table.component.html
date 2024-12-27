@@ -1,141 +1,139 @@
 <div class="holding-panel-container">
-  <mat-card appearance="outlined">
-    <mat-card-content>
-      @if (loading()) {
-        <div class="spinner-container">
-          <mat-spinner></mat-spinner>
-        </div>
-      }
-      @if (noData() && !loading()) {
-        <p class="no-records-message">No data.</p>
-      }
-      @if (!noData() && !loading()) {
-        <table
-          [dataSource]="dataSource"
-          class="mat-elevation-z8 portfolio-table"
-          mat-table
-          matSort
-        >
-          <ng-container matColumnDef="Stock">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>Stock</th>
-            <td *matCellDef="let element" mat-cell>
-              <div class="holding-item-contents-1">
-                <div class="company-image">
-                  <img alt="" class="ticker-image" src="{{ element.image }}" />
-                </div>
-                <div class="company-ticker">
-                  <div class="company-name">
-                    <a
-                      (click)="openStockDetail(element.company_ticker)"
-                      href="javascript:void(0)"
-                      >{{ element.company_name }}</a
-                    >
-                  </div>
-                  <div class="company-symbol">{{ element.company_ticker }}</div>
-                </div>
+  @if (loading()) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+  @if (noData() && !loading()) {
+    <app-norecords></app-norecords>
+  }
+  @if (!noData() && !loading()) {
+    <table
+      [dataSource]="dataSource"
+      class="mat-elevation-z3"
+      mat-table
+      matSort
+    >
+      <ng-container matColumnDef="Stock">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Stock</th>
+        <td *matCellDef="let element" mat-cell>
+          <div class="holding-item-contents-1">
+            <div class="company-image">
+              <img alt="" class="ticker-image" src="{{ element.image }}" />
+            </div>
+            <div class="company-ticker">
+              <div class="company-name">
+                <span>{{ element.company_name }}</span>
               </div>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="Shares">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>Shares</th>
-            <td *matCellDef="let element" mat-cell>{{ element.quantity }}</td>
-          </ng-container>
-          <ng-container matColumnDef="CostPerShare">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>
-              Cost per share
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.average_price }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="CurrentShareValue">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>
-              Current share value
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.current_price }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="TotalInvestment">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>
-              Total Investment
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.total_investment }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="CurrentValue">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>
-              Current Value
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.current_value }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="TotalProfit">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>
-              Total Profit
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              <div
-                [ngClass]="{
+              <div class="company-symbol">{{ element.company_ticker }}</div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Shares">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Shares</th>
+        <td *matCellDef="let element" mat-cell>{{ element.quantity }}</td>
+      </ng-container>
+      <ng-container matColumnDef="CostPerShare">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>
+          Cost per share
+        </th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.average_price }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="CurrentShareValue">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>
+          Current share value
+        </th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.current_price }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="TotalInvestment">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>
+          Total Investment
+        </th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.total_investment }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="CurrentValue">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>
+          Current Value
+        </th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.current_value }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="TotalProfit">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>
+          Total Profit
+        </th>
+        <td *matCellDef="let element" mat-cell>
+          <div
+            [ngClass]="{
                   profit: element.profit_loss_value >= 0,
                   loss: element.profit_loss_value < 0
                 }"
-                class="profit-loss"
-              >
-                <div class="dis-flex-row-align-c-jus-c">
-                  <div></div>
-                  <div>
-                    <span>{{ element.profit_loss }}</span>
-                  </div>
-                </div>
+            class="profit-loss"
+          >
+            <div class="dis-flex-row-align-c-jus-c">
+              <div></div>
+              <div>
+                <span>{{ element.profit_loss }}</span>
               </div>
-              <div
-                [ngClass]="{
+            </div>
+          </div>
+          <div
+            [ngClass]="{
                   profit: element.profit_loss_value >= 0,
                   loss: element.profit_loss_value < 0
                 }"
-                class="profit-loss-percentage"
-              >
-                <div class="dis-flex-row-align-c-jus-c">
-                  <div><mat-icon>{{element.profit_loss_value > 0 ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon></div>
-                  <div>
-                    <span>{{ element.profit_change_percentage }}</span>
-                  </div>
-                </div>
+            class="profit-loss-percentage"
+          >
+            <div class="dis-flex-row-align-c-jus-c">
+              <div>
+                <mat-icon>{{
+                    element.profit_loss_value > 0
+                      ? "arrow_drop_up"
+                      : "arrow_drop_down"
+                  }}</mat-icon>
               </div>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="ShareInPortfolio">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>
-              Share in portfolio
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.share_in_portfolio }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="Actions">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
-            <td *matCellDef="let element" mat-cell>
-              <span [matMenuTriggerFor]="menu" class="holding-actions"> </span>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item>
-                  <span class="holding-action-item">Add Transaction</span>
-                </button>
-                <button mat-menu-item>
-                  <span class="holding-action-item">Show History</span>
-                </button>
-                <button mat-menu-item>
-                  <span class="holding-action-item">Delete</span>
-                </button>
-              </mat-menu>
-            </td>
-          </ng-container>
-          <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-          <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
-        </table>
-      }
-    </mat-card-content>
-  </mat-card>
+              <div>
+                <span>{{ element.profit_change_percentage }}</span>
+              </div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="ShareInPortfolio">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>
+          Share in portfolio
+        </th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.share_in_portfolio }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Actions">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+        <td *matCellDef="let element" mat-cell>
+          <span [matMenuTriggerFor]="menu" class="holding-actions"> </span>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <span class="holding-action-item">Add Transaction</span>
+            </button>
+            <button mat-menu-item>
+              <span class="holding-action-item">Show History</span>
+            </button>
+            <button mat-menu-item>
+              <span class="holding-action-item">Delete</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+    </table>
+  }
 </div>

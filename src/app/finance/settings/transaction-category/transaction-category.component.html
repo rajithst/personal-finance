@@ -1,11 +1,11 @@
-<mat-card>
+<mat-card appearance="outlined">
   <mat-card-header>
     <div class="d-flex-align-sb card-title">
       <div class="title">
         <mat-card-title>Category settings</mat-card-title>
       </div>
       <div class="actions">
-        <button mat-raised-button color="primary" (click)="addCategory()">
+        <button mat-raised-button color="primary" (click)="editCategory()">
           Add New Category
         </button>
       </div>
@@ -25,6 +25,13 @@
                 aria-label="Edit payee"
               >
                 <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                (click)="deleteCategory(data)"
+                aria-label="Delete category"
+              >
+                <mat-icon>delete</mat-icon>
               </button>
             </mat-panel-description>
           </mat-expansion-panel-header>

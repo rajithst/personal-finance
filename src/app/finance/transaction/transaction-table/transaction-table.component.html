@@ -118,11 +118,7 @@
     </div>
   }
   @if (noData() && !loading()) {
-    <mat-card appearance="outlined">
-      <mat-card-content>
-        <p class="no-records-message">No data.</p>
-      </mat-card-content>
-    </mat-card>
+    <app-norecords></app-norecords>
   }
   @if (!noData()) {
     <mat-accordion class="transaction-item-panel" multi="true">

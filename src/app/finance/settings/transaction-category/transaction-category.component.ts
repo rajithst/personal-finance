@@ -1,41 +1,36 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  TransactionCategory,
-  TransactionSubCategory,
-} from '../../model/common';
-import { DataService } from '../../../service/data.service';
-import { SUCCESS_ACTION } from '../../../shared/data/client.data';
 import { CategoryEditComponent } from './category-edit/category-edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CategorySettings } from '../../model/category-settings';
 import {
-  MatTable,
+  MatCell, MatCellDef,
   MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
+  MatHeaderCell, MatHeaderCellDef,
+  MatHeaderRow, MatHeaderRowDef,
+  MatRow, MatRowDef,
+  MatTable,
 } from '@angular/material/table';
 import {
   MatAccordion,
   MatExpansionPanel,
+  MatExpansionPanelDescription,
   MatExpansionPanelHeader,
   MatExpansionPanelTitle,
-  MatExpansionPanelDescription,
 } from '@angular/material/expansion';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import {
   MatCard,
+  MatCardContent,
   MatCardHeader,
   MatCardTitle,
-  MatCardContent,
 } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
+import { FinanceStore } from '../../../core/store/finance.store';
+import { ActionConfirmComponent } from './action-confirm.component';
+
+const DIALOG_WIDTH = '900px';
+const DIALOG_TOP_POSITION = '5%';
 
 @Component({
   selector: 'app-transaction-category',
@@ -54,98 +49,79 @@ import { MatIcon } from '@angular/material/icon';
     MatExpansionPanelDescription,
     MatTable,
     MatColumnDef,
-    MatHeaderCellDef,
     MatHeaderCell,
-    MatCellDef,
     MatCell,
-    MatHeaderRowDef,
     MatHeaderRow,
-    MatRowDef,
     MatRow,
     MatIcon,
     MatIconButton,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatHeaderRowDef,
+    MatRowDef,
   ],
 })
 export class TransactionCategoryComponent implements OnInit {
-  categorySettings: CategorySettings[] = [];
-  displayedColumns: string[] = ['name', 'description'];
-  private readonly dataService = inject(DataService);
-  allCategories: TransactionCategory[] = this.dataService.getAllCategories();
-  allSubCategories: TransactionSubCategory[] =
-    this.dataService.getAllSubCategories();
+  private readonly store = inject(FinanceStore);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
 
+  categorySettings: CategorySettings[] = [];
+  displayedColumns: string[] = ['name', 'description'];
+
   ngOnInit() {
-    this.allCategories.forEach((category) => {
-      const subs = this.allSubCategories.filter(
+    this.prepareCategories();
+  }
+
+  prepareCategories() {
+    const allCategories = this.store.transactionCategories();
+    const allSubCategories = this.store.transactionSubCategories();
+    this.categorySettings = [];
+    allCategories.forEach((category) => {
+      const subs = allSubCategories.filter(
         (sub) => category.id === sub.category,
       );
       this.categorySettings.push({ category: category, subCategories: subs });
     });
   }
 
-  editCategory(settings: CategorySettings) {
+  editCategory(settings?: CategorySettings | null) {
     const dialog = this.dialog.open(CategoryEditComponent, {
       maxWidth: '850px',
       position: {
         top: '5%',
       },
-      data: { settings, task: 'edit' },
+      data: { settings: settings ?? null, task: settings ? 'edit' : 'add' },
     });
-    dialog.afterClosed().subscribe((result: any) => {
-      if (result && result.action === SUCCESS_ACTION) {
-        const targetId = this.categorySettings.findIndex(
-          (x) => x.category.id === settings.category.id,
-        );
-        if (targetId !== -1) {
-          if (!result.data.category && result.data.subcategories.length === 0) {
-            this.categorySettings.splice(targetId, 1);
-          } else {
-            this.categorySettings[targetId] = {
-              category: result.data.category,
-              subCategories: result.data.subcategories,
-            };
-          }
-          this.refreshClientSettings();
-          this.snackBar.open('Updated!.', 'Success', {
-            duration: 3000,
-          });
-        }
-      }
-    });
-  }
-
-  addCategory() {
-    const dialog = this.dialog.open(CategoryEditComponent, {
-      maxWidth: '850px',
-      position: {
-        top: '5%',
-      },
-      data: { settings: null, task: 'add' },
-    });
-    dialog.afterClosed().subscribe((result: any) => {
-      if (result && result.action === SUCCESS_ACTION) {
-        this.categorySettings.push({
-          category: result.data.category,
-          subCategories: result.data.subcategories,
-        });
-        this.refreshClientSettings();
-        this.snackBar.open('Added!.', 'Success', {
+    dialog.afterClosed().subscribe((result: boolean | undefined) => {
+      if (result !== undefined) {
+        const message = result ? 'Updated!' : 'Failed!';
+        const action = result ? 'Success' : 'Error';
+        this.snackBar.open(message, action, {
           duration: 3000,
         });
+        this.prepareCategories();
       }
     });
   }
 
-  private refreshClientSettings() {
-    const clientSettings = this.dataService.getClientSettings();
-    clientSettings.transaction_categories = this.categorySettings.map(
-      (x) => x.category,
-    );
-    clientSettings.transaction_sub_categories = this.categorySettings
-      .map((x) => x.subCategories)
-      .flat();
-    this.dataService.setClientSettings(clientSettings);
+  deleteCategory(settings: CategorySettings) {
+    const confirm = this.dialog.open(ActionConfirmComponent, {
+      maxWidth: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
+      data: { settings },
+    });
+    confirm.afterClosed().subscribe((result: boolean | undefined) => {
+      if (result !== undefined) {
+        const message = result ? 'Deleted!' : 'Failed!';
+        const action = result ? 'Success' : 'Error';
+        this.snackBar.open(message, action, {
+          duration: 3000,
+        });
+        this.prepareCategories();
+      }
+    });
   }
 }

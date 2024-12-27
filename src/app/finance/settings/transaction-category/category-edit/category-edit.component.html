@@ -6,18 +6,20 @@
     <table class="expense-field-table">
       <th></th>
       <tr>
-        <td *ngIf="data.task === 'add'">
-          <mat-form-field appearance="outline" class="fill coincraft-input">
-            <mat-label>Transaction Type</mat-label>
-            <mat-select formControlName="category_type">
-              @for (exc of TRANSACTION_TYPES; track exc) {
-                <mat-option [value]="exc.value">
-                  {{ exc.viewValue }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </td>
+        @if (data.task === "add") {
+          <td>
+            <mat-form-field appearance="outline" class="fill coincraft-input">
+              <mat-label>Transaction Type</mat-label>
+              <mat-select formControlName="category_type">
+                @for (exc of TRANSACTION_TYPES; track exc) {
+                  <mat-option [value]="exc.value">
+                    {{ exc.viewValue }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </td>
+        }
         <td>
           <mat-form-field appearance="outline" class="fill coincraft-input">
             <mat-label>Category Name</mat-label>
@@ -29,7 +31,7 @@
           </mat-form-field>
         </td>
         <td>
-          <mat-form-field appearance="outline" class="coincraft-input">
+          <mat-form-field appearance="outline" class="fill coincraft-input">
             <mat-label>Description</mat-label>
             <input
               formControlName="description"
@@ -37,17 +39,6 @@
               placeholder="Description"
             />
           </mat-form-field>
-        </td>
-        <td>
-          <div
-            *ngIf="data.task === 'edit'"
-            (click)="deleteCategory()"
-            class="coincraft-action-button"
-            matRipple
-            matTooltip="Delete Category"
-            matTooltipPosition="below"
-          >
-          </div>
         </td>
       </tr>
     </table>
@@ -69,8 +60,8 @@
       <ng-container formArrayName="subcategories">
         @for (data of subcategories; track data; let i = $index) {
           <tr [formGroupName]="i">
-            <td colspan="2">
-              <mat-form-field appearance="outline">
+            <td>
+              <mat-form-field appearance="outline" class="coincraft-input">
                 <mat-label>Name</mat-label>
                 <input
                   type="text"
@@ -80,8 +71,8 @@
                 />
               </mat-form-field>
             </td>
-            <td>
-              <mat-form-field appearance="outline">
+            <td colspan="3">
+              <mat-form-field appearance="outline" class="coincraft-input">
                 <mat-label>Description</mat-label>
                 <input
                   type="text"
@@ -92,10 +83,13 @@
               </mat-form-field>
             </td>
             <td>
-              <div
-                class="coincraft-action-button"
+              <button
+                mat-icon-button
                 (click)="deleteSubCategory(i)"
-              ></div>
+                aria-label="Delete category"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
             </td>
           </tr>
         }
@@ -104,7 +98,7 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-dialog-close mat-raised-button>Cancel</button>
+  <button mat-raised-button (click)="cancel()">Cancel</button>
   <button
     (click)="submit()"
     color="primary"

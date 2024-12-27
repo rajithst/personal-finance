@@ -1,7 +1,7 @@
 import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { PayeeSettingsComponent } from './payee-settings.component';
 import { Title } from '@angular/platform-browser';
-import { DataService } from '../../service/data.service';
+import { DataService } from '../service/data.service';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { payees } from '../../mock-data/payees';

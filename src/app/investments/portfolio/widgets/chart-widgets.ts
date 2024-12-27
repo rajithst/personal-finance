@@ -25,10 +25,10 @@ export class PortfolioAllocationWidget {
   imports: [ChartWidgetBase],
   template: `
     <app-chart-widget
-      [chartType]="'doughnut'"
+      [chartType]="'bar'"
       [labels]="labels"
       [datasets]="datasets"
-      [plugins]="plugins"
+      [options]="options"
     ></app-chart-widget>
   `,
   styles: ``,
@@ -38,10 +38,15 @@ export class IndustryAllocationWidget implements OnInit {
 
   labels: string[] = [];
   datasets: any[] = [];
-  plugins: any = {
-    legend: {
-      display: false,
-    },
+  options = {
+    indexAxis: 'y',
+    scales: {
+      y: {
+        ticks: {
+          autoSkip: false
+        }
+      }
+    }
   };
   ngOnInit() {
     const data =
@@ -61,10 +66,10 @@ export class IndustryAllocationWidget implements OnInit {
   imports: [ChartWidgetBase],
   template: `
     <app-chart-widget
-      [chartType]="'doughnut'"
+      [chartType]="'bar'"
       [labels]="labels"
       [datasets]="datasets"
-      [plugins]="plugins"
+      [options]="options"
     ></app-chart-widget>
   `,
   styles: ``,
@@ -74,10 +79,15 @@ export class SectorAllocationWidget implements OnInit {
 
   labels: string[] = [];
   datasets: any[] = [];
-  plugins: any = {
-    legend: {
-      display: false,
-    },
+  options = {
+    indexAxis: 'y',
+    scales: {
+      y: {
+        ticks: {
+          autoSkip: false
+        }
+      }
+    }
   };
   ngOnInit() {
     const data = this.portfolioService.portfolioData()?.sector_allocation ?? [];
@@ -112,6 +122,40 @@ export class MonthlyInvestmentWidget implements OnInit {
     this.labels = Object.keys(data);
     this.datasets = [
       { label: 'Monthly Investment', data: Object.values(data) || [] },
+    ];
+  }
+}
+
+@Component({
+  selector: 'app-monthly-investment',
+  imports: [ChartWidgetBase],
+  template: `
+    <app-chart-widget
+      [chartType]="'line'"
+      [labels]="labels"
+      [datasets]="datasets"
+      [options]="options"
+    ></app-chart-widget>
+  `,
+  styles: ``,
+})
+export class PortfolioGrowthWidget implements OnInit {
+  private readonly portfolioService = inject(PortfolioService);
+
+  labels: string[] = [];
+  datasets: any[] = [];
+  options: any = {
+    borderWidth: 3,
+  }
+
+  ngOnInit() {
+    const data = this.portfolioService.portfolioData()?.growth ?? [];
+    const invested = data.map((x) => x['total_invested']);
+    const current = data.map((x) => x['total_invested']);
+    this.labels = data.map((x) => x.date);
+    this.datasets = [
+      { label: 'Invested', data: invested || [] },
+      { label: 'Current Value', data: current || [] },
     ];
   }
 }

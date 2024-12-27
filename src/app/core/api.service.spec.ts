@@ -6,11 +6,6 @@ import {
 import { ApiService } from './api.service';
 import { environment } from '../../environments/environment';
 import { JwtTokenResponse } from '../auth/model';
-import { DashboardResponse } from '../finance/model/dashboard';
-
-import { PayeeResponse } from '../finance/model/payee';
-import { dashboardData } from '../mock-data/dashboard';
-import { payees } from '../mock-data/payees';
 import { provideHttpClient } from '@angular/common/http';
 
 describe('ApiService', () => {
@@ -53,27 +48,5 @@ describe('ApiService', () => {
     req.flush(mockResponse);
   });
 
-  it('should call getDashboard API and return data', () => {
-    const mockResponse: DashboardResponse = dashboardData;
 
-    service.getDashboard().subscribe((response) => {
-      expect(response).toEqual(mockResponse);
-    });
-
-    const req = httpMock.expectOne(`${SRC_URL}/finance/dashboard/`);
-    expect(req.request.method).toBe('GET');
-    req.flush(mockResponse);
-  });
-
-  it('should call getPayees API and return data', () => {
-    const mockResponse: PayeeResponse = { payees };
-
-    service.getPayees().subscribe((response) => {
-      expect(response).toEqual(mockResponse);
-    });
-
-    const req = httpMock.expectOne(`${SRC_URL}/finance/payee/`);
-    expect(req.request.method).toBe('GET');
-    req.flush(mockResponse);
-  });
 });

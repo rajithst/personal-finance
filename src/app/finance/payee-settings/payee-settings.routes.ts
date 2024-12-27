@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { PayeeSettingsComponent } from './payee-settings.component';
 import { PayeesComponent } from './payees/payees.component';
-import { payeeDetailResolver } from '../../service/resolvers';
 import { RecurringComponent } from './recurring/recurring.component';
 import { PayeeDetailComponent } from './payee-detail/payee-detail.component';
 
@@ -30,18 +29,12 @@ export const PAYEE_SETTINGS_ROUTES: Routes = [
         component: PayeeDetailComponent,
         title: 'Payees',
         data: { breadcrumb: 'Payee Settings' },
-        resolve: {
-          payee: payeeDetailResolver,
-        },
       },
       {
         path: ':name',
         component: PayeeDetailComponent,
         title: 'Payees',
         data: { breadcrumb: 'Payee Detail' },
-        resolve: {
-          payee: payeeDetailResolver,
-        },
       },
     ],
   },

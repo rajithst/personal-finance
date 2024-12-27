@@ -10,7 +10,6 @@ export interface ChartConfig {
 }
 @Component({
   selector: 'app-chart',
-  imports: [],
   template: `
     <div class="chart-container">
       <canvas #chart></canvas>
@@ -30,8 +29,7 @@ export class ChartComponent implements OnInit {
   chart = viewChild.required<ElementRef>('chart');
 
   ngOnInit() {
-    console.log(this.chartConfig().plugins);
-    const chart = new Chart(this.chart().nativeElement, {
+    new Chart(this.chart().nativeElement, {
       type: this.chartConfig().type as keyof ChartTypeRegistry,
       data: this.chartConfig().data,
       options: {
@@ -42,19 +40,12 @@ export class ChartComponent implements OnInit {
           line: {
             tension: 0.4,
           },
+          point: {
+            radius: 0,
+          },
         },
         plugins: {
           ...this.chartConfig().plugins,
-        },
-        onClick: (evt: Event) => {
-          var elements = chart.getElementsAtEventForMode(
-            evt,
-            'index',
-            { intersect: true },
-            false,
-          );
-          var index = elements[0].index;
-          console.log(elements, index);
         },
       },
     });

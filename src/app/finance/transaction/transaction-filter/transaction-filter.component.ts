@@ -1,9 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
-  NA_CATEGORY_ID,
-  NA_SUB_CATEGORY_ID,
-} from '../../../shared/data/client.data';
-import {
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialogTitle,
@@ -17,10 +13,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { INCOME, PAYMENT, SAVING } from '../../../shared/data/shared.data';
 import { TransactionFilter } from '../../model/transactions';
-import { LoadingService } from '../../../shared/loading/loading.service';
-import { DataService } from '../../../service/data.service';
 import {
   TransactionCategory,
   TransactionSubCategory,
@@ -36,7 +29,8 @@ import {
   MatList,
   MatListItem,
 } from '@angular/material/list';
-import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FinanceStore } from '../../../core/store/finance.store';
+import { INCOME, PAYMENT, SAVING } from '../../data/client.data';
 
 interface TransactionFilterData {
   filterParams: TransactionFilter;
@@ -48,7 +42,6 @@ interface TransactionFilterData {
   styleUrl: './transaction-filter.component.scss',
   imports: [
     MatDialogTitle,
-    CdkScrollable,
     MatDialogContent,
     MatSelectionList,
     MatListOption,
@@ -66,35 +59,31 @@ interface TransactionFilterData {
 export class TransactionFilterComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<TransactionFilterComponent>);
-  private readonly loadingService = inject(LoadingService);
   private readonly data = inject<TransactionFilterData>(MAT_DIALOG_DATA);
-  private readonly dataService = inject(DataService);
+  private readonly store = inject(FinanceStore);
 
   filterParams: TransactionFilter;
   clickedType: string = 'categories';
   categoryTitle = 'Categories';
   subCategoryTitle: string = 'Sub Categories';
-  selectedCategory: number = NA_SUB_CATEGORY_ID;
+  selectedCategory: number = 0;
   mainCategoryForm: FormGroup;
   subCategoryForm: FormGroup;
   accountForm: FormGroup;
 
   TRANSACTION_CATEGORIES: TransactionCategory[] =
-    this.dataService.getAllCategories();
-  transactionCategories: TransactionCategory[] = this.TRANSACTION_CATEGORIES;
+    this.store.transactionCategories();
   TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
-    this.dataService.getAllSubCategories();
+    this.store.transactionSubCategories();
+  EXPENSE_CATEGORIES: TransactionCategory[] = this.store.expenseCategories();
+  transactionCategories: TransactionCategory[] = this.TRANSACTION_CATEGORIES;
+  INCOME_CATEGORIES: TransactionCategory[] = this.store.incomeCategories();
+  SAVINGS_CATEGORIES: TransactionCategory[] = this.store.savingsCategories();
+  PAYMENT_CATEGORIES: TransactionCategory[] = this.store.paymentCategories();
+
+  accounts = this.store.creditAccounts();
   transactionSubCategories: TransactionSubCategory[] =
     this.TRANSACTION_SUB_CATEGORIES;
-  EXPENSE_CATEGORIES: TransactionCategory[] =
-    this.dataService.getExpenseCategories();
-  INCOME_CATEGORIES: TransactionCategory[] =
-    this.dataService.getIncomeCategories();
-  SAVINGS_CATEGORIES: TransactionCategory[] =
-    this.dataService.getSavingsCategories();
-  PAYMENT_CATEGORIES: TransactionCategory[] =
-    this.dataService.getPaymentCategories();
-  accounts = this.dataService.getClientSettings().accounts;
 
   ngOnInit() {
     this.filterParams = this.data.filterParams;
@@ -117,7 +106,7 @@ export class TransactionFilterComponent implements OnInit {
     }
     const firstCategory = this.transactionCategories.at(0);
     this.transactionSubCategories = this.getTransactionSubCategories(
-      firstCategory ? firstCategory.id : NA_CATEGORY_ID,
+      firstCategory ? firstCategory.id : 0,
     );
     this.subCategoryTitle = firstCategory ? firstCategory.category : 'N/A';
   }
@@ -167,7 +156,7 @@ export class TransactionFilterComponent implements OnInit {
     if (filterType == 'categories') {
       this.categoryTitle = 'Categories';
       const firstCategory = this.transactionCategories.at(0);
-      this.selectedCategory = firstCategory ? firstCategory.id : NA_CATEGORY_ID;
+      this.selectedCategory = firstCategory ? firstCategory.id : 0;
       this.subCategoryTitle = firstCategory ? firstCategory.category : 'N/A';
       this.transactionSubCategories = this.getTransactionSubCategories(
         this.selectedCategory,
@@ -193,9 +182,8 @@ export class TransactionFilterComponent implements OnInit {
   }
 
   submit() {
-    this.loadingService.loadingOn();
     const filterParams: TransactionFilter = {
-      year: this.dataService.getFilterYear(),
+      year: 2024,
       target: this.filterParams.target,
       categories: this.extractParams(this.mainCategoryForm.value),
       subcategories: this.extractParams(this.subCategoryForm.value),

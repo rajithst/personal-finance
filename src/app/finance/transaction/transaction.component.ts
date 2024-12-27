@@ -1,19 +1,13 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { LoadingService } from '../../shared/loading/loading.service';
-import { DataService } from '../../service/data.service';
-import { map, Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { DataService } from '../service/data.service';
+import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
 import { MonthlyTransaction, TransactionFilter } from '../model/transactions';
 import { Title } from '@angular/platform-browser';
-import {
-  EXPENSE,
-  INCOME,
-  PAYMENT,
-  SAVING,
-} from '../../shared/data/shared.data';
+import { EXPENSE, INCOME, PAYMENT, SAVING } from '../data/client.data';
 import { ApiService } from '../../core/api.service';
 import { AsyncPipe } from '@angular/common';
 import { TransactionTableComponent } from './transaction-table/transaction-table.component';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
@@ -32,17 +26,25 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
     MatMenuTrigger,
   ],
 })
-export class FinanceComponent {
+export class FinanceComponent implements OnInit {
   title = inject(Title);
   dataService = inject(DataService);
+  private readonly router = inject(Router);
   tabs = [
     { label: 'All Transactions', route: 'expense' },
     { label: 'Income', route: 'income' },
     { label: 'Payments', route: 'payment' },
     { label: 'Savings', route: 'saving' },
   ];
-  activeLink = this.tabs[0];
-  financeYears: number[] = [2020, 2021, 2022, 2023, 2024, 2025];
+  activeLink = { label: '', route: '' };
+  financeYears: number[] = [2025, 2024, 2023, 2022, 2021, 2020];
+
+  ngOnInit(): void {
+    this.title.setTitle('Finance');
+    const currentPath = this.router.url.split('/').at(-1);
+    this.activeLink =
+      this.tabs.find((tab) => tab.route === currentPath) || this.tabs[0];
+  }
 
   onYearSelect(year: number) {
     this.dataService.setFilterYear(year);
@@ -59,7 +61,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   target: string = EXPENSE;
   data$: Observable<MonthlyTransaction[] | null>;
   protected apiService = inject(ApiService);
-  protected loadingService = inject(LoadingService);
   protected readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly dataService = inject(DataService);
 
@@ -67,7 +68,6 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     this.dataService.year$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
-        console.log('from year');
         this.extracted({ target: this.target, year: value });
       });
 
@@ -83,12 +83,8 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  extracted(filters: TransactionFilter) {
-    const transactions$ = this.apiService.getTransactions(filters);
-    this.data$ = transactions$
-      .pipe(takeUntil(this.destroyed$))
-      .pipe(map((value) => value.payload));
-    this.loadingService.loadingOff();
+  async extracted(filters: TransactionFilter) {
+    this.data$ = of(await this.apiService.getTransactions(filters));
   }
 
   ngOnDestroy(): void {
@@ -100,7 +96,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
 @Component({
   selector: 'app-expenses',
   template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? null" [transactionType]="target"></app-transaction-table>',
+    '<app-transaction-table [transactions]="data$ | async" [transactionType]="target"></app-transaction-table>',
   styles: '',
   imports: [TransactionTableComponent, AsyncPipe],
 })
@@ -111,7 +107,7 @@ export class ExpensesComponent extends TransactionDetailComponent {
 @Component({
   selector: 'app-payments',
   template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+    '<app-transaction-table [transactions]="data$ | async" [transactionType]="target"></app-transaction-table>',
   styles: '',
   imports: [TransactionTableComponent, AsyncPipe],
 })
@@ -122,7 +118,7 @@ export class PaymentsComponent extends TransactionDetailComponent {
 @Component({
   selector: 'app-savings',
   template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+    '<app-transaction-table [transactions]="data$ | async" [transactionType]="target"></app-transaction-table>',
   styles: '',
   imports: [TransactionTableComponent, AsyncPipe],
 })
@@ -133,7 +129,7 @@ export class SavingsComponent extends TransactionDetailComponent {
 @Component({
   selector: 'app-income',
   template:
-    '<app-transaction-table [transactions]="(data$ | async) ?? []" [transactionType]="target"></app-transaction-table>',
+    '<app-transaction-table [transactions]="data$ | async" [transactionType]="target"></app-transaction-table>',
   styles: '',
   imports: [TransactionTableComponent, AsyncPipe],
 })

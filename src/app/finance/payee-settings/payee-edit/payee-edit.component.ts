@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, inject, OnInit, ViewChild} from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
   MAT_DIALOG_DATA,
@@ -8,14 +8,14 @@ import {
   MatDialogActions,
   MatDialogClose,
 } from '@angular/material/dialog';
-import { DestinationMap } from '../../model/payee';
+import { Payee } from '../../model/payee';
 import {
   TRANSACTION_TYPE_EXPENSE_ID,
   TRANSACTION_TYPE_INCOME_ID,
   TRANSACTION_TYPE_PAYMENTS_ID,
   TRANSACTION_TYPE_SAVINGS_ID,
   TRANSACTION_TYPES,
-} from '../../../shared/data/client.data';
+} from '../../data/client.data';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   MatChipEditedEvent,
@@ -25,7 +25,6 @@ import {
   MatChipRemove,
   MatChipInput,
 } from '@angular/material/chips';
-import { ApiService } from '../../../core/api.service';
 import {
   MatTableDataSource,
   MatTable,
@@ -41,93 +40,79 @@ import {
   MatRow,
 } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { DataService } from '../../../service/data.service';
 import {
   TransactionCategory,
   TransactionSubCategory,
 } from '../../model/common';
 import { MatButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { NgIf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FinanceStore } from '../../../core/store/finance.store';
+import {MatPaginator} from "@angular/material/paginator";
 
 interface PayeeEditDialogData {
-  payee: DestinationMap;
+  payee: Payee;
 }
 
 @Component({
-    selector: 'app-payee-edit',
-    templateUrl: './payee-edit.component.html',
-    styleUrl: './payee-edit.component.scss',
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatSelect,
-        MatOption,
-        MatDivider,
-        MatChipGrid,
-        MatChipRow,
-        MatChipRemove,
-        MatIcon,
-        MatChipInput,
-        NgIf,
-        MatTable,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCheckbox,
-        MatCellDef,
-        MatCell,
-        MatNoDataRow,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-    ]
+  selector: 'app-payee-edit',
+  templateUrl: './payee-edit.component.html',
+  styleUrl: './payee-edit.component.scss',
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatSelect,
+    MatOption,
+    MatDivider,
+    MatChipGrid,
+    MatChipRow,
+    MatChipRemove,
+    MatIcon,
+    MatChipInput,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCheckbox,
+    MatCellDef,
+    MatCell,
+    MatNoDataRow,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+    MatPaginator,
+  ],
 })
 export class PayeeEditComponent implements OnInit {
-  private readonly apiService = inject(ApiService);
-  private readonly dataService = inject(DataService);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   private readonly dialogRef = inject(MatDialogRef<PayeeEditComponent>);
+  private readonly store = inject(FinanceStore);
   data = inject<PayeeEditDialogData>(MAT_DIALOG_DATA);
 
   readonly addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
+
   transactionCategories: TransactionCategory[] = [];
   transactionSubCategories: TransactionSubCategory[] = [];
   payeeForm: FormGroup;
   keywords: string[] = [];
   displayedColumns: string[] = ['select', 'Payee', 'Category', 'SubCategory'];
-  dataSource: MatTableDataSource<DestinationMap>;
-  selection = new SelectionModel<DestinationMap>(true, []);
+  dataSource: MatTableDataSource<Payee>;
+  selection = new SelectionModel<Payee>(true, []);
   protected readonly TRANSACTION_TYPES = TRANSACTION_TYPES;
-  protected EXPENSE_SUB_CATEGORIES: TransactionSubCategory[] = [];
-  protected TRANSACTION_CATEGORIES: TransactionCategory[] =
-    this.dataService.getAllCategories();
-  protected TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
-    this.dataService.getAllSubCategories();
-  private readonly EXPENSE_CATEGORIES: TransactionCategory[] =
-    this.dataService.getExpenseCategories();
-  private readonly INCOME_CATEGORIES: TransactionCategory[] =
-    this.dataService.getIncomeCategories();
-  private readonly SAVINGS_CATEGORIES: TransactionCategory[] =
-    this.dataService.getSavingsCategories();
-  private readonly PAYMENT_CATEGORIES: TransactionCategory[] =
-    this.dataService.getPaymentCategories();
 
   ngOnInit(): void {
     const payeeData = this.data.payee;
@@ -172,8 +157,7 @@ export class PayeeEditComponent implements OnInit {
   }
 
   updateRelatedPayees() {
-    const relatedPayees = this.dataService.getPayees();
-
+    const relatedPayees = this.store.payees();
     const similarPayees = relatedPayees.filter(
       (x) =>
         x.id !== this.data.payee.id &&
@@ -182,7 +166,8 @@ export class PayeeEditComponent implements OnInit {
           x.destination_original.toLowerCase().includes(item.toLowerCase()),
         ),
     );
-    this.dataSource = new MatTableDataSource<DestinationMap>(similarPayees);
+    this.dataSource = new MatTableDataSource<Payee>(similarPayees);
+    this.dataSource.paginator = this.paginator;
     this.selection.clear();
     this.selection.select(...this.dataSource.data);
   }
@@ -237,39 +222,29 @@ export class PayeeEditComponent implements OnInit {
     this.selection.select(...this.dataSource.data);
   }
 
-  submit() {
+  async submit() {
     const formValues = this.payeeForm.value;
     formValues['keywords'] = this.keywords.join(',');
     formValues['merge_ids'] = this.selection.selected.map((x) => x.id);
-    this.apiService
-      .updatePayeeRules(formValues)
-      .subscribe((payee: DestinationMap) => {
-        if (payee?.id) {
-          this.dialogRef.close({
-            payee: payee,
-            mergeIds: formValues['merge_ids'],
-          });
-        } else {
-          this.dialogRef.close({ payee: null, mergeIds: null });
-        }
-      });
+    const updatedPayee = await this.store.updatePayee(formValues);
+    this.dialogRef.close(updatedPayee);
   }
 
   cancel() {
-    this.dialogRef.close({ payee: null, mergeIds: null });
+    this.dialogRef.close();
   }
 
   private setTransactionCategories(transactionType: number) {
     if (transactionType === TRANSACTION_TYPE_EXPENSE_ID) {
-      this.transactionCategories = this.EXPENSE_CATEGORIES;
+      this.transactionCategories = this.store.expenseCategories();
     } else if (transactionType === TRANSACTION_TYPE_INCOME_ID) {
-      this.transactionCategories = this.INCOME_CATEGORIES;
+      this.transactionCategories = this.store.incomeCategories();
     } else if (transactionType === TRANSACTION_TYPE_SAVINGS_ID) {
-      this.transactionCategories = this.SAVINGS_CATEGORIES;
+      this.transactionCategories = this.store.paymentCategories();
     } else if (transactionType === TRANSACTION_TYPE_PAYMENTS_ID) {
       this.transactionCategories = [
-        ...this.PAYMENT_CATEGORIES,
-        ...this.EXPENSE_CATEGORIES,
+        ...this.store.paymentCategories(),
+        ...this.store.expenseCategories(),
       ];
     }
     if (this.transactionCategories.length === 1) {
@@ -283,9 +258,9 @@ export class PayeeEditComponent implements OnInit {
 
   private setTransactionSubCategories(category: number) {
     if (category !== null) {
-      this.transactionSubCategories = this.TRANSACTION_SUB_CATEGORIES.filter(
-        (x) => x.category === category,
-      );
+      this.transactionSubCategories = this.store
+        .transactionSubCategories()
+        .filter((x) => x.category === category);
     }
 
     if (this.transactionSubCategories.length === 1) {

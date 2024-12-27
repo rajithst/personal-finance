@@ -9,8 +9,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { HoldingImportComponent } from './holding-import/holding-import.component';
 import { ApiService } from '../../core/api.service';
-import { Observable } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import { Holding } from '../model/holding';
+import {InvestmentStore} from "../../core/store/investment.store";
 
 const DIALOG_WIDTH = '900px';
 const DIALOG_TOP_POSITION = '5%';
@@ -28,18 +29,19 @@ const DIALOG_TOP_POSITION = '5%';
   ],
 })
 export class HoldingsComponent implements OnInit {
-  holdings$: Observable<Holding[]>;
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly apiService = inject(ApiService);
-  showValues = true;
+  private readonly store = inject(InvestmentStore);
+  holdings$: Observable<Holding[]>;
 
   ngOnInit(): void {
     this.getHoldings();
   }
 
-  getHoldings() {
-    this.holdings$ = this.apiService.getHoldings();
+  async getHoldings() {
+    const holdings = await this.apiService.getHoldings(this.store.currentPortfolio()?.id ?? 0);
+    this.holdings$ = of(holdings);
   }
 
   addTransaction() {
@@ -56,6 +58,7 @@ export class HoldingsComponent implements OnInit {
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
+        this.getHoldings();
       }
     });
   }

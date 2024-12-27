@@ -1,15 +1,5 @@
-.dividend-summary {
-  display: flex;
-  margin: 5px 0;
-}
-
-.summary-item {
-  width: 25%;
-  margin-right: 5px;
-}
-
 .dividend-cards {
-  height: 80vh;
+  height: calc(100vh - 220px);
   overflow-x: auto;
 }
 

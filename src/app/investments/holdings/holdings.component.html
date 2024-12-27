@@ -2,33 +2,6 @@
   <div class="info-panel"></div>
   <div class="edit-panel">
     <button
-      class="coincraft-action-button"
-      mat-mini-fab
-      matTooltip="Search Transactions"
-      matTooltipPosition="below"
-    >
-      <mat-icon>search</mat-icon>
-    </button>
-    <button
-      mat-mini-fab
-      [matTooltip]="showValues ? 'Hide values' : 'Show Values'"
-      matTooltipPosition="below"
-    >
-      @if (showValues) {
-        <mat-icon>visibility_off</mat-icon>
-      }
-      @if (!showValues) {
-        <mat-icon>visibility</mat-icon>
-      }
-    </button>
-    <button
-      mat-mini-fab
-      matTooltip="Filter Transactions"
-      matTooltipPosition="below"
-    >
-      <mat-icon>filter_alt</mat-icon>
-    </button>
-    <button
       (click)="importTransaction()"
       mat-mini-fab
       matTooltip="Upload Transactions"

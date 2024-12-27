@@ -1,7 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { DataService } from '../../service/data.service';
-import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 
 @Component({
@@ -10,19 +9,11 @@ import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
   styleUrl: './payee-settings.component.scss',
   imports: [RouterOutlet, MatTabLink, MatTabNav, RouterLink, MatTabNavPanel],
 })
-export class PayeeSettingsComponent implements OnInit {
-  activatedRoute = inject(ActivatedRoute);
-  dataService = inject(DataService);
+export class PayeeSettingsComponent {
   title = inject(Title);
   tabs = [
     { label: 'All Payees', route: 'payees' },
     { label: 'Recurring Payees', route: 'recurring-payments' },
   ];
   activeLink = this.tabs[0];
-
-  ngOnInit() {
-    this.activatedRoute.data.subscribe(({ payeeData }) => {
-      this.dataService.setPayees(payeeData.payees);
-    });
-  }
 }

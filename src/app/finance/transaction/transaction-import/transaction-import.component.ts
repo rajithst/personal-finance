@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ApiService } from '../../../core/api.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { DataService } from '../../../service/data.service';
 import { throwError } from 'rxjs';
 import {
   MatDialogActions,
@@ -13,9 +12,7 @@ import {
 import {
   ACCOUNT_TYPE_BANK_ACCOUNT,
   ACCOUNT_TYPE_CREDIT_CARD,
-  CANCEL_ACTION,
-  SUCCESS_ACTION,
-} from '../../../shared/data/client.data';
+} from '../../data/client.data';
 import moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -42,12 +39,12 @@ import {
   MatStepperNext,
   MatStepperPrevious,
 } from '@angular/material/stepper';
-import { CdkScrollable } from '@angular/cdk/scrolling';
 import { HttpEventType } from '@angular/common/http';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatList, MatListItem } from '@angular/material/list';
 import { CreditAccount } from '../../model/account';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { FinanceStore } from '../../../core/store/finance.store';
 
 @Component({
   selector: 'app-transaction-import',
@@ -55,7 +52,6 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
   styleUrl: './transaction-import.component.scss',
   imports: [
     MatDialogTitle,
-    CdkScrollable,
     MatDialogContent,
     MatStepper,
     MatStep,
@@ -89,16 +85,16 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 })
 export class TransactionImportComponent {
   private readonly apiService = inject(ApiService);
-  private readonly dataService = inject(DataService);
   private readonly dialogRef = inject(MatDialogRef<TransactionImportComponent>);
+  private readonly store = inject(FinanceStore);
 
   creditAccountTypes = [ACCOUNT_TYPE_CREDIT_CARD, ACCOUNT_TYPE_BANK_ACCOUNT];
   progress = 0;
   clickSubmit = false;
   uploadComplete = false;
   files: Array<File> = [];
-  myAccounts = this.dataService
-    .getAccounts()
+  myAccounts = this.store
+    .creditAccounts()
     .filter((x) => this.creditAccountTypes.includes(x.account_type));
 
   accountForm = new FormGroup({
@@ -213,18 +209,10 @@ export class TransactionImportComponent {
   }
 
   cancel() {
-    this.dialogRef.close({
-      refresh: false,
-      data: null,
-      action: CANCEL_ACTION,
-    });
+    this.dialogRef.close(this.progress === 100 && this.uploadComplete);
   }
 
   close() {
-    this.dialogRef.close({
-      refresh: true,
-      data: null,
-      action: SUCCESS_ACTION,
-    });
+    this.dialogRef.close(this.progress === 100 && this.uploadComplete);
   }
 }

@@ -1,17 +1,15 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
-import { DataService } from '../../service/data.service';
+import {Component, inject, OnInit} from '@angular/core';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
-  imports: [RouterOutlet, MatTabLink, MatTabNav, MatTabNavPanel, RouterLink],
+  imports: [MatTabLink, MatTabNav, MatTabNavPanel, RouterLink, RouterOutlet],
 })
 export class SettingsComponent implements OnInit {
-  activatedRoute = inject(ActivatedRoute);
-  dataService = inject(DataService);
+  private readonly router = inject(Router);
   tabs = [
     { label: 'Category Settings', route: 'category' },
     { label: 'Account settings', route: 'credit-accounts' },
@@ -19,9 +17,8 @@ export class SettingsComponent implements OnInit {
   ];
   activeLink = this.tabs[0];
 
-  ngOnInit() {
-    this.activatedRoute.data.subscribe(({ settings }) => {
-      this.dataService.setClientSettings(settings);
-    });
+  ngOnInit(): void {
+    const currentPath = this.router.url.split('/').at(-1);
+    this.activeLink = this.tabs.find((tab) => tab.route === currentPath) || this.tabs[0];
   }
 }

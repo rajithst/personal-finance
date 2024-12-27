@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { MONTHS } from '../../shared/data/client.data';
 import {PortfolioService} from "./portfolio.service";
+import {MONTHS} from "../../finance/dashboard/dashboard.data";
 
 @Injectable()
 export class ChartUtilityService {

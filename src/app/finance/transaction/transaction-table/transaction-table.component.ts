@@ -33,7 +33,7 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { DataService } from '../../../service/data.service';
+import { DataService } from '../../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
   MatAccordion,
@@ -43,20 +43,13 @@ import {
   MatExpansionPanelDescription,
 } from '@angular/material/expansion';
 import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
-import { LoadingService } from '../../../shared/loading/loading.service';
 import { Sort, MatSort, MatSortHeader } from '@angular/material/sort';
-import { ERROR_ACTION, SUCCESS_ACTION } from '../../../shared/data/client.data';
 import { Router } from '@angular/router';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { TransactionSplitComponent } from '../transaction-split/transaction-split.component';
 import { TransactionBulkEditComponent } from '../transaction-bulk-edit/transaction-bulk-edit.component';
-import {
-  TransactionCategory,
-  TransactionSubCategory,
-} from '../../model/common';
 import { TransactionImportComponent } from '../transaction-import/transaction-import.component';
-import { EXPENSE, INCOME } from '../../../shared/data/shared.data';
-import { CreditAccount } from '../../model/account';
+import { EXPENSE, INCOME } from '../../data/client.data';
 import { TransactionViewMoreDialog } from './view-more/view-more.component';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -73,12 +66,13 @@ import {
 } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconButton, MatMiniFabButton } from '@angular/material/button';
+import { FinanceStore } from '../../../core/store/finance.store';
+import { NorecordsComponent } from '../../../components/norecords/norecords.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 interface TransactionActionResult {
-  refresh: boolean;
+  status: boolean;
   data: TransactionExpand | TransactionExpand[] | null;
-  action: string;
 }
 
 interface FilterParamChip {
@@ -130,6 +124,7 @@ const DIALOG_TOP_POSITION = '5%';
     DatePipe,
     MatMiniFabButton,
     MatIconButton,
+    NorecordsComponent,
     MatProgressSpinner,
   ],
 })
@@ -140,9 +135,9 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
 
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
-  private readonly loadingService = inject(LoadingService);
   private readonly dataService = inject(DataService);
   private readonly router = inject(Router);
+  private readonly store = inject(FinanceStore);
 
   totalAnnualAmount = signal<number>(0);
   segments = signal(this.router.url.split('/'));
@@ -173,12 +168,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   ];
   protected readonly destroyed$ = new ReplaySubject<void>(1);
   protected readonly INCOME = INCOME;
-
-  CREDIT_ACCOUNTS: CreditAccount[] = this.dataService.getAccounts();
-  TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
-    this.dataService.getAllSubCategories();
-  TRANSACTION_CATEGORIES: TransactionCategory[] =
-    this.dataService.getAllCategories();
 
   ngOnInit(): void {
     if (this.lastSegment() !== EXPENSE) {
@@ -230,7 +219,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result && result.action === SUCCESS_ACTION) {
+      if (result?.data) {
         const responseData = result.data as TransactionExpand;
         let targetTableIndex = this.getTableIndexFromTransaction(responseData);
         this.updateInAllTransactions(targetTableIndex, responseData);
@@ -238,7 +227,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
-      } else if (result && result.action === ERROR_ACTION) {
+      } else if (result && !result.status) {
         this.snackBar.open('Failed to update!', 'Error', {
           duration: 3000,
         });
@@ -255,7 +244,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       data: { formData: item, task: 'delete' },
     });
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result && result.action === SUCCESS_ACTION) {
+      if (result) {
         const responseData = result.data as TransactionExpand;
         let targetTableIndex = this.getTableIndexFromTransaction(responseData);
         this.removeFromTransactions(targetTableIndex, [responseData.id!]);
@@ -263,7 +252,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.snackBar.open('Deleted!', 'Success', {
           duration: 3000,
         });
-      } else if (result && result.action === ERROR_ACTION) {
+      } else {
         this.snackBar.open('Failed to delete!', 'Error', {});
       }
     });
@@ -278,7 +267,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       data: { formData: null, task: 'add' },
     });
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result && result.action === SUCCESS_ACTION) {
+      if (result) {
         const responseData = result.data as TransactionExpand;
         let targetTableIndex = this.getTableIndexFromTransaction(responseData);
         if (targetTableIndex === -1) {
@@ -291,7 +280,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.snackBar.open('Added Successfully!', 'Success', {
           duration: 3000,
         });
-      } else if (result && result.action === ERROR_ACTION) {
+      } else {
         this.snackBar.open('Failed to add!', 'Error', {
           duration: 3000,
         });
@@ -324,7 +313,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       },
     });
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result.action === SUCCESS_ACTION) {
+      if (result) {
         const responseData = result.data as TransactionExpand;
         const targetTableIndex =
           this.getTableIndexFromTransaction(responseData);
@@ -335,7 +324,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
-      } else if (result.action === ERROR_ACTION) {
+      } else {
         this.selection.clear();
         this.snackBar.open('Failed to merge!', 'Error', {});
       }
@@ -353,7 +342,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       },
     });
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result && result.action === SUCCESS_ACTION) {
+      if (result) {
         const responseData = result.data as TransactionExpand[];
         const targetTableIndex = this.getTableIndexFromTransaction(item);
         responseData.forEach((updatedTransaction) => {
@@ -363,7 +352,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
-      } else if (result && result.action === ERROR_ACTION) {
+      } else {
         this.snackBar.open('Failed to split!', 'Error', {
           duration: 3000,
         });
@@ -382,7 +371,15 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         task: 'edit',
       },
     });
-    dialog.afterClosed().subscribe((result: TransactionExpand | null) => {});
+    dialog.afterClosed().subscribe((result: TransactionExpand | null) => {
+      if (result) {
+        const targetTableIndex = this.getTableIndexFromTransaction(result);
+        this.updateInAllTransactions(targetTableIndex, result);
+        this.refreshUpdatedDataSourceTable(targetTableIndex);
+        this.selection.clear();
+        this.bulkSelectedTableIndex = -1;
+      }
+    });
   }
 
   bulkDeleteTransactions() {
@@ -397,7 +394,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       },
     });
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result.action === SUCCESS_ACTION) {
+      if (result) {
         const responseData = result.data as TransactionExpand[];
         const tempTransaction = responseData[0];
         const deleteIds = responseData.map((x) => x.id as number);
@@ -426,7 +423,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       },
     });
     dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result && result.action === SUCCESS_ACTION) {
+      if (result) {
         this.snackBar.open('Imported Successfully!.', 'Success', {
           duration: 3000,
         });
@@ -475,7 +472,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         };
         this.createFilterChips();
         this.applyFiltersToTables();
-        this.loadingService.loadingOff();
       }
     });
   }
@@ -516,17 +512,18 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     const categoryChips = this.filterParams.categories?.map((x) => ({
       id: x,
       type: 'category',
-      name: this.TRANSACTION_CATEGORIES.find((y) => y.id === x)?.category,
+      name: this.store.transactionCategories().find((y) => y.id === x)
+        ?.category,
     }));
     const subCategoryChips = this.filterParams.subcategories?.map((x) => ({
       id: x,
       type: 'subcategory',
-      name: this.TRANSACTION_SUB_CATEGORIES.find((y) => y.id === x)?.name,
+      name: this.store.transactionSubCategories().find((y) => y.id === x)?.name,
     }));
     const accountChips = this.filterParams.accounts?.map((x) => ({
       id: x,
       type: 'account',
-      name: this.CREDIT_ACCOUNTS.find((y) => y.id === x)?.account_name,
+      name: this.store.creditAccounts().find((y) => y.id === x)?.account_name,
     }));
     this.filterParamChips = [
       ...categoryChips!,
@@ -742,7 +739,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   viewMoreInfo(element: TransactionExpand) {
-    const dialog = this.dialog.open(TransactionViewMoreDialog, {
+    this.dialog.open(TransactionViewMoreDialog, {
       maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,

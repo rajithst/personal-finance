@@ -1,6 +1,6 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../../core/api.service';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import {
   Widget,
   WidgetComponent,
@@ -12,13 +12,19 @@ import {
 import {
   IndustryAllocationWidget,
   MonthlyInvestmentWidget,
+  PortfolioGrowthWidget,
   SectorAllocationWidget,
 } from './widgets/chart-widgets';
 import { PortfolioService } from './portfolio.service';
+import { InvestmentStore } from '../../core/store/investment.store';
+import { LoadingComponent } from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-portfolio',
   template: `
+    @if (portfolioService.loading()) {
+      <app-loading></app-loading>
+    }
     <div class="dashboard-widgets">
       @for (widget of widgets; track widget) {
         <app-widget [data]="widget"></app-widget>
@@ -27,30 +33,33 @@ import { PortfolioService } from './portfolio.service';
   `,
   styles: `
     .dashboard-widgets {
-      height: 99%;
+      height: 95%;
       overflow-y: auto;
       display: grid;
-      grid-template-columns: repeat(4, minmax(200px, 1fr));
+      grid-template-columns: repeat(4, minmax(150px, 0.5fr));
       grid-auto-rows: 120px;
       gap: 10px;
     }
   `,
-  imports: [WidgetComponent],
+  imports: [WidgetComponent, LoadingComponent],
   providers: [PortfolioService],
 })
-export class PortfolioComponent implements OnDestroy {
+export class PortfolioComponent implements OnInit, OnDestroy {
   protected readonly destroyed$ = new ReplaySubject<void>(1);
-  private readonly portfolioService = inject(PortfolioService);
+  private readonly apiService = inject(ApiService);
+  private readonly store = inject(InvestmentStore);
+  readonly portfolioService = inject(PortfolioService);
   widgets: Widget[] = [];
 
-  constructor() {
-    const apiService = inject(ApiService);
-    const performance$ = apiService.getPortfolioPerformance();
-
-    performance$.pipe(takeUntil(this.destroyed$)).subscribe((performance) => {
-      this.portfolioService.setPortfolioData(performance);
-      this.prepareWidgets();
-    });
+  ngOnInit() {
+    this.portfolioService.setLoading(true);
+    this.apiService
+      .getPortfolioPerformance(this.store.currentPortfolio()?.id ?? 0)
+      .then((portfolio) => {
+        this.portfolioService.setPortfolioData(portfolio);
+        this.prepareWidgets();
+        this.portfolioService.setLoading(false);
+      });
   }
 
   prepareWidgets() {
@@ -97,24 +106,32 @@ export class PortfolioComponent implements OnDestroy {
       },
       {
         id: 1,
-        label: 'Industry Allocation',
-        content: IndustryAllocationWidget,
+        label: 'Portfolio Growth',
+        content: PortfolioGrowthWidget,
         rows: 3,
-        columns: 1,
-        hideSettingsButton: true,
-      },
-      {
-        id: 1,
-        label: 'Sector Allocation',
-        content: SectorAllocationWidget,
-        rows: 3,
-        columns: 1,
+        columns: 2,
         hideSettingsButton: true,
       },
       {
         id: 1,
         label: 'Monthly Investment',
         content: MonthlyInvestmentWidget,
+        rows: 3,
+        columns: 2,
+        hideSettingsButton: true,
+      },
+      {
+        id: 1,
+        label: 'Industry Allocation',
+        content: IndustryAllocationWidget,
+        rows: 3,
+        columns: 2,
+        hideSettingsButton: true,
+      },
+      {
+        id: 1,
+        label: 'Sector Allocation',
+        content: SectorAllocationWidget,
         rows: 3,
         columns: 2,
         hideSettingsButton: true,

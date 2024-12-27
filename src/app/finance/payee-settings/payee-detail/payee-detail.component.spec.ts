@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { TransactionExpand } from '../../model/transactions';
-import { DestinationMap } from '../../model/payee';
+import { Payee } from '../../model/payee';
 import { payees } from '../../../mock-data/payees';
 import { transactions } from '../../../mock-data/transactions';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -20,7 +20,7 @@ describe('PayeeDetailComponent', () => {
 
   beforeEach(waitForAsync(() => {
     // Mock data for payee and transactions
-    const mockPayee = payees[0] as DestinationMap;
+    const mockPayee = payees[0] as Payee;
     const mockTransactions: TransactionExpand[] = transactions;
 
     // Mock ActivatedRoute to provide test data
@@ -70,7 +70,7 @@ describe('PayeeDetailComponent', () => {
   it('should open dialog and handle result in editPayee method', () => {
     const mockDialogRef = {
       afterClosed: () => {
-        const updatedPayee: DestinationMap = payees[0];
+        const updatedPayee: Payee = payees[0];
         updatedPayee.destination = 'updated destination';
         return of({ payee: updatedPayee, mergeIds: null });
       },
@@ -81,7 +81,7 @@ describe('PayeeDetailComponent', () => {
 
     expect(dialogSpy.open).toHaveBeenCalled();
     fixture.detectChanges();
-    const updatedPayee: DestinationMap = payees[0];
+    const updatedPayee: Payee = payees[0];
     updatedPayee.destination = 'updated destination';
     expect(component.payeeInfo).toEqual(updatedPayee);
     expect(snackBarSpy.open).toHaveBeenCalledWith('Updated!', 'Success', {

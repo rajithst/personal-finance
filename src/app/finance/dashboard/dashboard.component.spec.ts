@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TransactionDashboardComponent } from './dashboard.component';
 import { ApiService } from '../../core/api.service';
-import { DataService } from '../../service/data.service';
+import { DataService } from '../service/data.service';
 import { of } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';

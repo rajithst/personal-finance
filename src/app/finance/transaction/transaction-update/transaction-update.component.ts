@@ -14,18 +14,17 @@ import {
   MatDialogActions,
   MatDialogClose,
   MAT_DIALOG_DEFAULT_OPTIONS,
+  MatDialog,
 } from '@angular/material/dialog';
 
 import {
-  CANCEL_ACTION,
-  ERROR_ACTION,
-  SUCCESS_ACTION,
+  DropDownType,
   TRANSACTION_TYPE_EXPENSE_ID,
   TRANSACTION_TYPE_INCOME_ID,
   TRANSACTION_TYPE_PAYMENTS_ID,
   TRANSACTION_TYPE_SAVINGS_ID,
   TRANSACTION_TYPES,
-} from '../../../shared/data/client.data';
+} from '../../data/client.data';
 import {
   TransactionExpand,
   TransactionMergeRequest,
@@ -33,8 +32,6 @@ import {
 } from '../../model/transactions';
 import moment from 'moment/moment';
 import { ApiService } from '../../../core/api.service';
-import { DropDownType } from '../../../shared/data/shared.data';
-import { DataService } from '../../../service/data.service';
 import {
   TransactionCategory,
   TransactionSubCategory,
@@ -57,8 +54,13 @@ import {
   MatSuffix,
   MatPrefix,
 } from '@angular/material/form-field';
-import { CdkScrollable } from '@angular/cdk/scrolling';
 import { NgIf, DecimalPipe } from '@angular/common';
+import { FinanceStore } from '../../../core/store/finance.store';
+import { CategoryEditComponent } from '../../settings/transaction-category/category-edit/category-edit.component';
+import {
+  CategorySettings,
+  CategorySettingsResponse,
+} from '../../model/category-settings';
 
 export interface TransactionUpdateDialogData {
   formData: TransactionExpand;
@@ -67,61 +69,72 @@ export interface TransactionUpdateDialogData {
 }
 
 @Component({
-    selector: 'app-transaction-update',
-    templateUrl: './transaction-update.component.html',
-    styleUrl: './transaction-update.component.scss',
-    imports: [
-        MatDialogTitle,
-        NgIf,
-        CdkScrollable,
-        MatDialogContent,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatOption,
-        MatInput,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatSuffix,
-        MatDatepicker,
-        MatPrefix,
-        MatDivider,
-        MatCheckbox,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-    ],
-    providers: [
-        provideNativeDateAdapter(),
-        {
-            provide: MAT_DIALOG_DEFAULT_OPTIONS,
-            useValue: {
-                width: '900px',
-                position: {
-                    top: '5%',
-                },
-            },
+  selector: 'app-transaction-update',
+  templateUrl: './transaction-update.component.html',
+  styleUrl: './transaction-update.component.scss',
+  imports: [
+    MatDialogTitle,
+    NgIf,
+    MatDialogContent,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatPrefix,
+    MatDivider,
+    MatCheckbox,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
+  providers: [
+    provideNativeDateAdapter(),
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
+        width: '900px',
+        position: {
+          top: '5%',
         },
-    ]
+      },
+    },
+  ],
 })
 export class TransactionUpdateDialog implements OnInit {
   private readonly apiService = inject(ApiService);
-  private readonly dataService = inject(DataService);
   private readonly dialogRef = inject(MatDialogRef<TransactionUpdateDialog>);
+  private readonly dialog = inject(MatDialog);
+  private readonly store = inject(FinanceStore);
   data = inject<TransactionUpdateDialogData>(MAT_DIALOG_DATA);
 
-  TRANSACTION_TYPES: DropDownType[] = TRANSACTION_TYPES;
-  ACCOUNTS: CreditAccount[] = this.dataService.getClientSettings().accounts;
-  EXPENSE_CATEGORIES: TransactionCategory[] =
-    this.dataService.getExpenseCategories();
-  TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
-    this.dataService.getAllSubCategories();
-  INCOME_CATEGORIES = this.dataService.getIncomeCategories();
-  PAYMENT_CATEGORIES = this.dataService.getPaymentCategories();
-  SAVINGS_CATEGORIES = this.dataService.getSavingsCategories();
-  transactionCategories: TransactionCategory[] = [];
-  transactionSubCategories: TransactionSubCategory[] = [];
+  readonly transactionTypes: DropDownType[] = TRANSACTION_TYPES;
+  readonly accounts: CreditAccount[] = this.store.creditAccounts();
+  transactionCategories: TransactionCategory[] = [
+    {
+      id: 0,
+      category: 'Add New Category',
+      category_type: 0,
+      category_type_text: 'Select a category',
+      description: 'Select a category',
+    },
+  ];
+  transactionCategoriesDisplay: TransactionCategory[] = [];
+  transactionSubCategoriesDisplay: TransactionSubCategory[] = [];
+  transactionSubCategories: TransactionSubCategory[] = [
+    {
+      id: 0,
+      name: 'Add New Sub Category',
+      category: 0,
+      category_text: 'Select a category',
+      description: 'Select a category',
+    },
+  ];
   transactionForm: FormGroup;
   formData: TransactionExpand;
 
@@ -143,7 +156,16 @@ export class TransactionUpdateDialog implements OnInit {
     }
 
     this.transactionForm.get('category')?.valueChanges.subscribe((value) => {
-      if (value) {
+      if (value !== null) {
+        if (value === 0) {
+          this.createNewCategory();
+        }
+        this.setTransactionSubCategories(value);
+      }
+    });
+    this.transactionForm.get('subcategory')?.valueChanges.subscribe((value) => {
+      if (value !== null && value === 0) {
+        this.createNewCategory(this.transactionForm.get('category')?.value);
         this.setTransactionSubCategories(value);
       }
     });
@@ -157,7 +179,7 @@ export class TransactionUpdateDialog implements OnInit {
       });
   }
 
-  submit() {
+  async submit() {
     this.transactionForm.value.date = moment(
       this.transactionForm.value.date,
     ).format('YYYY-MM-DD');
@@ -171,54 +193,76 @@ export class TransactionUpdateDialog implements OnInit {
       this.data.task == 'delete'
     ) {
       const payload: TransactionRequest = this.transactionForm.value;
-      this.apiService
-        .updateTransaction(payload)
-        .subscribe((transaction: TransactionExpand) => {
-          if (transaction) {
-            this.dialogRef.close({
-              refresh: true,
-              data: transaction,
-              action: SUCCESS_ACTION,
-            });
-          } else {
-            this.dialogRef.close({
-              refresh: false,
-              data: null,
-              action: ERROR_ACTION,
-            });
-          }
-        });
+      const updatedTransaction =
+        await this.apiService.updateTransaction(payload);
+      this.dialogRef.close({
+        data: updatedTransaction ?? null,
+        status: !!updatedTransaction,
+      });
     } else if (this.data.task == 'merge') {
       const data = this.transactionForm.value;
       const payload: TransactionMergeRequest = {
         ...data,
         merge_ids: this.data.mergeIds,
       };
-      this.apiService
-        .mergeTransaction(payload)
-        .subscribe((transaction: TransactionExpand) => {
-          if (transaction) {
-            this.dialogRef.close({
-              refresh: true,
-              data: transaction,
-              action: SUCCESS_ACTION,
-            });
-          } else {
-            this.dialogRef.close({
-              refresh: false,
-              data: null,
-              action: ERROR_ACTION,
-            });
-          }
-        });
+      const updatedTransaction =
+        await this.apiService.mergeTransaction(payload);
+      this.dialogRef.close({
+        data: updatedTransaction ?? null,
+        status: !!updatedTransaction,
+      });
     }
   }
 
+  createNewCategory(category: number | null = null) {
+    let categorySetting: CategorySettings | null = null;
+    if (category) {
+      const targetCategory = this.store
+        .transactionCategories()
+        .find((x) => x.id === category);
+      const targetSubCategories = this.store
+        .transactionSubCategories()
+        .filter((x) => x.category === category);
+      categorySetting = {
+        category: targetCategory!,
+        subCategories: targetSubCategories,
+      };
+    }
+    const dialog = this.dialog.open(CategoryEditComponent, {
+      maxWidth: '850px',
+      position: {
+        top: '5%',
+      },
+      data: {
+        settings: category ? categorySetting : null,
+        task: category ? 'edit' : 'add',
+      },
+    });
+    dialog
+      .afterClosed()
+      .subscribe((result: CategorySettingsResponse | null | undefined) => {
+        const transactionType =
+          this.transactionForm.get('transaction_type')?.value;
+        if (result !== undefined && result !== null) {
+          this.transactionForm.get('category')?.setValue(result.category?.id);
+          this.setTransactionCategories(transactionType);
+          this.setTransactionSubCategories(result.category?.id ?? 0);
+        } else if (category) {
+          this.transactionForm.get('subcategory')?.setValue(null);
+          this.setTransactionSubCategories(category);
+        } else {
+          this.transactionForm.get('category')?.setValue(null);
+          this.setTransactionCategories(transactionType);
+        }
+      });
+  }
+
   cancel() {
-    this.dialogRef.close({ refresh: false, data: null, action: CANCEL_ACTION });
+    this.dialogRef.close({ data: null, status: true });
   }
 
   getNewTransactionForm(data: TransactionExpand | null) {
+    console.log('data', data);
     let transactionType = null;
     if (data) {
       if (data.is_payment) {
@@ -272,70 +316,72 @@ export class TransactionUpdateDialog implements OnInit {
   }
 
   private setTransactionSubCategories(category: number) {
-    this.transactionSubCategories = this.TRANSACTION_SUB_CATEGORIES.filter(
-      (x) => x.category === category,
-    );
-    if (this.transactionSubCategories.length === 1) {
-      this.transactionForm
-        .get('subcategory')
-        ?.setValue(this.transactionSubCategories.at(0)!.id);
-    }
+    this.transactionSubCategoriesDisplay = [
+      ...this.transactionSubCategories,
+      ...this.store
+        .transactionSubCategories()
+        .filter((x) => x.category === category),
+    ];
   }
 
   private setTransactionCategories(transactionType: number) {
     if (transactionType === TRANSACTION_TYPE_EXPENSE_ID) {
-      this.transactionCategories = this.EXPENSE_CATEGORIES;
+      this.transactionCategoriesDisplay = [
+        ...this.transactionCategories,
+        ...this.store.expenseCategories(),
+      ];
       this.transactionForm.get('is_payment')?.setValue(false);
       this.transactionForm.get('is_saving')?.setValue(false);
       this.transactionForm.get('is_expense')?.setValue(true);
       this.transactionForm.get('is_income')?.setValue(false);
     } else if (transactionType === TRANSACTION_TYPE_INCOME_ID) {
-      this.transactionCategories = this.INCOME_CATEGORIES;
+      this.transactionCategoriesDisplay = [
+        ...this.transactionCategories,
+        ...this.store.incomeCategories(),
+      ];
       this.transactionForm.get('is_expense')?.setValue(false);
       this.transactionForm.get('is_payment')?.setValue(false);
       this.transactionForm.get('is_saving')?.setValue(false);
       this.transactionForm.get('is_income')?.setValue(true);
     } else if (transactionType === TRANSACTION_TYPE_SAVINGS_ID) {
-      this.transactionCategories = this.SAVINGS_CATEGORIES;
+      this.transactionCategoriesDisplay = [
+        ...this.transactionCategories,
+        ...this.store.savingsCategories(),
+      ];
       this.transactionForm.get('is_expense')?.setValue(true);
       this.transactionForm.get('is_payment')?.setValue(false);
       this.transactionForm.get('is_saving')?.setValue(true);
       this.transactionForm.get('is_income')?.setValue(false);
     } else if (transactionType === TRANSACTION_TYPE_PAYMENTS_ID) {
-      this.transactionCategories = [
-        ...this.PAYMENT_CATEGORIES,
-        ...this.EXPENSE_CATEGORIES,
+      this.transactionCategoriesDisplay = [
+        ...this.transactionCategories,
+        ...this.store.paymentCategories(),
+        ...this.store.expenseCategories(),
       ];
       this.transactionForm.get('is_expense')?.setValue(true);
       this.transactionForm.get('is_payment')?.setValue(true);
       this.transactionForm.get('is_saving')?.setValue(false);
       this.transactionForm.get('is_income')?.setValue(false);
     }
-    if (this.transactionCategories.length === 1) {
-      this.transactionForm
-        .get('category')
-        ?.setValue(this.transactionCategories.at(0)!.id);
-    }
   }
 }
 
 @Component({
-    selector: 'app-transaction-delete',
-    templateUrl: './transaction-delete.component.html',
-    styleUrl: './transaction-delete.component.scss',
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        MatFormField,
-        MatInput,
-        ReactiveFormsModule,
-        FormsModule,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-        DecimalPipe,
-    ]
+  selector: 'app-transaction-delete',
+  templateUrl: './transaction-delete.component.html',
+  styleUrl: './transaction-delete.component.scss',
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    MatFormField,
+    MatInput,
+    ReactiveFormsModule,
+    FormsModule,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+    DecimalPipe,
+  ],
 })
 export class TransactionDeleteDialog extends TransactionUpdateDialog {
   deleteReason: string = '';

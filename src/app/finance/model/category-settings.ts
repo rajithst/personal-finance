@@ -12,6 +12,10 @@ export interface CategorySettingsResponse {
   subcategories: TransactionSubCategory[] | [];
 }
 
+export interface CategoryDeleteResponse {
+  data: boolean
+}
+
 export interface CategorySettings {
   category: TransactionCategory;
   subCategories: TransactionSubCategory[];
