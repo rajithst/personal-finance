@@ -3,14 +3,12 @@ import { inject, Injectable } from '@angular/core';
 import { firstValueFrom, map, Observable } from 'rxjs';
 import {
   BulkDeleteRequest,
-  BulkDeleteResponse,
   MonthlyTransaction,
   Transaction,
   TransactionExpand,
   TransactionFilter,
   TransactionMergeRequest,
   TransactionSplitRequest,
-  TransactionSplitResponse,
 } from '../finance/model/transactions';
 import { environment } from '../../environments/environment';
 import { Payee, PayeeUpdateRequest, PayeeDetail } from '../finance/model/payee';
@@ -18,7 +16,6 @@ import { Payee, PayeeUpdateRequest, PayeeDetail } from '../finance/model/payee';
 import { DashboardResponse } from '../finance/model/dashboard';
 import { ClientSettings } from '../finance/model/common';
 import {
-  CategoryDeleteResponse,
   CategorySettingsRequest,
   CategorySettingsResponse,
 } from '../finance/model/category-settings';
@@ -98,17 +95,17 @@ export class ApiService {
   }
 
   async getPayeeDetail(payeeId: number | string): Promise<PayeeDetail> {
-    const payee$ = this.http.get<PayeeDetail>(
+    const payee$ = this.http.get<APIResponse<PayeeDetail>>(
       `${this.SRC_URL}/finance/payee-detail/${payeeId}/`,
     );
-    return await firstValueFrom(payee$);
+    return await firstValueFrom(payee$.pipe(map(mapToData)));
   }
 
   async getPayeeDetailByName(payeeName: string): Promise<PayeeDetail> {
-    const payee$ = this.http.get<PayeeDetail>(
+    const payee$ = this.http.get<APIResponse<PayeeDetail>>(
       `${this.SRC_URL}/finance/payee-detail/${payeeName}/`,
     );
-    return await firstValueFrom(payee$);
+    return await firstValueFrom(payee$.pipe(map(mapToData)));
   }
 
   async updateTransaction(payload: Transaction): Promise<TransactionExpand> {
@@ -139,8 +136,8 @@ export class ApiService {
 
   async splitTransaction(
     payload: TransactionSplitRequest,
-  ): Promise<TransactionSplitResponse> {
-    const splitResponse$ = this.http.put<APIResponse<TransactionSplitResponse>>(
+  ): Promise<TransactionExpand[]> {
+    const splitResponse$ = this.http.put<APIResponse<TransactionExpand[]>>(
       `${this.SRC_URL}/finance/bulk/transaction/`,
       payload,
     );
@@ -165,8 +162,8 @@ export class ApiService {
 
   async bulkDeleteTransactions(
     payload: BulkDeleteRequest,
-  ): Promise<BulkDeleteResponse> {
-    const response$ = this.http.put<APIResponse<BulkDeleteResponse>>(
+  ): Promise<TransactionExpand[]> {
+    const response$ = this.http.put<APIResponse<TransactionExpand[]>>(
       `${this.SRC_URL}/finance/bulk/transaction/`,
       payload,
     );
@@ -196,32 +193,32 @@ export class ApiService {
   ): Promise<CategorySettingsResponse> {
     let categorySettings$;
     if (payload.category.id) {
-      categorySettings$ = this.http.put<CategorySettingsResponse>(
+      categorySettings$ = this.http.put<APIResponse<CategorySettingsResponse>>(
         `${this.SRC_URL}/finance/category-settings/`,
         payload,
       );
     } else {
-      categorySettings$ = this.http.post<CategorySettingsResponse>(
+      categorySettings$ = this.http.post<APIResponse<CategorySettingsResponse>>(
         `${this.SRC_URL}/finance/category-settings/`,
         payload,
       );
     }
 
-    return await firstValueFrom(categorySettings$);
+    return await firstValueFrom(categorySettings$.pipe(map(mapToData)));
   }
 
-  async deleteCategory(categoryId: number): Promise<CategoryDeleteResponse> {
-    const response$ = this.http.delete<APIResponse<CategoryDeleteResponse>>(
+  async deleteCategory(categoryId: number): Promise<boolean> {
+    const response$ = this.http.delete<APIResponse<boolean>>(
       `${this.SRC_URL}/finance/category-settings/${categoryId}/`,
     );
     return await firstValueFrom(response$.pipe(map(mapToData)));
   }
 
   async initSettings(): Promise<ClientSettings> {
-    const settings$ = this.http.get<ClientSettings>(
+    const settings$ = this.http.get<APIResponse<ClientSettings>>(
       `${this.SRC_URL}/finance/settings/`,
     );
-    return await firstValueFrom(settings$);
+    return await firstValueFrom(settings$.pipe(map(mapToData)));
   }
 
   async updateCreditAccount(
@@ -229,18 +226,18 @@ export class ApiService {
   ): Promise<CreditAccount> {
     let creditAccount$;
     if (payload.id) {
-      creditAccount$ = this.http.put<CreditAccount>(
+      creditAccount$ = this.http.put<APIResponse<CreditAccount>>(
         `${this.SRC_URL}/finance/credit-account/`,
         payload,
       );
     } else {
-      creditAccount$ = this.http.post<CreditAccount>(
+      creditAccount$ = this.http.post<APIResponse<CreditAccount>>(
         `${this.SRC_URL}/finance/credit-account/`,
         payload,
       );
     }
 
-    return await firstValueFrom(creditAccount$);
+    return await firstValueFrom(creditAccount$.pipe(map(mapToData)));
   }
 
   /* Investment Module APIs*/

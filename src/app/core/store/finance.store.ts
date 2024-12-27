@@ -157,7 +157,7 @@ export const FinanceStore = signalStore(
       try {
         patchState(store, { loading: true });
         const response = await apiService.deleteCategory(categoryId);
-        if (response.data) {
+        if (response) {
           const categories = store
             .transactionCategories()
             .filter((x) => x.id !== categoryId);
@@ -167,7 +167,7 @@ export const FinanceStore = signalStore(
           patchState(store, { transactionCategories: categories });
           patchState(store, { transactionSubCategories: subcategories });
         }
-        return response.data;
+        return response;
       } catch (error) {
         patchState(store, { loading: false });
         return false;

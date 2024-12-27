@@ -122,7 +122,7 @@ export class TransactionSplitComponent implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close(false);
+    this.dialogRef.close();
   }
 
   async submit() {
