@@ -1,0 +1,19 @@
+@use "@angular/material" as mat;
+
+table {
+  @include mat.table-overrides(
+    (
+      background-color: #ffffff,
+      row-item-outline-width: 0.1px,
+      row-item-container-height: 40px,
+    )
+  );
+}
+
+.profit {
+  color: #00b300;
+}
+
+.loss {
+  color: #ff0000;
+}

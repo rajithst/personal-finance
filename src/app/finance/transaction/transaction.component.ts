@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { DataService } from '../service/data.service';
+import { DataService } from '../../service/data.service';
 import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
 import { MonthlyTransaction, TransactionFilter } from '../model/transactions';
 import { Title } from '@angular/platform-browser';
@@ -11,6 +11,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-transaction',
@@ -24,6 +25,7 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
+    MatIcon,
   ],
 })
 export class FinanceComponent implements OnInit {

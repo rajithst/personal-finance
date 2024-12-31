@@ -1,10 +1,17 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {Router, RouterLink, RouterOutlet} from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { Portfolio } from './model/portfolio';
 import { InvestmentStore } from '../core/store/investment.store';
+import { MatIcon } from '@angular/material/icon';
+import { DataService } from '../service/data.service';
+import { NewPortfolioComponent } from './portfolio/new-portfolio/new-portfolio.component';
+import { MatDialog } from '@angular/material/dialog';
+
+const DIALOG_WIDTH = '900px';
+const DIALOG_TOP_POSITION = '5%';
 
 @Component({
   selector: 'app-investments',
@@ -23,13 +30,21 @@ import { InvestmentStore } from '../core/store/investment.store';
         }
       </nav>
       <div class="toolbar-actions">
-        <button mat-flat-button color="primary" [matMenuTriggerFor]="menu">
-          {{currentPortfolio?.name || 'Select Portfolio'}}
+        <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu">
+          <mat-icon>arrow_drop_down</mat-icon>
+
+          {{ store.currentPortfolio()?.name || 'Select Portfolio'}}
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item>Create new portfolio</button>
-          @for (portfolio of myPortfolios; track portfolio.id) {
-            <button mat-menu-item>{{ portfolio.name }}</button>
+          <button mat-menu-item (click)="createNewPortfolio()">
+            <mat-icon>add</mat-icon>
+            <span>Create new portfolio</span>
+          </button>
+          @for (portfolio of store.portfolios(); track portfolio.id) {
+            <button mat-menu-item (click)="switchPortfolio(portfolio.id)">
+              <mat-icon>attach_money</mat-icon>
+              <span>{{ portfolio.name }}</span>
+            </button>
           }
         </mat-menu>
       </div>
@@ -63,13 +78,17 @@ import { InvestmentStore } from '../core/store/investment.store';
     MatTabNavPanel,
     MatButton,
     MatMenu,
+    MatIcon,
     MatMenuTrigger,
     MatMenuItem,
   ],
 })
 export class InvestmentsComponent implements OnInit {
-  private readonly store = inject(InvestmentStore);
+  store = inject(InvestmentStore);
   private readonly router = inject(Router);
+  private readonly dataService = inject(DataService);
+  private readonly dialog = inject(MatDialog);
+
   tabs = [
     { label: 'Portfolio', route: 'portfolio' },
     { label: 'Holdings', route: 'holdings' },
@@ -77,12 +96,33 @@ export class InvestmentsComponent implements OnInit {
     { label: 'Purchase History', route: 'purchase-history' },
   ];
   activeLink = { label: '', route: '' };
-  myPortfolios: Portfolio[] = this.store.portfolios();
-  currentPortfolio = this.store.currentPortfolio();
 
   ngOnInit() {
     const currentPath = this.router.url.split('/').at(-1);
-    this.activeLink = this.tabs.find((tab) => tab.route === currentPath) || this.tabs[0];
+    this.activeLink =
+      this.tabs.find((tab) => tab.route === currentPath) || this.tabs[0];
+    this.dataService.setPortfolioSwitch(this.store.currentPortfolio()?.id ?? 0);
   }
 
+  async switchPortfolio(id: number) {
+    const switched = await this.store.switchPortfolio(id);
+    if (!switched) {
+      return;
+    }
+    this.dataService.setPortfolioSwitch(id);
+  }
+
+  createNewPortfolio() {
+    const dialog = this.dialog.open(NewPortfolioComponent, {
+      maxWidth: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
+    });
+    dialog.afterClosed().subscribe((result: Portfolio | null) => {
+      if (result) {
+        this.switchPortfolio(result.id).then();
+      }
+    });
+  }
 }

@@ -1,10 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { PurchaseHistoryTableComponent } from './purchase-history-table/purchase-history-table.component';
 import { AsyncPipe } from '@angular/common';
-import { Observable, of } from 'rxjs';
+import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
 import { ApiService } from '../../core/api.service';
 import { StockPurchaseHistory } from '../model/stock';
 import { InvestmentStore } from '../../core/store/investment.store';
+import { DataService } from '../../service/data.service';
 
 @Component({
   selector: 'app-purchase-history',
@@ -16,16 +17,34 @@ import { InvestmentStore } from '../../core/store/investment.store';
   styles: ``,
   imports: [PurchaseHistoryTableComponent, AsyncPipe],
 })
-export class PurchaseHistoryComponent implements OnInit {
+export class PurchaseHistoryComponent implements OnInit, OnDestroy {
   private readonly apiService = inject(ApiService);
+  private readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly store = inject(InvestmentStore);
+  private readonly dataService = inject(DataService);
   purchaseHistory$: Observable<StockPurchaseHistory[]>;
 
   ngOnInit(): void {
-    this.apiService
-      .getStockPurchaseHistory(this.store.currentPortfolio()?.id ?? 0)
+    this.dataService.portfolioSwitcher
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((portfolioId) => {
+        if (!portfolioId) {
+          return;
+        }
+        this.getPurchaseHistory(portfolioId).then();
+      });
+  }
+
+  async getPurchaseHistory(portfolioId: number) {
+    await this.apiService
+      .getStockPurchaseHistory(portfolioId)
       .then((purchaseHistory) => {
         this.purchaseHistory$ = of(purchaseHistory);
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

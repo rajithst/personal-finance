@@ -80,15 +80,19 @@ export class CreditAccountComponent implements OnInit {
       },
       data: { account: element ?? null, task: 'edit' },
     });
-    dialog.afterClosed().subscribe((result: CreditAccount | null) => {
-      this.prepareAccounts();
-      const message = result
-        ? 'Updated Successfully!'
-        : 'Failed to update accounts!';
-      const action = result ? 'Success' : 'Error';
-      this.snackBar.open(message, action, {
-        duration: 3000,
+    dialog
+      .afterClosed()
+      .subscribe((result: CreditAccount | null | undefined) => {
+        if (result !== undefined) {
+          this.prepareAccounts();
+          const message = result
+            ? 'Updated Successfully!'
+            : 'Failed to update accounts!';
+          const action = result ? 'Success' : 'Error';
+          this.snackBar.open(message, action, {
+            duration: 3000,
+          });
+        }
       });
-    });
   }
 }

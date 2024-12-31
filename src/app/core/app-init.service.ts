@@ -16,7 +16,9 @@ export class AppInitService {
     if (isAvailable) {
       await this.financeStore.getClientSettings();
       await this.investmentStore.getClientSettings();
+      return true;
     }
+    return false;
 
   }
 

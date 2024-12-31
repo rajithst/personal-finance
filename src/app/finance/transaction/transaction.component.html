@@ -12,12 +12,16 @@
     }
   </nav>
   <div class="toolbar-actions">
-    <button mat-flat-button color="primary" [matMenuTriggerFor]="menu">
+    <button mat-stroked-button [matMenuTriggerFor]="menu">
       {{dataService.getFilterYear()}}
+      <mat-icon>arrow_drop_down</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
       @for (year of financeYears; track year) {
-        <button mat-menu-item (click)="onYearSelect(year)">{{ year }}</button>
+        <button mat-menu-item (click)="onYearSelect(year)">
+          <mat-icon>calendar_month</mat-icon>
+          <span>{{ year }}</span>
+        </button>
       }
     </mat-menu>
   </div>

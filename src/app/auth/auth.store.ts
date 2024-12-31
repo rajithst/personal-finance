@@ -30,7 +30,6 @@ export const AuthStore = signalStore(
         const user = authService.currentUser;
         if (user) {
           patchState(store, { user, token: authService.getToken() });
-          await this.getMyProfile();
         }
         return user;
       },
@@ -48,8 +47,6 @@ export const AuthStore = signalStore(
         const success = await authService.login(username, password);
         if (success) {
           patchState(store, { user: authService.currentUser, token: authService.getToken(), loading: false });
-          console.log('getting profile');
-          await this.getMyProfile();
         } else {
           patchState(store, { error: 'Invalid username or password' });
         }

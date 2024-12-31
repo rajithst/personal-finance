@@ -12,6 +12,7 @@ import {
 import { NgIf } from '@angular/common';
 import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
 import { AuthStore } from './auth.store';
+import {AppInitService} from "../core/app-init.service";
 
 @Component({
   selector: 'app-login',
@@ -88,9 +89,10 @@ import { AuthStore } from './auth.store';
   ],
 })
 export class LoginComponent implements OnInit {
-  fb = inject(FormBuilder);
-  router = inject(Router);
-  store = inject(AuthStore);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly store = inject(AuthStore);
+  private readonly appInitService = inject(AppInitService);
   loginForm = this.fb.group({
     username: ['', [Validators.required]],
     password: ['', Validators.required],
@@ -104,6 +106,7 @@ export class LoginComponent implements OnInit {
   async logInIfTokenPresent() {
     if (this.store.user()) {
       await this.store.init();
+      await this.store.getMyProfile();
       await this.router.navigate(['dashboard']);
     }
   }
@@ -123,6 +126,8 @@ export class LoginComponent implements OnInit {
         this.store.user() &&
         this.store.profile()
       ) {
+
+        await this.appInitService.appInit();
         await this.router.navigate(['/']);
       } else {
         this.invalidLogin = true;

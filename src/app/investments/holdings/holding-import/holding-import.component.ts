@@ -197,10 +197,10 @@ export class HoldingImportComponent {
   }
 
   cancel() {
-    this.dialogRef.close(false);
+    this.dialogRef.close();
   }
 
   close() {
-    this.dialogRef.close(false);
+    this.dialogRef.close(this.progress === 100 && this.uploadComplete);
   }
 }

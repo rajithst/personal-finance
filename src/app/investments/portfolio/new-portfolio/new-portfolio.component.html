@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>Create New Portfolio</h2>
+<mat-dialog-content>
+  <form [formGroup]="portfolioForm" (ngSubmit)="submit()">
+    <table>
+      <th></th>
+      <tr>
+        <td colspan="3">
+          <mat-form-field appearance="outline">
+            <mat-label>Portfolio Name</mat-label>
+            <input matInput formControlName="name" required />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field appearance="outline">
+            <mat-label>Portfolio Goal</mat-label>
+            <mat-select formControlName="goal">
+              <mat-option [value]="'Value'">Value</mat-option>
+              <mat-option [value]="'Passive Income'">Passive Income</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline">
+            <mat-label>Goal Amount</mat-label>
+            <input matInput formControlName="goal_amount" required />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="outline">
+            <mat-label>Currency</mat-label>
+            <mat-select formControlName="currency">
+              <mat-option [value]="'JPY'">JPY</mat-option>
+              <mat-option [value]="'USD'">USD</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+
+      </tr>
+      <tr>
+        <td colspan="3">
+          <mat-form-field appearance="outline">
+            <mat-label>Notes</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button (click)="cancel()" mat-dialog-close mat-raised-button>Cancel</button>
+  <button (click)="submit()" color="primary" mat-raised-button>Save</button>
+</mat-dialog-actions>

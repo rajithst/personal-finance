@@ -16,6 +16,9 @@ export class DataService {
   );
   year$ = this.filterYear$.asObservable();
 
+  private readonly portfolioSwitch$ = new BehaviorSubject<number | null>(null);
+  portfolioSwitcher = this.portfolioSwitch$.asObservable();
+
   getFilterYear() {
     return this.filterYear$.value;
   }
@@ -30,5 +33,9 @@ export class DataService {
 
   setValueVisibility(value: boolean) {
     this.valueVisible$.next(value);
+  }
+
+  setPortfolioSwitch(portfolioId: number) {
+    this.portfolioSwitch$.next(portfolioId);
   }
 }

@@ -55,3 +55,5 @@ function getIcon(value: number) {
 function getColor(value: number) {
   return value > 0 ? 'green' : 'red';
 }
+
+

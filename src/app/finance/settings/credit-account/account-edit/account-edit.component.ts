@@ -11,17 +11,7 @@ import {
   MatDialogTitle,
   MatDialogContent,
   MatDialogActions,
-  MatDialogClose,
 } from '@angular/material/dialog';
-import {
-  ACCOUNT_TYPE_BANK_ACCOUNT,
-  ACCOUNT_TYPE_CREDIT_CARD,
-  ACCOUNT_TYPE_INVESTMENT_ACCOUNT,
-  ACCOUNT_TYPES,
-  BANK_ACCOUNT_PROVIDERS,
-  CREDIT_CARD_PROVIDERS,
-  INVESTMENT_ACCOUNT_PROVIDERS,
-} from '../../../data/client.data';
 import { CreditAccount, CreditAccountRequest } from '../../../model/account';
 import { MatButton } from '@angular/material/button';
 import { MatInput } from '@angular/material/input';
@@ -50,32 +40,25 @@ interface AccountEditDialogData {
     MatInput,
     MatDialogActions,
     MatButton,
-    MatDialogClose,
   ],
 })
 export class AccountEditComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef<AccountEditComponent>);
   private readonly store = inject(FinanceStore);
-  protected readonly ACCOUNT_TYPES = ACCOUNT_TYPES;
+  protected readonly ACCOUNT_TYPES = this.store.accountTypes();
   data = inject<AccountEditDialogData>(MAT_DIALOG_DATA);
 
   creditAccountForm: FormGroup;
-
   accountProviders: string[] = [];
   accountTypeControl = new FormControl<string | null>(null, [
     Validators.required,
   ]);
 
   ngOnInit() {
+    this.prepareAccountProviders(this.data.account?.account_type ?? '');
     this.creditAccountForm = this.getCreditAccountForm(this.data.account);
     this.accountTypeControl.valueChanges.subscribe((value) => {
-      if (value === ACCOUNT_TYPE_CREDIT_CARD) {
-        this.accountProviders = CREDIT_CARD_PROVIDERS;
-      } else if (value === ACCOUNT_TYPE_BANK_ACCOUNT) {
-        this.accountProviders = BANK_ACCOUNT_PROVIDERS;
-      } else if (value === ACCOUNT_TYPE_INVESTMENT_ACCOUNT) {
-        this.accountProviders = INVESTMENT_ACCOUNT_PROVIDERS;
-      }
+      this.prepareAccountProviders(value ?? '');
     });
   }
 
@@ -102,9 +85,20 @@ export class AccountEditComponent implements OnInit {
     });
   }
 
+  private prepareAccountProviders(accountType: string) {
+    this.accountProviders = this.store
+      .accountProviders()
+      .filter((x) => x.provider_type === accountType)
+      .map((x) => x.value);
+  }
+
   async submit() {
     const payload: CreditAccountRequest = this.creditAccountForm.value;
     const updatedAccount = await this.store.updateCreditAccount(payload);
     this.dialogRef.close(updatedAccount);
+  }
+
+  cancel() {
+    this.dialogRef.close();
   }
 }

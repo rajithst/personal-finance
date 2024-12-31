@@ -34,7 +34,7 @@ export class ChartComponent implements OnInit {
       data: this.chartConfig().data,
       options: {
         ...this.chartConfig().options,
-        maintainAspectRatio: true,
+        maintainAspectRatio: false,
         responsive: true,
         elements: {
           line: {

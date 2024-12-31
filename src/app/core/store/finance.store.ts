@@ -8,6 +8,7 @@ import {
 import { computed, inject } from '@angular/core';
 import { Payee, PayeeUpdateRequest } from '../../finance/model/payee';
 import {
+  AccountProvider,
   TransactionCategory,
   TransactionSubCategory,
 } from '../../finance/model/common';
@@ -29,6 +30,9 @@ type FinanceState = {
   transactionCategories: TransactionCategory[];
   transactionSubCategories: TransactionSubCategory[];
   creditAccounts: CreditAccount[];
+  accountTypes: string[];
+  accountProviders: AccountProvider[];
+  initLoadPass: boolean;
   loading: boolean;
 };
 
@@ -37,6 +41,9 @@ const initialState: FinanceState = {
   transactionCategories: [],
   transactionSubCategories: [],
   creditAccounts: [],
+  accountTypes: [],
+  accountProviders: [],
+  initLoadPass: false,
   loading: false,
 };
 
@@ -72,8 +79,11 @@ export const FinanceStore = signalStore(
       const settings = await apiService.initSettings();
       patchState(store, {
         transactionCategories: settings.transaction_categories,
-        transactionSubCategories: settings.transaction_sub_categories,
+        transactionSubCategories: settings.transaction_subcategories,
         creditAccounts: settings.accounts,
+        accountTypes: settings.account_types,
+        accountProviders: settings.account_providers,
+        initLoadPass: true,
       });
     },
 
@@ -157,7 +167,7 @@ export const FinanceStore = signalStore(
       try {
         patchState(store, { loading: true });
         const response = await apiService.deleteCategory(categoryId);
-        if (response.data) {
+        if (response) {
           const categories = store
             .transactionCategories()
             .filter((x) => x.id !== categoryId);
@@ -167,7 +177,7 @@ export const FinanceStore = signalStore(
           patchState(store, { transactionCategories: categories });
           patchState(store, { transactionSubCategories: subcategories });
         }
-        return response.data;
+        return response;
       } catch (error) {
         patchState(store, { loading: false });
         return false;

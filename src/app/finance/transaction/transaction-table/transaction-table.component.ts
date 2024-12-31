@@ -33,7 +33,7 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { DataService } from '../../service/data.service';
+import { DataService } from '../../../service/data.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
   MatAccordion,
@@ -422,9 +422,11 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         top: DIALOG_TOP_POSITION,
       },
     });
-    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result) {
-        this.snackBar.open('Imported Successfully!.', 'Success', {
+    dialog.afterClosed().subscribe((result: boolean | undefined) => {
+      if (result !== undefined) {
+        const message = result ? 'Imported Successfully!' : 'Failed to import!';
+        const action = result ? 'Success' : 'Error';
+        this.snackBar.open(message, action, {
           duration: 3000,
         });
         this.dataService.setRefresh(true);

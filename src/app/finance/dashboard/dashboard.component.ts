@@ -1,5 +1,4 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { DashboardResponse } from '../model/dashboard';
 import { ReplaySubject } from 'rxjs';
 import { ApiService } from '../../core/api.service';
 import {
@@ -23,15 +22,20 @@ import {
   TotalSavingsWidget,
 } from './widgets/summary-widgets';
 import { ChartUtilityService } from './chart-utils.service';
+import { LoadingComponent } from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-transaction-portfolio',
   template: `
-    <div class="dashboard-widgets">
-      @for (widget of widgets; track widget) {
-        <app-widget [data]="widget"></app-widget>
-      }
-    </div>
+    @if (dashboardService.loading()) {
+      <app-loading></app-loading>
+    } @else {
+      <div class="dashboard-widgets">
+        @for (widget of widgets; track widget) {
+          <app-widget [data]="widget"></app-widget>
+        }
+      </div>
+    }
   `,
   styles: `
     .dashboard-widgets {
@@ -43,7 +47,7 @@ import { ChartUtilityService } from './chart-utils.service';
       gap: 5px;
     }
   `,
-  imports: [WidgetComponent],
+  imports: [WidgetComponent, LoadingComponent],
   providers: [DashboardService, ChartUtilityService],
 })
 export class TransactionDashboardComponent implements OnInit, OnDestroy {
@@ -52,15 +56,17 @@ export class TransactionDashboardComponent implements OnInit, OnDestroy {
   readonly dashboardService = inject(DashboardService);
   readonly chartUtilityService = inject(ChartUtilityService);
   readonly currentYear = this.chartUtilityService.getCurrentYear();
-
-  dashboardData: DashboardResponse;
   widgets: Widget[] = [];
 
   ngOnInit() {
-    this.apiService.getDashboard(Number(this.currentYear)).then((dashboardData) => {
-      this.dashboardService.setDashboardData(dashboardData);
-      this.prepareWidgets();
-    });
+    this.dashboardService.setLoading(true);
+    this.apiService
+      .getDashboard(Number(this.currentYear))
+      .then((dashboardData) => {
+        this.dashboardService.setDashboardData(dashboardData);
+        this.prepareWidgets();
+        this.dashboardService.setLoading(false);
+      });
   }
 
   prepareWidgets() {

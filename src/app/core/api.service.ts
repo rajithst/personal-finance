@@ -24,7 +24,7 @@ import {
 } from '../finance/model/category-settings';
 import { JwtTokenResponse, MyProfile } from '../auth/model';
 import { CreditAccount, CreditAccountRequest } from '../finance/model/account';
-import { PortfolioPerformance } from '../investments/model/portfolio';
+import {Portfolio, PortfolioPerformance} from '../investments/model/portfolio';
 import { Holding } from '../investments/model/holding';
 import { MonthlyDividend } from '../investments/model/dividend';
 import {
@@ -196,18 +196,18 @@ export class ApiService {
   ): Promise<CategorySettingsResponse> {
     let categorySettings$;
     if (payload.category.id) {
-      categorySettings$ = this.http.put<CategorySettingsResponse>(
+      categorySettings$ = this.http.put<APIResponse<CategorySettingsResponse>>(
         `${this.SRC_URL}/finance/category-settings/`,
         payload,
       );
     } else {
-      categorySettings$ = this.http.post<CategorySettingsResponse>(
+      categorySettings$ = this.http.post<APIResponse<CategorySettingsResponse>>(
         `${this.SRC_URL}/finance/category-settings/`,
         payload,
       );
     }
 
-    return await firstValueFrom(categorySettings$);
+    return await firstValueFrom(categorySettings$.pipe(map(mapToData)));
   }
 
   async deleteCategory(categoryId: number): Promise<CategoryDeleteResponse> {
@@ -218,10 +218,10 @@ export class ApiService {
   }
 
   async initSettings(): Promise<ClientSettings> {
-    const settings$ = this.http.get<ClientSettings>(
+    const settings$ = this.http.get<APIResponse<ClientSettings>>(
       `${this.SRC_URL}/finance/settings/`,
     );
-    return await firstValueFrom(settings$);
+    return await firstValueFrom(settings$.pipe(map(mapToData)));
   }
 
   async updateCreditAccount(
@@ -229,18 +229,18 @@ export class ApiService {
   ): Promise<CreditAccount> {
     let creditAccount$;
     if (payload.id) {
-      creditAccount$ = this.http.put<CreditAccount>(
+      creditAccount$ = this.http.put<APIResponse<CreditAccount>>(
         `${this.SRC_URL}/finance/credit-account/`,
         payload,
       );
     } else {
-      creditAccount$ = this.http.post<CreditAccount>(
+      creditAccount$ = this.http.post<APIResponse<CreditAccount>>(
         `${this.SRC_URL}/finance/credit-account/`,
         payload,
       );
     }
 
-    return await firstValueFrom(creditAccount$);
+    return await firstValueFrom(creditAccount$.pipe(map(mapToData)));
   }
 
   /* Investment Module APIs*/
@@ -323,5 +323,14 @@ export class ApiService {
         observe: 'events',
       },
     );
+  }
+
+  async createPortfolio(portfolio: Portfolio) {
+    const updatedPortfolio$ = this.http.post<APIResponse<Portfolio>>(
+      `${this.SRC_URL}/investments/portfolio/`,
+      portfolio,
+    );
+    return await firstValueFrom(updatedPortfolio$.pipe(map(mapToData)));
+
   }
 }

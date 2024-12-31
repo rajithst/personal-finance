@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../../core/api.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
 import {
   Widget,
   WidgetComponent,
@@ -12,24 +12,27 @@ import {
 import {
   IndustryAllocationWidget,
   MonthlyInvestmentWidget,
+  PortfolioAllocationWidget,
   PortfolioGrowthWidget,
-  SectorAllocationWidget,
+  SectorAllocationWidget, SectorPerformanceWidget,
 } from './widgets/chart-widgets';
 import { PortfolioService } from './portfolio.service';
 import { InvestmentStore } from '../../core/store/investment.store';
 import { LoadingComponent } from '../../components/loading/loading.component';
+import { DataService } from '../../service/data.service';
 
 @Component({
   selector: 'app-portfolio',
   template: `
     @if (portfolioService.loading()) {
       <app-loading></app-loading>
+    } @else {
+      <div class="dashboard-widgets">
+        @for (widget of widgets; track widget) {
+          <app-widget [data]="widget"></app-widget>
+        }
+      </div>
     }
-    <div class="dashboard-widgets">
-      @for (widget of widgets; track widget) {
-        <app-widget [data]="widget"></app-widget>
-      }
-    </div>
   `,
   styles: `
     .dashboard-widgets {
@@ -46,20 +49,31 @@ import { LoadingComponent } from '../../components/loading/loading.component';
 })
 export class PortfolioComponent implements OnInit, OnDestroy {
   protected readonly destroyed$ = new ReplaySubject<void>(1);
+  private readonly dataService = inject(DataService);
   private readonly apiService = inject(ApiService);
   private readonly store = inject(InvestmentStore);
   readonly portfolioService = inject(PortfolioService);
   widgets: Widget[] = [];
 
   ngOnInit() {
-    this.portfolioService.setLoading(true);
-    this.apiService
-      .getPortfolioPerformance(this.store.currentPortfolio()?.id ?? 0)
-      .then((portfolio) => {
-        this.portfolioService.setPortfolioData(portfolio);
-        this.prepareWidgets();
-        this.portfolioService.setLoading(false);
+    this.dataService.portfolioSwitcher
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((portfolioId) => {
+        if (!portfolioId) {
+          return;
+        }
+        this.getPortfolioData().then();
       });
+  }
+
+  async getPortfolioData() {
+    this.portfolioService.setLoading(true);
+    const portfolio = await this.apiService.getPortfolioPerformance(
+      this.store.currentPortfolio()?.id ?? 0,
+    );
+    this.portfolioService.setPortfolioData(portfolio);
+    this.prepareWidgets();
+    this.portfolioService.setLoading(false);
   }
 
   prepareWidgets() {
@@ -122,10 +136,26 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       },
       {
         id: 1,
+        label: 'Portfolio Allocation',
+        content: PortfolioAllocationWidget,
+        rows: 3,
+        columns: 2,
+        hideSettingsButton: true,
+      },
+      {
+        id: 1,
+        label: '',
+        content: SectorPerformanceWidget,
+        rows: 3,
+        columns: 2,
+        hideSettingsButton: true,
+      },
+      {
+        id: 1,
         label: 'Industry Allocation',
         content: IndustryAllocationWidget,
         rows: 3,
-        columns: 2,
+        columns: 1,
         hideSettingsButton: true,
       },
       {
@@ -133,7 +163,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
         label: 'Sector Allocation',
         content: SectorAllocationWidget,
         rows: 3,
-        columns: 2,
+        columns: 1,
         hideSettingsButton: true,
       },
     ];

@@ -4,6 +4,21 @@ export interface Portfolio {
   description?: string;
   currency?: string;
 }
+
+export interface Growth {
+  date: string;
+  total_invested: number;
+  portfolio_value: number;
+  growth: number;
+}
+
+export interface SectorPerformance {
+  sector: string;
+  total_investment: number;
+  total_current_value: number;
+  total_profit_loss: number;
+}
+
 export interface PortfolioPerformance {
   total_investment: number;
   current_portfolio_value: number;
@@ -11,7 +26,8 @@ export interface PortfolioPerformance {
   monthly_investment: DateValueMap;
   sector_allocation: CategoryAllocation[];
   industry_allocation: CategoryAllocation[];
-  growth: any[];
+  sector_performance: SectorPerformance[];
+  growth: Growth[];
 }
 
 export interface DateValueMap {

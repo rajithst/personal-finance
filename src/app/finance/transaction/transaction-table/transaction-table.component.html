@@ -243,6 +243,12 @@
               <th mat-header-cell mat-sort-header *matHeaderCellDef>Amount</th>
               <td mat-cell *matCellDef="let element">
                 ¥{{ showValues ? (element.amount | number: "1.2-2") : "--" }}
+                @if (element.notes) {
+                  <mat-icon class="note-icon"
+                    matTooltip="{{ element.notes }}"
+                    matTooltipPosition="below"
+                    >chat</mat-icon>
+                }
               </td>
             </ng-container>
 

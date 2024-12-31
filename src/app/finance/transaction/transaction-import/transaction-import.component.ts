@@ -209,7 +209,7 @@ export class TransactionImportComponent {
   }
 
   cancel() {
-    this.dialogRef.close(this.progress === 100 && this.uploadComplete);
+    this.dialogRef.close();
   }
 
   close() {

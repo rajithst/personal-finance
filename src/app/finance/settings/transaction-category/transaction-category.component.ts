@@ -77,6 +77,8 @@ export class TransactionCategoryComponent implements OnInit {
     const allCategories = this.store.transactionCategories();
     const allSubCategories = this.store.transactionSubCategories();
     this.categorySettings = [];
+    console.log(allCategories);
+    console.log(allSubCategories);
     allCategories.forEach((category) => {
       const subs = allSubCategories.filter(
         (sub) => category.id === sub.category,

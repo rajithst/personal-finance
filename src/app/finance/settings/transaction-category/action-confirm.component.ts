@@ -49,7 +49,6 @@ interface CategoryDeleteDialogData {
     MatButton,
     MatDialogClose,
   ],
-  providers: [FinanceStore],
 })
 export class ActionConfirmComponent {
   private readonly store = inject(FinanceStore);

@@ -7,6 +7,14 @@ mat-expansion-panel {
   ));
 }
 
+mat-menu > mat-icon {
+  color: #659fdf;
+}
+
+mat-icon.note-icon {
+  color: #81b7f4;
+}
+
 .transaction-panel {
   margin: 10px 0;
 }

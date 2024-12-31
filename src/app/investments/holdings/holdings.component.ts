@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { HoldingUpdateComponent } from './holding-update/holding-update.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -9,9 +9,10 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { HoldingImportComponent } from './holding-import/holding-import.component';
 import { ApiService } from '../../core/api.service';
-import {Observable, of} from 'rxjs';
+import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
 import { Holding } from '../model/holding';
-import {InvestmentStore} from "../../core/store/investment.store";
+import { InvestmentStore } from '../../core/store/investment.store';
+import { DataService } from '../../service/data.service';
 
 const DIALOG_WIDTH = '900px';
 const DIALOG_TOP_POSITION = '5%';
@@ -28,19 +29,30 @@ const DIALOG_TOP_POSITION = '5%';
     AsyncPipe,
   ],
 })
-export class HoldingsComponent implements OnInit {
+export class HoldingsComponent implements OnInit, OnDestroy {
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly apiService = inject(ApiService);
   private readonly store = inject(InvestmentStore);
+  private readonly destroyed$ = new ReplaySubject<void>(1);
+  private readonly dataService = inject(DataService);
   holdings$: Observable<Holding[]>;
 
   ngOnInit(): void {
-    this.getHoldings();
+    this.dataService.portfolioSwitcher
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((portfolioId) => {
+        if (!portfolioId) {
+          return;
+        }
+        this.getHoldings().then();
+      });
   }
 
   async getHoldings() {
-    const holdings = await this.apiService.getHoldings(this.store.currentPortfolio()?.id ?? 0);
+    const holdings = await this.apiService.getHoldings(
+      this.store.currentPortfolio()?.id ?? 0,
+    );
     this.holdings$ = of(holdings);
   }
 
@@ -58,7 +70,7 @@ export class HoldingsComponent implements OnInit {
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
-        this.getHoldings();
+        this.getHoldings().then();
       }
     });
   }
@@ -71,10 +83,20 @@ export class HoldingsComponent implements OnInit {
         top: DIALOG_TOP_POSITION,
       },
     });
-    dialog.afterClosed().subscribe((result) => {
-      if (result.refresh) {
-        this.getHoldings();
+    dialog.afterClosed().subscribe((result: boolean | undefined) => {
+      if (result !== undefined) {
+        const message = result ? 'Imported Successfully!' : 'Failed to import!';
+        const action = result ? 'Success' : 'Error';
+        this.snackBar.open(message, action, {
+          duration: 3000,
+        });
+        this.getHoldings().then();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

@@ -1,10 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { DividendTableComponent } from './dividend-table/dividend-table.component';
-import { Observable, of } from 'rxjs';
+import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
 import { ApiService } from '../../core/api.service';
 import { AsyncPipe } from '@angular/common';
 import { MonthlyDividend } from '../model/dividend';
-import { InvestmentStore } from '../../core/store/investment.store';
+import { DataService } from '../../service/data.service';
 
 @Component({
   selector: 'app-dividend',
@@ -14,16 +14,31 @@ import { InvestmentStore } from '../../core/store/investment.store';
   styles: ``,
   imports: [DividendTableComponent, AsyncPipe],
 })
-export class DividendComponent implements OnInit {
+export class DividendComponent implements OnInit, OnDestroy {
   private readonly apiService = inject(ApiService);
-  private readonly store = inject(InvestmentStore);
+  private readonly destroyed$ = new ReplaySubject<void>(1);
+  private readonly dataService = inject(DataService);
   dividends$: Observable<MonthlyDividend[]>;
 
   ngOnInit(): void {
-    this.apiService
-      .getDividends(this.store.currentPortfolio()?.id ?? 0)
-      .then((dividends) => {
-        this.dividends$ = of(dividends);
+    this.dataService.portfolioSwitcher
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((portfolioId) => {
+        if (!portfolioId) {
+          return;
+        }
+        this.getDividends(portfolioId).then();
       });
+  }
+
+  async getDividends(portfolioId: number) {
+    await this.apiService.getDividends(portfolioId).then((dividends) => {
+      this.dividends$ = of(dividends);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

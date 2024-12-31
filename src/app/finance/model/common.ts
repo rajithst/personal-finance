@@ -1,5 +1,10 @@
 import { CreditAccount } from './account';
 
+export interface AccountProvider {
+  'provider_type': string;
+  'value': string;
+}
+
 export interface TransactionCategory {
   id: number;
   category: string;
@@ -19,5 +24,7 @@ export interface TransactionSubCategory {
 export interface ClientSettings {
   accounts: CreditAccount[];
   transaction_categories: TransactionCategory[];
-  transaction_sub_categories: TransactionSubCategory[];
+  transaction_subcategories: TransactionSubCategory[];
+  account_types: string[];
+  account_providers: AccountProvider[];
 }
