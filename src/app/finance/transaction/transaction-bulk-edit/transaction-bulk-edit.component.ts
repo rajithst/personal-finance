@@ -38,7 +38,7 @@ export class TransactionBulkEditComponent {
   data = inject<TransactionBulkEditData>(MAT_DIALOG_DATA);
 
   cancel() {
-    this.dialogRef.close(false);
+    this.dialogRef.close();
   }
 
   async submit() {

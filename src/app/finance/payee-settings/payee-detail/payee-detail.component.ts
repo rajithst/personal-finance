@@ -79,6 +79,7 @@ export class PayeeDetailComponent implements OnInit {
   async getPayeeDetail() {
     const payeeId = this.activatedRoute.snapshot.paramMap.get('id');
     const payeeName = this.activatedRoute.snapshot.paramMap.get('name');
+    console.log(payeeId, payeeName);
     let payeeDetail: PayeeDetail | null = null;
     if (payeeId) {
       payeeDetail = await this.apiService.getPayeeDetail(payeeId);

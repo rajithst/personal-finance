@@ -209,30 +209,39 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     this.applyFiltersToTables();
   }
 
-  editTransaction(item: TransactionExpand) {
+  updateTransaction(item?: TransactionExpand) {
     const dialog = this.dialog.open(TransactionUpdateDialog, {
       maxWidth: DIALOG_WIDTH,
       position: {
         top: DIALOG_TOP_POSITION,
       },
-      data: { formData: item, task: 'edit' },
+      data: { formData: item ?? null, task: item ? 'edit' : 'add' },
     });
 
-    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result?.data) {
-        const responseData = result.data as TransactionExpand;
-        let targetTableIndex = this.getTableIndexFromTransaction(responseData);
-        this.updateInAllTransactions(targetTableIndex, responseData);
-        this.refreshUpdatedDataSourceTable(targetTableIndex);
-        this.snackBar.open('Updated!', 'Success', {
-          duration: 3000,
-        });
-      } else if (result && !result.status) {
-        this.snackBar.open('Failed to update!', 'Error', {
-          duration: 3000,
-        });
-      }
-    });
+    dialog
+      .afterClosed()
+      .subscribe((result: TransactionExpand | null | undefined) => {
+        if (result !== undefined && result !== null) {
+          const responseData = result;
+          let targetTableIndex =
+            this.getTableIndexFromTransaction(responseData);
+          if (targetTableIndex === -1) {
+            this.insertNewTransactionToDataSource(responseData);
+            targetTableIndex = this.getTableIndexFromTransaction(responseData);
+          }
+          this.updateInAllTransactions(targetTableIndex, responseData);
+          this.refreshUpdatedDataSourceTable(targetTableIndex);
+          const message = item ? 'Updated!' : 'Added!';
+          this.snackBar.open(message, 'Success', {
+            duration: 3000,
+          });
+        } else if (result === null) {
+          const message = item ? 'Failed to update!' : 'Failed to add!';
+          this.snackBar.open(message, 'Error', {
+            duration: 3000,
+          });
+        }
+      });
   }
 
   deleteTransaction(item: TransactionExpand) {
@@ -243,49 +252,22 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       },
       data: { formData: item, task: 'delete' },
     });
-    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result) {
-        const responseData = result.data as TransactionExpand;
-        let targetTableIndex = this.getTableIndexFromTransaction(responseData);
-        this.removeFromTransactions(targetTableIndex, [responseData.id!]);
-        this.refreshUpdatedDataSourceTable(targetTableIndex);
-        this.snackBar.open('Deleted!', 'Success', {
-          duration: 3000,
-        });
-      } else {
-        this.snackBar.open('Failed to delete!', 'Error', {});
-      }
-    });
-  }
-
-  addTransaction() {
-    const dialog = this.dialog.open(TransactionUpdateDialog, {
-      maxWidth: DIALOG_WIDTH,
-      position: {
-        top: DIALOG_TOP_POSITION,
-      },
-      data: { formData: null, task: 'add' },
-    });
-    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result) {
-        const responseData = result.data as TransactionExpand;
-        let targetTableIndex = this.getTableIndexFromTransaction(responseData);
-        if (targetTableIndex === -1) {
-          this.insertNewTransactionToDataSource(responseData);
-          targetTableIndex = this.getTableIndexFromTransaction(responseData);
-        } else {
-          this.updateInAllTransactions(targetTableIndex, responseData);
+    dialog
+      .afterClosed()
+      .subscribe((result: TransactionExpand | null | undefined) => {
+        if (result !== undefined && result !== null) {
+          const responseData = result;
+          let targetTableIndex =
+            this.getTableIndexFromTransaction(responseData);
+          this.removeFromTransactions(targetTableIndex, [responseData.id!]);
+          this.refreshUpdatedDataSourceTable(targetTableIndex);
+          this.snackBar.open('Deleted!', 'Success', {
+            duration: 3000,
+          });
+        } else if (result === null) {
+          this.snackBar.open('Failed to delete!', 'Error', {});
         }
-        this.refreshUpdatedDataSourceTable(targetTableIndex);
-        this.snackBar.open('Added Successfully!', 'Success', {
-          duration: 3000,
-        });
-      } else {
-        this.snackBar.open('Failed to add!', 'Error', {
-          duration: 3000,
-        });
-      }
-    });
+      });
   }
 
   mergeTransactions() {
@@ -312,9 +294,9 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         mergeIds: mergeIds,
       },
     });
-    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result) {
-        const responseData = result.data as TransactionExpand;
+    dialog.afterClosed().subscribe((result: TransactionExpand | null | undefined) => {
+      if (result !== undefined && result !== null) {
+        const responseData = result;
         const targetTableIndex =
           this.getTableIndexFromTransaction(responseData);
         this.removeFromTransactions(targetTableIndex, mergeIds as number[]);
@@ -324,7 +306,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.snackBar.open('Updated!', 'Success', {
           duration: 3000,
         });
-      } else {
+      } else if (result === null) {
         this.selection.clear();
         this.snackBar.open('Failed to merge!', 'Error', {});
       }
@@ -341,23 +323,25 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         formData: item,
       },
     });
-    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result) {
-        const responseData = result.data as TransactionExpand[];
-        const targetTableIndex = this.getTableIndexFromTransaction(item);
-        responseData.forEach((updatedTransaction) => {
-          this.updateInAllTransactions(targetTableIndex, updatedTransaction);
-        });
-        this.refreshUpdatedDataSourceTable(targetTableIndex);
-        this.snackBar.open('Updated!', 'Success', {
-          duration: 3000,
-        });
-      } else {
-        this.snackBar.open('Failed to split!', 'Error', {
-          duration: 3000,
-        });
-      }
-    });
+    dialog
+      .afterClosed()
+      .subscribe((result: TransactionExpand[] | null | undefined) => {
+        if (result !== undefined && result !== null) {
+          const responseData = result;
+          const targetTableIndex = this.getTableIndexFromTransaction(item);
+          responseData.forEach((updatedTransaction) => {
+            this.updateInAllTransactions(targetTableIndex, updatedTransaction);
+          });
+          this.refreshUpdatedDataSourceTable(targetTableIndex);
+          this.snackBar.open('Updated!', 'Success', {
+            duration: 3000,
+          });
+        } else if (result === null) {
+          this.snackBar.open('Failed to split!', 'Error', {
+            duration: 3000,
+          });
+        }
+      });
   }
 
   bulkEditTransactions() {
@@ -371,13 +355,9 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         task: 'edit',
       },
     });
-    dialog.afterClosed().subscribe((result: TransactionExpand | null) => {
-      if (result) {
-        const targetTableIndex = this.getTableIndexFromTransaction(result);
-        this.updateInAllTransactions(targetTableIndex, result);
-        this.refreshUpdatedDataSourceTable(targetTableIndex);
-        this.selection.clear();
-        this.bulkSelectedTableIndex = -1;
+    dialog.afterClosed().subscribe((result: TransactionExpand[] | null | undefined) => {
+      if (result !== undefined && result !== null) {
+        console.log(result);
       }
     });
   }
@@ -393,9 +373,9 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         task: 'delete',
       },
     });
-    dialog.afterClosed().subscribe((result: TransactionActionResult) => {
-      if (result) {
-        const responseData = result.data as TransactionExpand[];
+    dialog.afterClosed().subscribe((result: TransactionExpand[] | null | undefined) => {
+      if (result !== undefined && result !== null) {
+        const responseData = result;
         const tempTransaction = responseData[0];
         const deleteIds = responseData.map((x) => x.id as number);
         const targetTableIndex =
@@ -403,16 +383,20 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.removeFromTransactions(targetTableIndex, deleteIds);
         this.refreshUpdatedDataSourceTable(targetTableIndex);
         this.selection.clear();
+        this.snackBar.open('Deleted!', 'Success', {
+          duration: 3000,
+        });
         this.bulkSelectedTableIndex = -1;
+      } else if (result === null) {
+        this.snackBar.open('Failed to delete!', 'Error', {
+          duration: 3000,
+        });
       }
     });
   }
 
   showPayeeDetail(destination: string) {
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree([`/payee-settings/${destination}`]),
-    );
-    window.open(url, '_blank');
+    this.router.navigate(['/payee-settings', destination]);
   }
 
   importTransaction() {

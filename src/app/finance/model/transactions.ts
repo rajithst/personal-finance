@@ -1,7 +1,3 @@
-export interface TransactionsResponse {
-  data: MonthlyTransaction[];
-}
-
 export interface MonthlyTransaction {
   year: number;
   month: number;
@@ -70,23 +66,8 @@ export interface BulkDeleteRequest {
   delete_ids: number[] | null;
 }
 
-export interface BulkDeleteResponse {
-  status: number;
-  data: TransactionExpand[] | null;
-}
-
 export interface TransactionSplitRequest {
   task: string;
   main: TransactionExpand;
   splits: TransactionSplit[];
-}
-
-export interface TransactionSplitResponse {
-  status: number;
-  data: TransactionExpand[] | null;
-}
-export interface TransactionActionResult {
-  refresh: boolean;
-  data: TransactionExpand | TransactionExpand[] | null;
-  action: string;
 }

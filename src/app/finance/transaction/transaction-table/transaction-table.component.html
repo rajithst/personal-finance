@@ -102,7 +102,7 @@
       <mat-icon>upload</mat-icon>
     </button>
     <button
-      (click)="addTransaction()"
+      (click)="updateTransaction()"
       mat-mini-fab
       matTooltip="Add Transactions"
       matTooltipPosition="below"
@@ -263,7 +263,7 @@
                     <mat-icon>info</mat-icon>
                     <span>View More</span>
                   </button>
-                  <button mat-menu-item (click)="editTransaction(element)">
+                  <button mat-menu-item (click)="updateTransaction(element)">
                     <mat-icon>edit</mat-icon>
                     <span>Edit</span>
                   </button>

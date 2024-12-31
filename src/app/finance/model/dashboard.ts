@@ -35,7 +35,3 @@ interface CategoryAmount {
   category_id: number;
   amount: number;
 }
-
-
-
-
