@@ -8,6 +8,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { AuthStore } from './auth/auth.store';
+import {INCOME} from "./finance/data/client.data";
 
 @Component({
   selector: 'app-root',
@@ -39,4 +40,6 @@ export class AppComponent {
     this.authStore.logout();
     this.router.navigate(['/login']).then();
   }
+
+  protected readonly INCOME = INCOME;
 }

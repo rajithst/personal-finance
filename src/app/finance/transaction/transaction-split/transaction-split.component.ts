@@ -183,10 +183,10 @@ export class TransactionSplitComponent implements OnInit {
   private _filter(value: string): Payee[] {
     const filterValue = value.toLowerCase();
 
-    return this.payees.filter(
-      (option) =>
-        option.destination !== null &&
-        option.destination.toLowerCase().includes(filterValue),
+    return this.payees.filter((option) =>
+      option.destination !== null
+        ? option.destination.toLowerCase().includes(filterValue)
+        : false,
     );
   }
 }

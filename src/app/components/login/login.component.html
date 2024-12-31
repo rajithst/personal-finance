@@ -1,0 +1,35 @@
+<mat-card appearance="outlined">
+  <mat-card-title>Login</mat-card-title>
+  <form (ngSubmit)="submit()" [formGroup]="loginForm">
+    <mat-card-content>
+      <p *ngIf="invalidLogin" class="invalid-login">
+        Invalid Login credentials!
+      </p>
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-icon matSuffix>account_circle</mat-icon>
+        <mat-label>Username</mat-label>
+        <input formControlName="username" matInput placeholder="User name" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-icon matSuffix>password</mat-icon>
+        <mat-label>Password</mat-label>
+        <input
+          formControlName="password"
+          matInput
+          placeholder="Password"
+          type="password"
+        />
+      </mat-form-field>
+      <div class="submit-button">
+        <button
+          [disabled]="loginForm.invalid"
+          class="form-field"
+          color="primary"
+          mat-raised-button
+        >
+          Login
+        </button>
+      </div>
+    </mat-card-content>
+  </form>
+</mat-card>
