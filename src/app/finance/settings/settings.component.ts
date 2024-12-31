@@ -4,8 +4,24 @@ import {Router, RouterLink, RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrl: './settings.component.scss',
+  template: `
+    <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
+      @for (link of tabs; track link) {
+        <a
+          mat-tab-link
+          [routerLink]="link.route"
+          (click)="activeLink = link"
+          [active]="activeLink == link"
+        >
+          {{ link.label }}
+        </a>
+      }
+    </nav>
+    <mat-tab-nav-panel #tabPanel>
+      <router-outlet></router-outlet>
+    </mat-tab-nav-panel>
+  `,
+  styles: ``,
   imports: [MatTabLink, MatTabNav, MatTabNavPanel, RouterLink, RouterOutlet],
 })
 export class SettingsComponent implements OnInit {

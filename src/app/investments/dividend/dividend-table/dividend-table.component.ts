@@ -53,6 +53,4 @@ export class DividendTableComponent {
     'symbol',
     'action',
   ];
-
-  dividendPaymentFlow(element: any) {}
 }
