@@ -185,8 +185,8 @@ export class PortfolioGrowthWidget implements OnInit {
 
   ngOnInit() {
     const data = this.portfolioService.portfolioData()?.growth ?? [];
-    const invested = data.map((x) => x['total_invested']);
-    const current = data.map((x) => x['total_invested']);
+    const invested = data.map((x) => x['total_investment']);
+    const current = data.map((x) => x['portfolio_value']);
     this.labels = data.map((x) => x.date);
     this.datasets = [
       { label: 'Invested', data: invested || [] },

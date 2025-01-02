@@ -7,9 +7,10 @@ export interface Portfolio {
 
 export interface Growth {
   date: string;
-  total_invested: number;
+  total_investment: number;
   portfolio_value: number;
-  growth: number;
+  total_profit: number;
+  daily_return: number;
 }
 
 export interface SectorPerformance {
