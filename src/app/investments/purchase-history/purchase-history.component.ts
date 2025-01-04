@@ -4,23 +4,42 @@ import { AsyncPipe } from '@angular/common';
 import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
 import { ApiService } from '../../core/api.service';
 import { StockPurchaseHistory } from '../model/stock';
-import { InvestmentStore } from '../../core/store/investment.store';
 import { DataService } from '../../service/data.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatMiniFabButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-purchase-history',
   template: `
+    <div class="sub-toolbar">
+      <div class="sub-toolbar-info"></div>
+      <div class="sub-toolbar-actions">
+        <button
+          mat-mini-fab
+          matTooltip="Add Dividend Payment"
+          matTooltipPosition="below"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
     <app-purchase-history-table
       [purchaseHistory]="purchaseHistory$ | async"
     ></app-purchase-history-table>
   `,
   styles: ``,
-  imports: [PurchaseHistoryTableComponent, AsyncPipe],
+  imports: [
+    PurchaseHistoryTableComponent,
+    AsyncPipe,
+    MatIcon,
+    MatMiniFabButton,
+    MatTooltip,
+  ],
 })
 export class PurchaseHistoryComponent implements OnInit, OnDestroy {
   private readonly apiService = inject(ApiService);
   private readonly destroyed$ = new ReplaySubject<void>(1);
-  private readonly store = inject(InvestmentStore);
   private readonly dataService = inject(DataService);
   purchaseHistory$: Observable<StockPurchaseHistory[]>;
 

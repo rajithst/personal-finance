@@ -5,7 +5,6 @@ import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 @Component({
   selector: 'app-reports',
   template: `
-    <div class="data-card-content"></div>
     <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
       @for (link of tabs; track link) {
         <a

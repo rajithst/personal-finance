@@ -55,8 +55,19 @@ mat-option {
   font-size: 14px !important;
 }
 
-.searchbar-wrapper {
-  width: 100%;
+.sub-toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+  background: #e8e8e8;
+  padding: 5px;
+  border-radius: 10px;
+}
+.sub-toolbar > .sub-toolbar-actions {
+  display: flex;
+  > button {
+    margin: 0 2px;
+  }
 }
 
 .coincraft-input {

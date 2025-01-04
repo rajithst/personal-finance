@@ -91,16 +91,20 @@ export class InvestmentsComponent implements OnInit {
 
   tabs = [
     { label: 'Portfolio', route: 'portfolio' },
-    { label: 'Holdings', route: 'holdings' },
-    { label: 'Dividends', route: 'dividends' },
+    { label: 'Holdings', route: 'holdings' , },
+    { label: 'Dividends', route: 'dividends', subPaths: ['history'] },
     { label: 'Purchase History', route: 'purchase-history' },
   ];
+
+  subPaths = [
+
+  ]
   activeLink = { label: '', route: '' };
 
   ngOnInit() {
     const currentPath = this.router.url.split('/').at(-1);
     this.activeLink =
-      this.tabs.find((tab) => tab.route === currentPath) || this.tabs[0];
+      this.tabs.find((tab) => tab.route === currentPath || tab?.subPaths?.includes(currentPath ?? '')) || this.tabs[0];
     this.dataService.setPortfolioSwitch(this.store.currentPortfolio()?.id ?? 0);
   }
 

@@ -1,0 +1,32 @@
+<div class="sub-toolbar">
+  <div class="sub-toolbar-info"></div>
+  <div class="sub-toolbar-actions">
+    <button
+      mat-mini-fab
+      matTooltip="Add Dividend Payment"
+      matTooltipPosition="below"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>
+<div class="dividend-container">
+  <div class="dashboard-widgets">
+    @for (widget of widgets; track widget) {
+      <app-widget [data]="widget"></app-widget>
+    }
+  </div>
+  <div class="dividend-table">
+    <div class="sub-toolbar dividend-table-toolbar">
+      <div class="sub-toolbar-info">
+        <h3>Latest dividend payments</h3>
+      </div>
+      <div class="sub-toolbar-actions">
+        <button mat-stroked-button color="primary" routerLink="history">
+          See All Dividend Payments
+        </button>
+      </div>
+    </div>
+    <app-dividend-table [dividends]="dividends$ | async"></app-dividend-table>
+  </div>
+</div>

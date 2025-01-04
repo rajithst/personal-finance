@@ -1,24 +1,44 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { DividendTableComponent } from './dividend-table/dividend-table.component';
-import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
-import { ApiService } from '../../core/api.service';
+import {Observable, of, ReplaySubject, takeUntil} from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { MonthlyDividend } from '../model/dividend';
 import { DataService } from '../../service/data.service';
+import {
+  Widget,
+  WidgetComponent,
+} from '../../components/widget/widget.component';
+import {
+  DividendHistoryWidget,
+  DividendSummaryWidget,
+} from './widgets/dividend-history-widget';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
+import { InvestmentStore } from '../../core/store/investment.store';
 
 @Component({
   selector: 'app-dividend',
-  template: `<app-dividend-table
-    [dividends]="dividends$ | async"
-  ></app-dividend-table>`,
-  styles: ``,
-  imports: [DividendTableComponent, AsyncPipe],
+  templateUrl: './dividend.component.html',
+  styleUrl: './dividend.component.scss',
+  imports: [
+    WidgetComponent,
+    AsyncPipe,
+    DividendTableComponent,
+    MatIcon,
+    MatMiniFabButton,
+    MatTooltip,
+    MatButton,
+    RouterLink,
+  ],
 })
 export class DividendComponent implements OnInit, OnDestroy {
-  private readonly apiService = inject(ApiService);
   private readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly dataService = inject(DataService);
-  dividends$: Observable<MonthlyDividend[]>;
+  private readonly store = inject(InvestmentStore);
+  dividends$: Observable<MonthlyDividend[] | null>;
+  widgets: Widget[] = [];
 
   ngOnInit(): void {
     this.dataService.portfolioSwitcher
@@ -32,9 +52,30 @@ export class DividendComponent implements OnInit, OnDestroy {
   }
 
   async getDividends(portfolioId: number) {
-    await this.apiService.getDividends(portfolioId).then((dividends) => {
-      this.dividends$ = of(dividends);
-    });
+    await this.store.getDividends(portfolioId);
+    this.dividends$ = of(this.store.dividends().slice(-1));
+    this.prepareWidgets();
+  }
+
+  prepareWidgets() {
+    this.widgets = [
+      {
+        id: 1,
+        label: 'Dividend Summary',
+        content: DividendSummaryWidget,
+        rows: 2,
+        columns: 1,
+        hideSettingsButton: true,
+      },
+      {
+        id: 1,
+        label: 'Dividend History',
+        content: DividendHistoryWidget,
+        rows: 2,
+        columns: 3,
+        hideSettingsButton: true,
+      },
+    ];
   }
 
   ngOnDestroy(): void {

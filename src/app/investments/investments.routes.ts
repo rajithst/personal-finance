@@ -4,6 +4,7 @@ import { InvestmentsComponent } from './investments.component';
 import { HoldingsComponent } from './holdings/holdings.component';
 import { DividendComponent } from './dividend/dividend.component';
 import { PurchaseHistoryComponent } from './purchase-history/purchase-history.component';
+import {DividendFlowComponent} from "./dividend/dividend-flow/dividend-flow.component";
 
 export const INVESTMENT_ROUTES: Routes = [
   {
@@ -28,6 +29,11 @@ export const INVESTMENT_ROUTES: Routes = [
       {
         path: 'dividends',
         component: DividendComponent,
+        title: 'Expense Activity',
+      },
+      {
+        path: 'dividends/history',
+        component: DividendFlowComponent,
         title: 'Expense Activity',
       },
       {

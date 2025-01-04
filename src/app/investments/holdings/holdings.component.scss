@@ -1,14 +1,6 @@
-.filters-right {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-  background: #dadada;
-  padding: 5px;
-  border-radius: 10px;
+.holding-container {
+  height: calc(100vh - 220px);
+  padding: 10px;
+  overflow: auto;
 }
-.filters-right > .edit-panel {
-  display: flex;
-  > button {
-    margin: 0 2px;
-  }
-}
+

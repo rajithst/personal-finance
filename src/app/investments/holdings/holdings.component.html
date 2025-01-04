@@ -1,6 +1,6 @@
-<div class="filters-right">
-  <div class="info-panel"></div>
-  <div class="edit-panel">
+<div class="sub-toolbar">
+  <div class="sub-toolbar-info"></div>
+  <div class="sub-toolbar-actions">
     <button
       (click)="importTransaction()"
       mat-mini-fab
@@ -19,4 +19,6 @@
     </button>
   </div>
 </div>
-<app-holding-table [holdings]="holdings$ | async"></app-holding-table>
+<div class="holding-container">
+  <app-holding-table [holdings]="holdings$ | async"></app-holding-table>
+</div>

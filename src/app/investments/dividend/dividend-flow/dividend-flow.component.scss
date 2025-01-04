@@ -1,0 +1,45 @@
+.sub-toolbar {
+  background: transparent;
+}
+.breadcrumb {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.breadcrumb li {
+  font-size: 14px;
+  color: #555;
+  margin-right: 8px;
+}
+
+.breadcrumb li a {
+  text-decoration: none;
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+.breadcrumb li a:hover {
+  color: #0056b3;
+}
+
+.breadcrumb li:after {
+  content: "/";
+  margin-left: 8px;
+  color: #aaa;
+}
+
+.breadcrumb li:last-child:after {
+  content: "";
+}
+
+.breadcrumb li[aria-current="page"] {
+  color: #999;
+  font-weight: bold;
+}
+
+.breadcrumb li[aria-current="page"]:hover {
+  color: #999;
+}

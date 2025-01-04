@@ -1,1 +1,13 @@
-<p>dividend-flow works!</p>
+<div class="sub-toolbar">
+  <div class="sub-toolbar-info">
+    <nav aria-label="Breadcrumb">
+      <ul class="breadcrumb">
+        <li><a routerLink="/investments/dividends">Dividend</a></li>
+        <li aria-current="page">Dividend History</li>
+      </ul>
+    </nav>
+  </div>
+  <div class="sub-toolbar-actions">
+  </div>
+</div>
+<app-dividend-table [dividends]="dividends$ | async"></app-dividend-table>

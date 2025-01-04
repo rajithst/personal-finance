@@ -64,6 +64,7 @@ export class PortfolioAllocationWidget implements OnInit {
       [labels]="labels"
       [datasets]="datasets"
       [options]="options"
+      [plugins]="plugins"
     ></app-chart-widget>
   `,
   styles: ``,
@@ -81,6 +82,11 @@ export class IndustryAllocationWidget implements OnInit {
           autoSkip: false,
         },
       },
+    },
+  };
+  plugins = {
+    legend: {
+      display: false,
     },
   };
   ngOnInit() {
@@ -105,6 +111,7 @@ export class IndustryAllocationWidget implements OnInit {
       [labels]="labels"
       [datasets]="datasets"
       [options]="options"
+      [plugins]="plugins"
     ></app-chart-widget>
   `,
   styles: ``,
@@ -124,6 +131,12 @@ export class SectorAllocationWidget implements OnInit {
       },
     },
   };
+  plugins = {
+    legend: {
+      display: false,
+    },
+  };
+
   ngOnInit() {
     const data = this.portfolioService.portfolioData()?.sector_allocation ?? [];
     this.labels = Object.keys(data);
@@ -141,6 +154,7 @@ export class SectorAllocationWidget implements OnInit {
       [chartType]="'bar'"
       [labels]="labels"
       [datasets]="datasets"
+      [plugins]="plugins"
     ></app-chart-widget>
   `,
   styles: ``,
@@ -150,6 +164,11 @@ export class MonthlyInvestmentWidget implements OnInit {
 
   labels: string[] = [];
   datasets: any[] = [];
+  plugins = {
+    legend: {
+      display: false,
+    },
+  }
 
   ngOnInit() {
     const data =

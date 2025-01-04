@@ -6,7 +6,7 @@
         <div class="step-content">
           <form [formGroup]="accountForm">
             <ng-template matStepLabel>Select Broker & Portfolio</ng-template>
-            <mat-form-field appearance="outline" class="coincraft-input">
+            <mat-form-field appearance="outline">
               <mat-label>Account</mat-label>
               <mat-select formControlName="account">
                 @for (exc of myAccounts; track exc) {
@@ -14,7 +14,7 @@
                 }
               </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="coincraft-input">
+            <mat-form-field appearance="outline">
               <mat-label>Portfolio</mat-label>
               <mat-select formControlName="portfolio">
                 @for (exc of myPortfolios; track exc) {
@@ -84,7 +84,7 @@
       <mat-step>
         <ng-template matStepLabel>Advanced Settings</ng-template>
         <div class="step-content">
-          <mat-form-field class="coincraft-input">
+          <mat-form-field>
             <mat-label>Date range</mat-label>
             <mat-date-range-input
               [formGroup]="rangeForm"

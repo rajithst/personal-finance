@@ -128,7 +128,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       },
       {
         id: 1,
-        label: 'Monthly Investment',
+        label: 'Monthly Purchases',
         content: MonthlyInvestmentWidget,
         rows: 3,
         columns: 2,
