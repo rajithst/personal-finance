@@ -52,11 +52,11 @@ export class AuthService {
     return this.loggedInUser;
   }
 
-  get isLoggedIn() {
+  get isTokenExpired() {
     const token = this.getToken();
-    if (!token) return false;
+    if (!token) return true;
     const helper = new JwtHelperService();
-    return !helper.isTokenExpired(token);
+    return helper.isTokenExpired(token);
   }
 
   unAuthorizedLogout() {

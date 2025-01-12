@@ -6,7 +6,7 @@ import {
   WidgetComponent,
 } from '../../components/widget/widget.component';
 import {
-  PortfolioGainsWidget,
+  PortfolioGainsWidget, PortfolioPassiveIncomeWidget,
   PortfolioValueWidget,
 } from './widgets/summary-widgets';
 import {
@@ -111,7 +111,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       {
         id: 1,
         label: 'Passive Income',
-        content: PortfolioGainsWidget,
+        content: PortfolioPassiveIncomeWidget,
         rows: 1,
         columns: 1,
         backgroundColor: '#003f5c',

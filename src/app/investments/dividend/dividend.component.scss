@@ -1,16 +1,14 @@
 .dashboard-widgets {
-  height: 35%;
-  overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(4, minmax(150px, 0.5fr));
-  grid-auto-rows: 120px;
   gap: 10px;
+
 }
 
 .dividend-container {
-  height: calc(100vh - 100px);
+  height: calc(100vh - 220px);
   padding: 10px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .dividend-table-toolbar {

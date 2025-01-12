@@ -12,9 +12,8 @@
 </div>
 <div class="dividend-container">
   <div class="dashboard-widgets">
-    @for (widget of widgets; track widget) {
-      <app-widget [data]="widget"></app-widget>
-    }
+    <app-widget [data]="widgets[0]"></app-widget>
+    <app-widget [data]="widgets[1]"></app-widget>
   </div>
   <div class="dividend-table">
     <div class="sub-toolbar dividend-table-toolbar">

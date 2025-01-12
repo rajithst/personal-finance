@@ -19,6 +19,7 @@ import {
 import {MonthlyDividend} from "../../model/dividend";
 import {LoadingComponent} from "../../../components/loading/loading.component";
 import {NorecordsComponent} from "../../../components/norecords/norecords.component";
+import {MatChip, MatChipSet} from "@angular/material/chips";
 
 @Component({
   selector: 'app-dividend-table',
@@ -40,6 +41,8 @@ import {NorecordsComponent} from "../../../components/norecords/norecords.compon
     DecimalPipe,
     LoadingComponent,
     NorecordsComponent,
+    MatChipSet,
+    MatChip,
   ],
 })
 export class DividendTableComponent {

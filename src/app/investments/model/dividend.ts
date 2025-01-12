@@ -3,6 +3,7 @@ export interface MonthlyDividend {
   month: number;
   month_text: string;
   total: number;
+  currency: string;
   dividends: DividendIncome[]
 }
 

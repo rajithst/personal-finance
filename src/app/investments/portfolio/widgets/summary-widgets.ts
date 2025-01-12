@@ -23,11 +23,36 @@ export class PortfolioGainsWidget {
   decimalPipe = inject(DecimalPipe);
   profitLoss = this.chartUtilityService.getTotalProfit();
   totalInvestments = this.chartUtilityService.getTotalInvestments();
-  formattedValue = `$ ${this.decimalPipe.transform(this.profitLoss, '1.2-2')}`;
+  currency = this.chartUtilityService.getCurrentPortfolioCurrency();
+  formattedValue = `${this.currency}${this.decimalPipe.transform(this.profitLoss, '1.2-2')}`;
   color = getColor(this.profitLoss);
   iconText = getIcon(this.profitLoss);
   profitPercentage = (this.profitLoss / this.totalInvestments) * 100;
   totalProfitPercentage = `${this.profitPercentage > 0 ? '+' : '-'}${this.decimalPipe.transform(this.profitPercentage, '1.2-2')} %`;
+}
+
+@Component({
+  selector: 'app-portfolio-gains',
+  providers: [DecimalPipe, ChartUtilityService],
+  imports: [SummaryComponent],
+  template: ` <app-summary
+    [summaryValue]="formattedValue"
+    [color]="color"
+    [iconText]="iconText"
+    [iconColor]="color"
+  >
+  </app-summary>`,
+  styles: ``
+})
+export class PortfolioPassiveIncomeWidget {
+  chartUtilityService = inject(ChartUtilityService);
+  decimalPipe = inject(DecimalPipe);
+  passiveIncome = this.chartUtilityService.getPassiveIncome();
+  currency = this.chartUtilityService.getCurrentPortfolioCurrency();
+  formattedValue = `${this.currency}${this.decimalPipe.transform(this.passiveIncome, '1.2-2')}`;
+  color = getColor(this.passiveIncome);
+  iconText = getIcon(this.passiveIncome);
+
 }
 
 @Component({
@@ -43,8 +68,9 @@ export class PortfolioGainsWidget {
 export class PortfolioValueWidget {
   chartUtilityService = inject(ChartUtilityService);
   decimalPipe = inject(DecimalPipe);
-  formattedValue = `$ ${this.decimalPipe.transform(this.chartUtilityService.getPortfolioValue(), '1.2-2')}`;
-  investedValue = `$ ${this.decimalPipe.transform(this.chartUtilityService.getTotalInvestments(), '1.2-2')}`;
+  currency = this.chartUtilityService.getCurrentPortfolioCurrency();
+  formattedValue = `${this.currency}${this.decimalPipe.transform(this.chartUtilityService.getPortfolioValue(), '1.2-2')}`;
+  investedValue = `${this.currency}${this.decimalPipe.transform(this.chartUtilityService.getTotalInvestments(), '1.2-2')}`;
   summarySubText = `Invested value: ${this.investedValue}`;
 }
 
@@ -53,7 +79,7 @@ function getIcon(value: number) {
 }
 
 function getColor(value: number) {
-  return value > 0 ? 'green' : 'red';
+  return value > 0 ? '#5dd063' : 'red';
 }
 
 

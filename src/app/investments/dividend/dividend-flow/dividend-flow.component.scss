@@ -43,3 +43,8 @@
 .breadcrumb li[aria-current="page"]:hover {
   color: #999;
 }
+
+.dividend-cards {
+  height: calc(100vh - 190px);
+  overflow-x: auto;
+}

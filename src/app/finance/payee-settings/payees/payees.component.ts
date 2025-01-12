@@ -39,10 +39,11 @@ import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
-import { MatIconButton } from '@angular/material/button';
+import {MatIconButton, MatMiniFabButton} from '@angular/material/button';
 import { LoadingComponent } from '../../../components/loading/loading.component';
 import { FinanceStore } from '../../../core/store/finance.store';
 import { NorecordsComponent } from '../../../components/norecords/norecords.component';
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-payees',
@@ -72,6 +73,8 @@ import { NorecordsComponent } from '../../../components/norecords/norecords.comp
     MatIconButton,
     LoadingComponent,
     NorecordsComponent,
+    MatMiniFabButton,
+    MatTooltip,
   ],
 })
 export class PayeesComponent implements OnInit, OnDestroy {

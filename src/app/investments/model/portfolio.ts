@@ -28,6 +28,7 @@ export interface PortfolioPerformance {
   sector_allocation: CategoryAllocation[];
   industry_allocation: CategoryAllocation[];
   sector_performance: SectorPerformance[];
+  passive_income: number;
   growth: Growth[];
 }
 

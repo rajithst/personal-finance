@@ -1,15 +1,11 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {PortfolioService} from "./portfolio.service";
-import {MONTHS} from "../../finance/dashboard/dashboard.data";
+import {InvestmentStore} from "../../core/store/investment.store";
 
 @Injectable()
 export class ChartUtilityService {
-  currentYear = new Date().getFullYear();
-  currentMonthNumber = new Date().getMonth();
-  lastMonthNumber = new Date().getMonth() - 1;
-  currentMonthKey = `${this.currentYear}-${String(this.currentMonthNumber).padStart(2, '0')}-01`;
-
-  constructor(private readonly portfolioService: PortfolioService) {}
+  private readonly portfolioService = inject(PortfolioService);
+  private readonly store = inject(InvestmentStore);
 
   getTotalInvestments(): number {
     return this.portfolioService.portfolioData()?.total_investment ?? 0;
@@ -23,19 +19,18 @@ export class ChartUtilityService {
     return this.getPortfolioValue() - this.getTotalInvestments();
   }
 
-  getMonthList() {
-    return MONTHS.map((month) => month.viewValue);
+  getPassiveIncome() {
+    return this.portfolioService.portfolioData()?.passive_income ?? 0;
   }
 
-  getCurrentMonth() {
-    return (
-      MONTHS.find((m) => m.value === this.currentMonthNumber)?.viewValue ?? ''
-    );
+  getCurrentPortfolioCurrency() {
+    const portfolio = this.store.currentPortfolio();
+    if (portfolio?.currency === 'USD') {
+      return '$';
+    } else if (portfolio?.currency === 'JPY') {
+      return '¥';
+    }
+    return '';
   }
-
-  getCurrentYear() {
-    return this.currentYear.toString();
-  }
-
 
 }
