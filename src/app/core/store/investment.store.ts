@@ -57,9 +57,7 @@ export const InvestmentStore = signalStore(
     },
 
     async getClientSettings() {
-      console.log('getClientSettings');
       const settings = await apiService.initInvestmentSettings();
-      console.log('settings ', settings);
       patchState(store, {
         brokerAccounts: settings.broker_accounts,
         portfolios: settings.portfolios,
@@ -72,7 +70,6 @@ export const InvestmentStore = signalStore(
     async getDividends(portfolioId: number) {
         patchState(store, { loading: true });
         const dividends = await apiService.getDividends(portfolioId);
-        console.log('dividends ', dividends);
         patchState(store, { dividends, loading: false });
     }
   })),

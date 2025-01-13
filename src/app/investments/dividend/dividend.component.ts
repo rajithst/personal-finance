@@ -41,18 +41,20 @@ export class DividendComponent implements OnInit, OnDestroy {
   widgets: Widget[] = [];
 
   ngOnInit(): void {
+    this.getDividends().then();
+
     this.dataService.portfolioSwitcher
       .pipe(takeUntil(this.destroyed$))
       .subscribe((portfolioId) => {
         if (!portfolioId) {
           return;
         }
-        this.getDividends(portfolioId).then();
+        this.getDividends().then();
       });
   }
 
-  async getDividends(portfolioId: number) {
-    await this.store.getDividends(portfolioId);
+  async getDividends() {
+    await this.store.getDividends(this.store.currentPortfolio()?.id ?? 0);
     this.dividends$ = of(this.store.dividends().slice(-1));
     this.prepareWidgets();
   }

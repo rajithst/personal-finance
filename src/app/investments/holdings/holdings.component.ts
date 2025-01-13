@@ -39,6 +39,7 @@ export class HoldingsComponent implements OnInit, OnDestroy {
   holdings$: Observable<Holding[]>;
 
   ngOnInit(): void {
+    this.getHoldings().then();
     this.dataService.portfolioSwitcher
       .pipe(takeUntil(this.destroyed$))
       .subscribe((portfolioId) => {

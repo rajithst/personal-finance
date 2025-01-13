@@ -8,6 +8,7 @@ import { DataService } from '../../service/data.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
+import { InvestmentStore } from '../../core/store/investment.store';
 
 @Component({
   selector: 'app-purchase-history',
@@ -41,22 +42,24 @@ export class PurchaseHistoryComponent implements OnInit, OnDestroy {
   private readonly apiService = inject(ApiService);
   private readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly dataService = inject(DataService);
+  private readonly store = inject(InvestmentStore);
   purchaseHistory$: Observable<StockPurchaseHistory[]>;
 
   ngOnInit(): void {
+    this.getPurchaseHistory().then();
     this.dataService.portfolioSwitcher
       .pipe(takeUntil(this.destroyed$))
       .subscribe((portfolioId) => {
         if (!portfolioId) {
           return;
         }
-        this.getPurchaseHistory(portfolioId).then();
+        this.getPurchaseHistory().then();
       });
   }
 
-  async getPurchaseHistory(portfolioId: number) {
+  async getPurchaseHistory() {
     await this.apiService
-      .getStockPurchaseHistory(portfolioId)
+      .getStockPurchaseHistory(this.store.currentPortfolio()?.id ?? 0)
       .then((purchaseHistory) => {
         this.purchaseHistory$ = of(purchaseHistory);
       });

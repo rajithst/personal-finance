@@ -20,6 +20,7 @@ import { PortfolioService } from './portfolio.service';
 import { InvestmentStore } from '../../core/store/investment.store';
 import { LoadingComponent } from '../../components/loading/loading.component';
 import { DataService } from '../../service/data.service';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-portfolio',
@@ -53,9 +54,12 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   private readonly apiService = inject(ApiService);
   private readonly store = inject(InvestmentStore);
   readonly portfolioService = inject(PortfolioService);
+  private readonly snackBar = inject(MatSnackBar);
   widgets: Widget[] = [];
 
   ngOnInit() {
+    this.getPortfolioData().then();
+
     this.dataService.portfolioSwitcher
       .pipe(takeUntil(this.destroyed$))
       .subscribe((portfolioId) => {
@@ -71,9 +75,16 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     const portfolio = await this.apiService.getPortfolioPerformance(
       this.store.currentPortfolio()?.id ?? 0,
     );
-    this.portfolioService.setPortfolioData(portfolio);
-    this.prepareWidgets();
-    this.portfolioService.setLoading(false);
+    if (portfolio) {
+      this.portfolioService.setPortfolioData(portfolio);
+      this.prepareWidgets();
+      this.portfolioService.setLoading(false);
+    } else {
+      this.portfolioService.setLoading(false);
+      this.snackBar.open('Something went wrong. Please try again!', 'Error', {
+        duration: 3000,
+      });
+      }
   }
 
   prepareWidgets() {

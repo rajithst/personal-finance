@@ -50,7 +50,16 @@ const DIALOG_TOP_POSITION = '5%';
       </div>
     </div>
     <mat-tab-nav-panel #tabPanel>
-      <router-outlet></router-outlet>
+      @if (store.portfolios().length === 0) {
+        <div class="no-portfolio">
+          <p>You don't have any portfolios yet.</p>
+          <button mat-raised-button color="primary" (click)="createNewPortfolio()">
+            Create new portfolio
+          </button>
+        </div>
+      } @else {
+        <router-outlet></router-outlet>
+      }
     </mat-tab-nav-panel>
   `,
   styles: `
@@ -68,6 +77,13 @@ const DIALOG_TOP_POSITION = '5%';
     }
     div[mat-tab-group] {
       flex-grow: 1;
+    }
+    .no-portfolio {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 50%;
     }
   `,
   imports: [
@@ -105,7 +121,6 @@ export class InvestmentsComponent implements OnInit {
     const currentPath = this.router.url.split('/').at(-1);
     this.activeLink =
       this.tabs.find((tab) => tab.route === currentPath || tab?.subPaths?.includes(currentPath ?? '')) || this.tabs[0];
-    this.dataService.setPortfolioSwitch(this.store.currentPortfolio()?.id ?? 0);
   }
 
   async switchPortfolio(id: number) {
