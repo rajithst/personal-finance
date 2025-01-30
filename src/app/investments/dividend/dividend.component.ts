@@ -55,7 +55,7 @@ export class DividendComponent implements OnInit, OnDestroy {
 
   async getDividends() {
     await this.store.getDividends(this.store.currentPortfolio()?.id ?? 0);
-    this.dividends$ = of(this.store.dividends().slice(-1));
+    this.dividends$ = of(this.store.dividends().slice(-1) ?? []);
     this.prepareWidgets();
   }
 

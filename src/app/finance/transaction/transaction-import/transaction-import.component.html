@@ -47,6 +47,7 @@
                   @for (exc of this.files; track exc) {
                     <mat-list-item>
                       {{ exc.name }}
+                      <span (click)="deleteAttachment(exc.name)" class="delete-icon">delete</span>
                     </mat-list-item>
                   }
                 </mat-list>

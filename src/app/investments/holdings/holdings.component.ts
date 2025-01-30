@@ -36,7 +36,7 @@ export class HoldingsComponent implements OnInit, OnDestroy {
   private readonly store = inject(InvestmentStore);
   private readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly dataService = inject(DataService);
-  holdings$: Observable<Holding[]>;
+  holdings$: Observable<Holding[]> | null;
 
   ngOnInit(): void {
     this.getHoldings().then();
@@ -54,7 +54,7 @@ export class HoldingsComponent implements OnInit, OnDestroy {
     const holdings = await this.apiService.getHoldings(
       this.store.currentPortfolio()?.id ?? 0,
     );
-    this.holdings$ = of(holdings);
+    this.holdings$ = of(holdings ?? []);
   }
 
   addTransaction() {

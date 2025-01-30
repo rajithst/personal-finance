@@ -39,6 +39,9 @@ import {AppInitService} from "../../core/app-init.service";
       color: red;
       font-weight: 500;
     }
+    button {
+      margin: 5px 0;
+    }
   `,
   imports: [
     MatCard,

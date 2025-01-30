@@ -43,7 +43,7 @@ export class PurchaseHistoryComponent implements OnInit, OnDestroy {
   private readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly dataService = inject(DataService);
   private readonly store = inject(InvestmentStore);
-  purchaseHistory$: Observable<StockPurchaseHistory[]>;
+  purchaseHistory$: Observable<StockPurchaseHistory[]> | null;
 
   ngOnInit(): void {
     this.getPurchaseHistory().then();
@@ -61,7 +61,7 @@ export class PurchaseHistoryComponent implements OnInit, OnDestroy {
     await this.apiService
       .getStockPurchaseHistory(this.store.currentPortfolio()?.id ?? 0)
       .then((purchaseHistory) => {
-        this.purchaseHistory$ = of(purchaseHistory);
+        this.purchaseHistory$ = of(purchaseHistory ?? []);
       });
   }
 
