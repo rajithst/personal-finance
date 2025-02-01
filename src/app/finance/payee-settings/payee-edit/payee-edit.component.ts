@@ -240,7 +240,7 @@ export class PayeeEditComponent implements OnInit {
     } else if (transactionType === TRANSACTION_TYPE_INCOME_ID) {
       this.transactionCategories = this.store.incomeCategories();
     } else if (transactionType === TRANSACTION_TYPE_SAVINGS_ID) {
-      this.transactionCategories = this.store.paymentCategories();
+      this.transactionCategories = this.store.savingsCategories();
     } else if (transactionType === TRANSACTION_TYPE_PAYMENTS_ID) {
       this.transactionCategories = [
         ...this.store.paymentCategories(),
