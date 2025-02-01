@@ -120,14 +120,14 @@ export class PayeeDetailComponent implements OnInit {
     dialog
       .afterClosed()
       .subscribe(
-        (result: PayeeDetail | null ) => {
-          if (result) {
-            this.setDataSource(result);
-            this.snackBar.open('Updated!', 'Success', {
-              duration: 3000,
-            });
-          } else if (result !== undefined) {
-            this.snackBar.open('Failed!', 'Error', {
+        (result: PayeeDetail | null | undefined) => {
+          if (result !== undefined) {
+            if (result) {
+              this.setDataSource(result);
+            }
+            const message = result ? 'Updated!' : 'Failed!';
+            const action = result ? 'Success' : 'Error';
+            this.snackBar.open(message, action, {
               duration: 3000,
             });
           }

@@ -21,7 +21,7 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { Payee } from '../../model/payee';
+import {Payee, PayeeDetail} from '../../model/payee';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -141,7 +141,7 @@ export class PayeesComponent implements OnInit, OnDestroy {
       },
       data: { payee },
     });
-    dialog.afterClosed().subscribe((result: Payee | null | undefined) => {
+    dialog.afterClosed().subscribe((result: PayeeDetail | null | undefined) => {
       if (result !== undefined) {
         this.preparePayeeTable().then();
         const message = result ? 'Updated!' : 'Failed!';
