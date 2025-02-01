@@ -17,7 +17,7 @@
   @if (noData() && !loading()) {
     <app-norecords></app-norecords>
   }
-  @if (!noData()) {
+  @if (!noData() && !loading()) {
     <table [dataSource]="dataSource" class="mat-elevation-z3" mat-table matSort>
       <ng-container matColumnDef="select">
         <th *matHeaderCellDef mat-header-cell>

@@ -144,19 +144,11 @@ export class ApiService {
     return await firstValueFrom(splitResponse$.pipe(map(mapToData)));
   }
 
-  async updatePayeeRules(payload: PayeeUpdateRequest): Promise<Payee> {
-    let updatedPayee$;
-    if (payload.id) {
-      updatedPayee$ = this.http.put<APIResponse<Payee>>(
-        `${this.SRC_URL}/finance/payee/`,
-        payload,
-      );
-    } else {
-      updatedPayee$ = this.http.post<APIResponse<Payee>>(
-        `${this.SRC_URL}/finance/payee/`,
-        payload,
-      );
-    }
+  async updatePayeeRules(payload: PayeeUpdateRequest): Promise<PayeeDetail> {
+    const updatedPayee$ = this.http.put<APIResponse<PayeeDetail>>(
+      `${this.SRC_URL}/finance/payee/`,
+      payload,
+    );
     return await firstValueFrom(updatedPayee$.pipe(map(mapToData)));
   }
 

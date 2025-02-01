@@ -256,7 +256,6 @@ export class TransactionUpdateDialog implements OnInit {
   }
 
   getNewTransactionForm(data: TransactionExpand | null) {
-    console.log('data', data);
     let transactionType = null;
     if (data) {
       if (data.is_payment) {

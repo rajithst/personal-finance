@@ -60,13 +60,15 @@ export const FinanceStore = signalStore(
       try {
         patchState(store, { loading: true });
         const updatedPayee = await apiService.updatePayeeRules(payee);
+        const newPayee = updatedPayee.payee ?? payee;
         if (payee.id !== null) {
+
           const payees = store
             .payees()
-            .map((x) => (x.id === payee.id ? updatedPayee : x));
+            .map((x) => (x.id === payee.id ? newPayee : x));
           patchState(store, { payees });
         } else {
-          patchState(store, { payees: [...store.payees(), updatedPayee] });
+          patchState(store, { payees: [...store.payees(), newPayee] });
         }
         return updatedPayee;
       } catch (error) {

@@ -68,7 +68,6 @@ export class PurchaseHistoryTableComponent implements OnChanges {
   );
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.purchaseHistory());
     this.dataSource = new MatTableDataSource<StockPurchaseHistory>(
       this.purchaseHistory() ?? [],
     );

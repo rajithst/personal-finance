@@ -69,11 +69,7 @@ import { MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { FinanceStore } from '../../../core/store/finance.store';
 import { NorecordsComponent } from '../../../components/norecords/norecords.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-
-interface TransactionActionResult {
-  status: boolean;
-  data: TransactionExpand | TransactionExpand[] | null;
-}
+import {LoadingService} from "../../../service/loading.service";
 
 interface FilterParamChip {
   id: number;
@@ -136,6 +132,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly dataService = inject(DataService);
+  private readonly loadingService = inject(LoadingService);
   private readonly router = inject(Router);
   private readonly store = inject(FinanceStore);
 
@@ -145,9 +142,9 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     const segmentLength = this.segments().length;
     return this.segments().at(segmentLength - 1);
   });
-
-  loading = computed(() => this.transactions() === null);
+  loading = computed(() => this.transactions() === null || this.switchLoading());
   noData = computed(() => !this.loading() && this.transactions()?.length === 0);
+  switchLoading = signal(false);
   showValues = false;
   selection = new SelectionModel<TransactionExpand>(true, []);
   allDataSource: MatTableDataSource<TransactionExpand>[] = [];
@@ -183,6 +180,12 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         this.createFilterChips();
       });
 
+    this.loadingService.loading$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((value) => {
+        this.switchLoading.set(value);
+      });
+
     this.dataService.valueVisibility$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
@@ -207,6 +210,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.createFilterChips();
     this.applyFiltersToTables();
+    this.loadingService.setLoading(false);
   }
 
   updateTransaction(item?: TransactionExpand) {
@@ -294,23 +298,25 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         mergeIds: mergeIds,
       },
     });
-    dialog.afterClosed().subscribe((result: TransactionExpand | null | undefined) => {
-      if (result !== undefined && result !== null) {
-        const responseData = result;
-        const targetTableIndex =
-          this.getTableIndexFromTransaction(responseData);
-        this.removeFromTransactions(targetTableIndex, mergeIds as number[]);
-        this.updateInAllTransactions(targetTableIndex, responseData);
-        this.refreshUpdatedDataSourceTable(targetTableIndex);
-        this.selection.clear();
-        this.snackBar.open('Updated!', 'Success', {
-          duration: 3000,
-        });
-      } else if (result === null) {
-        this.selection.clear();
-        this.snackBar.open('Failed to merge!', 'Error', {});
-      }
-    });
+    dialog
+      .afterClosed()
+      .subscribe((result: TransactionExpand | null | undefined) => {
+        if (result !== undefined && result !== null) {
+          const responseData = result;
+          const targetTableIndex =
+            this.getTableIndexFromTransaction(responseData);
+          this.removeFromTransactions(targetTableIndex, mergeIds as number[]);
+          this.updateInAllTransactions(targetTableIndex, responseData);
+          this.refreshUpdatedDataSourceTable(targetTableIndex);
+          this.selection.clear();
+          this.snackBar.open('Updated!', 'Success', {
+            duration: 3000,
+          });
+        } else if (result === null) {
+          this.selection.clear();
+          this.snackBar.open('Failed to merge!', 'Error', {});
+        }
+      });
   }
 
   splitTransaction(item: TransactionExpand, tableIndex: number) {
@@ -355,11 +361,13 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         task: 'edit',
       },
     });
-    dialog.afterClosed().subscribe((result: TransactionExpand[] | null | undefined) => {
-      if (result !== undefined && result !== null) {
-        console.log(result);
-      }
-    });
+    dialog
+      .afterClosed()
+      .subscribe((result: TransactionExpand[] | null | undefined) => {
+        if (result !== undefined && result !== null) {
+          console.log(result);
+        }
+      });
   }
 
   bulkDeleteTransactions() {
@@ -373,26 +381,28 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         task: 'delete',
       },
     });
-    dialog.afterClosed().subscribe((result: TransactionExpand[] | null | undefined) => {
-      if (result !== undefined && result !== null) {
-        const responseData = result;
-        const tempTransaction = responseData[0];
-        const deleteIds = responseData.map((x) => x.id as number);
-        const targetTableIndex =
-          this.getTableIndexFromTransaction(tempTransaction);
-        this.removeFromTransactions(targetTableIndex, deleteIds);
-        this.refreshUpdatedDataSourceTable(targetTableIndex);
-        this.selection.clear();
-        this.snackBar.open('Deleted!', 'Success', {
-          duration: 3000,
-        });
-        this.bulkSelectedTableIndex = -1;
-      } else if (result === null) {
-        this.snackBar.open('Failed to delete!', 'Error', {
-          duration: 3000,
-        });
-      }
-    });
+    dialog
+      .afterClosed()
+      .subscribe((result: TransactionExpand[] | null | undefined) => {
+        if (result !== undefined && result !== null) {
+          const responseData = result;
+          const tempTransaction = responseData[0];
+          const deleteIds = responseData.map((x) => x.id as number);
+          const targetTableIndex =
+            this.getTableIndexFromTransaction(tempTransaction);
+          this.removeFromTransactions(targetTableIndex, deleteIds);
+          this.refreshUpdatedDataSourceTable(targetTableIndex);
+          this.selection.clear();
+          this.snackBar.open('Deleted!', 'Success', {
+            duration: 3000,
+          });
+          this.bulkSelectedTableIndex = -1;
+        } else if (result === null) {
+          this.snackBar.open('Failed to delete!', 'Error', {
+            duration: 3000,
+          });
+        }
+      });
   }
 
   showPayeeDetail(destination: string) {

@@ -101,7 +101,7 @@ export class PayeesComponent implements OnInit, OnDestroy {
   private readonly snackBar = inject(MatSnackBar);
   private readonly store = inject(FinanceStore);
 
-  payees = signal<Payee[]>([]);
+  payees = signal<Payee[] | null>(null);
   loading = computed(() => this.payees() === null);
   noData = computed(() => !this.loading() && this.payees()?.length === 0);
 
@@ -111,8 +111,8 @@ export class PayeesComponent implements OnInit, OnDestroy {
 
   async preparePayeeTable() {
     await this.store.getPayees();
-    this.payees.set(this.store.payees());
-    this.dataSource = new MatTableDataSource<Payee>(this.payees());
+    this.payees.set(this.store.payees() ?? []);
+    this.dataSource = new MatTableDataSource<Payee>(this.payees() ?? []);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }

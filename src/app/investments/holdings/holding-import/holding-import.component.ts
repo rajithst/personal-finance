@@ -169,7 +169,6 @@ export class HoldingImportComponent {
       const upload$ = this.apiService.uploadHoldingTransactions(formData);
       upload$.subscribe({
         next: (event) => {
-          console.log(event);
           switch (event.type) {
             case HttpEventType.UploadProgress:
               if (event.total) {

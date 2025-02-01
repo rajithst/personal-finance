@@ -12,6 +12,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
+import {LoadingService} from "../../service/loading.service";
 
 @Component({
   selector: 'app-transaction',
@@ -63,6 +64,8 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   target: string = EXPENSE;
   data$: Observable<MonthlyTransaction[] | null>;
   protected apiService = inject(ApiService);
+  private readonly loading = inject(LoadingService);
+
   protected readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly dataService = inject(DataService);
 
@@ -70,6 +73,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
     this.dataService.year$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
+        this.loading.setLoading(true);
         this.extracted({ target: this.target, year: value });
       });
 
@@ -77,6 +81,7 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
         if (value) {
+          this.loading.setLoading(true);
           this.extracted({
             target: this.target,
             year: this.dataService.getFilterYear(),
