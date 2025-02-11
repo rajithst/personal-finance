@@ -1,8 +1,11 @@
 import {
   Component,
   computed,
+  inject,
   input,
   OnChanges,
+  OnInit,
+  signal,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -27,6 +30,8 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatIcon } from '@angular/material/icon';
 import { Holding } from '../../model/holding';
 import { NorecordsComponent } from '../../../components/norecords/norecords.component';
+import { ReplaySubject, takeUntil } from 'rxjs';
+import { LoadingService } from '../../../service/loading.service';
 
 interface TableElement {
   company_name: string;
@@ -69,9 +74,13 @@ interface TableElement {
     MatProgressSpinner,
   ],
 })
-export class HoldingTableComponent implements OnChanges {
+export class HoldingTableComponent implements OnInit, OnChanges {
   holdings = input.required<Holding[] | null>();
   @ViewChild(MatSort) sort: MatSort;
+
+  private readonly loadingService = inject(LoadingService);
+  protected readonly destroyed$ = new ReplaySubject<void>(1);
+
   displayedColumns: string[] = [
     'Stock',
     'Shares',
@@ -84,8 +93,17 @@ export class HoldingTableComponent implements OnChanges {
     'Actions',
   ];
   dataSource = new MatTableDataSource<TableElement>();
-  loading = computed(() => this.holdings() === null);
+  loading = computed(() => this.holdings() === null || this.switchLoading());
   noData = computed(() => !this.loading() && this.holdings()?.length === 0);
+  switchLoading = signal(false);
+
+  ngOnInit() {
+    this.loadingService.loading$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((value) => {
+        this.switchLoading.set(value);
+      });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const tableData = this.formatData();

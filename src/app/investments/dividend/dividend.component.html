@@ -11,21 +11,27 @@
   </div>
 </div>
 <div class="dividend-container">
-  <div class="dashboard-widgets">
-    <app-widget [data]="widgets[0]"></app-widget>
-    <app-widget [data]="widgets[1]"></app-widget>
-  </div>
-  <div class="dividend-table">
-    <div class="sub-toolbar dividend-table-toolbar">
-      <div class="sub-toolbar-info">
-        <h3>Latest dividend payments</h3>
-      </div>
-      <div class="sub-toolbar-actions">
-        <button mat-stroked-button color="primary" routerLink="history">
-          See All Dividend Payments
-        </button>
-      </div>
+  @if (loading()) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
     </div>
-    <app-dividend-table [dividends]="dividends$ | async"></app-dividend-table>
-  </div>
+  } @else {
+    <div class="dashboard-widgets">
+      <app-widget [data]="widgets[0]"></app-widget>
+      <app-widget [data]="widgets[1]"></app-widget>
+    </div>
+    <div class="dividend-table">
+      <div class="sub-toolbar dividend-table-toolbar">
+        <div class="sub-toolbar-info">
+          <h3>Latest dividend payments</h3>
+        </div>
+        <div class="sub-toolbar-actions">
+          <button mat-stroked-button color="primary" routerLink="history">
+            See All Dividend Payments
+          </button>
+        </div>
+      </div>
+      <app-dividend-table [dividends]="dividends$ | async"></app-dividend-table>
+    </div>
+  }
 </div>

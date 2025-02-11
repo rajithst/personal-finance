@@ -13,6 +13,7 @@ import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
 import { Holding } from '../model/holding';
 import { InvestmentStore } from '../../core/store/investment.store';
 import { DataService } from '../../service/data.service';
+import { LoadingService } from '../../service/loading.service';
 
 const DIALOG_WIDTH = '900px';
 const DIALOG_TOP_POSITION = '5%';
@@ -36,21 +37,25 @@ export class HoldingsComponent implements OnInit, OnDestroy {
   private readonly store = inject(InvestmentStore);
   private readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly dataService = inject(DataService);
+  private readonly loading = inject(LoadingService);
+
   holdings$: Observable<Holding[]> | null;
 
   ngOnInit(): void {
-    this.getHoldings().then();
+    this.getHoldings().then(() => this.loading.setLoading(false));
+
     this.dataService.portfolioSwitcher
       .pipe(takeUntil(this.destroyed$))
       .subscribe((portfolioId) => {
         if (!portfolioId) {
           return;
         }
-        this.getHoldings().then();
+        this.getHoldings().then(() => this.loading.setLoading(false));
       });
   }
 
   async getHoldings() {
+    this.loading.setLoading(true);
     const holdings = await this.apiService.getHoldings(
       this.store.currentPortfolio()?.id ?? 0,
     );
@@ -66,12 +71,17 @@ export class HoldingsComponent implements OnInit, OnDestroy {
       },
       data: { task: 'add' },
     });
-    dialog.afterClosed().subscribe((result) => {
-      if (result.refresh) {
-        this.snackBar.open('Updated!', 'Success', {
+    dialog.afterClosed().subscribe((result: Holding | null | undefined) => {
+      if (result !== undefined && result !== null) {
+        this.getHoldings().then(() => {
+          this.snackBar.open('Added Successfully!', 'Success', {
+            duration: 3000,
+          });
+        });
+      } else if (result === null) {
+        this.snackBar.open('Failed!', 'Error', {
           duration: 3000,
         });
-        this.getHoldings().then();
       }
     });
   }

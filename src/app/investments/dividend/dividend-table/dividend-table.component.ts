@@ -1,4 +1,11 @@
-import { Component, computed, input } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import {
   MatTable,
@@ -16,10 +23,12 @@ import {
   MatCardTitle,
   MatCardContent,
 } from '@angular/material/card';
-import {MonthlyDividend} from "../../model/dividend";
-import {LoadingComponent} from "../../../components/loading/loading.component";
-import {NorecordsComponent} from "../../../components/norecords/norecords.component";
-import {MatChip, MatChipSet} from "@angular/material/chips";
+import { MonthlyDividend } from '../../model/dividend';
+import { LoadingComponent } from '../../../components/loading/loading.component';
+import { NorecordsComponent } from '../../../components/norecords/norecords.component';
+import { MatChip, MatChipSet } from '@angular/material/chips';
+import { ReplaySubject, takeUntil } from 'rxjs';
+import { LoadingService } from '../../../service/loading.service';
 
 @Component({
   selector: 'app-dividend-table',
@@ -45,10 +54,15 @@ import {MatChip, MatChipSet} from "@angular/material/chips";
     MatChip,
   ],
 })
-export class DividendTableComponent {
+export class DividendTableComponent implements OnInit {
   dividends = input.required<MonthlyDividend[] | null>();
-  loading = computed(() => this.dividends() === null);
+  loading = computed(() => this.dividends() === null || this.switchLoading());
   noData = computed(() => !this.loading() && this.dividends()?.length === 0);
+  switchLoading = signal(false);
+
+  private readonly loadingService = inject(LoadingService);
+  protected readonly destroyed$ = new ReplaySubject<void>(1);
+
   displayedColumns: string[] = [
     'position',
     'name',
@@ -56,4 +70,12 @@ export class DividendTableComponent {
     'symbol',
     'action',
   ];
+
+  ngOnInit(): void {
+    this.loadingService.loading$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((value) => {
+        this.switchLoading.set(value);
+      });
+  }
 }

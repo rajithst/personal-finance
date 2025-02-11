@@ -1,6 +1,6 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import { DividendTableComponent } from './dividend-table/dividend-table.component';
-import {Observable, of, ReplaySubject, takeUntil} from 'rxjs';
+import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { MonthlyDividend } from '../model/dividend';
 import { DataService } from '../../service/data.service';
@@ -17,6 +17,7 @@ import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { InvestmentStore } from '../../core/store/investment.store';
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-dividend',
@@ -31,12 +32,15 @@ import { InvestmentStore } from '../../core/store/investment.store';
     MatTooltip,
     MatButton,
     RouterLink,
+    MatProgressSpinner,
   ],
 })
 export class DividendComponent implements OnInit, OnDestroy {
   private readonly destroyed$ = new ReplaySubject<void>(1);
   private readonly dataService = inject(DataService);
   private readonly store = inject(InvestmentStore);
+  loading = signal(false);
+
   dividends$: Observable<MonthlyDividend[] | null>;
   widgets: Widget[] = [];
 
@@ -54,9 +58,11 @@ export class DividendComponent implements OnInit, OnDestroy {
   }
 
   async getDividends() {
+    this.loading.set(true);
     await this.store.getDividends(this.store.currentPortfolio()?.id ?? 0);
     this.dividends$ = of(this.store.dividends().slice(-1) ?? []);
     this.prepareWidgets();
+    this.loading.set(false);
   }
 
   prepareWidgets() {

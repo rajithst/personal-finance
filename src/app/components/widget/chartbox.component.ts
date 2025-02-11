@@ -1,5 +1,6 @@
 import { Component, ElementRef, input, OnInit, viewChild } from '@angular/core';
 import Chart, { ChartTypeRegistry } from 'chart.js/auto';
+import {MatProgressBar} from "@angular/material/progress-bar";
 
 export interface ChartConfig {
   type: string;
@@ -12,6 +13,9 @@ export interface ChartConfig {
   selector: 'app-chart',
   template: `
     <div class="chart-container">
+      @if (!chartConfig()) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }
       <canvas #chart></canvas>
     </div>
   `,
@@ -23,6 +27,7 @@ export interface ChartConfig {
       width: 100%;
     }
   `,
+  imports: [MatProgressBar],
 })
 export class ChartComponent implements OnInit {
   chartConfig = input.required<ChartConfig>();

@@ -41,6 +41,7 @@ import { NgIf } from '@angular/common';
 import { StockPurchaseRequest } from '../../model/stock';
 import { Portfolio } from '../../model/portfolio';
 import { InvestmentStore } from '../../../core/store/investment.store';
+import { MatProgressBar } from '@angular/material/progress-bar';
 
 interface HoldingUpdateData {
   task: string;
@@ -68,6 +69,7 @@ interface HoldingUpdateData {
     MatDialogActions,
     MatButton,
     MatDialogClose,
+    MatProgressBar,
   ],
   providers: [provideNativeDateAdapter()],
 })
@@ -81,6 +83,7 @@ export class HoldingUpdateComponent implements OnInit {
   companyImage = computed(() => this.company()?.image);
   currency = computed(() => this.company()?.stock_currency);
   portfolios = signal<Portfolio[]>([]);
+  loading = signal<boolean>(false);
   transactionForm = this.getNewTransactionForm();
 
   constructor(
@@ -89,8 +92,10 @@ export class HoldingUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading.set(true);
     this.apiService.getCompanies().then((companies) => {
       this.companies.set(companies);
+      this.loading.set(false);
     });
     this.portfolios.set(this.store.portfolios());
     this.transactionForm.get('company')?.valueChanges.subscribe((value) => {
@@ -109,10 +114,11 @@ export class HoldingUpdateComponent implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close({ refresh: false });
+    this.dialogRef.close();
   }
 
   async submit() {
+    this.loading.set(true);
     this.transactionForm.value.purchase_date = moment(
       this.transactionForm.value.purchase_date,
     ).format('YYYY-MM-DD');
@@ -124,7 +130,8 @@ export class HoldingUpdateComponent implements OnInit {
     );
     const payload = this.transactionForm.value as StockPurchaseRequest;
     const updatedPurchase = await this.apiService.updateStockPurchase(payload);
-    this.dialogRef.close({ refresh: !!updatedPurchase });
+    this.loading.set(false);
+    this.dialogRef.close(updatedPurchase ?? null);
   }
 
   private getNewTransactionForm() {
