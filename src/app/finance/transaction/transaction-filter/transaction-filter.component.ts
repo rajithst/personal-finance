@@ -31,6 +31,7 @@ import {
 } from '@angular/material/list';
 import { FinanceStore } from '../../../core/store/finance.store';
 import { INCOME, PAYMENT, SAVING } from '../../data/client.data';
+import {DataService} from "../../../service/data.service";
 
 interface TransactionFilterData {
   filterParams: TransactionFilter;
@@ -61,6 +62,7 @@ export class TransactionFilterComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef<TransactionFilterComponent>);
   private readonly data = inject<TransactionFilterData>(MAT_DIALOG_DATA);
   private readonly store = inject(FinanceStore);
+  private readonly dataService = inject(DataService);
 
   filterParams: TransactionFilter;
   clickedType: string = 'categories';
@@ -183,7 +185,7 @@ export class TransactionFilterComponent implements OnInit {
 
   submit() {
     const filterParams: TransactionFilter = {
-      year: 2024,
+      year: this.dataService.getFilterYear(),
       target: this.filterParams.target,
       categories: this.extractParams(this.mainCategoryForm.value),
       subcategories: this.extractParams(this.subCategoryForm.value),
