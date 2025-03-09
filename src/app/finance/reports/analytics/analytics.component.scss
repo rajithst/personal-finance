@@ -1,7 +1,57 @@
+.analytics-action-toolbar {
+  display: flex;
+  > form > mat-form-field {
+    margin: 5px 5px 0;
+  }
+}
 mat-card {
-  height: calc(100vh - 190px);
+  height: calc(100vh - 220px);
   padding: 10px;
   overflow: auto;
   margin-top: 5px;
 }
 
+:host {
+  display: block;
+  border-radius: 16px;
+}
+
+.container {
+  position: relative;
+  height: 95%;
+  width: 100%;
+  padding: 10px 10px 30px 10px;
+  border: 1px solid #dddddd;
+  box-sizing: border-box;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.widget-header {
+  margin: 0;
+  font-size: 16px;
+  text-align: center;
+}
+
+.chart-container {
+  display: inline-block;
+  position: relative;
+  height: 95%;
+  width: 100%;
+}
+
+.dashboard-widgets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 0.5fr));
+  gap: 10px;
+}
+
+.hidden-dt {
+  width: 1px;
+  visibility: hidden;
+  height: 0;
+}
+
+.no-data {
+  text-align: center;
+}

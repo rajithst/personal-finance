@@ -21,7 +21,10 @@ import {
 } from '../finance/model/category-settings';
 import { JwtTokenResponse, MyProfile } from '../auth/model';
 import { CreditAccount, CreditAccountRequest } from '../finance/model/account';
-import {Portfolio, PortfolioPerformance} from '../investments/model/portfolio';
+import {
+  Portfolio,
+  PortfolioPerformance,
+} from '../investments/model/portfolio';
 import { Holding } from '../investments/model/holding';
 import { MonthlyDividend } from '../investments/model/dividend';
 import {
@@ -33,6 +36,7 @@ import {
   CompanyInfo,
   InvestmentClientSettings,
 } from '../investments/model/investment';
+import {Analytics} from "../finance/model/analytics";
 
 export interface BaseAPIResponse {
   status: boolean;
@@ -232,6 +236,18 @@ export class ApiService {
     return await firstValueFrom(creditAccount$.pipe(map(mapToData)));
   }
 
+  async getAnalytics(payload: {
+    target: number | null;
+    category: number | null;
+    start_date: string;
+    end_date: string;
+  }) {
+    const data$ = this.http.get<APIResponse<Analytics[]>>(
+      `${this.SRC_URL}/finance/analytics/?target=${payload.target}&start_date=${payload.start_date}&end_date=${payload.end_date}&category=${payload.category ?? ''}`,
+    );
+    return await firstValueFrom(data$.pipe(map(mapToData)));
+  }
+
   /* Investment Module APIs*/
 
   async initInvestmentSettings(): Promise<InvestmentClientSettings> {
@@ -320,6 +336,5 @@ export class ApiService {
       portfolio,
     );
     return await firstValueFrom(updatedPortfolio$.pipe(map(mapToData)));
-
   }
 }

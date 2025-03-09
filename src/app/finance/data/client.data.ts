@@ -23,3 +23,14 @@ export const TRANSACTION_TYPES: DropDownType[] = [
   { value: TRANSACTION_TYPE_SAVINGS_ID, viewValue: 'Savings', checked: false },
   { value: TRANSACTION_TYPE_PAYMENTS_ID, viewValue: 'Payment', checked: false },
 ];
+
+
+export const DEFAULT_ANALYTICS_DATE_RANGE: DropDownType[] = [
+  { value: 0, viewValue: 'All', checked: false },
+  { value: 1, viewValue: 'This Month', checked: false },
+  { value: 2, viewValue: 'Last Month', checked: false },
+  { value: 3, viewValue: 'Last 3 months', checked: false },
+  { value: 4, viewValue: 'Last 6 months', checked: false },
+  { value: 5, viewValue: 'This year', checked: false },
+  { value: 6, viewValue: 'Last year', checked: false },
+]
