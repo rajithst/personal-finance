@@ -1,8 +1,8 @@
 import { CreditAccount } from './account';
 
 export interface AccountProvider {
-  'provider_type': string;
-  'value': string;
+  provider_type: string;
+  value: string;
 }
 
 export interface TransactionCategory {

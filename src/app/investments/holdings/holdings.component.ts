@@ -60,6 +60,7 @@ export class HoldingsComponent implements OnInit, OnDestroy {
       this.store.currentPortfolio()?.id ?? 0,
     );
     this.holdings$ = of(holdings ?? []);
+    this.loading.setLoading(false);
   }
 
   addTransaction() {

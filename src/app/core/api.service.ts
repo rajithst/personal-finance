@@ -36,7 +36,7 @@ import {
   CompanyInfo,
   InvestmentClientSettings,
 } from '../investments/model/investment';
-import {Analytics} from "../finance/model/analytics";
+import {CategoryAnalytics} from "../finance/model/analytics";
 
 export interface BaseAPIResponse {
   status: boolean;
@@ -242,7 +242,7 @@ export class ApiService {
     start_date: string;
     end_date: string;
   }) {
-    const data$ = this.http.get<APIResponse<Analytics[]>>(
+    const data$ = this.http.get<APIResponse<CategoryAnalytics[]>>(
       `${this.SRC_URL}/finance/analytics/?target=${payload.target}&start_date=${payload.start_date}&end_date=${payload.end_date}&category=${payload.category ?? ''}`,
     );
     return await firstValueFrom(data$.pipe(map(mapToData)));

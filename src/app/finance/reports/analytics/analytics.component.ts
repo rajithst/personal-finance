@@ -11,6 +11,7 @@ import {
 import {
   AnalyticsCategoryWidget,
   AnalyticsChartWidget,
+  TotalSummaryWidget,
 } from '../widgets/chart-widgets';
 import { AnalyticsService } from '../analytics.service';
 import { FinanceStore } from '../../../core/store/finance.store';
@@ -95,7 +96,6 @@ export class AnalyticsComponent implements OnInit {
         if (value !== null) {
           this.modifyFilterOptions(value);
           this.categoryFormControl.setValue(0);
-          this.dateRangeFormControl.setValue(null);
           this.getData();
         }
       },
@@ -142,10 +142,10 @@ export class AnalyticsComponent implements OnInit {
             break;
           case 6:
             this.startDate.set(
-              moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD'),
+              moment().subtract(1, 'year').endOf('year').format('YYYY-MM-DD'),
             );
             this.endDate.set(
-              moment().subtract(1, 'year').endOf('year').format('YYYY-MM-DD'),
+              moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD'),
             );
             break;
           default:
@@ -170,11 +170,25 @@ export class AnalyticsComponent implements OnInit {
           ? null
           : this.categoryFormControl.value,
     };
-    const data = await this.apiService.getAnalytics(payload);
+    let data = await this.apiService.getAnalytics(payload);
     this.noData.set(data.length === 0);
     if (data) {
+      const isCategorySelect =
+        this.categoryFormControl.value !== 0 &&
+        this.categoryFormControl.value !== null;
+      if (isCategorySelect) {
+        data[0].subcategories = data[0].subcategories.map((x) => ({
+          ...x,
+          color: getColor(),
+        }));
+      }
       const dataWithColorCode = data.map((x) => ({ ...x, color: getColor() }));
+      const dateRange = this.startDate()
+        ? `${this.startDate()} - ${this.endDate()}`
+        : 'All Time';
       this.analyticsService.setAnalyticsData(dataWithColorCode);
+      this.analyticsService.setSubcategoryVisibility(isCategorySelect);
+      this.analyticsService.setDateRange(dateRange);
       this.prepareWidgets();
     }
   }
@@ -195,10 +209,25 @@ export class AnalyticsComponent implements OnInit {
   }
 
   prepareWidgets() {
+    const pickedType =
+      this.transactionTypes.find(
+        (x) => x.value === this.transactionTypeControl.value,
+      )?.viewValue ?? '';
+    const pickedCategory =
+      this.categories.find((x) => x.id === this.categoryFormControl.value)
+        ?.category ?? null;
     this.widgets = [
       {
         id: 1,
-        label: 'Distribution',
+        label: `${pickedCategory ?? pickedType} Summary`,
+        content: TotalSummaryWidget,
+        rows: 3,
+        columns: 1,
+        hideSettingsButton: true,
+      },
+      {
+        id: 1,
+        label: pickedCategory ?? pickedType,
         content: AnalyticsChartWidget,
         rows: 3,
         columns: 1,
@@ -206,10 +235,10 @@ export class AnalyticsComponent implements OnInit {
       },
       {
         id: 1,
-        label: 'Portfolio Value',
+        label: `${pickedCategory ?? pickedType} Breakdown`,
         content: AnalyticsCategoryWidget,
         rows: 3,
-        columns: 3,
+        columns: 2,
         hideSettingsButton: true,
       },
     ];
