@@ -14,6 +14,13 @@ export interface Payee {
   keywords: string;
 }
 
+export interface PayeeFilter {
+  query?: string;
+  target: string;
+  categories?: number[];
+  subcategories?: number[];
+}
+
 export interface PayeeUpdateRequest extends Payee {
   merge_ids: number[];
 }

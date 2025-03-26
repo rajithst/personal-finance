@@ -19,6 +19,9 @@ export class DataService {
   private readonly portfolioSwitch$ = new BehaviorSubject<number | null>(null);
   portfolioSwitcher = this.portfolioSwitch$.asObservable();
 
+  private readonly searchBar$ = new BehaviorSubject<string | null>(null);
+  search$ = this.searchBar$.asObservable();
+
   getFilterYear() {
     return this.filterYear$.value;
   }
@@ -37,5 +40,9 @@ export class DataService {
 
   setPortfolioSwitch(portfolioId: number) {
     this.portfolioSwitch$.next(portfolioId);
+  }
+
+  setSearchQuery(query: string) {
+    this.searchBar$.next(query);
   }
 }

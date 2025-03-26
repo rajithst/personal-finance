@@ -69,7 +69,8 @@ import { MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { FinanceStore } from '../../../core/store/finance.store';
 import { NorecordsComponent } from '../../../components/norecords/norecords.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import {LoadingService} from "../../../service/loading.service";
+import { LoadingService } from '../../../service/loading.service';
+import { SearchBarComponent } from '../../../components/search-bar/search-bar.component';
 
 interface FilterParamChip {
   id: number;
@@ -122,6 +123,7 @@ const DIALOG_TOP_POSITION = '5%';
     MatIconButton,
     NorecordsComponent,
     MatProgressSpinner,
+    SearchBarComponent,
   ],
 })
 export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
@@ -142,7 +144,9 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     const segmentLength = this.segments().length;
     return this.segments().at(segmentLength - 1);
   });
-  loading = computed(() => this.transactions() === null || this.switchLoading());
+  loading = computed(
+    () => this.transactions() === null || this.switchLoading(),
+  );
   noData = computed(() => !this.loading() && this.transactions()?.length === 0);
   switchLoading = signal(false);
   showValues = false;
@@ -190,6 +194,13 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
         this.showValues = value;
+      });
+
+    this.dataService.search$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((value) => {
+        this.filterParams.query = value ?? '';
+        this.applyFiltersToTables();
       });
   }
 
@@ -428,6 +439,16 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  viewMoreInfo(element: TransactionExpand) {
+    this.dialog.open(TransactionViewMoreDialog, {
+      maxWidth: DIALOG_WIDTH,
+      position: {
+        top: DIALOG_TOP_POSITION,
+      },
+      data: { transaction: element },
+    });
+  }
+
   isAllSelected(tableIndex: number) {
     const numSelected = this.selection.selected.length;
     const numRows = this.allDataSource[tableIndex].data.length;
@@ -565,11 +586,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     dataSource.filterPredicate = this.createFilterPredicate();
     dataSource.filter = JSON.stringify(this.filterParams).trim();
     this.allDataSource[tableIndex] = dataSource;
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   private removeFromTransactions(tableIndex: number, deleteIds: number[]) {
@@ -734,13 +750,9 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  viewMoreInfo(element: TransactionExpand) {
-    this.dialog.open(TransactionViewMoreDialog, {
-      maxWidth: DIALOG_WIDTH,
-      position: {
-        top: DIALOG_TOP_POSITION,
-      },
-      data: { transaction: element },
-    });
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+    this.dataService.setSearchQuery('');
   }
 }
