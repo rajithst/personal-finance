@@ -13,28 +13,34 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { TransactionFilter } from '../../model/transactions';
+import { TransactionFilter } from '../../finance/model/transactions';
 import {
   TransactionCategory,
   TransactionSubCategory,
-} from '../../model/common';
-import { CreditAccount } from '../../model/account';
+} from '../../finance/model/common';
+import { CreditAccount } from '../../finance/model/account';
 import { MatButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatRipple } from '@angular/material/core';
-import { NgIf } from '@angular/common';
 import {
   MatSelectionList,
   MatListOption,
   MatList,
   MatListItem,
 } from '@angular/material/list';
-import { FinanceStore } from '../../../core/store/finance.store';
-import { INCOME, PAYMENT, SAVING } from '../../data/client.data';
-import {DataService} from "../../../service/data.service";
+import { FinanceStore } from '../../core/store/finance.store';
+import {
+  EXPENSE,
+  INCOME,
+  PAYMENT,
+  SAVING,
+} from '../../finance/data/client.data';
+import { DataService } from '../../service/data.service';
+import { Payee } from '../../finance/model/payee';
 
 interface TransactionFilterData {
   filterParams: TransactionFilter;
+  hiddenSections?: string[];
 }
 
 @Component({
@@ -47,7 +53,6 @@ interface TransactionFilterData {
     MatSelectionList,
     MatListOption,
     ReactiveFormsModule,
-    NgIf,
     MatList,
     MatListItem,
     MatRipple,
@@ -60,37 +65,58 @@ interface TransactionFilterData {
 export class TransactionFilterComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<TransactionFilterComponent>);
-  private readonly data = inject<TransactionFilterData>(MAT_DIALOG_DATA);
+  protected readonly data = inject<TransactionFilterData>(MAT_DIALOG_DATA);
   private readonly store = inject(FinanceStore);
   private readonly dataService = inject(DataService);
 
   filterParams: TransactionFilter;
-  clickedType: string = 'categories';
-  categoryTitle = 'Categories';
-  subCategoryTitle: string = 'Sub Categories';
-  selectedCategory: number = 0;
+  clickedType = '';
+  categoryTitle = '';
+  subCategoryTitle = '';
+  selectedCategory = 0;
   mainCategoryForm: FormGroup;
   subCategoryForm: FormGroup;
   accountForm: FormGroup;
+  payeeForm: FormGroup;
 
   TRANSACTION_CATEGORIES: TransactionCategory[] =
     this.store.transactionCategories();
   TRANSACTION_SUB_CATEGORIES: TransactionSubCategory[] =
     this.store.transactionSubCategories();
   EXPENSE_CATEGORIES: TransactionCategory[] = this.store.expenseCategories();
-  transactionCategories: TransactionCategory[] = this.TRANSACTION_CATEGORIES;
   INCOME_CATEGORIES: TransactionCategory[] = this.store.incomeCategories();
   SAVINGS_CATEGORIES: TransactionCategory[] = this.store.savingsCategories();
   PAYMENT_CATEGORIES: TransactionCategory[] = this.store.paymentCategories();
+  transactionCategories: TransactionCategory[] = this.TRANSACTION_CATEGORIES;
+  payees: Payee[] = this.store.payees();
 
   accounts = this.store.creditAccounts();
   transactionSubCategories: TransactionSubCategory[] =
     this.TRANSACTION_SUB_CATEGORIES;
 
+  constructor() {
+    this.mainCategoryForm = this.formBuilder.group({});
+    this.subCategoryForm = this.formBuilder.group({});
+    this.accountForm = this.formBuilder.group({});
+    this.payeeForm = this.formBuilder.group({});
+  }
+
   ngOnInit() {
-    this.filterParams = this.data.filterParams;
-    this.modifyFilterOptions();
-    this.createForm();
+    this.preparePayees().then(() => {
+      this.filterParams = this.data.filterParams;
+      this.modifyFilterOptions();
+      this.createForm();
+      this.clickedType = 'categories';
+      this.categoryTitle = 'Categories';
+      this.subCategoryTitle = 'Sub Categories';
+    });
+  }
+
+  async preparePayees() {
+    if (this.payees.length == 0) {
+      await this.store.getPayees();
+      this.payees = this.store.payees();
+    }
   }
 
   modifyFilterOptions() {
@@ -103,7 +129,7 @@ export class TransactionFilterComponent implements OnInit {
       this.transactionCategories = this.SAVINGS_CATEGORIES;
     } else if (this.filterParams?.target === INCOME) {
       this.transactionCategories = this.INCOME_CATEGORIES;
-    } else {
+    } else if (this.filterParams?.target === EXPENSE) {
       this.transactionCategories = this.EXPENSE_CATEGORIES;
     }
     const firstCategory = this.transactionCategories.at(0);
@@ -117,6 +143,7 @@ export class TransactionFilterComponent implements OnInit {
     const categoryGroup: any = {};
     const subCategoryGroup: any = {};
     const accountsGroup: any = {};
+    const payeeGroup: any = {};
 
     this.TRANSACTION_CATEGORIES.forEach((category: TransactionCategory) => {
       categoryGroup[`category_${category.id}`] = new FormControl(
@@ -138,9 +165,16 @@ export class TransactionFilterComponent implements OnInit {
       );
     });
 
+    this.payees.forEach((payee: Payee) => {
+      payeeGroup[`payee_${payee.id}`] = new FormControl(
+        this.filterParams.payees?.includes(payee.id),
+      );
+    });
+
     this.mainCategoryForm = this.formBuilder.group(categoryGroup);
     this.subCategoryForm = this.formBuilder.group(subCategoryGroup);
     this.accountForm = this.formBuilder.group(accountsGroup);
+    this.payeeForm = this.formBuilder.group(payeeGroup);
   }
 
   clickOnOption(filterType: string, filterOption: TransactionCategory) {
@@ -167,7 +201,7 @@ export class TransactionFilterComponent implements OnInit {
       this.categoryTitle = 'Accounts';
       this.subCategoryTitle = '';
     } else if (filterType == 'payee') {
-      this.categoryTitle = 'Payee';
+      this.categoryTitle = 'Payees';
       this.subCategoryTitle = '';
     }
   }
@@ -177,6 +211,7 @@ export class TransactionFilterComponent implements OnInit {
     filterParamsCopy.categories = [];
     filterParamsCopy.subcategories = [];
     filterParamsCopy.paymentMethods = [];
+    filterParamsCopy.payees = [];
     this.dialogRef.close({
       refresh: true,
       filters: filterParamsCopy,
@@ -190,6 +225,7 @@ export class TransactionFilterComponent implements OnInit {
       categories: this.extractParams(this.mainCategoryForm.value),
       subcategories: this.extractParams(this.subCategoryForm.value),
       accounts: this.extractParams(this.accountForm.value),
+      payees: this.extractParams(this.payeeForm.value)
     };
     this.dialogRef.close({ refresh: true, filters: filterParams });
   }

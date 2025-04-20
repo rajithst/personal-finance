@@ -52,6 +52,7 @@ export interface TransactionFilter {
   target: string;
   categories?: number[];
   subcategories?: number[];
+  payees?: number[];
   accounts?: number[];
 }
 

@@ -1,0 +1,128 @@
+<h2 mat-dialog-title>Filters</h2>
+<mat-dialog-content>
+  <div class="filter-section">
+    <div class="main-category-section">
+      <mat-selection-list
+        [multiple]="false"
+        class="option-list"
+        hideSingleSelectionIndicator
+      >
+        @if (!data.hiddenSections?.includes("categories")) {
+          <mat-list-option (click)="clickOnMainFilter('categories')">
+            Categories
+          </mat-list-option>
+        }
+        @if (!data.hiddenSections?.includes("accounts")) {
+          <mat-list-option (click)="clickOnMainFilter('accounts')">
+            Accounts
+          </mat-list-option>
+        }
+        @if (!data.hiddenSections?.includes("payee")) {
+          <mat-list-option (click)="clickOnMainFilter('payee')">
+            Payee
+          </mat-list-option>
+        }
+      </mat-selection-list>
+    </div>
+
+    <div class="category-result-section">
+      <div class="category-title">{{ categoryTitle }}</div>
+      @if (clickedType === "categories") {
+        <form [formGroup]="mainCategoryForm">
+          <mat-list class="option-list" role="list">
+            @for (exec of transactionCategories; track exec.id) {
+              <mat-list-item
+                matRipple
+                (click)="clickOnOption('categories', exec)"
+              >
+                <div class="list-item-actions">
+                  <div class="checkbox">
+                    <mat-checkbox
+                      [formControlName]="'category_' + exec.id"
+                      class="example-margin"
+                    ></mat-checkbox>
+                  </div>
+                  <div class="item-text">{{ exec.category }}</div>
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        </form>
+      }
+      @if (clickedType === "accounts") {
+        <form [formGroup]="accountForm">
+          <mat-list class="option-list" role="list">
+            @for (exec of accounts; track exec.id) {
+              <mat-list-item matRipple>
+                <div class="list-item-actions">
+                  <div class="checkbox">
+                    <mat-checkbox
+                      [formControlName]="'account_' + exec.id"
+                      class="example-margin"
+                    ></mat-checkbox>
+                  </div>
+                  <div class="item-text">{{ exec.account_name }}</div>
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        </form>
+      }
+      @if (clickedType === "payee") {
+        <div class="payee-section">
+          <form [formGroup]="payeeForm">
+            <mat-list class="option-list" role="list">
+              @for (exec of payees; track exec.id) {
+                <mat-list-item matRipple>
+                  <div class="list-item-actions">
+                    <div class="checkbox">
+                      <mat-checkbox
+                        [formControlName]="'payee_' + exec.id"
+                        class="example-margin"
+                      ></mat-checkbox>
+                    </div>
+                    <div class="item-text">
+                      {{
+                        exec.destination_eng
+                          ? exec.destination_eng
+                          : exec.destination
+                      }}
+                    </div>
+                  </div>
+                </mat-list-item>
+              }
+            </mat-list>
+          </form>
+        </div>
+      }
+    </div>
+    @if (clickedType === "categories") {
+      <div class="subcategory-section">
+        <div class="subcategory-title">{{ subCategoryTitle }}</div>
+        <form [formGroup]="subCategoryForm">
+          <mat-list class="option-list" role="list">
+            @for (exec of transactionSubCategories; track exec.id) {
+              <mat-list-item matRipple>
+                <div class="list-item-actions">
+                  <div class="checkbox">
+                    <mat-checkbox
+                      [formControlName]="'subcategory_' + exec.id"
+                      class="example-margin"
+                    ></mat-checkbox>
+                  </div>
+                  <div class="item-text">{{ exec.name }}</div>
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        </form>
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-dialog-close mat-raised-button>Cancel</button>
+  <button (click)="clear()" mat-raised-button>Reset Filters</button>
+  <button (click)="submit()" color="primary" mat-raised-button>Filter</button>
+</mat-dialog-actions>

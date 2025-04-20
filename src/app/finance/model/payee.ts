@@ -19,6 +19,7 @@ export interface PayeeFilter {
   target: string;
   categories?: number[];
   subcategories?: number[];
+  payees?: number[];
 }
 
 export interface PayeeUpdateRequest extends Payee {

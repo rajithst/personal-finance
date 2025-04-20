@@ -42,7 +42,7 @@ import {
   MatExpansionPanelTitle,
   MatExpansionPanelDescription,
 } from '@angular/material/expansion';
-import { TransactionFilterComponent } from '../transaction-filter/transaction-filter.component';
+import { TransactionFilterComponent } from '../../../components/transaction-filter/transaction-filter.component';
 import { Sort, MatSort, MatSortHeader } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { ReplaySubject, takeUntil } from 'rxjs';
@@ -473,7 +473,7 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
   openFilters() {
     this.dialog.closeAll();
     const dialog = this.dialog.open(TransactionFilterComponent, {
-      maxWidth: '700px',
+      maxWidth: '800px',
       hasBackdrop: true,
       data: { filterParams: this.filterParams },
     });
@@ -709,19 +709,20 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
           ? filterObject.accounts?.includes(data.account)
           : true;
       const filterQuery = filterObject.query ? filterObject.query : '';
-      const q1 = data.destination
-        .toLowerCase()
-        .includes(filterQuery.toLowerCase());
-      const q2 = data.alias?.toLowerCase().includes(filterQuery.toLowerCase());
-      const q3 = data.category_text
-        ?.toLowerCase()
-        .includes(filterQuery.toLowerCase());
-      const q4 = data.subcategory_text
-        ?.toLowerCase()
-        .includes(filterQuery.toLowerCase());
-      const q5 = data.account_name
-        .toLowerCase()
-        .includes(filterQuery.toLowerCase());
+      let [q1, q2, q3, q4, q5] = [true, true, true, true, true];
+      if (filterQuery) {
+        q1 = data.destination.toLowerCase().includes(filterQuery.toLowerCase());
+        q2 = data.alias?.toLowerCase().includes(filterQuery.toLowerCase());
+        q3 = data.category_text
+          ?.toLowerCase()
+          .includes(filterQuery.toLowerCase()) ?? true;
+        q4 = data.subcategory_text
+          ?.toLowerCase()
+          .includes(filterQuery.toLowerCase()) ?? true;;
+        q5 = data.account_name
+          .toLowerCase()
+          .includes(filterQuery.toLowerCase()) ?? true;;
+      }
 
       return <boolean>(
         (data.year === filterObject.year &&

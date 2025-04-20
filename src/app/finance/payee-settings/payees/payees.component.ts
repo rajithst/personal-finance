@@ -20,6 +20,7 @@ import {
   MatHeaderRow,
   MatRowDef,
   MatRow,
+  MatNoDataRow,
 } from '@angular/material/table';
 import { Payee, PayeeDetail, PayeeFilter } from '../../model/payee';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -47,6 +48,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { SearchBarComponent } from '../../../components/search-bar/search-bar.component';
 import { DataService } from '../../../service/data.service';
+import { TransactionFilterComponent } from '../../../components/transaction-filter/transaction-filter.component';
 
 @Component({
   selector: 'app-payees',
@@ -80,6 +82,7 @@ import { DataService } from '../../../service/data.service';
     MatTooltip,
     FormsModule,
     SearchBarComponent,
+    MatNoDataRow,
   ],
 })
 export class PayeesComponent implements OnInit, OnDestroy {
@@ -118,8 +121,10 @@ export class PayeesComponent implements OnInit, OnDestroy {
     this.dataService.search$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((value) => {
-        this.filterParams.query = value ?? '';
-        this.applyFiltersToTable();
+        if (value !== null) {
+          this.filterParams.query = value ?? '';
+          this.applyFiltersToTable();
+        }
       });
   }
 
@@ -134,6 +139,7 @@ export class PayeesComponent implements OnInit, OnDestroy {
   }
 
   private applyFiltersToTable() {
+    this.dataSource.filterPredicate = this.createFilterPredicate();
     this.dataSource.filter = JSON.stringify(this.filterParams).trim();
   }
 
@@ -173,11 +179,35 @@ export class PayeesComponent implements OnInit, OnDestroy {
     });
   }
 
+  openFilters() {
+    this.dialog.closeAll();
+    const dialog = this.dialog.open(TransactionFilterComponent, {
+      maxWidth: '800px',
+      hasBackdrop: true,
+      data: { filterParams: this.filterParams, hiddenSections: ['accounts'] },
+    });
+
+    dialog.afterClosed().subscribe((result) => {
+      if (result) {
+        this.filterParams = {
+          target: result.filters.target,
+          categories: result.filters.categories,
+          subcategories: result.filters.subcategories,
+          payees: result.filters.payees,
+          query: result.filters.query,
+        };
+        this.applyFiltersToTable();
+      }
+    });
+  }
+
   private createFilterPredicate(): (data: Payee, filter: string) => boolean {
     return (data: Payee, filter: string): boolean => {
       const filterObject: PayeeFilter = JSON.parse(filter);
+      console.log('Evaluating row:', data, 'with filter:', filterObject);
       let categoryIncludes = false;
       let subCategoryIncludes = false;
+      let payeeIncludes = true;
       const c1 =
         filterObject.categories?.length === 0 &&
         filterObject.subcategories?.length === 0;
@@ -198,29 +228,34 @@ export class PayeesComponent implements OnInit, OnDestroy {
           data.subcategory,
         );
       }
-
+      if (data.id != null && filterObject.payees && filterObject.payees.length > 0) {
+        payeeIncludes = filterObject.payees.includes(data.id);
+      }
       const filterQuery = filterObject.query ? filterObject.query : '';
-      const q1 = data.destination
-        .toLowerCase()
-        .includes(filterQuery.toLowerCase());
-      const q2 =
-        data.destination_eng
-          ?.toLowerCase()
-          .includes(filterQuery.toLowerCase()) || false;
-      const q3 =
-        data.category_text?.toLowerCase().includes(filterQuery.toLowerCase()) ||
-        false;
-      const q4 =
-        data.subcategory_text
-          ?.toLowerCase()
-          .includes(filterQuery.toLowerCase()) || false;
+      let [q1, q2, q3, q4] = [true, true, true, true];
+      if (filterQuery) {
+        q1 = data.destination.toLowerCase().includes(filterQuery.toLowerCase());
+        q2 =
+          data.destination_eng
+            ?.toLowerCase()
+            .includes(filterQuery.toLowerCase()) || false;
+        q3 =
+          data.category_text
+            ?.toLowerCase()
+            .includes(filterQuery.toLowerCase()) || false;
+        q4 =
+          data.subcategory_text
+            ?.toLowerCase()
+            .includes(filterQuery.toLowerCase()) || false;
+      }
 
       return (
         (c1 ||
           (c2 && subCategoryIncludes) ||
           (c3 && categoryIncludes) ||
           (c4 && (categoryIncludes || subCategoryIncludes))) &&
-        (q1 || q2 || q3 || q4)
+        (q1 || q2 || q3 || q4) &&
+        payeeIncludes
       );
     };
   }
@@ -231,6 +266,7 @@ export class PayeesComponent implements OnInit, OnDestroy {
       target: '',
       categories: [],
       subcategories: [],
+      payees: [],
     };
   }
 

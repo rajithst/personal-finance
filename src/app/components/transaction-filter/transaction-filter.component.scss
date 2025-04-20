@@ -1,3 +1,6 @@
+mat-dialog-content {
+  width: 800px;
+}
 .filter-section {
   height: 300px;
   max-height: 300px;
@@ -6,17 +9,12 @@
 }
 
 .main-category-section {
-  width: 200px;
-  border-right: 1px solid #d5cbcb;
-}
-
-.category-result-section {
-  width: 200px;
+  width: 150px;
   border-right: 1px solid #d5cbcb;
 }
 
 .subcategory-section {
-  width: 250px;
+  border-left: 1px solid #d5cbcb;
 }
 
 .option-list {
