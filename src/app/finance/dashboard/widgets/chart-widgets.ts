@@ -1,6 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DashboardService } from '../dashboard.service';
-import { TRANSACTION_TYPE_INCOME_ID } from '../../data/client.data';
+import {
+  ACCOUNT_TYPE_BANK_ACCOUNT,
+  ACCOUNT_TYPE_CREDIT_CARD,
+  TRANSACTION_TYPE_INCOME_ID,
+} from '../../data/client.data';
 import { ChartUtilityService } from '../chart-utils.service';
 import { ChartWidgetBase } from '../../../components/widget/chart-widget-base';
 import { FinanceStore } from '../../../core/store/finance.store';
@@ -127,7 +131,6 @@ export class IncomeVsSavingsWidget implements OnInit {
     ></app-chart-widget>
   `,
   imports: [ChartWidgetBase],
-  providers: [FinanceStore],
 })
 export class MonthlyExpenseCategoryWidget implements OnInit {
   private readonly dashboardService = inject(DashboardService);
@@ -168,7 +171,6 @@ export class MonthlyExpenseCategoryWidget implements OnInit {
     ></app-chart-widget>
   `,
   styles: ``,
-  providers: [FinanceStore],
 })
 export class MonthlyAccountUsageWidget implements OnInit {
   private readonly dashboardService = inject(DashboardService);
@@ -177,9 +179,12 @@ export class MonthlyAccountUsageWidget implements OnInit {
 
   labels: string[] = [];
   datasets: any[] = [];
+  creditAccountTypes = [ACCOUNT_TYPE_CREDIT_CARD, ACCOUNT_TYPE_BANK_ACCOUNT];
 
   ngOnInit() {
-    const creditAccounts = this.store.creditAccounts();
+    const creditAccounts = this.store
+      .creditAccounts()
+      .filter((x) => this.creditAccountTypes.includes(x.account_type));
     const data = this.dashboardService.dashboardData()?.account_wise_expenses;
     const targetKey = this.chartUtility.currentMonthKey;
     const categorySum: any[] = [];
@@ -210,6 +215,7 @@ export class MonthlyPaymentCategoryWidget implements OnInit {
   private readonly chartUtility = inject(ChartUtilityService);
   labels: string[] = [];
   datasets: any[] = [];
+
   ngOnInit() {
     const transactions =
       this.dashboardService.dashboardData()?.payment_by_destination;

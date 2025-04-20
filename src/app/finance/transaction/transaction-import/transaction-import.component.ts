@@ -171,6 +171,7 @@ export class TransactionImportComponent {
     formData.append('start_date', importStartDate);
     formData.append('end_date', importEndDate);
     const upload$ = this.apiService.uploadTransactions(formData);
+
     setTimeout(() => {
       this.clickSubmit = true;
       upload$.subscribe({
