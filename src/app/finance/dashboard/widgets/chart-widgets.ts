@@ -128,6 +128,7 @@ export class IncomeVsSavingsWidget implements OnInit {
       [chartType]="'doughnut'"
       [labels]="labels"
       [datasets]="datasets"
+      [plugins]="plugins"
     ></app-chart-widget>
   `,
   imports: [ChartWidgetBase],
@@ -138,6 +139,13 @@ export class MonthlyExpenseCategoryWidget implements OnInit {
   private readonly store = inject(FinanceStore);
   labels: string[] = [];
   datasets: any[] = [];
+  plugins = {
+    legend: {
+      display: true,
+      position: 'right',
+      align: 'left',
+    },
+  };
 
   ngOnInit() {
     const transactionCategories = this.store.transactionCategories();
@@ -207,6 +215,7 @@ export class MonthlyAccountUsageWidget implements OnInit {
     [chartType]="'doughnut'"
     [labels]="labels"
     [datasets]="datasets"
+    [plugins]="plugins"
   ></app-chart-widget>`,
   styles: ``,
 })
@@ -215,6 +224,13 @@ export class MonthlyPaymentCategoryWidget implements OnInit {
   private readonly chartUtility = inject(ChartUtilityService);
   labels: string[] = [];
   datasets: any[] = [];
+  plugins = {
+    legend: {
+      display: true,
+      position: 'right',
+      align: 'left',
+    },
+  };
 
   ngOnInit() {
     const transactions =

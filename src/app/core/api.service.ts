@@ -36,7 +36,7 @@ import {
   CompanyInfo,
   InvestmentClientSettings,
 } from '../investments/model/investment';
-import {CategoryAnalytics} from "../finance/model/analytics";
+import { CategoryAnalytics } from '../finance/model/analytics';
 
 export interface BaseAPIResponse {
   status: boolean;

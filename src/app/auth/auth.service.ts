@@ -13,12 +13,16 @@ export class AuthService {
 
   async login(username: string, password: string) {
     const loginPayload = { username: username, password: password };
-    const result = await this.apiService.login(loginPayload);
-    if (result.token) {
-      localStorage.setItem(this.USER_STORAGE_KEY, JSON.stringify(result));
-      return true;
+    try {
+      const result = await this.apiService.login(loginPayload);
+      if (result?.token) {
+        localStorage.setItem(this.USER_STORAGE_KEY, JSON.stringify(result));
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
     }
-    return false;
   }
 
   clearLocalStorage() {

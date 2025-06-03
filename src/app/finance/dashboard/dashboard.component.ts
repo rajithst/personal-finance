@@ -132,24 +132,25 @@ export class TransactionDashboardComponent implements OnInit, OnDestroy {
         rows: 3,
         columns: 2,
       },
+
+      {
+        id: 1,
+        label: `Top Expenses (${this.chartUtilityService.getCurrentMonth()})`,
+        content: TopExpensesWidget,
+        rows: 3,
+        columns: 2,
+      },
       {
         id: 1,
         label: `Spending Breakdown (${this.chartUtilityService.getCurrentMonth()})`,
         content: MonthlyExpenseCategoryWidget,
         rows: 3,
-        columns: 1,
+        columns: 2,
       },
       {
         id: 1,
         label: `Payment Breakdown (${this.chartUtilityService.getCurrentMonth()})`,
         content: MonthlyPaymentCategoryWidget,
-        rows: 3,
-        columns: 1,
-      },
-      {
-        id: 1,
-        label: `Top Expenses (${this.chartUtilityService.getCurrentMonth()})`,
-        content: TopExpensesWidget,
         rows: 3,
         columns: 2,
       },
