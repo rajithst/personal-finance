@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -54,13 +54,19 @@ import {
   MatSuffix,
   MatPrefix,
 } from '@angular/material/form-field';
-import { NgIf, DecimalPipe } from '@angular/common';
+import { NgIf, DecimalPipe, AsyncPipe } from '@angular/common';
 import { FinanceStore } from '../../../core/store/finance.store';
 import { CategoryEditComponent } from '../../settings/transaction-category/category-edit/category-edit.component';
 import {
   CategorySettings,
   CategorySettingsResponse,
 } from '../../model/category-settings';
+import {
+  MatAutocomplete,
+  MatAutocompleteTrigger,
+} from '@angular/material/autocomplete';
+import { Observable, of } from 'rxjs';
+import { Payee } from '../../model/payee';
 
 export interface TransactionUpdateDialogData {
   formData: TransactionExpand;
@@ -92,6 +98,9 @@ export interface TransactionUpdateDialogData {
     MatDialogActions,
     MatButton,
     MatDialogClose,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    AsyncPipe,
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -135,6 +144,8 @@ export class TransactionUpdateDialog implements OnInit {
       description: 'Select a category',
     },
   ];
+  filteredPayees: Observable<Payee[]>;
+  payees = signal<Payee[]>([]);
   transactionForm: FormGroup;
   formData: TransactionExpand;
 
@@ -169,7 +180,6 @@ export class TransactionUpdateDialog implements OnInit {
         this.setTransactionSubCategories(value);
       }
     });
-
     this.transactionForm
       .get('transaction_type')
       ?.valueChanges.subscribe((value) => {
@@ -177,6 +187,13 @@ export class TransactionUpdateDialog implements OnInit {
         this.transactionForm.get('category')?.setValue(null);
         this.setTransactionCategories(value);
       });
+    this.transactionForm.get('destination')?.valueChanges.subscribe((value) => {
+      this.filteredPayees = of(this.filterPayees(value));
+    });
+
+    this.preparePayees().then(() => {
+      this.filteredPayees = of(this.payees());
+    });
   }
 
   async submit() {
@@ -206,6 +223,11 @@ export class TransactionUpdateDialog implements OnInit {
         await this.apiService.mergeTransaction(payload);
       this.dialogRef.close(updatedTransaction ?? null);
     }
+  }
+
+  async preparePayees() {
+    await this.store.getPayees();
+    this.payees.set(this.store.payees() ?? []);
   }
 
   createNewCategory(category: number | null = null) {
@@ -315,6 +337,16 @@ export class TransactionUpdateDialog implements OnInit {
         .transactionSubCategories()
         .filter((x) => x.category === category),
     ];
+  }
+
+  private filterPayees(value: string): Payee[] {
+    const filterValue = value.toLowerCase();
+    return this.payees().filter(
+      (payee) =>
+        payee.destination.toLowerCase().includes(filterValue) ||
+        payee.destination_eng?.toLowerCase().includes(filterValue) ||
+        payee.destination_original?.toLowerCase().includes(filterValue),
+    );
   }
 
   private setTransactionCategories(transactionType: number) {

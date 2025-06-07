@@ -43,12 +43,37 @@
         </td>
       </tr>
       <tr>
-        <td colspan="2">
+        <td colspan="3">
           <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Payee</mat-label>
-            <input formControlName="destination" matInput placeholder="Payee" />
+            <input
+              formControlName="destination"
+              [matAutocomplete]="auto"
+              matInput
+              placeholder="Payee"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              @for (option of filteredPayees | async; track option) {
+                <mat-option [value]="option.destination"
+                  >{{ option.destination }}
+                  @if (option.destination_eng) {
+                    ({{ option.destination_eng }})
+                  }
+                </mat-option>
+              }
+            </mat-autocomplete>
           </mat-form-field>
         </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <mat-form-field appearance="outline" class="coincraft-input">
+            <mat-label>Payee Alias (English)</mat-label>
+            <input formControlName="alias" matInput placeholder="Destination" />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
         <td>
           <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Amount</mat-label>
@@ -56,8 +81,6 @@
             <span matTextPrefix>¥&nbsp;</span>
           </mat-form-field>
         </td>
-      </tr>
-      <tr>
         <td>
           <mat-form-field appearance="outline" class="coincraft-input">
             <mat-label>Category</mat-label>
@@ -78,10 +101,16 @@
             </mat-select>
           </mat-form-field>
         </td>
-        <td>
+      </tr>
+      <tr>
+        <td colspan="3">
           <mat-form-field appearance="outline" class="coincraft-input">
-            <mat-label>Payee Alias (English)</mat-label>
-            <input formControlName="alias" matInput placeholder="Destination" />
+            <mat-label>Notes</mat-label>
+            <textarea
+              formControlName="notes"
+              matInput
+              placeholder="Notes"
+            ></textarea>
           </mat-form-field>
         </td>
       </tr>
@@ -100,19 +129,6 @@
             </mat-checkbox>
           </li>
         </ul>
-      </div>
-      <div class="info-area">
-        <div class="area-title">
-          <span>Additional Info</span>
-        </div>
-        <mat-form-field appearance="outline" class="coincraft-input">
-          <mat-label>Notes</mat-label>
-          <textarea
-            formControlName="notes"
-            matInput
-            placeholder="Notes"
-          ></textarea>
-        </mat-form-field>
       </div>
     </div>
   </form>
