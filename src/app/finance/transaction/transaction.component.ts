@@ -12,7 +12,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
-import {LoadingService} from "../../service/loading.service";
+import { LoadingService } from '../../service/loading.service';
 
 @Component({
   selector: 'app-transaction',

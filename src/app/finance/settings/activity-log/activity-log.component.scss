@@ -1,6 +1,117 @@
+@use "@angular/material" as mat;
+
+mat-chip {
+  @include mat.chips-overrides((
+    outline-color: red,
+  ));
+}
+
 mat-card {
   height: calc(100vh - 150px);
   padding: 10px;
   overflow: auto;
   margin-top:1%;
+}
+
+.card-title {
+  width: 100%;
+}
+
+mat-expansion-panel {
+  @include mat.expansion-overrides((
+    header-text-weight: 500,
+    header-text-size: 14px,
+  ));
+}
+
+.mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-log {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.change-group {
+  padding: 1rem;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  border-left: 4px solid #007bff;
+}
+.meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+
+.action .tag {
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.create  { background: #28a745; }
+.delete { background: #dc3545; }
+.update  { background: #007bff; }
+
+.source {
+  margin-right: 10px;
+  font-weight: 600;
+  background: #555;
+}
+
+.actor {
+  font-weight: 600;
+  color: #333;
+}
+
+.timestamp {
+  font-size: 0.85rem;
+  color: #999;
+  margin-left: 10px;
+}
+
+.log-entry {
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.field-name {
+  font-weight: bold;
+  color: #333;
+}
+
+.change {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  margin-left: 10px;
+}
+
+.old-value {
+  color: #888;
+  text-decoration: line-through;
+}
+
+.arrow {
+  color: #555;
+}
+
+.new-value {
+  color: #007bff;
+  font-weight: 500;
+}
+
+.button-row .mat-mdc-button-base {
+  margin: 8px 8px 8px 0;
 }

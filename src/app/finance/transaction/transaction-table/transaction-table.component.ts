@@ -50,7 +50,6 @@ import { TransactionSplitComponent } from '../transaction-split/transaction-spli
 import { TransactionBulkEditComponent } from '../transaction-bulk-edit/transaction-bulk-edit.component';
 import { TransactionImportComponent } from '../transaction-import/transaction-import.component';
 import { EXPENSE, INCOME } from '../../data/client.data';
-import { TransactionViewMoreDialog } from './view-more/view-more.component';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
@@ -124,6 +123,7 @@ const DIALOG_TOP_POSITION = '5%';
     NorecordsComponent,
     MatProgressSpinner,
     SearchBarComponent,
+
   ],
 })
 export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
@@ -439,16 +439,6 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  viewMoreInfo(element: TransactionExpand) {
-    this.dialog.open(TransactionViewMoreDialog, {
-      maxWidth: DIALOG_WIDTH,
-      position: {
-        top: DIALOG_TOP_POSITION,
-      },
-      data: { transaction: element },
-    });
-  }
-
   isAllSelected(tableIndex: number) {
     const numSelected = this.selection.selected.length;
     const numRows = this.allDataSource[tableIndex].data.length;
@@ -708,20 +698,22 @@ export class TransactionTableComponent implements OnInit, OnChanges, OnDestroy {
         filterObject.accounts?.length !== 0
           ? filterObject.accounts?.includes(data.account)
           : true;
-      const filterQuery = filterObject.query ? filterObject.query : '';
+      const filterQuery = filterObject.query ?? '';
       let [q1, q2, q3, q4, q5] = [true, true, true, true, true];
       if (filterQuery) {
         q1 = data.destination.toLowerCase().includes(filterQuery.toLowerCase());
         q2 = data.alias?.toLowerCase().includes(filterQuery.toLowerCase());
-        q3 = data.category_text
-          ?.toLowerCase()
-          .includes(filterQuery.toLowerCase()) ?? true;
-        q4 = data.subcategory_text
-          ?.toLowerCase()
-          .includes(filterQuery.toLowerCase()) ?? true;;
-        q5 = data.account_name
-          .toLowerCase()
-          .includes(filterQuery.toLowerCase()) ?? true;;
+        q3 =
+          data.category_text
+            ?.toLowerCase()
+            .includes(filterQuery.toLowerCase()) ?? true;
+        q4 =
+          data.subcategory_text
+            ?.toLowerCase()
+            .includes(filterQuery.toLowerCase()) ?? true;
+        q5 =
+          data.account_name.toLowerCase().includes(filterQuery.toLowerCase()) ??
+          true;
       }
 
       return <boolean>(

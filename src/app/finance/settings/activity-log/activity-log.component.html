@@ -1,6 +1,87 @@
 <mat-card appearance="outlined">
   <mat-card-header>
-    <mat-card-title>Activity Logs</mat-card-title>
+    <div class="d-flex-align-sb card-title">
+      <div class="title">
+        <mat-card-title>Activity Log</mat-card-title>
+      </div>
+      <div class="actions">
+        <section>
+          <div class="button-row">
+            <button mat-stroked-button>Create</button>
+            <button mat-stroked-button>Update</button>
+            <button mat-stroked-button>Delete</button>
+          </div>
+        </section>
+      </div>
+    </div>
   </mat-card-header>
-  <mat-card-content> </mat-card-content>
+  <mat-card-content>
+    <mat-accordion>
+      @for (log of activities(); track log.id) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title
+              >{{ log.section_text }} {{ log.action_text }} on
+              {{ log.timestamp }}</mat-panel-title
+            >
+            <mat-panel-description>
+              <div></div>
+              <div>
+                <button mat-button="outlined" routerLink="{{ log.url }}">
+                  Go to section
+                </button>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="activity-log">
+            <div class="change-group">
+              <div class="meta">
+                <span class="actor">
+                  {{ log.changed_by }}
+                  <span class="timestamp">on {{ log.timestamp }}</span>
+                </span>
+                <div class="action">
+                  <span [ngSwitch]="log.section">
+                    <ng-container *ngSwitchCase="'transaction'">
+                      <span class="tag source"
+                        >Transaction #{{ log.object_id }}</span
+                      ></ng-container
+                    >
+                    <ng-container *ngSwitchDefault>Unknown</ng-container>
+                  </span>
+                  <span
+                    class="tag"
+                    [ngClass]="{
+                      create: log.action === 'create',
+                      update: log.action === 'update',
+                      delete: log.action === 'delete'
+                    }"
+                    [ngSwitch]="log.action"
+                  >
+                    <ng-container *ngSwitchCase="'create'">Create</ng-container>
+                    <ng-container *ngSwitchCase="'update'">Update</ng-container>
+                    <ng-container *ngSwitchCase="'delete'">Delete</ng-container>
+                    <ng-container *ngSwitchDefault>Unknown</ng-container>
+                  </span>
+                </div>
+              </div>
+              @for (change of log.changes; track change) {
+                <div class="log-entry">
+                  <div class="field-name">{{ change.field }} :</div>
+                  <div class="change">
+                    @if (log.action !== "create") {
+                      <span class="old-value">{{ change.oldValue }}</span>
+                      <span class="arrow">→</span>
+                    }
+                    <span class="new-value">{{ change.newValue }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </mat-card-content>
 </mat-card>

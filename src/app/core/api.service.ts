@@ -69,6 +69,12 @@ export class ApiService {
     return await firstValueFrom(token$);
   }
 
+  async activityLog(): Promise<APIResponse<any>> {
+    const activityLog$ = this.http.get<APIResponse<any>>(
+      `${this.SRC_URL}/logs/activity/`,
+    );
+    return await firstValueFrom(activityLog$);
+  }
   async getDashboard(year: number): Promise<DashboardResponse> {
     const dashboard$ = this.http.get<APIResponse<DashboardResponse>>(
       `${this.SRC_URL}/finance/dashboard/?year=${year}`,
@@ -175,6 +181,13 @@ export class ApiService {
         observe: 'events' as const,
       },
     );
+  }
+
+  async getTransactionById(id: string): Promise<TransactionExpand> {
+    const transaction$ = this.http.get<APIResponse<TransactionExpand>>(
+      `${this.SRC_URL}/finance/transaction/${id}/`,
+    );
+    return await firstValueFrom(transaction$.pipe(map(mapToData)));
   }
 
   async getMyProfile(): Promise<MyProfile> {
