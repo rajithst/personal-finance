@@ -92,46 +92,46 @@ export class ApiService {
       ? payload.subcategories.join(',')
       : '';
     const transactions$ = this.http.get<APIResponse<MonthlyTransaction[]>>(
-      `${this.SRC_URL}/finance/transaction/?year=${year}&target=${target}&cat=${categories}&subcat=${subcategories}`,
+      `${this.SRC_URL}/finance/transaction/list/?year=${year}&target=${target}&cat=${categories}&subcat=${subcategories}`,
     );
     return await firstValueFrom(transactions$.pipe(map(mapToData)));
   }
 
+  async updateTransaction(payload: Transaction): Promise<TransactionExpand> {
+    const updatedTransaction$ = this.http.post<APIResponse<TransactionExpand>>(
+      `${this.SRC_URL}/finance/transaction/item/`,
+      payload,
+    );
+    return await firstValueFrom(updatedTransaction$.pipe(map(mapToData)));
+  }
+
   async getPayees(): Promise<Payee[]> {
     const payees$ = this.http.get<APIResponse<Payee[]>>(
-      `${this.SRC_URL}/finance/payee/`,
+      `${this.SRC_URL}/finance/payees/list/`,
     );
     return await firstValueFrom(payees$.pipe(map(mapToData)));
   }
 
+  async updatePayeeRules(payload: PayeeUpdateRequest): Promise<PayeeDetail> {
+    const updatedPayee$ = this.http.put<APIResponse<PayeeDetail>>(
+      `${this.SRC_URL}/finance/payees/item/${payload.id}/`,
+      payload,
+    );
+    return await firstValueFrom(updatedPayee$.pipe(map(mapToData)));
+  }
+
   async getPayeeDetail(payeeId: number | string): Promise<PayeeDetail> {
     const payee$ = this.http.get<APIResponse<PayeeDetail>>(
-      `${this.SRC_URL}/finance/payee-detail/${payeeId}/`,
+      `${this.SRC_URL}/finance/payees/item/${payeeId}/`,
     );
     return await firstValueFrom(payee$.pipe(map(mapToData)));
   }
 
   async getPayeeDetailByName(payeeName: string): Promise<PayeeDetail> {
     const payee$ = this.http.get<APIResponse<PayeeDetail>>(
-      `${this.SRC_URL}/finance/payee-detail/${payeeName}/`,
+      `${this.SRC_URL}/finance/payees/item/${payeeName}/`,
     );
     return await firstValueFrom(payee$.pipe(map(mapToData)));
-  }
-
-  async updateTransaction(payload: Transaction): Promise<TransactionExpand> {
-    let updatedTransaction$;
-    if (payload.id) {
-      updatedTransaction$ = this.http.put<APIResponse<TransactionExpand>>(
-        `${this.SRC_URL}/finance/transaction/${payload.id}/`,
-        payload,
-      );
-    } else {
-      updatedTransaction$ = this.http.post<APIResponse<TransactionExpand>>(
-        `${this.SRC_URL}/finance/transaction/`,
-        payload,
-      );
-    }
-    return await firstValueFrom(updatedTransaction$.pipe(map(mapToData)));
   }
 
   async mergeTransaction(
@@ -154,19 +154,13 @@ export class ApiService {
     return await firstValueFrom(splitResponse$.pipe(map(mapToData)));
   }
 
-  async updatePayeeRules(payload: PayeeUpdateRequest): Promise<PayeeDetail> {
-    const updatedPayee$ = this.http.put<APIResponse<PayeeDetail>>(
-      `${this.SRC_URL}/finance/payee/`,
-      payload,
-    );
-    return await firstValueFrom(updatedPayee$.pipe(map(mapToData)));
-  }
+
 
   async bulkDeleteTransactions(
     payload: BulkDeleteRequest,
   ): Promise<TransactionExpand[]> {
     const response$ = this.http.put<APIResponse<TransactionExpand[]>>(
-      `${this.SRC_URL}/finance/bulk/transaction/`,
+      `${this.SRC_URL}/finance/transaction/bulk/`,
       payload,
     );
     return await firstValueFrom(response$.pipe(map(mapToData)));
@@ -174,20 +168,13 @@ export class ApiService {
 
   uploadTransactions(formData: FormData): Observable<any> {
     return this.http.post(
-      `${this.SRC_URL}/finance/import/transactions/`,
+      `${this.SRC_URL}/finance/transaction/import/`,
       formData,
       {
         reportProgress: true,
         observe: 'events' as const,
       },
     );
-  }
-
-  async getTransactionById(id: string): Promise<TransactionExpand> {
-    const transaction$ = this.http.get<APIResponse<TransactionExpand>>(
-      `${this.SRC_URL}/finance/transaction/${id}/`,
-    );
-    return await firstValueFrom(transaction$.pipe(map(mapToData)));
   }
 
   async getMyProfile(): Promise<MyProfile> {
@@ -203,12 +190,12 @@ export class ApiService {
     let categorySettings$;
     if (payload.category.id) {
       categorySettings$ = this.http.put<APIResponse<CategorySettingsResponse>>(
-        `${this.SRC_URL}/finance/category-settings/`,
+        `${this.SRC_URL}/finance/category/settings/`,
         payload,
       );
     } else {
       categorySettings$ = this.http.post<APIResponse<CategorySettingsResponse>>(
-        `${this.SRC_URL}/finance/category-settings/`,
+        `${this.SRC_URL}/finance/category/settings/`,
         payload,
       );
     }
@@ -218,7 +205,7 @@ export class ApiService {
 
   async deleteCategory(categoryId: number): Promise<boolean> {
     const response$ = this.http.delete<APIResponse<boolean>>(
-      `${this.SRC_URL}/finance/category-settings/${categoryId}/`,
+      `${this.SRC_URL}/finance/settings/${categoryId}/`,
     );
     return await firstValueFrom(response$.pipe(map(mapToData)));
   }
@@ -236,12 +223,12 @@ export class ApiService {
     let creditAccount$;
     if (payload.id) {
       creditAccount$ = this.http.put<APIResponse<CreditAccount>>(
-        `${this.SRC_URL}/finance/credit-account/`,
+        `${this.SRC_URL}/accounts/credit/`,
         payload,
       );
     } else {
       creditAccount$ = this.http.post<APIResponse<CreditAccount>>(
-        `${this.SRC_URL}/finance/credit-account/`,
+        `${this.SRC_URL}/accounts/credit/`,
         payload,
       );
     }
@@ -349,5 +336,13 @@ export class ApiService {
       portfolio,
     );
     return await firstValueFrom(updatedPortfolio$.pipe(map(mapToData)));
+  }
+
+  async getAnalyticsFromPrompt(promptPayload: { prompt: string | null; categories: string; accounts: string }) {
+   const analytics$ = this.http.post<APIResponse<TransactionExpand[]>>(
+      `${this.SRC_URL}/finance/analytics/prompt/`,
+      promptPayload,
+    );
+    return await firstValueFrom(analytics$.pipe(map(mapToData)));
   }
 }
