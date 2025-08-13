@@ -268,7 +268,7 @@ export class ApiService {
 
   async getHoldings(portfolio: number): Promise<Holding[]> {
     const holdings$ = this.http.get<APIResponse<Holding[]>>(
-      `${this.SRC_URL}/investments/holdings/?portfolio=${portfolio}`,
+      `${this.SRC_URL}/investments/stocks/holdings/?portfolio=${portfolio}`,
     );
     return await firstValueFrom(holdings$.pipe(map(mapToData)));
   }
