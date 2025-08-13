@@ -98,10 +98,18 @@ export class ApiService {
   }
 
   async updateTransaction(payload: Transaction): Promise<TransactionExpand> {
-    const updatedTransaction$ = this.http.post<APIResponse<TransactionExpand>>(
-      `${this.SRC_URL}/finance/transaction/item/`,
-      payload,
-    );
+    let updatedTransaction$;
+    if (payload.id) {
+      updatedTransaction$ = this.http.put<APIResponse<TransactionExpand>>(
+        `${this.SRC_URL}/finance/transaction/item/${payload.id}/`,
+        payload,
+      );
+    } else {
+      updatedTransaction$ = this.http.post<APIResponse<TransactionExpand>>(
+        `${this.SRC_URL}/finance/transaction/item/`,
+        payload,
+      );
+    }
     return await firstValueFrom(updatedTransaction$.pipe(map(mapToData)));
   }
 
